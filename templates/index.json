@@ -1,0 +1,143 @@
+{
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "🚚 Livraison rapide au Maroc — Paiement à la livraison (COD) disponible ✦ Retours sous 7 jours"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "sticky_header_type": "on-scroll-up"
+      }
+    },
+    "hero-banner": {
+      "type": "image-banner",
+      "settings": {
+        "image_height": 700,
+        "image_overlay_opacity": 30,
+        "subheading": "Nouvelle Collection",
+        "heading": "L'Élégance <em>Marocaine</em>",
+        "button_label_1": "Découvrir la Collection",
+        "desktop_content_position": "middle-left",
+        "color_scheme": "background-1"
+      }
+    },
+    "features": {
+      "type": "luxury-features",
+      "blocks": {
+        "feat-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "✦",
+            "title": "Qualité Supérieure",
+            "text": "Tissus premium sélectionnés pour un confort absolu"
+          }
+        },
+        "feat-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "🚚",
+            "title": "Livraison Maroc",
+            "text": "Livraison rapide 24–72h partout au Maroc"
+          }
+        },
+        "feat-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "💳",
+            "title": "Paiement COD",
+            "text": "Payez à la réception — aucun risque pour vous"
+          }
+        },
+        "feat-4": {
+          "type": "feature",
+          "settings": {
+            "icon": "↩",
+            "title": "Retours Faciles",
+            "text": "7 jours pour changer d'avis"
+          }
+        }
+      },
+      "block_order": ["feat-1", "feat-2", "feat-3", "feat-4"]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Sélection",
+        "title": "Nos Pièces Phares",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "view_all_label": "Voir toute la collection"
+      }
+    },
+    "brand-story": {
+      "type": "rich-text",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": { "eyebrow": "Notre Univers" }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "L'Art de l'Élégance Moderne",
+            "heading_size": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Essalam Elegance incarne le luxe marocain moderne — des pièces soigneusement sélectionnées pour la femme qui allie tradition et sophistication contemporaine.</p>"
+          }
+        },
+        "btn": {
+          "type": "button",
+          "settings": {
+            "button_label": "Découvrir notre histoire",
+            "button_style": "secondary"
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "text", "btn"],
+      "settings": {
+        "desktop_content_position": "center"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col-1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Collections",
+            "menu": "main-menu"
+          }
+        },
+        "col-2": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Aide",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": ["col-1", "col-2"],
+      "settings": {
+        "brand_tagline": "Mode de luxe pour la femme marocaine moderne"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "hero-banner",
+    "features",
+    "featured-collection",
+    "brand-story",
+    "footer"
+  ]
+}

@@ -1,0 +1,241 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Essalam Elegance",
+    "theme_version": "1.0.0",
+    "theme_author": "Essalam Elegance",
+    "theme_documentation_url": "https://essalamelegance.store",
+    "theme_support_url": "https://essalamelegance.store"
+  },
+  {
+    "name": "t:settings_schema.colors.name",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors_solid_button_labels",
+        "default": "#FFFFFF",
+        "label": "t:settings_schema.colors.settings.colors_solid_button_labels.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_1",
+        "default": "#C9A84C",
+        "label": "Couleur accent principale (Or)"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_2",
+        "default": "#0A0A0A",
+        "label": "Couleur accent secondaire (Noir)"
+      },
+      {
+        "type": "color",
+        "id": "colors_text",
+        "default": "#0A0A0A",
+        "label": "t:settings_schema.colors.settings.colors_text.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_background_1",
+        "default": "#FFFFFF",
+        "label": "t:settings_schema.colors.settings.colors_background_1.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_background_2",
+        "default": "#F7F5F0",
+        "label": "t:settings_schema.colors.settings.colors_background_2.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_button",
+        "default": "#0A0A0A",
+        "label": "t:settings_schema.colors.settings.colors_button.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_button_text",
+        "default": "#FFFFFF",
+        "label": "t:settings_schema.colors.settings.colors_button_text.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_secondary_button",
+        "default": "#0A0A0A",
+        "label": "t:settings_schema.colors.settings.colors_secondary_button.label"
+      },
+      {
+        "type": "color",
+        "id": "colors_secondary_button_text",
+        "default": "#0A0A0A",
+        "label": "t:settings_schema.colors.settings.colors_secondary_button_text.label"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.typography.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__1.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "cormorant_garamond_n4",
+        "label": "t:settings_schema.typography.settings.type_header_font.label",
+        "info": "t:settings_schema.typography.settings.type_header_font.info"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 100,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "label": "t:settings_schema.typography.settings.heading_scale.label",
+        "default": 120
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__2.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "montserrat_n4",
+        "label": "t:settings_schema.typography.settings.type_body_font.label",
+        "info": "t:settings_schema.typography.settings.type_body_font.info"
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 100,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "t:settings_schema.typography.settings.body_scale.label",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "page_width",
+        "label": "Largeur de page",
+        "options": [
+          { "value": "1200px", "label": "1200px" },
+          { "value": "1400px", "label": "1400px" },
+          { "value": "1600px", "label": "1600px" }
+        ],
+        "default": "1400px"
+      },
+      {
+        "type": "range",
+        "id": "spacing_sections",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Espacement entre sections",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Boutons",
+    "settings": [
+      {
+        "type": "range",
+        "id": "buttons_border_thickness",
+        "min": 0,
+        "max": 12,
+        "step": 1,
+        "unit": "px",
+        "label": "Épaisseur de bordure",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "buttons_border_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Opacité de la bordure",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "buttons_radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Rayon des coins",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Cartes produit",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_style",
+        "options": [
+          { "value": "standard", "label": "Standard" },
+          { "value": "card", "label": "Carte" }
+        ],
+        "default": "standard",
+        "label": "Style de carte"
+      },
+      {
+        "type": "range",
+        "id": "card_image_ratio",
+        "min": 0.5,
+        "max": 2,
+        "step": 0.1,
+        "unit": "",
+        "label": "Ratio image",
+        "default": 1.2
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings_schema.favicon.settings.favicon.label",
+        "info": "t:settings_schema.favicon.settings.favicon.info"
+      }
+    ]
+  },
+  {
+    "name": "Médias sociaux",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/essalamelegance"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https://facebook.com/essalamelegance"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      }
+    ]
+  }
+]

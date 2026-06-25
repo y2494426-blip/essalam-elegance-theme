@@ -1,0 +1,73 @@
+{
+  "general": {
+    "continue_shopping": "Continuer mes achats",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "loading": "Chargement",
+    "breadcrumbs": {
+      "home": "Accueil"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "sold_out": "Épuisé",
+      "unavailable": "Indisponible",
+      "on_sale": "Promo",
+      "quantity": {
+        "label": "Quantité",
+        "decrease": "Diminuer",
+        "increase": "Augmenter"
+      },
+      "description": "Description",
+      "sku": "Référence",
+      "vendor": "Marque",
+      "share": "Partager"
+    },
+    "facets": {
+      "filter_by_label": "Filtrer par",
+      "sort_by_label": "Trier par",
+      "clear_all": "Effacer tout",
+      "filters": "Filtres",
+      "sort_by": {
+        "title": "Trier par :",
+        "manual": "En vedette",
+        "best-selling": "Meilleures ventes",
+        "title-ascending": "A - Z",
+        "title-descending": "Z - A",
+        "price-ascending": "Prix croissant",
+        "price-descending": "Prix décroissant",
+        "created-descending": "Nouveautés",
+        "created-ascending": "Plus anciens"
+      }
+    }
+  },
+  "cart": {
+    "title": "Panier",
+    "empty": "Votre panier est vide",
+    "subtotal": "Sous-total",
+    "checkout": "Passer la commande",
+    "note": "Ajouter une note",
+    "shipping": "Les frais d'expédition sont calculés à la caisse.",
+    "free_shipping": "Livraison gratuite à partir de",
+    "continue_shopping": "Continuer mes achats",
+    "taxes_and_shipping_at_checkout": "Taxes et frais calculés à la commande"
+  },
+  "sections": {
+    "header": {
+      "menu": "Menu",
+      "cart": "Panier ({{ count }} articles)"
+    },
+    "footer": {
+      "copyright": "© {{ year }} {{ shop_name }}. Tous droits réservés."
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Aller au contenu",
+    "close": "Fermer",
+    "open_menu": "Ouvrir le menu"
+  },
+  "errors": {
+    "general": "Une erreur s'est produite. Veuillez réessayer."
+  }
+}

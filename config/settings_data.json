@@ -1,0 +1,29 @@
+{
+  "current": {
+    "colors_solid_button_labels": "#FFFFFF",
+    "colors_accent_1": "#C9A84C",
+    "colors_accent_2": "#0A0A0A",
+    "colors_text": "#0A0A0A",
+    "colors_background_1": "#FFFFFF",
+    "colors_background_2": "#F7F5F0",
+    "colors_button": "#0A0A0A",
+    "colors_button_text": "#FFFFFF",
+    "colors_secondary_button": "#0A0A0A",
+    "colors_secondary_button_text": "#0A0A0A",
+    "type_header_font": "cormorant_garamond_n4",
+    "heading_scale": 120,
+    "type_body_font": "montserrat_n4",
+    "body_scale": 100,
+    "page_width": "1400px",
+    "spacing_sections": 0,
+    "buttons_border_thickness": 1,
+    "buttons_border_opacity": 100,
+    "buttons_radius": 0,
+    "card_style": "standard",
+    "card_image_ratio": 1.2,
+    "social_instagram_link": "https://instagram.com/essalamelegance",
+    "social_facebook_link": "https://facebook.com/essalamelegance",
+    "social_tiktok_link": ""
+  },
+  "presets": {}
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" dir="{% if request.locale.iso_code == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  {{ content_for_header }}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
+
+  {%- unless settings.type_body_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- unless settings.type_header_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+
+  {% style %}
+    :root {
+      --color-base-text: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
+      --color-base-background-1: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
+      --color-base-background-2: {{ settings.colors_background_2.red }}, {{ settings.colors_background_2.green }}, {{ settings.colors_background_2.blue }};
+      --color-base-accent-1: {{ settings.colors_accent_1.red }}, {{ settings.colors_accent_1.green }}, {{ settings.colors_accent_1.blue }};
+      --color-base-accent-2: {{ settings.colors_accent_2.red }}, {{ settings.colors_accent_2.green }}, {{ settings.colors_accent_2.blue }};
+      --color-base-solid-button-labels: {{ settings.colors_solid_button_labels.red }}, {{ settings.colors_solid_button_labels.green }}, {{ settings.colors_solid_button_labels.blue }};
+      --color-base-outline-button-labels: {{ settings.colors_secondary_button_text.red }}, {{ settings.colors_secondary_button_text.green }}, {{ settings.colors_secondary_button_text.blue }};
+      --color-base-button: {{ settings.colors_button.red }}, {{ settings.colors_button.green }}, {{ settings.colors_button.blue }};
+      --page-width: {{ settings.page_width }};
+      --font-heading-family: 'Cormorant Garamond', Georgia, serif;
+      --font-body-family: 'Montserrat', Arial, sans-serif;
+      --font-heading-style: normal;
+      --font-heading-weight: 400;
+      --font-body-weight: 400;
+      --font-body-weight-bold: 600;
+      --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+      --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+      --buttons-radius: {{ settings.buttons_radius }}px;
+      --buttons-border-width: {{ settings.buttons_border_thickness }}px;
+    }
+  {% endstyle %}
+</head>
+
+<body class="gradient{% if settings.animations_reveal_on_scroll %} animate--page-load{% endif %}">
+  {% sections 'header-group' %}
+
+  <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  {{ 'global.js' | asset_url | script_tag }}
+</body>
+</html>

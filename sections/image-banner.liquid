@@ -1,0 +1,185 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+
+{%- let image = section.settings.image -%}
+{%- let image_2 = section.settings.image_2 -%}
+
+<div
+  id="Banner-{{ section.id }}"
+  class="banner motion-reduce global-media-settings{% if section.settings.adapt_height %} banner--adapt{% endif %}{% if section.settings.image_overlay_opacity > 0 %} banner--overlay{% endif %}"
+  style="--banner-height: {{ section.settings.image_height }}px;"
+>
+  {%- if image != blank -%}
+    <div class="banner__media global-media-settings{% if image_2 != blank %} banner__media--half{% endif %}">
+      <img
+        src="{{ image | image_url: width: 1920 }}"
+        alt="{{ image.alt | escape }}"
+        width="{{ image.width }}"
+        height="{{ image.height }}"
+        loading="eager"
+        fetchpriority="high"
+        class="banner__image"
+      >
+    </div>
+  {%- else -%}
+    <div class="banner__media banner__media--placeholder">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+  {%- endif -%}
+
+  {%- if image_2 != blank -%}
+    <div class="banner__media banner__media--half global-media-settings">
+      <img
+        src="{{ image_2 | image_url: width: 960 }}"
+        alt="{{ image_2.alt | escape }}"
+        width="{{ image_2.width }}"
+        height="{{ image_2.height }}"
+        loading="eager"
+        class="banner__image"
+      >
+    </div>
+  {%- endif -%}
+
+  <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width">
+    <div class="banner__box content-container color-{{ section.settings.color_scheme }}">
+      {%- if section.settings.subheading != blank -%}
+        <p class="banner__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="banner__heading inline-richtext h0">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="banner__text rte">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label_1 != blank or section.settings.button_label_2 != blank -%}
+        <div class="banner__buttons">
+          {%- if section.settings.button_label_1 != blank -%}
+            <a href="{{ section.settings.button_link_1 }}" class="button button--primary">
+              {{ section.settings.button_label_1 | escape }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.button_label_2 != blank -%}
+            <a href="{{ section.settings.button_link_2 }}" class="button button--secondary">
+              {{ section.settings.button_label_2 | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bannière image",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Deuxième image (optionnel)"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "default": 700,
+      "unit": "px",
+      "label": "Hauteur de la bannière"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30,
+      "unit": "%",
+      "label": "Opacité du overlay"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Nouvelle Collection",
+      "label": "Sous-titre"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "L'Élégance <em>Marocaine</em>",
+      "label": "Titre"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "default": "Découvrir la Collection",
+      "label": "Bouton principal — texte"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Bouton principal — lien"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "default": "",
+      "label": "Bouton secondaire — texte"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Bouton secondaire — lien"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        { "value": "top-left", "label": "Haut gauche" },
+        { "value": "top-center", "label": "Haut centre" },
+        { "value": "top-right", "label": "Haut droite" },
+        { "value": "middle-left", "label": "Milieu gauche" },
+        { "value": "middle-center", "label": "Centre" },
+        { "value": "middle-right", "label": "Milieu droite" },
+        { "value": "bottom-left", "label": "Bas gauche" },
+        { "value": "bottom-center", "label": "Bas centre" },
+        { "value": "bottom-right", "label": "Bas droite" }
+      ],
+      "default": "middle-left",
+      "label": "Position du contenu"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        { "value": "accent-1", "label": "Or" },
+        { "value": "accent-2", "label": "Noir" },
+        { "value": "background-1", "label": "Blanc" },
+        { "value": "background-2", "label": "Beige" }
+      ],
+      "default": "background-1",
+      "label": "Couleur du bloc de texte"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bannière image"
+    }
+  ]
+}
+{% endschema %}
