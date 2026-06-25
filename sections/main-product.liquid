@@ -1,285 +1,252 @@
+{% comment %} ESSALEM ELEGANCE - Optimized Product Page {% endcomment %}
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 
-{%- liquid
-  assign product = product
-  assign current_variant = product.selected_or_first_available_variant
-  assign product_form_id = 'product-form-' | append: section.id
--%}
+{%- assign product = product -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
 
-<section class="product-section page-width" id="shopify-section-{{ section.id }}">
-  <div class="product" id="Product-{{ section.id }}">
+<product-info
+  id="MainProduct-{{ section.id }}"
+  data-section="{{ section.id }}"
+  data-url="{{ product.url }}"
+  data-update-url="true"
+>
+  <div class="product" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:1200px;margin:0 auto;padding:40px 20px;">
 
-    <!-- Media gallery -->
-    <div class="product__media-wrapper" id="MediaGallery-{{ section.id }}">
-      <div class="product__media-list">
-        {%- if product.media.size > 0 -%}
+    {%- comment -%} MEDIA GALLERY {%- endcomment -%}
+    <div class="product__media-wrapper">
+      <media-gallery
+        id="MediaGallery-{{ section.id }}"
+        role="region"
+        aria-label="{{ product.title }} - Galerie"
+        data-desktop-layout="stacked"
+      >
+        <ul class="product__media-list" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
           {%- for media in product.media -%}
-            <div class="product__media-item{% if forloop.first %} product__media-item--active{% endif %}" id="{{ section.id }}-{{ media.id }}">
+            <li
+              class="product__media-item"
+              data-media-id="{{ section.id }}-{{ media.id }}"
+              style="{% unless forloop.first %}display:none;{% endunless %}"
+            >
               {%- if media.media_type == 'image' -%}
-                <div class="media ratio" style="--ratio: {{ media.aspect_ratio }}">
-                  <img
-                    src="{{ media | image_url: width: 1080 }}"
-                    alt="{{ media.alt | escape }}"
-                    width="{{ media.width }}"
-                    height="{{ media.height }}"
-                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                    {% if forloop.first %}fetchpriority="high"{% endif %}
-                  >
-                </div>
-              {%- elsif media.media_type == 'video' -%}
-                <div class="media ratio" style="--ratio: {{ media.aspect_ratio }}">
-                  {{ media | media_tag: image_size: '1024x', autoplay: false, loop: false, controls: true }}
-                </div>
+                <img
+                  src="{{ media | image_url: width: 800 }}"
+                  alt="{{ media.alt | escape }}"
+                  width="800"
+                  height="{{ 800 | divided_by: media.aspect_ratio | ceil }}"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                  style="width:100%;height:auto;display:block;"
+                >
               {%- endif -%}
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          <div class="product__media-item">
-            <div class="media ratio" style="--ratio: 1">
+            </li>
+          {%- else -%}
+            <li>
               {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {% if product.media.size > 1 %}
+          <ul style="list-style:none;padding:0;margin:12px 0 0;display:flex;gap:8px;flex-wrap:wrap;">
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                <li>
+                  <img
+                    src="{{ media | image_url: width: 100 }}"
+                    alt="{{ media.alt | escape }}"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                    style="width:80px;height:80px;object-fit:cover;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s;"
+                    onclick="this.closest('media-gallery').setActiveMedia('{{ section.id }}-{{ media.id }}', true)"
+                  >
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {% endif %}
+      </media-gallery>
+    </div>
+
+    {%- comment -%} PRODUCT INFO {%- endcomment -%}
+    <div class="product__info-wrapper">
+      {%- comment -%} BADGES {%- endcomment -%}
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        {% if current_variant.compare_at_price > current_variant.price %}
+          {%- assign savings_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round -%}
+          <span style="background:var(--essalem-gold);color:var(--essalem-black);font-family:var(--font-modern);font-size:1.1rem;font-weight:700;padding:4px 12px;letter-spacing:0.05em;">-{{ savings_pct }}%</span>
+        {% endif %}
+        <span style="background:var(--essalem-black);color:var(--essalem-white);font-family:var(--font-modern);font-size:1.1rem;font-weight:600;padding:4px 12px;letter-spacing:0.05em;">🚚 Livraison Gratuite</span>
+      </div>
+
+      {%- comment -%} TITLE {%- endcomment -%}
+      <h1 class="product__title" id="ProductTitle-{{ section.id }}">{{ product.title }}</h1>
+
+      {%- comment -%} PRICE {%- endcomment -%}
+      <div id="price-{{ section.id }}" style="margin:16px 0 24px;">
+        {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
+      </div>
+
+      {%- comment -%} URGENCY {%- endcomment -%}
+      {% if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 10 %}
+        <div class="essalem-urgency">
+          ⚠️ Stock limité — Plus que {{ current_variant.inventory_quantity }} en stock !
+        </div>
+      {% endif %}
+
+      {%- comment -%} VARIANT SELECTORS {%- endcomment -%}
+      <variant-selects
+        id="variant-selects-{{ section.id }}"
+        data-section="{{ section.id }}"
+        data-url="{{ product.url }}"
+        data-update-url="true"
+      >
+        {%- for option in product.options_with_values -%}
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-family:var(--font-modern);font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+              {{ option.name }}
+            </label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              {%- for value in option.values -%}
+                <label style="cursor:pointer;">
+                  <input
+                    type="radio"
+                    name="{{ option.name | handleize }}"
+                    value="{{ value | escape }}"
+                    form="{{ product_form_id }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                    style="display:none;"
+                  >
+                  <span style="display:inline-block;padding:8px 16px;border:1px solid #ddd;font-family:var(--font-modern);font-size:1.3rem;cursor:pointer;transition:all 0.2s;{% if option.selected_value == value %}border-color:var(--essalem-gold);background:var(--essalem-gold);color:var(--essalem-black);font-weight:600;{% endif %}">
+                    {{ value }}
+                  </span>
+                </label>
+              {%- endfor -%}
             </div>
           </div>
-        {%- endif -%}
-      </div>
+        {%- endfor -%}
+        <script type="application/json" data-selected-variant>{{ current_variant | json }}</script>
+      </variant-selects>
 
-      <!-- Thumbnails -->
-      {%- if product.media.size > 1 -%}
-        <div class="product__thumbnails">
-          {%- for media in product.media -%}
-            <button
-              class="product__thumbnail{% if forloop.first %} product__thumbnail--active{% endif %}"
-              data-media-id="{{ section.id }}-{{ media.id }}"
-              aria-label="{{ media.alt | default: product.title | escape }}"
-            >
-              <div class="media ratio" style="--ratio: 1">
-                <img
-                  src="{{ media | image_url: width: 120 }}"
-                  alt="{{ media.alt | escape }}"
-                  width="120"
-                  height="120"
-                  loading="lazy"
-                >
-              </div>
-            </button>
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
-    </div>
+      {%- comment -%} PRODUCT FORM {%- endcomment -%}
+      <product-form data-hide-errors="false">
+        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
 
-    <!-- Product info -->
-    <div class="product__info-wrapper">
-      <div id="ProductInfo-{{ section.id }}" class="product__info-container">
-
-        {%- if section.settings.show_vendor and product.vendor != blank -%}
-          <p class="product__vendor">{{ product.vendor | upcase }}</p>
-        {%- endif -%}
-
-        <h1 class="product__title">{{ product.title }}</h1>
-
-        <div id="price-{{ section.id }}" class="price-wrapper" role="status">
-          {%- render 'price', product: product, use_variant: true, show_badges: true -%}
-        </div>
-
-        <div class="product__description rte">
-          {{ product.description }}
-        </div>
-
-        {%- unless product.has_only_default_variant -%}
-          <variant-selects
-            id="variant-selects-{{ section.id }}"
-            data-section="{{ section.id }}"
-            data-url="{{ product.url }}"
-          >
-            {%- for option in product.options_with_values -%}
-              <div class="product-form__input">
-                <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
-                  {{ option.name }}
-                </label>
-                <div class="select">
-                  <select
-                    id="Option-{{ section.id }}-{{ forloop.index0 }}"
-                    class="select__select"
-                    name="options[{{ option.name | escape }}]"
-                    form="{{ product_form_id }}"
-                  >
-                    {%- for value in option.values -%}
-                      <option
-                        value="{{ value | escape }}"
-                        {% if option.selected_value == value %}selected="selected"{% endif %}
-                      >{{ value }}</option>
-                    {%- endfor -%}
-                  </select>
-                </div>
-              </div>
-            {%- endfor -%}
-            <script type="application/json">
-              {{ product.variants | json }}
-            </script>
-          </variant-selects>
-        {%- endunless -%}
-
-        <!-- Quantity -->
-        <div class="product-form__input">
-          <label class="form__label" for="Quantity-{{ section.id }}">Quantité</label>
-          <quantity-input class="quantity">
-            <button class="quantity__button" name="minus" type="button" aria-label="Diminuer">
-              <svg width="10" height="2" viewBox="0 0 10 2" fill="none" aria-hidden="true"><path d="M0 1h10" stroke="currentColor" stroke-width="1.5"/></svg>
-            </button>
-            <input
-              class="quantity__input"
-              type="number"
-              name="quantity"
-              id="Quantity-{{ section.id }}"
-              min="1"
-              value="1"
-              form="{{ product_form_id }}"
-              autocomplete="off"
-            >
-            <button class="quantity__button" name="plus" type="button" aria-label="Augmenter">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 0v10M0 5h10" stroke="currentColor" stroke-width="1.5"/></svg>
-            </button>
-          </quantity-input>
-        </div>
-
-        <!-- Form -->
-        <product-form>
-          {%- form 'product', product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-            <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
-
-            <div class="product-form__error-message-wrapper" hidden role="alert">
-              <span class="product-form__error-message"></span>
-            </div>
-
-            <div class="product-form__buttons">
-              <button
-                id="ProductSubmitButton-{{ section.id }}"
-                type="submit"
-                name="add"
-                class="product-form__submit button button--full-width button--primary"
-                {% if current_variant.available == false %}disabled{% endif %}
+          <div class="product-form__quantity" style="margin-bottom:20px;">
+            <label for="Quantity-{{ section.id }}" style="display:block;font-family:var(--font-modern);font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Quantité</label>
+            <quantity-input class="quantity" style="display:flex;">
+              <button class="quantity__button" name="minus" type="button"
+                style="width:44px;height:44px;border:1px solid #ddd;background:none;font-size:1.8rem;cursor:pointer;"
+              >&minus;</button>
+              <input
+                class="quantity__input"
+                type="number"
+                name="quantity"
+                id="Quantity-{{ section.id }}"
+                min="1"
+                value="1"
+                style="width:64px;height:44px;border:1px solid #ddd;border-left:none;border-right:none;text-align:center;font-family:var(--font-modern);font-size:1.5rem;"
               >
-                <span class="btn-label">
-                  {%- if current_variant.available -%}
-                    Ajouter au panier
-                  {%- else -%}
-                    Épuisé
-                  {%- endif -%}
-                </span>
-                <div class="loading-overlay">
-                  <div class="loading-overlay__spinner"></div>
-                </div>
-              </button>
+              <button class="quantity__button" name="plus" type="button"
+                style="width:44px;height:44px;border:1px solid #ddd;background:none;font-size:1.8rem;cursor:pointer;"
+              >+</button>
+            </quantity-input>
+          </div>
 
-              {%- if section.settings.show_dynamic_checkout -%}
-                {{ form | payment_button }}
-              {%- endif -%}
-            </div>
+          <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+            <button
+              id="ProductSubmitButton-{{ section.id }}"
+              type="submit"
+              name="add"
+              style="flex:1;min-width:200px;background:var(--essalem-gold);color:var(--essalem-black);font-family:var(--font-modern);font-size:1.4rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:18px 24px;border:none;cursor:pointer;transition:all 0.3s;position:relative;"
+              {% unless current_variant.available %}disabled{% endunless %}
+            >
+              <span>{% if current_variant.available %}Ajouter au Panier{% else %}Rupture de Stock{% endif %}</span>
+              <span class="loading__spinner hidden" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);"></span>
+            </button>
 
-            <!-- COD notice -->
-            <p class="product-form__cod-notice">
-              💳 Paiement à la livraison (COD) disponible &mdash; Livraison 24&ndash;72h au Maroc
-            </p>
-          {%- endform -%}
-        </product-form>
+            {% if section.settings.show_dynamic_checkout %}
+              {{ form | payment_button }}
+            {% endif %}
+          </div>
 
+          <div class="product-form__error-message-wrapper" hidden>
+            <span class="product-form__error-message"></span>
+          </div>
+        {%- endform -%}
+      </product-form>
+
+      {%- comment -%} TRUST BADGES {%- endcomment -%}
+      <div class="essalem-trust-badges">
+        <div class="essalem-trust-badge">
+          <span class="essalem-trust-badge__icon">🚚</span>
+          <span>Livraison gratuite partout au Maroc</span>
+        </div>
+        <div class="essalem-trust-badge">
+          <span class="essalem-trust-badge__icon">💳</span>
+          <span>Paiement à la livraison (COD) disponible</span>
+        </div>
+        <div class="essalem-trust-badge">
+          <span class="essalem-trust-badge__icon">⭐</span>
+          <span>Qualité premium garantie</span>
+        </div>
+        <div class="essalem-trust-badge">
+          <span class="essalem-trust-badge__icon">📞</span>
+          <span>Support client rapide via WhatsApp</span>
+        </div>
+        <div class="essalem-trust-badge">
+          <span class="essalem-trust-badge__icon">🔄</span>
+          <span>Retour facile sous 7 jours</span>
+        </div>
       </div>
+
+      {%- comment -%} DESCRIPTION {%- endcomment -%}
+      {% if product.description != blank %}
+        <div style="margin-top:24px;">
+          <h3 style="font-family:var(--font-luxury);font-size:2rem;font-weight:500;color:var(--essalem-black);margin-bottom:16px;">Description</h3>
+          <div style="font-family:var(--font-modern);font-size:1.4rem;color:var(--essalem-gray);line-height:1.8;">
+            {{ product.description }}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
-</section>
 
-<style>
-  .product-section { padding: 4rem 0 6rem; }
-  .product {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
-  }
-  .product__vendor {
-    font-size: 1.1rem;
-    letter-spacing: 0.15em;
-    color: var(--color-gold);
-    margin: 0 0 0.8rem;
-  }
-  .product__title {
-    font-family: var(--font-heading-family);
-    font-size: calc(var(--font-heading-scale) * 2.8rem);
-    font-weight: 400;
-    margin: 0 0 1.5rem;
-  }
-  .price-wrapper { margin: 0 0 2rem; }
-  .product__description { margin: 0 0 2.5rem; font-size: 1.4rem; line-height: 1.8; color: rgba(var(--color-foreground), 0.75); }
-  .product-form__input { margin-bottom: 2rem; }
-  .product-form__buttons { margin-top: 1rem; }
-  .product-form__submit { height: 5rem; }
-  .product-form__cod-notice {
-    font-size: 1.2rem;
-    color: var(--color-gold);
-    margin-top: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-  }
-  .product__thumbnails {
-    display: flex;
-    gap: 0.8rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-  }
-  .product__thumbnail {
-    width: 6rem;
-    height: 6rem;
-    border: 1px solid transparent;
-    cursor: pointer;
-    padding: 0;
-    background: none;
-    overflow: hidden;
-  }
-  .product__thumbnail--active { border-color: var(--color-gold); }
-  .product__thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-  @media screen and (max-width: 749px) {
-    .product { grid-template-columns: 1fr; gap: 3rem; }
-  }
-</style>
+  {%- comment -%} MOBILE STICKY CTA {%- endcomment -%}
+  <div class="essalem-sticky-cta" id="sticky-cta-{{ section.id }}">
+    <div>
+      <div style="font-family:var(--font-luxury);font-size:1.4rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ product.title | truncate: 30 }}</div>
+      <div style="font-family:var(--font-modern);font-size:1.4rem;font-weight:700;color:var(--essalem-gold);">{{ current_variant.price | money }}</div>
+    </div>
+    <button
+      type="button"
+      style="background:var(--essalem-gold);color:var(--essalem-black);font-family:var(--font-modern);font-size:1.3rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:14px 20px;border:none;cursor:pointer;white-space:nowrap;"
+      onclick="document.getElementById('ProductSubmitButton-{{ section.id }}').click()"
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      {% if current_variant.available %}Ajouter au Panier{% else %}Rupture de Stock{% endif %}
+    </button>
+  </div>
+</product-info>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const gallery = document.getElementById('MediaGallery-{{ section.id }}');
-    if (!gallery) return;
-    gallery.querySelectorAll('.product__thumbnail').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.dataset.mediaId;
-        gallery.querySelectorAll('.product__media-item').forEach(item => item.classList.remove('product__media-item--active'));
-        gallery.querySelectorAll('.product__thumbnail').forEach(t => t.classList.remove('product__thumbnail--active'));
-        document.getElementById(targetId)?.classList.add('product__media-item--active');
-        btn.classList.add('product__thumbnail--active');
-      });
-    });
-  });
-</script>
+<script src="{{ 'product-info.js' | asset_url }}" defer></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
-  "name": "Informations produit",
+  "name": "Produit",
   "tag": "section",
-  "class": "section",
   "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "Afficher la marque"
-    },
     {
       "type": "checkbox",
       "id": "show_dynamic_checkout",
       "default": true,
-      "label": "Bouton paiement dynamique"
+      "label": "Afficher le bouton d'achat rapide"
     }
   ],
-  "presets": [
-    {
-      "name": "Informations produit"
-    }
-  ]
+  "presets": [{"name": "Produit"}]
 }
 {% endschema %}

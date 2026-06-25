@@ -1,0 +1,67 @@
+{% comment %} ESSALEM ELEGANCE - Thank You Page {% endcomment %}
+<div class="essalem-thankyou">
+  <span class="essalem-thankyou__emoji">🎉</span>
+
+  <h1 class="essalem-thankyou__title">Merci pour votre commande !</h1>
+
+  <p class="essalem-thankyou__message">
+    Votre commande a été reçue avec succès. Notre équipe va la traiter et vous contacter très bientôt pour confirmer la livraison.
+  </p>
+
+  <div class="essalem-thankyou__delivery-info">
+    <h3 style="font-family:var(--font-luxury);font-size:2rem;color:var(--essalem-black);margin-bottom:16px;">🚚 Informations de Livraison</h3>
+    <ul style="font-family:var(--font-modern);font-size:1.4rem;color:var(--essalem-gray);line-height:2;list-style:none;padding:0;margin:0;">
+      <li>✓ Livraison gratuite dans tout le Maroc</li>
+      <li>✓ Délai : 24 à 72 heures ouvrables</li>
+      <li>✓ Paiement à la réception (COD)</li>
+      <li>✓ Vous recevrez un SMS de confirmation</li>
+    </ul>
+  </div>
+
+  <a href="https://wa.me/{{ section.settings.whatsapp | remove: '+' | remove: ' ' | remove: '-' }}?text=Bonjour%2C%20je%20viens%20de%20passer%20une%20commande%20sur%20ESSALEM%20ELEGANCE"
+     class="essalem-thankyou__whatsapp-btn"
+     target="_blank"
+     rel="noopener">
+    💬 Suivre ma commande sur WhatsApp
+  </a>
+
+  {% if section.settings.discount_code != blank %}
+    <div style="border:2px dashed var(--essalem-gold);padding:24px;margin:32px 0;">
+      <p style="font-family:var(--font-modern);font-size:1.3rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--essalem-gold);margin-bottom:8px;">Cadeau pour vous 🎁</p>
+      <p style="font-family:var(--font-luxury);font-size:2rem;font-weight:500;color:var(--essalem-black);margin-bottom:4px;">{{ section.settings.discount_amount }} sur votre prochaine commande</p>
+      <p style="font-family:var(--font-modern);font-size:1.6rem;font-weight:700;color:var(--essalem-gold);letter-spacing:0.1em;">{{ section.settings.discount_code }}</p>
+    </div>
+  {% endif %}
+
+  <div style="margin-top:40px;">
+    <a href="/collections/all" style="display:inline-block;background:var(--essalem-black);color:var(--essalem-white);font-family:var(--font-modern);font-size:1.3rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:16px 40px;text-decoration:none;">Continuer les achats</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page Merci",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "whatsapp",
+      "label": "WhatsApp (avec indicatif)",
+      "default": "+212600000000"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Code promo (laisser vide pour masquer)",
+      "default": "MERCI10"
+    },
+    {
+      "type": "text",
+      "id": "discount_amount",
+      "label": "Montant remise",
+      "default": "10% de réduction"
+    }
+  ],
+  "presets": [{"name": "Page Merci"}]
+}
+{% endschema %}

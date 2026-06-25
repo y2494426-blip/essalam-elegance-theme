@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "essalem-page-thank-you",
+      "settings": {
+        "whatsapp": "+212600000000",
+        "discount_code": "MERCI10",
+        "discount_amount": "10% de réduction"
+      }
+    }
+  },
+  "order": ["main"]
+}

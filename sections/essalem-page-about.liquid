@@ -1,0 +1,55 @@
+{% comment %} ESSALEM ELEGANCE - About Page {% endcomment %}
+<div class="essalem-about__hero">
+  <div style="max-width:800px;margin:0 auto;">
+    <h1 class="essalem-about__hero-title">
+      Notre <span>Histoire</span>
+    </h1>
+    <p style="font-family:var(--font-modern);font-size:1.8rem;color:rgba(255,255,255,0.75);line-height:1.7;max-width:600px;margin:0 auto;">
+      ESSALEM ELEGANCE — une marque marocaine née de la passion pour l'élégance et le style.
+    </p>
+  </div>
+</div>
+
+<div class="essalem-page" style="padding-top:0;">
+  <div style="font-family:var(--font-modern);font-size:1.5rem;color:var(--essalem-gray);line-height:1.8;margin-bottom:60px;">
+    {{ page.content }}
+  </div>
+
+  <div class="essalem-about__values">
+    <div class="essalem-about__value">
+      <span class="essalem-about__value-icon">💎</span>
+      <h3 class="essalem-about__value-title">Qualité</h3>
+      <p class="essalem-about__value-text">Chaque produit est soigneusement sélectionné pour garantir une qualité premium.</p>
+    </div>
+    <div class="essalem-about__value">
+      <span class="essalem-about__value-icon">✨</span>
+      <h3 class="essalem-about__value-title">Élégance</h3>
+      <p class="essalem-about__value-text">Le style et le raffinement au cœur de chaque pièce de notre collection.</p>
+    </div>
+    <div class="essalem-about__value">
+      <span class="essalem-about__value-icon">💰</span>
+      <h3 class="essalem-about__value-title">Accessibilité</h3>
+      <p class="essalem-about__value-text">Les meilleurs prix du marché marocain, livraison gratuite incluse.</p>
+    </div>
+    <div class="essalem-about__value">
+      <span class="essalem-about__value-icon">🤝</span>
+      <h3 class="essalem-about__value-title">Confiance</h3>
+      <p class="essalem-about__value-text">Paiement à la livraison et retours faciles pour votre tranquillité d'esprit.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:60px 0;background:var(--essalem-black);margin:0 -20px;padding:60px 40px;">
+    <h2 style="font-family:var(--font-luxury);font-size:3.5rem;font-weight:400;color:var(--essalem-white);margin-bottom:12px;">Rejoignez la famille ESSALEM</h2>
+    <p style="font-family:var(--font-modern);font-size:1.5rem;color:rgba(255,255,255,0.65);margin-bottom:32px;">Des milliers de clients satisfaits à travers le Maroc</p>
+    <a href="/collections/all" style="display:inline-block;background:var(--essalem-gold);color:var(--essalem-black);font-family:var(--font-modern);font-size:1.3rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:16px 40px;text-decoration:none;transition:all 0.3s;">Découvrir la Collection</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "À Propos",
+  "tag": "section",
+  "settings": [],
+  "presets": [{"name": "À Propos"}]
+}
+{% endschema %}
