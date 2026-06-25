@@ -1,143 +1,213 @@
 {
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
+    "essalem-hero": {
+      "type": "essalem-hero",
       "settings": {
-        "show_announcement": true,
-        "announcement_text": "🚚 Livraison rapide au Maroc — Paiement à la livraison (COD) disponible ✦ Retours sous 7 jours"
+        "eyebrow": "Collection Premium 2024",
+        "title": "<p><em>Élégance</em> qui rassemble</p>",
+        "subtitle": "Montres, Lunettes, Sacs et Mode — pour Homme, Femme et Couples",
+        "cta_primary_label": "Acheter Maintenant",
+        "cta_primary_url": "/collections/all",
+        "cta_secondary_label": "Voir les Collections",
+        "cta_secondary_url": "/collections",
+        "overlay_opacity": 65
       }
     },
-    "header": {
-      "type": "header",
+    "essalem-collections-grid": {
+      "type": "essalem-collections-grid",
       "settings": {
-        "sticky_header_type": "on-scroll-up"
-      }
-    },
-    "hero-banner": {
-      "type": "image-banner",
-      "settings": {
-        "image_height": 700,
-        "image_overlay_opacity": 30,
-        "subheading": "Nouvelle Collection",
-        "heading": "L'Élégance <em>Marocaine</em>",
-        "button_label_1": "Découvrir la Collection",
-        "desktop_content_position": "middle-left",
-        "color_scheme": "background-1"
-      }
-    },
-    "features": {
-      "type": "luxury-features",
+        "eyebrow": "Nos Catégories",
+        "title": "Explorez Nos Collections"
+      },
       "blocks": {
-        "feat-1": {
-          "type": "feature",
+        "montres": {
+          "type": "collection_card",
           "settings": {
-            "icon": "✦",
-            "title": "Qualité Supérieure",
-            "text": "Tissus premium sélectionnés pour un confort absolu"
+            "name": "Montres",
+            "icon": "⌚",
+            "url": "/collections/montres"
           }
         },
-        "feat-2": {
+        "lunettes": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Lunettes",
+            "icon": "🕶️",
+            "url": "/collections/lunettes"
+          }
+        },
+        "sacs": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Sacs",
+            "icon": "👜",
+            "url": "/collections/sacs"
+          }
+        },
+        "chaussures": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Chaussures",
+            "icon": "👟",
+            "url": "/collections/chaussures"
+          }
+        },
+        "t-shirts": {
+          "type": "collection_card",
+          "settings": {
+            "name": "T-Shirts",
+            "icon": "👕",
+            "url": "/collections/t-shirts"
+          }
+        },
+        "casquettes": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Casquettes",
+            "icon": "🧢",
+            "url": "/collections/casquettes"
+          }
+        },
+        "accessoires": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Accessoires",
+            "icon": "💎",
+            "url": "/collections/accessoires"
+          }
+        }
+      },
+      "block_order": ["montres", "lunettes", "sacs", "chaussures", "t-shirts", "casquettes", "accessoires"]
+    },
+    "essalem-why-us": {
+      "type": "essalem-why-us",
+      "settings": {
+        "eyebrow": "Nos Avantages",
+        "title": "Pourquoi Choisir ESSALEM ?"
+      },
+      "blocks": {
+        "livraison": {
           "type": "feature",
           "settings": {
             "icon": "🚚",
-            "title": "Livraison Maroc",
-            "text": "Livraison rapide 24–72h partout au Maroc"
+            "title": "Livraison Gratuite",
+            "text": "Livraison gratuite partout au Maroc. Recevez votre commande en 24-72h."
           }
         },
-        "feat-3": {
+        "cod": {
           "type": "feature",
           "settings": {
             "icon": "💳",
-            "title": "Paiement COD",
-            "text": "Payez à la réception — aucun risque pour vous"
+            "title": "Paiement à la Livraison",
+            "text": "Payez en espèces à la réception. Aucun risque, aucune carte bancaire requise."
           }
         },
-        "feat-4": {
+        "qualite": {
           "type": "feature",
           "settings": {
-            "icon": "↩",
-            "title": "Retours Faciles",
-            "text": "7 jours pour changer d'avis"
+            "icon": "⭐",
+            "title": "Qualité Supérieure",
+            "text": "Chaque produit est sélectionné avec soin pour vous garantir la meilleure qualité."
+          }
+        },
+        "securite": {
+          "type": "feature",
+          "settings": {
+            "icon": "🔒",
+            "title": "Commande Sécurisée",
+            "text": "Votre satisfaction est garantie. Retour facile sous 7 jours si vous n'êtes pas satisfait."
           }
         }
       },
-      "block_order": ["feat-1", "feat-2", "feat-3", "feat-4"]
+      "block_order": ["livraison", "cod", "qualite", "securite"]
     },
-    "featured-collection": {
+    "best-sellers": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "Sélection",
-        "title": "Nos Pièces Phares",
-        "products_to_show": 4,
+        "title": "Meilleures Ventes",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "products_to_show": 8,
         "columns_desktop": 4,
+        "full_width": false,
         "show_view_all": true,
-        "view_all_label": "Voir toute la collection"
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-2",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "enable_quick_add": true,
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
-    "brand-story": {
-      "type": "rich-text",
+    "essalem-testimonials": {
+      "type": "essalem-testimonials",
+      "settings": {
+        "eyebrow": "Avis Clients",
+        "title": "Ce Que Disent Nos Clients"
+      },
       "blocks": {
-        "eyebrow": {
-          "type": "eyebrow",
-          "settings": { "eyebrow": "Notre Univers" }
-        },
-        "heading": {
-          "type": "heading",
+        "t1": {
+          "type": "testimonial",
           "settings": {
-            "heading": "L'Art de l'Élégance Moderne",
-            "heading_size": "h1"
+            "rating": 5,
+            "text": "J'ai commandé une montre pour mon mari, elle est magnifique ! Livraison en 2 jours à Casablanca. Je recommande vivement ESSALEM ELEGANCE !",
+            "name": "Fatima Z.",
+            "location": "Casablanca",
+            "verified": true
           }
         },
-        "text": {
-          "type": "text",
+        "t2": {
+          "type": "testimonial",
           "settings": {
-            "text": "<p>Essalam Elegance incarne le luxe marocain moderne — des pièces soigneusement sélectionnées pour la femme qui allie tradition et sophistication contemporaine.</p>"
+            "rating": 5,
+            "text": "Les lunettes sont superbes et la qualité est au rendez-vous. Le paiement à la livraison m'a rassurée. Très bonne expérience d'achat.",
+            "name": "Mohamed A.",
+            "location": "Rabat",
+            "verified": true
           }
         },
-        "btn": {
-          "type": "button",
+        "t3": {
+          "type": "testimonial",
           "settings": {
-            "button_label": "Découvrir notre histoire",
-            "button_style": "secondary"
+            "rating": 5,
+            "text": "Sac reçu en parfait état, exactement comme sur les photos. Service client très réactif sur WhatsApp. J'achèterai encore !",
+            "name": "Khadija M.",
+            "location": "Marrakech",
+            "verified": true
           }
         }
       },
-      "block_order": ["eyebrow", "heading", "text", "btn"],
-      "settings": {
-        "desktop_content_position": "center"
-      }
+      "block_order": ["t1", "t2", "t3"]
     },
-    "footer": {
-      "type": "footer",
-      "blocks": {
-        "col-1": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Collections",
-            "menu": "main-menu"
-          }
-        },
-        "col-2": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Aide",
-            "menu": "footer"
-          }
-        }
-      },
-      "block_order": ["col-1", "col-2"],
+    "essalem-contact": {
+      "type": "essalem-contact",
       "settings": {
-        "brand_tagline": "Mode de luxe pour la femme marocaine moderne"
+        "eyebrow": "Contactez-Nous",
+        "title": "Nous Sommes Là Pour Vous",
+        "info_title": "Nos Coordonnées",
+        "whatsapp": "+212 6XX XXX XXX",
+        "phone": "+212 6XX XXX XXX",
+        "email": "contact@essalamelegance.store",
+        "hours": "Lun–Sam, 9h–21h",
+        "form_title": "Envoyez-Nous un Message"
       }
     }
   },
   "order": [
-    "announcement-bar",
-    "header",
-    "hero-banner",
-    "features",
-    "featured-collection",
-    "brand-story",
-    "footer"
+    "essalem-hero",
+    "essalem-collections-grid",
+    "essalem-why-us",
+    "best-sellers",
+    "essalem-testimonials",
+    "essalem-contact"
   ]
 }

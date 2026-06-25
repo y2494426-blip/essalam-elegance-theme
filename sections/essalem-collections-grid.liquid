@@ -1,0 +1,118 @@
+{% comment %} ESSALEM ELEGANCE - Collections Grid Section {% endcomment %}
+<section class="essalem-collections-grid">
+  <div class="essalem-section-header">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-section-eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    <h2 class="essalem-section-title">{{ section.settings.title }}</h2>
+    <div class="essalem-section-divider"></div>
+  </div>
+
+  <div class="essalem-collections-grid__grid">
+    {% for block in section.blocks %}
+      {% assign collection = collections[block.settings.collection] %}
+      <a href="{% if collection != blank %}{{ collection.url }}{% else %}{{ block.settings.url }}{% endif %}"
+         class="essalem-collection-card"
+         {{ block.shopify_attributes }}>
+
+        {% if collection.image %}
+          <img
+            class="essalem-collection-card__image"
+            src="{{ collection.image | image_url: width: 600 }}"
+            alt="{{ block.settings.name }}"
+            loading="lazy"
+            width="600"
+          >
+        {% elsif block.settings.image != blank %}
+          <img
+            class="essalem-collection-card__image"
+            src="{{ block.settings.image | image_url: width: 600 }}"
+            alt="{{ block.settings.name }}"
+            loading="lazy"
+            width="600"
+          >
+        {% else %}
+          <div class="essalem-collection-card__placeholder">{{ block.settings.icon }}</div>
+        {% endif %}
+
+        <div class="essalem-collection-card__overlay"></div>
+
+        <div class="essalem-collection-card__content">
+          <span class="essalem-collection-card__icon">{{ block.settings.icon }}</span>
+          <span class="essalem-collection-card__name">{{ block.settings.name }}</span>
+          <span class="essalem-collection-card__cta">Découvrir &rarr;</span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Grille Collections",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus",
+      "default": "Nos Catégories"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre de section",
+      "default": "Explorez Nos Collections"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Carte Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (si pas de collection)"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Lien manuel"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nom affiché",
+          "default": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji/Icône",
+          "default": "✨"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grille Collections",
+      "blocks": [
+        {"type": "collection_card", "settings": {"name": "Montres", "icon": "⌚", "url": "/collections/montres"}},
+        {"type": "collection_card", "settings": {"name": "Lunettes", "icon": "🕶️", "url": "/collections/lunettes"}},
+        {"type": "collection_card", "settings": {"name": "Sacs", "icon": "👜", "url": "/collections/sacs"}},
+        {"type": "collection_card", "settings": {"name": "Chaussures", "icon": "👟", "url": "/collections/chaussures"}},
+        {"type": "collection_card", "settings": {"name": "T-Shirts", "icon": "👕", "url": "/collections/t-shirts"}},
+        {"type": "collection_card", "settings": {"name": "Casquettes", "icon": "🧢", "url": "/collections/casquettes"}},
+        {"type": "collection_card", "settings": {"name": "Accessoires", "icon": "💎", "url": "/collections/accessoires"}}
+      ]
+    }
+  ]
+}
+{% endschema %}
