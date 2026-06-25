@@ -1,0 +1,72 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div class="product-recommendations page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="product-recommendations__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    <div class="grid grid--{{ section.settings.columns_desktop }}-col">
+      {%- for recommendation in recommendations.products -%}
+        <div class="grid__item">
+          {%- render 'card-product', card_product: recommendation -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<style>
+  .product-recommendations {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+  .product-recommendations__heading {
+    font-family: var(--font-heading-family);
+    font-size: calc(var(--font-heading-scale) * 2rem);
+    font-weight: 400;
+    text-align: center;
+    margin: 0 0 3rem;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Recommandations produit",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Vous pourriez aussi aimer",
+      "label": "Titre"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Nombre de produits"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4,
+      "label": "Colonnes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recommandations produit"
+    }
+  ]
+}
+{% endschema %}

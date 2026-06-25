@@ -6,7 +6,7 @@
         "products_per_page": 12,
         "columns_desktop": 4,
         "enable_sorting": true,
-        "enable_filtering": true
+        "enable_filtering": false
       }
     }
   },

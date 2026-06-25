@@ -1,0 +1,285 @@
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+<section class="product-section page-width" id="shopify-section-{{ section.id }}">
+  <div class="product" id="Product-{{ section.id }}">
+
+    <!-- Media gallery -->
+    <div class="product__media-wrapper" id="MediaGallery-{{ section.id }}">
+      <div class="product__media-list">
+        {%- if product.media.size > 0 -%}
+          {%- for media in product.media -%}
+            <div class="product__media-item{% if forloop.first %} product__media-item--active{% endif %}" id="{{ section.id }}-{{ media.id }}">
+              {%- if media.media_type == 'image' -%}
+                <div class="media ratio" style="--ratio: {{ media.aspect_ratio }}">
+                  <img
+                    src="{{ media | image_url: width: 1080 }}"
+                    alt="{{ media.alt | escape }}"
+                    width="{{ media.width }}"
+                    height="{{ media.height }}"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    {% if forloop.first %}fetchpriority="high"{% endif %}
+                  >
+                </div>
+              {%- elsif media.media_type == 'video' -%}
+                <div class="media ratio" style="--ratio: {{ media.aspect_ratio }}">
+                  {{ media | media_tag: image_size: '1024x', autoplay: false, loop: false, controls: true }}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <div class="product__media-item">
+            <div class="media ratio" style="--ratio: 1">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Thumbnails -->
+      {%- if product.media.size > 1 -%}
+        <div class="product__thumbnails">
+          {%- for media in product.media -%}
+            <button
+              class="product__thumbnail{% if forloop.first %} product__thumbnail--active{% endif %}"
+              data-media-id="{{ section.id }}-{{ media.id }}"
+              aria-label="{{ media.alt | default: product.title | escape }}"
+            >
+              <div class="media ratio" style="--ratio: 1">
+                <img
+                  src="{{ media | image_url: width: 120 }}"
+                  alt="{{ media.alt | escape }}"
+                  width="120"
+                  height="120"
+                  loading="lazy"
+                >
+              </div>
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Product info -->
+    <div class="product__info-wrapper">
+      <div id="ProductInfo-{{ section.id }}" class="product__info-container">
+
+        {%- if section.settings.show_vendor and product.vendor != blank -%}
+          <p class="product__vendor">{{ product.vendor | upcase }}</p>
+        {%- endif -%}
+
+        <h1 class="product__title">{{ product.title }}</h1>
+
+        <div id="price-{{ section.id }}" class="price-wrapper" role="status">
+          {%- render 'price', product: product, use_variant: true, show_badges: true -%}
+        </div>
+
+        <div class="product__description rte">
+          {{ product.description }}
+        </div>
+
+        {%- unless product.has_only_default_variant -%}
+          <variant-selects
+            id="variant-selects-{{ section.id }}"
+            data-section="{{ section.id }}"
+            data-url="{{ product.url }}"
+          >
+            {%- for option in product.options_with_values -%}
+              <div class="product-form__input">
+                <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                  {{ option.name }}
+                </label>
+                <div class="select">
+                  <select
+                    id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                    class="select__select"
+                    name="options[{{ option.name | escape }}]"
+                    form="{{ product_form_id }}"
+                  >
+                    {%- for value in option.values -%}
+                      <option
+                        value="{{ value | escape }}"
+                        {% if option.selected_value == value %}selected="selected"{% endif %}
+                      >{{ value }}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              </div>
+            {%- endfor -%}
+            <script type="application/json">
+              {{ product.variants | json }}
+            </script>
+          </variant-selects>
+        {%- endunless -%}
+
+        <!-- Quantity -->
+        <div class="product-form__input">
+          <label class="form__label" for="Quantity-{{ section.id }}">Quantité</label>
+          <quantity-input class="quantity">
+            <button class="quantity__button" name="minus" type="button" aria-label="Diminuer">
+              <svg width="10" height="2" viewBox="0 0 10 2" fill="none" aria-hidden="true"><path d="M0 1h10" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+            <input
+              class="quantity__input"
+              type="number"
+              name="quantity"
+              id="Quantity-{{ section.id }}"
+              min="1"
+              value="1"
+              form="{{ product_form_id }}"
+              autocomplete="off"
+            >
+            <button class="quantity__button" name="plus" type="button" aria-label="Augmenter">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 0v10M0 5h10" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+          </quantity-input>
+        </div>
+
+        <!-- Form -->
+        <product-form>
+          {%- form 'product', product, id: product_form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" value="{{ current_variant.id }}" disabled>
+
+            <div class="product-form__error-message-wrapper" hidden role="alert">
+              <span class="product-form__error-message"></span>
+            </div>
+
+            <div class="product-form__buttons">
+              <button
+                id="ProductSubmitButton-{{ section.id }}"
+                type="submit"
+                name="add"
+                class="product-form__submit button button--full-width button--primary"
+                {% if current_variant.available == false %}disabled{% endif %}
+              >
+                <span class="btn-label">
+                  {%- if current_variant.available -%}
+                    Ajouter au panier
+                  {%- else -%}
+                    Épuisé
+                  {%- endif -%}
+                </span>
+                <div class="loading-overlay">
+                  <div class="loading-overlay__spinner"></div>
+                </div>
+              </button>
+
+              {%- if section.settings.show_dynamic_checkout -%}
+                {{ form | payment_button }}
+              {%- endif -%}
+            </div>
+
+            <!-- COD notice -->
+            <p class="product-form__cod-notice">
+              💳 Paiement à la livraison (COD) disponible &mdash; Livraison 24&ndash;72h au Maroc
+            </p>
+          {%- endform -%}
+        </product-form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .product-section { padding: 4rem 0 6rem; }
+  .product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .product__vendor {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: var(--color-gold);
+    margin: 0 0 0.8rem;
+  }
+  .product__title {
+    font-family: var(--font-heading-family);
+    font-size: calc(var(--font-heading-scale) * 2.8rem);
+    font-weight: 400;
+    margin: 0 0 1.5rem;
+  }
+  .price-wrapper { margin: 0 0 2rem; }
+  .product__description { margin: 0 0 2.5rem; font-size: 1.4rem; line-height: 1.8; color: rgba(var(--color-foreground), 0.75); }
+  .product-form__input { margin-bottom: 2rem; }
+  .product-form__buttons { margin-top: 1rem; }
+  .product-form__submit { height: 5rem; }
+  .product-form__cod-notice {
+    font-size: 1.2rem;
+    color: var(--color-gold);
+    margin-top: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .product__thumbnails {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .product__thumbnail {
+    width: 6rem;
+    height: 6rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    overflow: hidden;
+  }
+  .product__thumbnail--active { border-color: var(--color-gold); }
+  .product__thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+  @media screen and (max-width: 749px) {
+    .product { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const gallery = document.getElementById('MediaGallery-{{ section.id }}');
+    if (!gallery) return;
+    gallery.querySelectorAll('.product__thumbnail').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.mediaId;
+        gallery.querySelectorAll('.product__media-item').forEach(item => item.classList.remove('product__media-item--active'));
+        gallery.querySelectorAll('.product__thumbnail').forEach(t => t.classList.remove('product__thumbnail--active'));
+        document.getElementById(targetId)?.classList.add('product__media-item--active');
+        btn.classList.add('product__thumbnail--active');
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Informations produit",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Afficher la marque"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "default": true,
+      "label": "Bouton paiement dynamique"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Informations produit"
+    }
+  ]
+}
+{% endschema %}

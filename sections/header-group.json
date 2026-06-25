@@ -1,0 +1,20 @@
+{
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "🚚 Livraison rapide au Maroc — Paiement à la livraison (COD) disponible ✦ Retours sous 7 jours"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "sticky_header_type": "on-scroll-up",
+        "logo_width": 200
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

@@ -1,80 +1,120 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
 {%- liquid
-  assign ratio = 1.2
-  if settings.card_image_ratio
-    assign ratio = settings.card_image_ratio
-  endif
+  assign product_url = card_product.url | default: '#'
+  assign placeholder_index = placeholder_index | default: 1
 -%}
 
 <div class="card-wrapper product-card-wrapper">
-  <div class="card card--{{ settings.card_style }} color-background-1">
-    <div class="card__inner">
-      <div class="card__media" style="padding-top: {{ 1 | divided_by: ratio | times: 100 }}%;">
+  <div class="card card--{{ settings.card_style | default: 'standard' }} color-background-1">
+
+    <!-- Media -->
+    <div class="card__inner{% if card_product == blank %} ratio{% endif %}"{% if card_product == blank %} style="--ratio: {{ settings.card_image_ratio | default: 1.2 | divided_by: 1.0 }}"{% endif %}>
+      <div class="card__media">
         {%- if card_product.featured_media -%}
-          <a href="{{ card_product.url }}" tabindex="-1" aria-label="{{ card_product.title | escape }}">
-            <img
-              src="{{ card_product.featured_media | image_url: width: 600 }}"
-              alt="{{ card_product.featured_media.alt | escape }}"
-              class="card__image motion-reduce"
-              width="600"
-              height="{{ 600 | divided_by: card_product.featured_media.aspect_ratio | ceil }}"
-              loading="lazy"
-            >
+          <a href="{{ product_url }}" class="card__media-link" tabindex="-1" aria-hidden="true">
+            <div class="media ratio" style="--ratio: {{ settings.card_image_ratio | default: 1.2 | divided_by: 1.0 }}">
+              <img
+                srcset="
+                  {{ card_product.featured_media | image_url: width: 165 }} 165w,
+                  {{ card_product.featured_media | image_url: width: 360 }} 360w,
+                  {{ card_product.featured_media | image_url: width: 533 }} 533w,
+                  {{ card_product.featured_media | image_url: width: 720 }} 720w,
+                  {{ card_product.featured_media | image_url: width: 940 }} 940w
+                "
+                src="{{ card_product.featured_media | image_url: width: 533 }}"
+                sizes="(min-width: 1400px) 350px, (min-width: 990px) calc((100vw - 10rem) / 4), (min-width: 750px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)"
+                alt="{{ card_product.featured_media.alt | escape }}"
+                class="motion-reduce"
+                width="{{ card_product.featured_media.width }}"
+                height="{{ card_product.featured_media.height }}"
+                loading="lazy"
+              >
+              {%- if card_product.media[1] != blank -%}
+                <img
+                  srcset="
+                    {{ card_product.media[1] | image_url: width: 165 }} 165w,
+                    {{ card_product.media[1] | image_url: width: 360 }} 360w,
+                    {{ card_product.media[1] | image_url: width: 533 }} 533w,
+                    {{ card_product.media[1] | image_url: width: 720 }} 720w
+                  "
+                  src="{{ card_product.media[1] | image_url: width: 533 }}"
+                  sizes="(min-width: 1400px) 350px, (min-width: 990px) calc((100vw - 10rem) / 4), (min-width: 750px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)"
+                  alt="{{ card_product.media[1].alt | escape }}"
+                  class="motion-reduce"
+                  width="{{ card_product.media[1].width }}"
+                  height="{{ card_product.media[1].height }}"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </div>
           </a>
-          {%- if card_product.media[1] != blank -%}
-            <img
-              src="{{ card_product.media[1] | image_url: width: 600 }}"
-              alt="{{ card_product.media[1].alt | escape }}"
-              class="card__image card__image--secondary motion-reduce"
-              width="600"
-              height="{{ 600 | divided_by: card_product.media[1].aspect_ratio | ceil }}"
-              loading="lazy"
-            >
-          {%- endif -%}
         {%- else -%}
-          <a href="{% unless card_product == blank %}{{ card_product.url }}{% endunless %}" tabindex="-1">
-            {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+          <a href="{{ product_url }}" tabindex="-1" aria-hidden="true">
+            <div class="media ratio" style="--ratio: {{ settings.card_image_ratio | default: 1.2 | divided_by: 1.0 }}">
+              {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
           </a>
         {%- endif -%}
+      </div>
 
-        <!-- Quick action overlay -->
-        <div class="card__overlay">
-          {%- if card_product != blank -%}
-            <a href="{{ card_product.url }}" class="card__overlay-link button button--primary">
-              Voir le produit
-            </a>
-          {%- endif -%}
-        </div>
-
-        <!-- Badges -->
-        <div class="card__badges">
-          {%- if card_product.available == false -%}
-            <span class="badge badge--sold-out">Épuisé</span>
-          {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-            <span class="badge badge--sale">Promo</span>
-          {%- endif -%}
-          {%- if card_product.tags contains 'nouveau' or card_product.tags contains 'new' -%}
-            <span class="badge badge--new">Nouveau</span>
-          {%- endif -%}
-        </div>
+      <!-- Badges -->
+      <div class="card__badge top left">
+        {%- if card_product.available == false -%}
+          <span class="badge badge--sold-out">Épuisé</span>
+        {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+          <span class="badge badge--sale">
+            -{{ card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price }}%
+          </span>
+        {%- endif -%}
+        {%- if card_product.tags contains 'nouveau' or card_product.tags contains 'new' -%}
+          <span class="badge badge--new">Nouveau</span>
+        {%- endif -%}
       </div>
     </div>
 
+    <!-- Card content -->
     <div class="card__content">
       <div class="card__information">
-        {%- if card_product.vendor != blank -%}
-          <p class="card__vendor visually-hidden">{{ card_product.vendor }}</p>
-        {%- endif -%}
-
-        <h3 class="card__heading">
-          <a href="{% unless card_product == blank %}{{ card_product.url }}{% endunless %}" class="full-unstyled-link">
+        <h3 class="card__heading{% if card_product == blank %} card__heading--placeholder{% endif %}">
+          <a
+            href="{{ product_url }}"
+            class="full-unstyled-link"
+            {% if card_product == blank %} tabindex="-1"{% endif %}
+          >
             {{ card_product.title | default: 'Titre du produit' | escape }}
           </a>
         </h3>
 
         <div class="card__price">
-          {%- render 'price', product: card_product -%}
+          {%- if card_product != blank -%}
+            {%- render 'price', product: card_product -%}
+          {%- else -%}
+            <div class="price">
+              <div class="price__container">
+                <span class="price-item price-item--regular">{{ 299 | times: 100 | money }}</span>
+              </div>
+            </div>
+          {%- endif -%}
         </div>
       </div>
     </div>
+
   </div>
 </div>
+
+<style>
+  .card__media-link { display: block; }
+  .card__badge.top.left {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    z-index: 2;
+  }
+  .card__heading { font-size: calc(var(--font-heading-scale, 1) * 1.5rem); margin: 0 0 0.5rem; }
+  .card__price { margin-top: 0.4rem; }
+</style>

@@ -18,61 +18,87 @@
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
 
-  {% if page_description %}
+  {%- if page_description -%}
     <meta name="description" content="{{ page_description | escape }}">
-  {% endif %}
+  {%- endif -%}
 
-  <!-- Preconnect fonts -->
+  <!-- Google Fonts: Cormorant Garamond + Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   {{ content_for_header }}
 
-  {{ 'base.css' | asset_url | stylesheet_tag }}
-  {{ 'custom.css' | asset_url | stylesheet_tag }}
-
-  {%- unless settings.type_body_font.system? -%}
-    <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
-  {%- endunless -%}
-  {%- unless settings.type_header_font.system? -%}
-    <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-  {%- endunless -%}
+  {%- liquid
+    assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bolder'
+    assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+    assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+  -%}
 
   {% style %}
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ body_font_bold | font_face: font_display: 'swap' }}
+    {{ body_font_italic | font_face: font_display: 'swap' }}
+    {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+    {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
     :root {
-      --color-base-text: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
-      --color-base-background-1: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
-      --color-base-background-2: {{ settings.colors_background_2.red }}, {{ settings.colors_background_2.green }}, {{ settings.colors_background_2.blue }};
-      --color-base-accent-1: {{ settings.colors_accent_1.red }}, {{ settings.colors_accent_1.green }}, {{ settings.colors_accent_1.blue }};
-      --color-base-accent-2: {{ settings.colors_accent_2.red }}, {{ settings.colors_accent_2.green }}, {{ settings.colors_accent_2.blue }};
-      --color-base-solid-button-labels: {{ settings.colors_solid_button_labels.red }}, {{ settings.colors_solid_button_labels.green }}, {{ settings.colors_solid_button_labels.blue }};
-      --color-base-outline-button-labels: {{ settings.colors_secondary_button_text.red }}, {{ settings.colors_secondary_button_text.green }}, {{ settings.colors_secondary_button_text.blue }};
-      --color-base-button: {{ settings.colors_button.red }}, {{ settings.colors_button.green }}, {{ settings.colors_button.blue }};
-      --page-width: {{ settings.page_width }};
-      --font-heading-family: 'Cormorant Garamond', Georgia, serif;
+      /* Dawn API — RGB triplets */
+      --color-foreground: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
+      --color-background: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
+      --color-shadow: {{ settings.colors_text.red }}, {{ settings.colors_text.green }}, {{ settings.colors_text.blue }};
+      --color-button: {{ settings.colors_button.red }}, {{ settings.colors_button.green }}, {{ settings.colors_button.blue }};
+      --color-button-text: {{ settings.colors_button_text.red }}, {{ settings.colors_button_text.green }}, {{ settings.colors_button_text.blue }};
+      --color-secondary-button: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
+      --color-secondary-button-text: {{ settings.colors_secondary_button_text.red }}, {{ settings.colors_secondary_button_text.green }}, {{ settings.colors_secondary_button_text.blue }};
+
+      /* Brand palette */
+      --color-black: #0A0A0A;
+      --color-white: #FFFFFF;
+      --color-gold: #C9A84C;
+      --color-gold-light: #D4B96A;
+      --color-gold-dark: #A8893A;
+      --color-cream: #F7F5F0;
+
+      /* Typography */
       --font-body-family: 'Montserrat', Arial, sans-serif;
+      --font-body-style: normal;
+      --font-body-weight: 300;
+      --font-body-weight-bold: 600;
+      --font-heading-family: 'Cormorant Garamond', Georgia, serif;
       --font-heading-style: normal;
       --font-heading-weight: 400;
-      --font-body-weight: 400;
-      --font-body-weight-bold: 600;
       --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
       --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
-      --buttons-radius: {{ settings.buttons_radius }}px;
-      --buttons-border-width: {{ settings.buttons_border_thickness }}px;
+
+      /* Layout */
+      --page-width: {{ settings.page_width | default: '1400px' }};
+
+      /* Buttons */
+      --buttons-radius: {{ settings.buttons_radius | default: 0 }}px;
+      --border-width: {{ settings.buttons_border_thickness | default: 1 }}px;
+      --border-opacity: {{ settings.buttons_border_opacity | default: 100 | divided_by: 100.0 }};
     }
   {% endstyle %}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
 </head>
 
 <body class="gradient{% if settings.animations_reveal_on_scroll %} animate--page-load{% endif %}">
-  {% sections 'header-group' %}
+  <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+    Aller au contenu principal
+  </a>
+
+  {%- sections 'header-group' -%}
 
   <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
-  {% sections 'footer-group' %}
+  {%- sections 'footer-group' -%}
 
+  <script>window.routes = { cart_add_url: '{{ routes.cart_add_url }}', cart_change_url: '{{ routes.cart_change_url }}', cart_update_url: '{{ routes.cart_update_url }}', cart_url: '{{ routes.cart_url }}', predictive_search_url: '{{ routes.predictive_search_url }}' };</script>
   {{ 'global.js' | asset_url | script_tag }}
 </body>
 </html>
