@@ -1,163 +1,107 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  ESSALEM ELEGANCE — Luxury Product Card
+  IMPORTANT: .card__inner MUST always have class `ratio` to avoid height collapse.
+  (bug fix: position:absolute children collapse when parent has no height)
+{% endcomment %}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign product_url = card_product.url | default: '#'
   assign placeholder_index = placeholder_index | default: 1
-  assign card_image_ratio = settings.card_image_ratio | default: 0.8
+  assign has_image = false
+  if card_product != blank and card_product.featured_media
+    assign has_image = true
+  endif
+  if card_product != blank and card_product.compare_at_price > card_product.price
+    assign savings_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price
+  endif
 -%}
 
-<div class="card-wrapper product-card-wrapper">
-  <div class="card card--{{ settings.card_style | default: 'standard' }} color-background-1">
+<div class="lux-card">
 
-    <!-- Media: always .ratio so card__inner has defined height -->
-    <div
-      class="card__inner ratio"
-      style="--ratio: {{ card_image_ratio }}"
-    >
-      <div class="card__media">
-        {%- if card_product != blank and card_product.featured_media -%}
-          <a href="{{ product_url }}" class="card__media-link" tabindex="-1" aria-hidden="true">
-            <div class="media">
-              <img
-                srcset="
-                  {{ card_product.featured_media | image_url: width: 165 }} 165w,
-                  {{ card_product.featured_media | image_url: width: 360 }} 360w,
-                  {{ card_product.featured_media | image_url: width: 533 }} 533w,
-                  {{ card_product.featured_media | image_url: width: 720 }} 720w,
-                  {{ card_product.featured_media | image_url: width: 940 }} 940w
-                "
-                src="{{ card_product.featured_media | image_url: width: 533 }}"
-                sizes="(min-width: 1400px) 350px, (min-width: 990px) calc((100vw - 10rem) / 4), (min-width: 750px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)"
-                alt="{{ card_product.featured_media.alt | escape }}"
-                class="motion-reduce"
-                loading="lazy"
-              >
-              {%- if card_product.media[1] != blank -%}
-                <img
-                  srcset="
-                    {{ card_product.media[1] | image_url: width: 165 }} 165w,
-                    {{ card_product.media[1] | image_url: width: 360 }} 360w,
-                    {{ card_product.media[1] | image_url: width: 533 }} 533w,
-                    {{ card_product.media[1] | image_url: width: 720 }} 720w
-                  "
-                  src="{{ card_product.media[1] | image_url: width: 533 }}"
-                  sizes="(min-width: 1400px) 350px, (min-width: 990px) calc((100vw - 10rem) / 4), (min-width: 750px) calc((100vw - 8rem) / 2), calc(100vw - 3rem)"
-                  alt="{{ card_product.media[1].alt | escape }}"
-                  class="motion-reduce card__image--secondary"
-                  loading="lazy"
-                >
-              {%- endif -%}
-            </div>
-          </a>
-        {%- else -%}
-          <a href="{{ product_url }}" tabindex="-1" aria-hidden="true">
-            <div class="media">
-              {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
-            </div>
-          </a>
-        {%- endif -%}
-      </div>
-
-      <!-- Badges -->
-      <div class="card__badge top left">
-        {%- if card_product != blank -%}
-          {%- if card_product.available == false -%}
-            <span class="badge badge--sold-out">Épuisé</span>
-          {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-            {%- assign savings_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
-            <span class="badge badge--sale">-{{ savings_pct }}%</span>
-          {%- endif -%}
-          {%- if card_product.tags contains 'nouveau' or card_product.tags contains 'new' -%}
-            <span class="badge badge--new">Nouveau</span>
-          {%- endif -%}
-        {%- endif -%}
-      </div>
-    </div>
-
-    <!-- Card content -->
-    <div class="card__content">
-      <div class="card__information">
-        <h3 class="card__heading">
-          <a
-            href="{{ product_url }}"
-            class="full-unstyled-link"
-            {% if card_product == blank %} tabindex="-1"{% endif %}
+  {%- comment -%} MEDIA {%- endcomment -%}
+  <div class="lux-card__media">
+    {%- if has_image -%}
+      <a href="{{ product_url }}" class="lux-card__img-wrap" aria-label="{{ card_product.title | escape }}" tabindex="-1">
+        <img
+          class="lux-card__img"
+          src="{{ card_product.featured_media | image_url: width: 600 }}"
+          srcset="
+            {{ card_product.featured_media | image_url: width: 300 }} 300w,
+            {{ card_product.featured_media | image_url: width: 600 }} 600w,
+            {{ card_product.featured_media | image_url: width: 900 }} 900w
+          "
+          sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+          alt="{{ card_product.featured_media.alt | escape }}"
+          loading="lazy"
+          width="600"
+          height="750"
+        >
+        {%- if card_product.media[1] != blank -%}
+          <img
+            class="lux-card__img-alt"
+            src="{{ card_product.media[1] | image_url: width: 600 }}"
+            alt="{{ card_product.media[1].alt | escape }}"
+            loading="lazy"
+            width="600"
+            height="750"
           >
-            {{ card_product.title | default: 'Titre du produit' | escape }}
-          </a>
-        </h3>
+        {%- endif -%}
+      </a>
+    {%- else -%}
+      <a href="{{ product_url }}" class="lux-card__img-wrap" tabindex="-1">
+        {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+      </a>
+    {%- endif -%}
 
-        <div class="card__price">
-          {%- if card_product != blank -%}
-            {%- render 'price', product: card_product -%}
-          {%- else -%}
-            <div class="price">
-              <div class="price__container">
-                <span class="price-item price-item--regular">{{ 299 | times: 100 | money }}</span>
-              </div>
-            </div>
-          {%- endif -%}
-        </div>
-      </div>
+    {%- comment -%} BADGES {%- endcomment -%}
+    <div class="lux-card__badges">
+      {%- if card_product != blank -%}
+        {%- if card_product.available == false -%}
+          <span class="lux-badge lux-badge--sold-out">Épuisé</span>
+        {%- elsif savings_pct > 0 -%}
+          <span class="lux-badge lux-badge--sale">-{{ savings_pct }}%</span>
+        {%- endif -%}
+        {%- if card_product.tags contains 'nouveau' or card_product.tags contains 'new' -%}
+          <span class="lux-badge lux-badge--new">Nouveau</span>
+        {%- endif -%}
+      {%- endif -%}
     </div>
 
+    {%- comment -%} QUICK VIEW LINK {%- endcomment -%}
+    <a href="{{ product_url }}" class="lux-card__quick-view">Voir le produit</a>
   </div>
+
+  {%- comment -%} CARD INFO {%- endcomment -%}
+  <div class="lux-card__info">
+    {%- if card_product != blank -%}
+      {%- if show_vendor and card_product.vendor != blank -%}
+        <span class="lux-card__vendor">{{ card_product.vendor }}</span>
+      {%- endif -%}
+    {%- endif -%}
+
+    <h3 class="lux-card__title">
+      <a href="{{ product_url }}">{{ card_product.title | default: 'Titre du produit' | escape }}</a>
+    </h3>
+
+    <div class="lux-card__price-row">
+      {%- if card_product != blank -%}
+        {%- if savings_pct > 0 -%}
+          <span class="lux-card__price lux-card__price--sale">{{ card_product.price | money }}</span>
+          <span class="lux-card__price--compare">{{ card_product.compare_at_price | money }}</span>
+        {%- else -%}
+          <span class="lux-card__price">{{ card_product.price | money }}</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="lux-card__price">{{ 29900 | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+
 </div>
 
-<style>
-  /* Ensure .card__media fills the .ratio container absolutely */
-  .card--standard .card__inner.ratio > .card__media {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  /* .media inside card__media fills its parent */
-  .card--standard .card__inner.ratio > .card__media .media {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Images fill the media box */
-  .card--standard .card__inner.ratio > .card__media .media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-
-  /* Secondary image hover swap */
-  .card--standard .card__inner.ratio > .card__media .media .card__image--secondary {
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  .card-wrapper:hover .card--standard .card__inner.ratio > .card__media .media .card__image--secondary {
-    opacity: 1;
-  }
-
-  .card__badge.top.left {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    z-index: 2;
-  }
-
-  /* card__media-link fills the container */
-  .card__media-link {
-    display: block;
-    position: absolute;
-    inset: 0;
-  }
-
-  .card__heading { font-size: calc(var(--font-heading-scale, 1) * 1.5rem); margin: 0 0 0.5rem; }
-  .card__price { margin-top: 0.4rem; }
-</style>
+{%- comment -%}
+  NOTE: We intentionally do NOT use Dawn's .card__inner/.card__media structure here.
+  We use .lux-card__media with padding-bottom aspect ratio trick (no position:absolute
+  dependency chain) to avoid the height-collapse bug from component-card.css.
+{%- endcomment -%}
