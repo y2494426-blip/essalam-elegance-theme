@@ -1,0 +1,183 @@
+<style>
+.lux-float-cart {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  z-index: 9999;
+}
+.lux-float-cart__btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #0A0A0A;
+  border: 2px solid #C9A86A;
+  color: #C9A86A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.lux-float-cart__btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px rgba(201,168,106,0.4);
+}
+.lux-float-cart__btn.pop {
+  animation: lux-cart-pop 0.4s ease;
+}
+@keyframes lux-cart-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); }
+  70%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.lux-float-cart__count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #C9A86A;
+  color: #0A0A0A;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+.lux-float-cart__count.hidden { display: none; }
+.lux-float-cart__count.bump {
+  animation: lux-count-bump 0.3s ease;
+}
+@keyframes lux-count-bump {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+.lux-card__quick-add {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background: #0A0A0A;
+  color: #C9A86A;
+  border: 1.5px solid #C9A86A;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  text-align: center;
+}
+.lux-card__quick-add:hover:not(:disabled) {
+  background: #C9A86A;
+  color: #0A0A0A;
+}
+.lux-card__quick-add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.lux-card__quick-add.success {
+  background: #2a7a4b;
+  border-color: #2a7a4b;
+  color: #fff;
+}
+</style>
+
+<div class="lux-float-cart" id="luxFloatCart">
+  <button class="lux-float-cart__btn" id="luxFloatCartBtn" onclick="window.location.href='/cart'" aria-label="Voir le panier">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="21" r="1"/>
+      <circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    <span class="lux-float-cart__count hidden" id="luxCartCount">0</span>
+  </button>
+</div>
+
+<script>
+(function() {
+  var countEl = document.getElementById('luxCartCount');
+  var btnEl   = document.getElementById('luxFloatCartBtn');
+
+  function updateCount(n) {
+    if (n > 0) {
+      countEl.textContent = n;
+      countEl.classList.remove('hidden');
+    } else {
+      countEl.classList.add('hidden');
+    }
+  }
+
+  fetch('/cart.js')
+    .then(function(r){ return r.json(); })
+    .then(function(c){ updateCount(c.item_count); })
+    .catch(function(){});
+
+  window.luxQuickAdd = function(btn) {
+    if (!btn || btn.disabled) return;
+    var variantId = btn.getAttribute('data-variant-id');
+    if (!variantId) return;
+    btn.disabled = true;
+    var orig = btn.textContent;
+    btn.textContent = '...';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      if (data.status && data.status >= 400) {
+        btn.textContent = orig;
+        btn.disabled = false;
+        return Promise.reject('add failed');
+      }
+      btn.textContent = '\u2713 Ajout\u00e9';
+      btn.classList.add('success');
+      if (btnEl) {
+        btnEl.classList.remove('pop');
+        void btnEl.offsetWidth;
+        btnEl.classList.add('pop');
+        btnEl.addEventListener('animationend', function(){ btnEl.classList.remove('pop'); }, { once: true });
+      }
+      return fetch('/cart.js').then(function(r){ return r.json(); });
+    })
+    .then(function(cart) {
+      if (cart && cart.item_count !== undefined) {
+        updateCount(cart.item_count);
+        if (countEl) {
+          countEl.classList.remove('bump');
+          void countEl.offsetWidth;
+          countEl.classList.add('bump');
+          countEl.addEventListener('animationend', function(){ countEl.classList.remove('bump'); }, { once: true });
+        }
+      }
+      setTimeout(function() {
+        btn.textContent = orig;
+        btn.classList.remove('success');
+        btn.disabled = false;
+      }, 1800);
+    })
+    .catch(function() {
+      btn.textContent = orig;
+      btn.classList.remove('success');
+      btn.disabled = false;
+    });
+  };
+
+  document.addEventListener('cart:updated', function() {
+    fetch('/cart.js')
+      .then(function(r){ return r.json(); })
+      .then(function(c){ updateCount(c.item_count); })
+      .catch(function(){});
+  });
+})();
+</script>

@@ -1,0 +1,256 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+
+{% render 'essalem-back-button' %}
+{% render 'lux-float-cart' %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_media = current_variant.featured_media | default: product.featured_media -%}
+
+<div class="lux-product-page">
+
+  <div class="lux-cod-bar">
+    <span>🚚 Livraison rapide au Maroc</span>
+    <span>💳 Paiement à la livraison (COD)</span>
+    <span>✅ Retours sous 7 jours</span>
+  </div>
+
+  <div class="lux-product-layout">
+
+    <div class="lux-gallery" id="lux-gallery">
+      <div class="lux-gallery__main">
+        {%- if featured_media -%}
+          <div class="lux-gallery__main-img" id="lux-main-img">
+            {{ featured_media | image_url: width: 900 | image_tag: loading: 'eager', class: 'lux-gallery__img', id: 'lux-featured-img' }}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="lux-gallery__thumbs">
+          {%- for media in product.media limit: 8 -%}
+            <button
+              class="lux-gallery__thumb {% if media == featured_media %}lux-gallery__thumb--active{% endif %}"
+              onclick="document.getElementById('lux-featured-img').src='{{ media | image_url: width: 900 }}'; this.closest('.lux-gallery__thumbs').querySelectorAll('.lux-gallery__thumb').forEach(b=>b.classList.remove('lux-gallery__thumb--active')); this.classList.add('lux-gallery__thumb--active');"
+              aria-label="Image {{ forloop.index }}"
+            >
+              {{ media | image_url: width: 120 | image_tag: loading: 'lazy', class: 'lux-gallery__thumb-img' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="lux-product-info">
+
+      {%- if product.vendor != blank -%}
+        <p class="lux-product-vendor">{{ product.vendor }}</p>
+      {%- endif -%}
+
+      <h1 class="lux-product-title">{{ product.title }}</h1>
+
+      <div class="lux-product-price" id="price-{{ section.id }}">
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="lux-price--sale">{{ current_variant.price | money }}</span>
+          <span class="lux-price--compare">{{ current_variant.compare_at_price | money }}</span>
+          {%- assign savings = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+          <span class="lux-badge--sale">-{{ savings }}%</span>
+        {%- else -%}
+          <span class="lux-price">{{ current_variant.price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="lux-product-rating">
+        <span class="lux-stars">★★★★★</span>
+        <span class="lux-rating-count">({{ product.metafields.reviews.rating_count | default: '24' }} avis)</span>
+      </div>
+
+      {%- form 'product', product, id: 'product-form-{{ section.id }}', class: 'lux-product-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="lux-option-group">
+              <label class="lux-option-label">{{ option.name }}</label>
+              <div class="lux-variant-pills">
+                {%- for value in option.values -%}
+                  <label class="lux-variant-pill">
+                    <input type="radio" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="lux-qty-group">
+          <label class="lux-option-label" for="qty-{{ section.id }}">Quantité</label>
+          <div class="lux-qty-selector">
+            <button type="button" class="lux-qty-btn" onclick="let q=document.getElementById('qty-{{ section.id }}'); if(q.value>1)q.value=+q.value-1;">−</button>
+            <input type="number" id="qty-{{ section.id }}" name="quantity" value="1" min="1" class="lux-qty-input" readonly>
+            <button type="button" class="lux-qty-btn" onclick="let q=document.getElementById('qty-{{ section.id }}'); q.value=+q.value+1;">+</button>
+          </div>
+        </div>
+
+        <div class="lux-cod-form-wrapper">
+          {%- comment -%}content_for 'blocks' renders EasySell App Block if added via customizer{%- endcomment -%}
+          {% content_for 'blocks' %}
+          {%- comment -%}Fallback button — AJAX add-to-cart, no page redirect. EasySell App Embed hooks onto [name="add"] and replaces it with the COD form when active.{%- endcomment -%}
+          <button
+            type="button"
+            class="lux-add-to-cart-btn"
+            data-lux-add-to-cart
+            {% if current_variant.available == false %}disabled{% endif %}
+            style="
+              width:100%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              gap:8px;
+              background:#000;
+              color:#fff;
+              border:none;
+              border-radius:8px;
+              padding:16px;
+              font-size:16px;
+              font-weight:600;
+              cursor:pointer;
+              margin-bottom:10px;
+              transition:opacity 0.2s;
+              {% if current_variant.available == false %}opacity:0.5;cursor:not-allowed;{% endif %}
+            "
+          >
+            <span data-lux-add-to-cart-label>
+              {%- if current_variant.available -%}
+                🛒 Ajouter au panier
+              {%- else -%}
+                Rupture de stock
+              {%- endif -%}
+            </span>
+          </button>
+        </div>
+
+      {%- endform -%}
+
+      <script>
+        (function () {
+          var btn = document.currentScript.previousElementSibling.querySelector('[data-lux-add-to-cart]')
+            || document.currentScript.parentElement.querySelector('[data-lux-add-to-cart]');
+          if (!btn) return;
+          var form = btn.closest('form');
+          var label = btn.querySelector('[data-lux-add-to-cart-label]');
+          var originalText = label ? label.textContent : '';
+
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (btn.disabled) return;
+
+            var formData = new FormData(form);
+            btn.disabled = true;
+            if (label) label.textContent = 'Ajout en cours...';
+
+            fetch('/cart/add.js', {
+              method: 'POST',
+              body: formData,
+              headers: { 'Accept': 'application/json' }
+            })
+              .then(function (res) {
+                if (!res.ok) throw new Error('Add to cart failed');
+                return res.json();
+              })
+              .then(function () {
+                if (label) label.textContent = '✓ Ajouté au panier';
+
+                // Refresh cart count on the floating cart icon, if present
+                return fetch('/cart.js')
+                  .then(function (res) { return res.json(); })
+                  .then(function (cart) {
+                    document
+                      .querySelectorAll('[data-lux-cart-count], .lux-cart-count, #lux-cart-count')
+                      .forEach(function (el) { el.textContent = cart.item_count; });
+                    document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+                  });
+              })
+              .catch(function () {
+                if (label) label.textContent = 'Erreur, réessayez';
+              })
+              .finally(function () {
+                setTimeout(function () {
+                  btn.disabled = false;
+                  if (label) label.textContent = originalText;
+                }, 1800);
+              });
+          });
+        })();
+      </script>
+
+      <div class="lux-trust-grid">
+        <div class="lux-trust-item"><div class="lux-trust-icon">🚚</div><div class="lux-trust-text">Livraison rapide partout au Maroc</div></div>
+        <div class="lux-trust-item"><div class="lux-trust-icon">💳</div><div class="lux-trust-text">Paiement à la livraison (COD)</div></div>
+        <div class="lux-trust-item"><div class="lux-trust-icon">🔒</div><div class="lux-trust-text">Commande 100% sécurisée</div></div>
+        <div class="lux-trust-item"><div class="lux-trust-icon">↩</div><div class="lux-trust-text">Retours acceptés sous 7 jours</div></div>
+      </div>
+
+      {%- if product.description != blank -%}
+        <div class="lux-product-desc">
+          <h3 class="lux-section-label">Description</h3>
+          {{ product.description }}
+        </div>
+      {%- endif -%}
+
+      <div class="lux-accordion">
+        <h3 class="lux-section-label">Questions fréquentes</h3>
+        <details class="lux-accordion__item">
+          <summary class="lux-accordion__q">Comment commander ?</summary>
+          <div class="lux-accordion__a">Choisissez votre taille et couleur, cliquez sur le bouton de commande et entrez votre adresse. Vous payez à la livraison.</div>
+        </details>
+        <details class="lux-accordion__item">
+          <summary class="lux-accordion__q">Quel est le délai de livraison ?</summary>
+          <div class="lux-accordion__a">La livraison est effectuée sous 2 à 5 jours ouvrables partout au Maroc.</div>
+        </details>
+        <details class="lux-accordion__item">
+          <summary class="lux-accordion__q">Comment effectuer un retour ?</summary>
+          <div class="lux-accordion__a">Contactez-nous dans les 7 jours suivant la réception. Nous organisons le retour gratuit et le remboursement ou échange.</div>
+        </details>
+        <details class="lux-accordion__item">
+          <summary class="lux-accordion__q">Les produits sont-ils authentiques ?</summary>
+          <div class="lux-accordion__a">Tous nos produits sont 100% authentiques, sélectionnés avec soin pour leur qualité artisanale marocaine.</div>
+        </details>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="lux-reviews-section">
+    <h2 class="lux-reviews-title">Ce que disent nos clients</h2>
+    <div class="lux-reviews-grid">
+      <div class="lux-review-card">
+        <div class="lux-stars">★★★★★</div>
+        <p class="lux-review-text">"Qualité exceptionnelle ! Le tissu est luxueux et la coupe parfaite."</p>
+        <p class="lux-review-author">— Fatima Z., Casablanca</p>
+      </div>
+      <div class="lux-review-card">
+        <div class="lux-stars">★★★★★</div>
+        <p class="lux-review-text">"Livraison rapide et produit conforme. Je recommande vivement ESSALEM ELEGANCE."</p>
+        <p class="lux-review-author">— Youssef M., Rabat</p>
+      </div>
+      <div class="lux-review-card">
+        <div class="lux-stars">★★★★★</div>
+        <p class="lux-review-text">"Un vrai coup de cœur. L'emballage est soigné et le produit est magnifique."</p>
+        <p class="lux-review-author">— Sara B., Marrakech</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" }
+  ]
+}
+{% endschema %}

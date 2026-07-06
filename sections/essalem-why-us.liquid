@@ -1,0 +1,78 @@
+{% comment %} ESSALEM ELEGANCE - Why Choose Us Section {% endcomment %}
+<section class="essalem-why-us">
+  <div class="essalem-section-header">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-section-eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    <h2 class="essalem-section-title">{{ section.settings.title }}</h2>
+    <div class="essalem-section-divider"></div>
+  </div>
+
+  <div class="essalem-why-us__grid">
+    {% for block in section.blocks %}
+      <div class="essalem-feature-card" {{ block.shopify_attributes }}>
+        <span class="essalem-feature-card__icon">{{ block.settings.icon }}</span>
+        <h3 class="essalem-feature-card__title">{{ block.settings.title }}</h3>
+        <p class="essalem-feature-card__text">{{ block.settings.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pourquoi Nous Choisir",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus",
+      "default": "Nos Avantages"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Pourquoi Choisir ESSALEM ?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Avantage",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji",
+          "default": "✨"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Avantage"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Description de l'avantage"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pourquoi Nous Choisir",
+      "blocks": [
+        {"type": "feature", "settings": {"icon": "🚚", "title": "Livraison Gratuite", "text": "Livraison gratuite partout au Maroc. Recevez votre commande en 24-72h."}},
+        {"type": "feature", "settings": {"icon": "💳", "title": "Paiement à la Livraison", "text": "Payez en espèces à la réception. Aucun risque, aucune carte bancaire requise."}},
+        {"type": "feature", "settings": {"icon": "⭐", "title": "Qualité Supérieure", "text": "Chaque produit est sélectionné avec soin pour vous garantir la meilleure qualité."}},
+        {"type": "feature", "settings": {"icon": "🔒", "title": "Commande Sécurisée", "text": "Votre satisfaction est garantie. Retour facile sous 7 jours si vous n'êtes pas satisfait."}}
+      ]
+    }
+  ]
+}
+{% endschema %}

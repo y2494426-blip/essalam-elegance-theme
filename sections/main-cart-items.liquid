@@ -1,0 +1,128 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+{% render 'essalem-back-button' %}
+
+<div class="lux-cart-page">
+  <button
+    type="button"
+    class="lux-cart-close"
+    aria-label="Fermer le panier"
+    onclick="if (document.referrer && document.referrer.indexOf(window.location.host) !== -1) { history.back(); } else { window.location.href = '/'; }"
+  >
+    ✕
+  </button>
+
+  <h1 class="lux-cart-title">Votre panier</h1>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="lux-cart-empty">
+      <p class="lux-cart-empty__text">Votre panier est vide pour le moment.</p>
+      <a href="/collections/all" class="lux-btn">Continuer mes achats</a>
+    </div>
+  {%- else -%}
+    <form action="/cart" method="post" class="lux-cart-form">
+      <div class="lux-cart-items">
+        {%- for item in cart.items -%}
+          <div class="lux-cart-item">
+            <a href="{{ item.url }}" class="lux-cart-item__img-link">
+              {{ item.image | image_url: width: 160 | image_tag: loading: 'lazy', class: 'lux-cart-item__img' }}
+            </a>
+            <div class="lux-cart-item__info">
+              <a href="{{ item.url }}" class="lux-cart-item__title">{{ item.product.title }}</a>
+              {%- if item.variant.title != 'Default Title' -%}
+                <p class="lux-cart-item__variant">{{ item.variant.title }}</p>
+              {%- endif -%}
+              <p class="lux-cart-item__price-mobile">{{ item.final_price | money }}</p>
+              <div class="lux-cart-item__qty-row">
+                <div class="lux-qty-selector lux-qty-selector--sm">
+                  <button type="button" class="lux-qty-btn" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.dispatchEvent(new Event('change'));">−</button>
+                  <input type="number" class="lux-qty-input" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ forloop.index }}" onchange="this.form.submit();">
+                  <button type="button" class="lux-qty-btn" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.dispatchEvent(new Event('change'));">+</button>
+                </div>
+                <a href="/cart/change?line={{ forloop.index }}&quantity=0" class="lux-cart-item__remove">Retirer</a>
+              </div>
+            </div>
+            <div class="lux-cart-item__price-desktop">
+              {%- if item.original_price != item.final_price -%}
+                <span class="lux-price--sale">{{ item.final_price | money }}</span>
+                <span class="lux-price--compare">{{ item.original_price | money }}</span>
+              {%- else -%}
+                <span class="lux-price">{{ item.final_price | money }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="lux-cart-summary">
+        <div class="lux-cart-summary__row lux-cart-summary__row--total">
+          <span>Sous-total</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+        <p class="lux-cart-summary__note">Frais de livraison et taxes calculés à l'étape suivante.</p>
+        <button type="submit" name="checkout" class="lux-btn-atc"></button>
+        <a href="/collections/all" class="lux-cart-summary__continue">← Continuer mes achats</a>
+      </div>
+    </form>
+  {%- endif -%}
+</div>
+
+<style>
+  .lux-cart-page { max-width: 1000px; margin: 0 auto; padding: 100px 24px 80px; min-height: 50vh; position: relative; }
+  .lux-cart-title { font-family: var(--lux-font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 300; color: var(--lux-black); margin: 0 0 36px; text-align: center; }
+
+  .lux-cart-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.2s;
+  }
+  .lux-cart-close:hover { opacity: 0.75; }
+
+  .lux-cart-empty { text-align: center; padding: 60px 0; }
+  .lux-cart-empty__text { font-family: var(--lux-font-sans); color: var(--lux-gray); margin-bottom: 24px; }
+
+  .lux-cart-form { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
+  @media (max-width: 768px) { .lux-cart-form { grid-template-columns: 1fr; } }
+
+  .lux-cart-items { display: flex; flex-direction: column; gap: 20px; }
+  .lux-cart-item { display: grid; grid-template-columns: 90px 1fr auto; gap: 16px; align-items: center; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .lux-cart-item__img-link { display: block; border-radius: var(--lux-radius); overflow: hidden; background: var(--lux-beige); }
+  .lux-cart-item__img { width: 90px; height: 90px; object-fit: cover; display: block; }
+  .lux-cart-item__title { font-family: var(--lux-font-serif); font-size: 1.05rem; color: var(--lux-black); text-decoration: none; }
+  .lux-cart-item__variant { font-family: var(--lux-font-sans); font-size: 0.8rem; color: var(--lux-gray); margin: 4px 0; }
+  .lux-cart-item__price-mobile { display: none; font-family: var(--lux-font-sans); font-weight: 600; margin: 4px 0; }
+  .lux-cart-item__qty-row { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
+  .lux-qty-selector--sm .lux-qty-btn { width: 32px; height: 36px; font-size: 1rem; }
+  .lux-qty-selector--sm .lux-qty-input { width: 42px; height: 36px; }
+  .lux-cart-item__remove { font-family: var(--lux-font-sans); font-size: 0.78rem; color: var(--lux-gray); text-decoration: underline; }
+  .lux-cart-item__price-desktop { font-family: var(--lux-font-sans); font-weight: 600; color: var(--lux-black); white-space: nowrap; }
+  @media (max-width: 600px) {
+    .lux-cart-item { grid-template-columns: 70px 1fr; }
+    .lux-cart-item__price-desktop { display: none; }
+    .lux-cart-item__price-mobile { display: block; }
+  }
+
+  .lux-cart-summary { background: var(--lux-beige); border-radius: var(--lux-radius); padding: 24px; position: sticky; top: 100px; }
+  .lux-cart-summary__row { display: flex; justify-content: space-between; font-family: var(--lux-font-sans); margin-bottom: 8px; }
+  .lux-cart-summary__row--total { font-size: 1.15rem; font-weight: 700; color: var(--lux-black); margin: 12px 0; }
+  .lux-cart-summary__note { font-size: 0.75rem; color: var(--lux-gray); margin-bottom: 16px; }
+  .lux-cart-summary .lux-btn-atc { width: 100%; margin-bottom: 12px; }
+  .lux-cart-summary__continue { display: block; text-align: center; font-family: var(--lux-font-sans); font-size: 0.8rem; color: var(--lux-gray); text-decoration: none; }
+</style>
+
+{% schema %}
+{ "name": "Panier", "tag": "section", "class": "section", "settings": [] }
+{% endschema %}

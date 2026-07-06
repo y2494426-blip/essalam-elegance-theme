@@ -1,0 +1,144 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+{% render 'essalem-back-button' %}
+{% render 'lux-float-cart' %}
+
+<div class="lux-collection-page">
+
+  <!-- Beige/white luxury banner -->
+  <div class="lux-col-banner">
+    <div class="lux-col-banner__orb lux-col-banner__orb--1"></div>
+    <div class="lux-col-banner__orb lux-col-banner__orb--2"></div>
+    <div class="lux-col-banner__orb lux-col-banner__orb--3"></div>
+    <div class="lux-col-banner__dots"></div>
+    <div class="lux-col-banner__content">
+      <p class="lux-col-banner__eyebrow">Collection Exclusive</p>
+      <h1 class="lux-col-banner__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="lux-col-banner__desc">{{ collection.description | strip_html | truncate: 120 }}</p>
+      {%- endif -%}
+      <div class="lux-col-banner__line"></div>
+    </div>
+  </div>
+
+  <style>
+  .lux-col-banner {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FDFAF4 0%, #F5F1E8 50%, #EDE8DC 100%);
+    padding: 72px 24px 64px;
+    text-align: center;
+  }
+  .lux-col-banner__dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #C9A86A22 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  .lux-col-banner__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    animation: lux-orb-drift 8s ease-in-out infinite alternate;
+  }
+  .lux-col-banner__orb--1 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #C9A86A28 0%, transparent 70%);
+    top: -80px; left: -60px;
+    animation-duration: 9s;
+  }
+  .lux-col-banner__orb--2 {
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, #C9A86A1a 0%, transparent 70%);
+    top: 20px; right: -40px;
+    animation-duration: 11s;
+    animation-delay: -3s;
+  }
+  .lux-col-banner__orb--3 {
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #BFA06022 0%, transparent 70%);
+    bottom: -30px; left: 40%;
+    animation-duration: 7s;
+    animation-delay: -5s;
+  }
+  @keyframes lux-orb-drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(20px, 15px) scale(1.08); }
+  }
+  .lux-col-banner__content { position: relative; z-index: 1; }
+  .lux-col-banner__eyebrow {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    color: #C9A86A;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .lux-col-banner__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 600;
+    color: #1A1409;
+    margin: 0 0 16px;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+  }
+  .lux-col-banner__desc {
+    font-size: 15px;
+    color: #5a4e3a;
+    max-width: 520px;
+    margin: 0 auto 20px;
+    line-height: 1.65;
+  }
+  .lux-col-banner__line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C9A86A, transparent);
+    margin: 0 auto;
+  }
+  </style>
+
+  <!-- Toolbar -->
+  <div class="lux-toolbar">
+    <p class="lux-toolbar__count">
+      {%- if collection.products_count == 1 -%}
+        1 produit
+      {%- else -%}
+        {{ collection.products_count }} produits
+      {%- endif -%}
+    </p>
+  </div>
+
+  <!-- Product grid -->
+  <div class="lux-product-grid">
+    {%- for product in collection.products -%}
+      {% render 'card-product',
+        card_product: product,
+        media_aspect_ratio: 'portrait',
+        show_secondary_image: true,
+        show_vendor: false
+      %}
+    {%- else -%}
+      <p class="lux-empty">Aucun produit dans cette collection.</p>
+    {%- endfor -%}
+  </div>
+
+  <!-- Pagination -->
+  {%- if paginate.pages > 1 -%}
+    <div class="lux-pagination">
+      {{ paginate | default_pagination }}
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}

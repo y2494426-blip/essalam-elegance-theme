@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "essalem-page-contact",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

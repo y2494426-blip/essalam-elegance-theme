@@ -1,0 +1,23 @@
+{% comment %} ESSALEM ELEGANCE - Dedicated Contact Page {% endcomment %}
+<div class="essalem-page">
+  <h1 class="essalem-page__title">Contactez-Nous</h1>
+  <p class="essalem-page__subtitle">Nous sommes là pour vous aider 7j/7</p>
+</div>
+
+{% render 'essalem-contact' %}
+
+<div style="max-width:900px;margin:0 auto;padding:0 20px 60px;">
+  <div style="background:var(--essalem-black);padding:40px;text-align:center;">
+    <p style="font-family:var(--font-luxury);font-size:2.4rem;color:var(--essalem-gold);margin-bottom:12px;">Réponse rapide garantie</p>
+    <p style="font-family:var(--font-modern);font-size:1.4rem;color:rgba(255,255,255,0.65);">Nous répondons à tous les messages dans les 2 heures. Sur WhatsApp, c'est encore plus rapide !</p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page Contact",
+  "tag": "section",
+  "settings": [],
+  "presets": [{"name": "Page Contact"}]
+}
+{% endschema %}

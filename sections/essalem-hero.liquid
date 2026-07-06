@@ -1,0 +1,420 @@
+{% comment %} ESSALEM ELEGANCE - Hero Section (Three.js 3D background) {% endcomment %}
+<section
+  class="essalem-hero essalem-hero--3d"
+  id="essalem-hero-{{ section.id }}"
+  style="{% if section.settings.background_image != blank %}background-image:url({{ section.settings.background_image | image_url: width: 2000 }});background-size:cover;background-position:center;{% endif %}"
+>
+
+  {%- comment -%} Three.js WebGL canvas — fades in when ready {%- endcomment -%}
+  <canvas
+    class="essalem-hero__canvas"
+    id="essalem-canvas-{{ section.id }}"
+    aria-hidden="true"
+  ></canvas>
+
+  {%- comment -%} CSS fallback scene — visible until WebGL initialises {%- endcomment -%}
+  <div class="essalem-hero__css-scene" id="essalem-css-{{ section.id }}" aria-hidden="true">
+    <div class="essalem-hero__orb essalem-hero__orb--1"></div>
+    <div class="essalem-hero__orb essalem-hero__orb--2"></div>
+    <div class="essalem-hero__orb essalem-hero__orb--3"></div>
+    <div class="essalem-hero__grid-floor"></div>
+    <div class="essalem-hero__particles">
+      {%- for i in (1..14) -%}
+        <span class="essalem-hero__particle" style="--i:{{ i }};"></span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {% if section.settings.background_image != blank %}
+    <div
+      class="essalem-hero__image-overlay"
+      style="position:absolute;inset:0;background:rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }});z-index:1;"
+    ></div>
+  {% endif %}
+
+  <div class="essalem-hero__content">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-hero__eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+
+    <h1 class="essalem-hero__title">{{ section.settings.title }}</h1>
+
+    {% if section.settings.subtitle != blank %}
+      <p class="essalem-hero__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    <div class="essalem-hero__trust">
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon"></span>
+        Livraison gratuite
+      </span>
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon">&#x1F4B3;</span>
+        Paiement &#xE0; la livraison
+      </span>
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon">&#x2B50;</span>
+        Qualit&#xE9; premium
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .essalem-hero--3d {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 30%, #1a1a1a 0%, #0a0a0a 60%, #000 100%);
+  }
+
+  /* WebGL canvas */
+  .essalem-hero__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  /* CSS fallback */
+  .essalem-hero__css-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    transition: opacity 0.8s ease;
+  }
+  .essalem-hero__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(42px);
+    opacity: 0.38;
+    background: radial-gradient(circle at 35% 30%, rgba(201,168,106,0.9), rgba(201,168,106,0.02) 70%);
+    animation: essalem-orb-float 9s ease-in-out infinite;
+  }
+  .essalem-hero__orb--1 { width: 320px; height: 320px; top: 5%;  left: 5%;  animation-delay: 0s; }
+  .essalem-hero__orb--2 { width: 200px; height: 200px; top: 50%; left: 75%; animation-delay: 2.5s; background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%); }
+  .essalem-hero__orb--3 { width: 240px; height: 240px; top: 65%; left: 12%; animation-delay: 5s; }
+  @keyframes essalem-orb-float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50%       { transform: translate(14px,-22px) scale(1.07); }
+  }
+  .essalem-hero__grid-floor {
+    position: absolute;
+    left: 50%; bottom: -5%;
+    width: 220%; height: 55%;
+    background-image:
+      linear-gradient(rgba(201,168,106,0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,106,0.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: translateX(-50%) rotateX(78deg);
+    transform-origin: bottom;
+    mask-image: linear-gradient(to top, rgba(0,0,0,0.85), transparent 75%);
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.85), transparent 75%);
+  }
+  .essalem-hero__particles { position: absolute; inset: 0; }
+  .essalem-hero__particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    border-radius: 50%;
+    background: rgba(201,168,106,0.85);
+    box-shadow: 0 0 6px rgba(201,168,106,0.6);
+    left: calc((var(--i) * 7%) + 1%);
+    top: 100%;
+    animation: essalem-particle-rise calc(7s + (var(--i) * 0.4s)) linear infinite;
+    animation-delay: calc(var(--i) * -0.7s);
+  }
+  @keyframes essalem-particle-rise {
+    0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-110vh) scale(1); opacity: 0; }
+  }
+
+  .essalem-hero__content { position: relative; z-index: 2; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .essalem-hero__orb,
+    .essalem-hero__particle { animation: none !important; }
+  }
+  @media (max-width: 768px) {
+    .essalem-hero__orb { filter: blur(52px); opacity: 0.25; }
+  }
+</style>
+
+<script>
+(function () {
+  var SECTION_ID = '{{ section.id }}';
+  var hero     = document.getElementById('essalem-hero-' + SECTION_ID);
+  var canvas   = document.getElementById('essalem-canvas-' + SECTION_ID);
+  var cssScene = document.getElementById('essalem-css-' + SECTION_ID);
+  if (!hero || !canvas) return;
+
+  // Respect reduced-motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Quick WebGL probe
+  function hasWebGL() {
+    try {
+      var c = document.createElement('canvas');
+      return !!(c.getContext('webgl') || c.getContext('experimental-webgl'));
+    } catch (e) { return false; }
+  }
+  if (!hasWebGL()) return;
+
+  // ---- Load Three.js, then init scene ----
+  function loadThreeJS(cb) {
+    if (typeof THREE !== 'undefined') { cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js';
+    s.defer = true;
+    s.onload = cb;
+    s.onerror = function () { console.warn('[ESSALEM] Three.js load failed — CSS fallback active.'); };
+    document.head.appendChild(s);
+  }
+
+  function initThree() {
+    if (typeof THREE === 'undefined') return;
+
+    var W = hero.offsetWidth;
+    var H = hero.offsetHeight || 600;
+
+    // Renderer — transparent so CSS gradient shows through
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    var scene  = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 100);
+    camera.position.set(0, 0, 6);
+
+    // ---- Materials ----
+    var goldMat = new THREE.MeshStandardMaterial({
+      color: 0xC9A86A, metalness: 0.88, roughness: 0.12
+    });
+    var goldDimMat = new THREE.MeshStandardMaterial({
+      color: 0xC9A86A, metalness: 0.75, roughness: 0.25,
+      transparent: true, opacity: 0.42
+    });
+    var whiteMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff, metalness: 0.65, roughness: 0.2,
+      transparent: true, opacity: 0.22
+    });
+
+    // ---- Torus rings ----
+    // Primary ring — bold gold
+    var ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.045, 32, 120), goldMat);
+    ring1.rotation.x = Math.PI * 0.15;
+    scene.add(ring1);
+
+    // Outer sweeping ring
+    var ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.55, 0.022, 16, 100), goldDimMat);
+    ring2.rotation.x = Math.PI * 0.55;
+    ring2.rotation.z = Math.PI * 0.1;
+    scene.add(ring2);
+
+    // Inner delicate ring
+    var ring3 = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.016, 16, 80), whiteMat);
+    ring3.rotation.x = Math.PI * 0.35;
+    ring3.rotation.y = Math.PI * 0.2;
+    scene.add(ring3);
+
+    // ---- Floating gems (octahedra = diamond-cut look) ----
+    var gemData = [
+      [-2.8,  0.8, -1.0, 0.095, 0, 0.30],
+      [ 2.6,  1.2, -0.5, 0.070, 1, 0.45],
+      [-1.8, -1.6, -0.8, 0.110, 0, 0.60],
+      [ 2.2, -1.0,  0.5, 0.085, 1, 0.20],
+      [-2.5,  1.8,  0.2, 0.065, 0, 0.75],
+      [ 1.8,  2.0, -1.2, 0.100, 1, 0.10],
+      [ 0.6, -2.2,  0.8, 0.080, 0, 0.50],
+      [-0.8,  2.2, -0.3, 0.060, 1, 0.35]
+    ];
+    var gems = [];
+    gemData.forEach(function (d) {
+      var mesh = new THREE.Mesh(
+        new THREE.OctahedronGeometry(d[3], 0),
+        d[4] === 0 ? goldMat : whiteMat
+      );
+      mesh.position.set(d[0], d[1], d[2]);
+      mesh.rotation.set(d[5], d[5] * 1.3, 0);
+      scene.add(mesh);
+      gems.push({ mesh: mesh, vy: 0.3 + Math.random() * 0.5, offset: d[5] });
+    });
+
+    // ---- Gold particle field ----
+    var PC = 280;
+    var pPos  = new Float32Array(PC * 3);
+    var pSpd  = new Float32Array(PC);
+    for (var i = 0; i < PC; i++) {
+      pPos[i*3]   = (Math.random() - 0.5) * 10;
+      pPos[i*3+1] = (Math.random() - 0.5) * 7;
+      pPos[i*3+2] = (Math.random() - 0.5) * 4;
+      pSpd[i]     = 0.0015 + Math.random() * 0.003;
+    }
+    var pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    var pMat = new THREE.PointsMaterial({
+      color: 0xC9A86A, size: 0.032, transparent: true, opacity: 0.6
+    });
+    scene.add(new THREE.Points(pGeo, pMat));
+
+    // ---- Lighting ----
+    scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+
+    var goldLight = new THREE.PointLight(0xC9A86A, 3.8, 14);
+    goldLight.position.set(3, 3, 4);
+    scene.add(goldLight);
+
+    var whiteLight = new THREE.PointLight(0xffffff, 1.6, 12);
+    whiteLight.position.set(-3, -2, 3);
+    scene.add(whiteLight);
+
+    var rimLight = new THREE.PointLight(0xD4B97A, 1.4, 10);
+    rimLight.position.set(0, 4, -2);
+    scene.add(rimLight);
+
+    // ---- Mouse camera parallax ----
+    var mX = 0, mY = 0, cX = 0, cY = 0;
+    function onMouseMove(e) {
+      var r = hero.getBoundingClientRect();
+      mX =  ((e.clientX - r.left)  / r.width  - 0.5) * 0.9;
+      mY = -((e.clientY - r.top)   / r.height - 0.5) * 0.55;
+    }
+    hero.addEventListener('mousemove', onMouseMove);
+    hero.addEventListener('mouseleave', function () { mX = 0; mY = 0; });
+
+    // ---- Resize ----
+    function onResize() {
+      W = hero.offsetWidth;
+      H = hero.offsetHeight || 600;
+      camera.aspect = W / H;
+      camera.updateProjectionMatrix();
+      renderer.setSize(W, H);
+    }
+    window.addEventListener('resize', onResize);
+
+    // ---- Render loop ----
+    var clock   = new THREE.Clock();
+    var rafId   = null;
+    var isVisible = true;
+
+    var visObs = new IntersectionObserver(function (entries) {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible && !rafId) rafId = requestAnimationFrame(tick);
+    }, { threshold: 0.05 });
+    visObs.observe(hero);
+
+    function tick() {
+      if (!isVisible) { rafId = null; return; }
+      rafId = requestAnimationFrame(tick);
+
+      var t = clock.getElapsedTime();
+
+      // Rings
+      ring1.rotation.y  = t * 0.20;
+      ring1.rotation.z  = t * 0.06;
+      ring2.rotation.y  = -t * 0.13;
+      ring2.rotation.z += 0.0008;
+      ring3.rotation.x  = Math.PI * 0.35 + Math.sin(t * 0.38) * 0.06;
+      ring3.rotation.y  = t * 0.25;
+
+      // Gems drift
+      gems.forEach(function (g) {
+        g.mesh.rotation.y += g.vy * 0.009;
+        g.mesh.rotation.x += g.vy * 0.006;
+        g.mesh.position.y += Math.sin(t * g.vy + g.offset) * 0.0008;
+      });
+
+      // Particles rise
+      for (var i = 0; i < PC; i++) {
+        pPos[i*3+1] += pSpd[i];
+        if (pPos[i*3+1] > 3.5) pPos[i*3+1] = -3.5;
+      }
+      pGeo.attributes.position.needsUpdate = true;
+
+      // Camera parallax (eased)
+      cX += (mX - cX) * 0.045;
+      cY += (mY - cY) * 0.045;
+      camera.position.x = cX;
+      camera.position.y = cY;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+    }
+
+    // Fade canvas in, fade CSS scene out
+    canvas.style.opacity = '1';
+    if (cssScene) cssScene.style.opacity = '0';
+    setTimeout(function () {
+      if (cssScene) cssScene.style.display = 'none';
+    }, 1200);
+
+    rafId = requestAnimationFrame(tick);
+
+    // Theme editor cleanup
+    if (window.Shopify && Shopify.designMode) {
+      document.addEventListener('shopify:section:unload', function (e) {
+        if (e.target.contains && e.target.contains(hero)) {
+          cancelAnimationFrame(rafId);
+          visObs.disconnect();
+          renderer.dispose();
+          window.removeEventListener('resize', onResize);
+        }
+      });
+    }
+  }
+
+  // Kick off — load Three.js as soon as possible (defer attribute handles non-blocking)
+  loadThreeJS(initThree);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Hero ESSALEM",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Image de fond (optionnelle, sinon fond 3D noir/or)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacit\u00e9 du calque",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus du titre",
+      "default": "Collection Premium 2024"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Titre principal",
+      "default": "<p><em>\u00c9l\u00e9gance<\/em> qui rassemble<\/p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Montres, Lunettes, Sacs et Mode \u2014 pour Homme, Femme et Couples"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero ESSALEM"
+    }
+  ]
+}
+{% endschema %} 

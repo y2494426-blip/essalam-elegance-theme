@@ -1,0 +1,66 @@
+{% comment %} ESSALEM ELEGANCE - Shipping Policy Page {% endcomment %}
+<div class="essalem-page">
+  <h1 class="essalem-page__title">Politique de Livraison</h1>
+  <p class="essalem-page__subtitle">Livraison gratuite partout au Maroc</p>
+
+  <div class="essalem-section-divider" style="margin-bottom:48px;"></div>
+
+  <div style="font-family:var(--font-modern);font-size:1.5rem;color:var(--essalem-gray);line-height:1.9;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:48px;">
+      <div style="background:var(--essalem-cream);padding:28px;text-align:center;">
+        <span style="font-size:3rem;display:block;margin-bottom:12px;">🚚</span>
+        <h3 style="font-family:var(--font-luxury);font-size:2rem;color:var(--essalem-black);margin-bottom:8px;">Livraison Gratuite</h3>
+        <p style="color:var(--essalem-gray);font-size:1.3rem;">Partout au Maroc, sans minimum d'achat</p>
+      </div>
+      <div style="background:var(--essalem-cream);padding:28px;text-align:center;">
+        <span style="font-size:3rem;display:block;margin-bottom:12px;">⏱</span>
+        <h3 style="font-family:var(--font-luxury);font-size:2rem;color:var(--essalem-black);margin-bottom:8px;">24 à 72 Heures</h3>
+        <p style="color:var(--essalem-gray);font-size:1.3rem;">Délai de livraison standard</p>
+      </div>
+      <div style="background:var(--essalem-cream);padding:28px;text-align:center;">
+        <span style="font-size:3rem;display:block;margin-bottom:12px;">💳</span>
+        <h3 style="font-family:var(--font-luxury);font-size:2rem;color:var(--essalem-black);margin-bottom:8px;">Paiement COD</h3>
+        <p style="color:var(--essalem-gray);font-size:1.3rem;">Payez à la réception uniquement</p>
+      </div>
+    </div>
+
+    {{ page.content }}
+
+    <h2 style="font-family:var(--font-luxury);font-size:2.8rem;color:var(--essalem-black);margin:40px 0 20px;">Délais par région</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:1.4rem;">
+      <thead>
+        <tr style="background:var(--essalem-black);color:var(--essalem-white);">
+          <th style="padding:14px 20px;text-align:left;font-family:var(--font-modern);font-weight:600;">Ville / Région</th>
+          <th style="padding:14px 20px;text-align:left;font-family:var(--font-modern);font-weight:600;">Délai</th>
+          <th style="padding:14px 20px;text-align:left;font-family:var(--font-modern);font-weight:600;">Coût</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--essalem-light-gray);">
+          <td style="padding:14px 20px;">Casablanca, Rabat, Marrakech</td>
+          <td style="padding:14px 20px;">24 heures</td>
+          <td style="padding:14px 20px;color:var(--essalem-gold);font-weight:700;">Gratuit</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--essalem-light-gray);background:var(--essalem-cream);">
+          <td style="padding:14px 20px;">Fes, Agadir, Tanger, Meknes</td>
+          <td style="padding:14px 20px;">24-48 heures</td>
+          <td style="padding:14px 20px;color:var(--essalem-gold);font-weight:700;">Gratuit</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--essalem-light-gray);">
+          <td style="padding:14px 20px;">Autres villes du Maroc</td>
+          <td style="padding:14px 20px;">48-72 heures</td>
+          <td style="padding:14px 20px;color:var(--essalem-gold);font-weight:700;">Gratuit</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Politique Livraison",
+  "tag": "section",
+  "settings": [],
+  "presets": [{"name": "Politique Livraison"}]
+}
+{% endschema %}

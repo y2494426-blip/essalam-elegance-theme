@@ -1,0 +1,69 @@
+{%- comment -%}
+  We intentionally do NOT use Dawn's .card__inner/.card__media structure here.
+  We use .lux-card__media with padding-bottom aspect ratio trick to avoid the height-collapse bug.
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = 1.25
+  if media_aspect_ratio == 'portrait'
+    assign ratio = 1.25
+  elsif media_aspect_ratio == 'square'
+    assign ratio = 1
+  endif
+  assign thirty_days_ago = 'now' | date: '%s' | minus: 2592000
+  assign is_new = false
+  if card_product.created_at and card_product.created_at > thirty_days_ago
+    assign is_new = true
+  endif
+-%}
+
+<div class="lux-card">
+  <a href="{{ card_product.url }}" class="lux-card__link" aria-label="{{ card_product.title | escape }}">
+    <div class="lux-card__media" style="padding-bottom: {{ ratio | times: 100 }}%">
+      <div class="lux-card__img-wrap">
+        {%- if card_product.featured_media -%}
+          {{ card_product.featured_media | image_url: width: 600 | image_tag: loading: 'lazy', class: 'lux-card__img lux-card__img--primary', alt: card_product.featured_media.alt | escape }}
+          {%- if show_secondary_image and card_product.media[1] -%}
+            {{ card_product.media[1] | image_url: width: 600 | image_tag: loading: 'lazy', class: 'lux-card__img lux-card__img--secondary', alt: card_product.media[1].alt | escape }}
+          {%- endif -%}
+        {%- else -%}
+          <div class="lux-card__img-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+        {%- endif -%}
+      </div>
+      <div class="lux-card__badges">
+        {%- if card_product.available == false -%}
+          <span class="lux-badge lux-badge--sold-out">Épuisé</span>
+        {%- elsif card_product.compare_at_price > card_product.price -%}
+          {%- assign savings = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
+          <span class="lux-badge lux-badge--sale">-{{ savings }}%</span>
+        {%- elsif is_new -%}
+          <span class="lux-badge lux-badge--new">Nouveau</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </a>
+  <div class="lux-card__info">
+    {%- if show_vendor and card_product.vendor != blank -%}
+      <p class="lux-card__vendor">{{ card_product.vendor }}</p>
+    {%- endif -%}
+    <h3 class="lux-card__title">
+      <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+    </h3>
+    <div class="lux-card__price">
+      {%- if card_product.compare_at_price > card_product.price -%}
+        <span class="lux-price--sale">{{ card_product.price | money }}</span>
+        <span class="lux-price--compare">{{ card_product.compare_at_price | money }}</span>
+      {%- else -%}
+        <span class="lux-price">{{ card_product.price | money }}</span>
+      {%- endif -%}
+    </div>
+    <button
+      class="lux-card__quick-add"
+      data-variant-id="{{ card_product.variants.first.id }}"
+      onclick="window.luxQuickAdd && window.luxQuickAdd(this)"
+      {%- if card_product.available == false %} disabled{%- endif -%}
+    >
+      {%- if card_product.available -%}+ Ajouter au panier{%- else -%}Épuisé{%- endif -%}
+    </button>
+  </div>
+</div>

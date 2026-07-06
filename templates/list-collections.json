@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "eyebrow": "Nos Catégories",
+        "title": "Toutes Nos Collections",
+        "sort": "alphabetical",
+        "show_empty": false
+      }
+    }
+  },
+  "order": ["main"]
+}

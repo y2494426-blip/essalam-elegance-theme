@@ -1,0 +1,189 @@
+{% comment %} ESSALEM ELEGANCE - Contact Section {% endcomment %}
+<section class="essalem-contact">
+  <div class="essalem-section-header">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-section-eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    <h2 class="essalem-section-title">{{ section.settings.title }}</h2>
+    <div class="essalem-section-divider"></div>
+  </div>
+
+  <div class="essalem-contact__grid">
+    <div class="essalem-contact__info">
+      <h3 class="essalem-contact__info-title">{{ section.settings.info_title }}</h3>
+
+      <div class="essalem-contact__channels">
+        {% if section.settings.whatsapp != blank %}
+          <a href="https://wa.me/{{ section.settings.whatsapp | remove: '+' | remove: ' ' | remove: '-' }}" class="essalem-contact__channel" target="_blank" rel="noopener">
+            <span class="essalem-contact__channel-icon">💬</span>
+            <div class="essalem-contact__channel-content">
+              <span class="essalem-contact__channel-label">WhatsApp</span>
+              <span class="essalem-contact__channel-value">{{ section.settings.whatsapp }}</span>
+            </div>
+          </a>
+        {% endif %}
+
+        {% if section.settings.phone != blank %}
+          <a href="tel:{{ section.settings.phone }}" class="essalem-contact__channel">
+            <span class="essalem-contact__channel-icon">📞</span>
+            <div class="essalem-contact__channel-content">
+              <span class="essalem-contact__channel-label">Téléphone</span>
+              <span class="essalem-contact__channel-value">{{ section.settings.phone }}</span>
+            </div>
+          </a>
+        {% endif %}
+
+        {% if section.settings.email != blank %}
+          <a href="mailto:{{ section.settings.email }}" class="essalem-contact__channel">
+            <span class="essalem-contact__channel-icon">✉️</span>
+            <div class="essalem-contact__channel-content">
+              <span class="essalem-contact__channel-label">Email</span>
+              <span class="essalem-contact__channel-value">{{ section.settings.email }}</span>
+            </div>
+          </a>
+        {% endif %}
+
+        <div class="essalem-contact__channel">
+          <span class="essalem-contact__channel-icon">🕒</span>
+          <div class="essalem-contact__channel-content">
+            <span class="essalem-contact__channel-label">Horaires</span>
+            <span class="essalem-contact__channel-value">{{ section.settings.hours }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="essalem-contact__form">
+      <h3 class="essalem-contact__form-title">{{ section.settings.form_title }}</h3>
+
+      {%- form 'contact' -%}
+        {%- if form.posted_successfully? -%}
+          <p style="color: var(--essalem-gold); font-family: var(--font-modern); padding: 16px; background: rgba(212,175,55,0.1); margin-bottom: 20px;">
+            ✓ Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.
+          </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <p style="color: #dc2626; font-family: var(--font-modern); padding: 16px; background: rgba(220,38,38,0.05); margin-bottom: 20px;">
+            Une erreur s'est produite. Veuillez réessayer.
+          </p>
+        {%- endif -%}
+
+        <div class="essalem-contact__field">
+          <label class="essalem-contact__label" for="ContactForm-name">Nom complet *</label>
+          <input
+            class="essalem-contact__input"
+            type="text"
+            id="ContactForm-name"
+            name="contact[name]"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+            placeholder="Votre nom"
+            required
+          >
+        </div>
+
+        <div class="essalem-contact__field">
+          <label class="essalem-contact__label" for="ContactForm-email">Email *</label>
+          <input
+            class="essalem-contact__input"
+            type="email"
+            id="ContactForm-email"
+            name="contact[email]"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            placeholder="votre@email.com"
+            required
+          >
+        </div>
+
+        <div class="essalem-contact__field">
+          <label class="essalem-contact__label" for="ContactForm-phone">Téléphone</label>
+          <input
+            class="essalem-contact__input"
+            type="tel"
+            id="ContactForm-phone"
+            name="contact[phone]"
+            value="{{ form.phone }}"
+            placeholder="06 XX XX XX XX"
+          >
+        </div>
+
+        <div class="essalem-contact__field">
+          <label class="essalem-contact__label" for="ContactForm-body">Message *</label>
+          <textarea
+            class="essalem-contact__textarea"
+            id="ContactForm-body"
+            name="contact[body]"
+            placeholder="Comment pouvons-nous vous aider ?"
+            required
+          >{{ form.body }}</textarea>
+        </div>
+
+        <button type="submit" class="essalem-contact__submit">
+          Envoyer le message
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact ESSALEM",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus",
+      "default": "Contactez-Nous"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Nous Sommes Là Pour Vous"
+    },
+    {
+      "type": "text",
+      "id": "info_title",
+      "label": "Titre colonne info",
+      "default": "Nos Coordonnées"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp",
+      "label": "Numéro WhatsApp (avec indicatif)",
+      "default": "+212 6XX XXX XXX"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Téléphone",
+      "default": "+212 6XX XXX XXX"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "contact@essalamelegance.store"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Horaires",
+      "default": "Lun–Sam, 9h–21h"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Titre du formulaire",
+      "default": "Envoyez-Nous un Message"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact ESSALEM"
+    }
+  ]
+}
+{% endschema %}

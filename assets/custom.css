@@ -1,0 +1,1178 @@
+/* ESSALEM ELEGANCE - Brand Stylesheet */
+
+:root {
+  --essalem-gold: #D4AF37;
+  --essalem-gold-light: #E8CC6A;
+  --essalem-gold-dark: #B8941E;
+  --essalem-black: #0A0A0A;
+  --essalem-white: #FFFFFF;
+  --essalem-cream: #F8F5EE;
+  --essalem-gray: #6B6B6B;
+  --essalem-light-gray: #F0EDE8;
+  --font-luxury: 'Cormorant Garamond', Georgia, serif;
+  --font-modern: 'Montserrat', Arial, sans-serif;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-luxury: 0 8px 32px rgba(212, 175, 55, 0.15);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== GLOBAL BRAND OVERRIDES ===== */
+body {
+  font-family: var(--font-modern);
+  color: var(--essalem-black);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-luxury);
+  letter-spacing: 0.02em;
+}
+
+/* ===== ANNOUNCEMENT BAR ===== */
+.announcement-bar {
+  background-color: var(--essalem-black) !important;
+  color: var(--essalem-gold) !important;
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.announcement-bar__message {
+  color: var(--essalem-gold) !important;
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.announcement-bar a {
+  color: var(--essalem-gold) !important;
+}
+
+/* Scrolling announcement text */
+.announcement-bar__message-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollAnnouncement 30s linear infinite;
+}
+
+@keyframes scrollAnnouncement {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== HEADER ===== */
+.header {
+  background-color: var(--essalem-white) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+.header__heading-link,
+.header__heading {
+  font-family: var(--font-luxury);
+  font-size: 2.4rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--essalem-black) !important;
+  text-transform: uppercase;
+}
+
+.header__heading-link:hover {
+  color: var(--essalem-gold) !important;
+}
+
+.header__nav-item a,
+.header__menu-item a {
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--essalem-black);
+  transition: var(--transition-smooth);
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.header__nav-item a::after,
+.header__menu-item a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--essalem-gold);
+  transition: width 0.3s ease;
+}
+
+.header__nav-item a:hover::after,
+.header__menu-item a:hover::after {
+  width: 100%;
+}
+
+.header__nav-item a:hover,
+.header__menu-item a:hover {
+  color: var(--essalem-gold);
+}
+
+.header__icon svg path,
+.header__icon svg circle {
+  stroke: var(--essalem-black);
+  transition: stroke 0.2s ease;
+}
+
+.header__icon:hover svg path,
+.header__icon:hover svg circle {
+  stroke: var(--essalem-gold);
+}
+
+/* ===== HERO SECTION ===== */
+.essalem-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--essalem-black) 0%, #1a1a1a 50%, #2a2a1a 100%);
+  overflow: hidden;
+  text-align: center;
+}
+
+.essalem-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.essalem-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 40px 20px;
+}
+
+.essalem-hero__eyebrow {
+  font-family: var(--font-modern);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--essalem-gold);
+  margin-bottom: 20px;
+  display: block;
+}
+
+.essalem-hero__title {
+  font-family: var(--font-luxury);
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--essalem-white);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+
+.essalem-hero__title em {
+  font-style: italic;
+  color: var(--essalem-gold);
+}
+
+.essalem-hero__subtitle {
+  font-family: var(--font-modern);
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 40px;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+}
+
+.essalem-hero__cta-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.essalem-hero__cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--essalem-gold);
+  color: var(--essalem-black);
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: 2px solid var(--essalem-gold);
+}
+
+.essalem-hero__cta-primary:hover {
+  background-color: var(--essalem-gold-dark);
+  border-color: var(--essalem-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-luxury);
+}
+
+.essalem-hero__cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  color: var(--essalem-white);
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: var(--transition-smooth);
+}
+
+.essalem-hero__cta-secondary:hover {
+  border-color: var(--essalem-gold);
+  color: var(--essalem-gold);
+  transform: translateY(-2px);
+}
+
+.essalem-hero__trust {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.essalem-hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-modern);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+.essalem-hero__trust-icon {
+  color: var(--essalem-gold);
+  font-size: 1.4rem;
+}
+
+/* ===== COLLECTIONS GRID ===== */
+.essalem-collections-grid {
+  padding: 80px 0;
+  background-color: var(--essalem-cream);
+}
+
+.essalem-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.essalem-section-eyebrow {
+  font-family: var(--font-modern);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--essalem-gold);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.essalem-section-title {
+  font-family: var(--font-luxury);
+  font-size: clamp(2.8rem, 4vw, 4.5rem);
+  font-weight: 400;
+  color: var(--essalem-black);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.essalem-section-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--essalem-gold), transparent);
+  margin: 20px auto 0;
+}
+
+.essalem-collections-grid__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.essalem-collection-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background-color: var(--essalem-black);
+  cursor: pointer;
+  group: true;
+}
+
+.essalem-collection-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.essalem-collection-card:hover .essalem-collection-card__image {
+  transform: scale(1.08);
+}
+
+.essalem-collection-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+  transition: var(--transition-smooth);
+}
+
+.essalem-collection-card:hover .essalem-collection-card__overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, rgba(212,175,55,0.1) 100%);
+}
+
+.essalem-collection-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 20px;
+  transform: translateY(8px);
+  transition: var(--transition-smooth);
+}
+
+.essalem-collection-card:hover .essalem-collection-card__content {
+  transform: translateY(0);
+}
+
+.essalem-collection-card__icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.essalem-collection-card__name {
+  font-family: var(--font-luxury);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--essalem-white);
+  display: block;
+  letter-spacing: 0.05em;
+}
+
+.essalem-collection-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-modern);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--essalem-gold);
+  margin-top: 8px;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: var(--transition-smooth);
+}
+
+.essalem-collection-card:hover .essalem-collection-card__cta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.essalem-collection-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+}
+
+/* ===== WHY CHOOSE US ===== */
+.essalem-why-us {
+  padding: 80px 0;
+  background-color: var(--essalem-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.essalem-why-us::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.essalem-why-us .essalem-section-title {
+  color: var(--essalem-white);
+}
+
+.essalem-why-us__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.essalem-feature-card {
+  text-align: center;
+  padding: 40px 24px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.essalem-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--essalem-gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.essalem-feature-card:hover::before {
+  transform: scaleX(1);
+}
+
+.essalem-feature-card:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-4px);
+  background-color: rgba(212, 175, 55, 0.03);
+}
+
+.essalem-feature-card__icon {
+  font-size: 3.6rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.essalem-feature-card__title {
+  font-family: var(--font-luxury);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--essalem-gold);
+  margin-bottom: 12px;
+  letter-spacing: 0.03em;
+}
+
+.essalem-feature-card__text {
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===== TESTIMONIALS ===== */
+.essalem-testimonials {
+  padding: 80px 0;
+  background-color: var(--essalem-cream);
+}
+
+.essalem-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.essalem-testimonial-card {
+  background-color: var(--essalem-white);
+  padding: 36px 28px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.essalem-testimonial-card:hover {
+  box-shadow: var(--shadow-luxury);
+  transform: translateY(-4px);
+}
+
+.essalem-testimonial-card::before {
+  content: '\201C';
+  font-family: var(--font-luxury);
+  font-size: 8rem;
+  color: rgba(212, 175, 55, 0.15);
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  line-height: 1;
+}
+
+.essalem-testimonial__stars {
+  color: var(--essalem-gold);
+  font-size: 1.6rem;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.essalem-testimonial__text {
+  font-family: var(--font-luxury);
+  font-size: 1.6rem;
+  font-style: italic;
+  color: var(--essalem-black);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.essalem-testimonial__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.essalem-testimonial__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--essalem-gold), var(--essalem-gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-luxury);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--essalem-black);
+  flex-shrink: 0;
+}
+
+.essalem-testimonial__name {
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--essalem-black);
+  display: block;
+}
+
+.essalem-testimonial__location {
+  font-family: var(--font-modern);
+  font-size: 1.1rem;
+  color: var(--essalem-gray);
+}
+
+.essalem-testimonial__verified {
+  font-family: var(--font-modern);
+  font-size: 1.1rem;
+  color: var(--essalem-gold);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* ===== CONTACT SECTION ===== */
+.essalem-contact {
+  padding: 80px 0;
+  background-color: var(--essalem-white);
+}
+
+.essalem-contact__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.essalem-contact__info-title {
+  font-family: var(--font-luxury);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--essalem-black);
+  margin-bottom: 32px;
+}
+
+.essalem-contact__channels {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.essalem-contact__channel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--essalem-light-gray);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.essalem-contact__channel:hover {
+  border-color: var(--essalem-gold);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-card);
+}
+
+.essalem-contact__channel-icon {
+  font-size: 2.4rem;
+  flex-shrink: 0;
+}
+
+.essalem-contact__channel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.essalem-contact__channel-label {
+  font-family: var(--font-modern);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--essalem-gold);
+}
+
+.essalem-contact__channel-value {
+  font-family: var(--font-modern);
+  font-size: 1.4rem;
+  color: var(--essalem-black);
+  font-weight: 500;
+}
+
+.essalem-contact__form-title {
+  font-family: var(--font-luxury);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--essalem-black);
+  margin-bottom: 28px;
+}
+
+.essalem-contact__field {
+  margin-bottom: 20px;
+}
+
+.essalem-contact__label {
+  display: block;
+  font-family: var(--font-modern);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--essalem-black);
+  margin-bottom: 8px;
+}
+
+.essalem-contact__input,
+.essalem-contact__textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--essalem-light-gray);
+  font-family: var(--font-modern);
+  font-size: 1.4rem;
+  color: var(--essalem-black);
+  background-color: var(--essalem-white);
+  transition: border-color 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.essalem-contact__input:focus,
+.essalem-contact__textarea:focus {
+  border-color: var(--essalem-gold);
+}
+
+.essalem-contact__textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.essalem-contact__submit {
+  background-color: var(--essalem-gold);
+  color: var(--essalem-black);
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  width: 100%;
+}
+
+.essalem-contact__submit:hover {
+  background-color: var(--essalem-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-luxury);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background-color: var(--essalem-black) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.footer__heading {
+  color: var(--essalem-gold) !important;
+  font-family: var(--font-luxury) !important;
+  font-size: 1.8rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 20px !important;
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.65) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+}
+
+.footer a:hover {
+  color: var(--essalem-gold) !important;
+}
+
+.footer__copyright {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-family: var(--font-modern);
+  font-size: 1.2rem;
+}
+
+/* ===== BUTTONS ===== */
+.button,
+.btn {
+  font-family: var(--font-modern) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.button--primary,
+.button:not(.button--secondary):not(.button--tertiary) {
+  background-color: var(--essalem-gold) !important;
+  color: var(--essalem-black) !important;
+  border-color: var(--essalem-gold) !important;
+}
+
+.button--primary:hover,
+.button:not(.button--secondary):not(.button--tertiary):hover {
+  background-color: var(--essalem-gold-dark) !important;
+  border-color: var(--essalem-gold-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-luxury);
+}
+
+/* ===== PRODUCT CARDS ===== */
+.card-wrapper {
+  transition: var(--transition-smooth);
+}
+
+.card-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-luxury);
+}
+
+.card__badge {
+  background-color: var(--essalem-gold);
+  color: var(--essalem-black);
+  font-family: var(--font-modern);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.price__sale {
+  color: var(--essalem-gold);
+}
+
+/* ===== PRODUCT PAGE ===== */
+.product__title {
+  font-family: var(--font-luxury);
+  font-size: clamp(2.4rem, 3vw, 3.6rem);
+  font-weight: 400;
+  color: var(--essalem-black);
+  line-height: 1.2;
+}
+
+.product__price {
+  font-family: var(--font-luxury);
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--essalem-black);
+}
+
+.product__price .price-item--sale {
+  color: var(--essalem-gold);
+}
+
+/* Trust badges on product page */
+.essalem-trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 0;
+  border-top: 1px solid var(--essalem-light-gray);
+  border-bottom: 1px solid var(--essalem-light-gray);
+  margin: 20px 0;
+}
+
+.essalem-trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  color: var(--essalem-black);
+}
+
+.essalem-trust-badge__icon {
+  color: var(--essalem-gold);
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+/* Urgency / stock indicator */
+.essalem-urgency {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #FFF8E7;
+  border-left: 3px solid var(--essalem-gold);
+  margin: 16px 0;
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #8B6914;
+}
+
+/* Mobile sticky CTA */
+@media screen and (max-width: 749px) {
+  .essalem-sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    padding: 12px 16px;
+    background-color: var(--essalem-white);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    display: flex;
+    gap: 12px;
+  }
+
+  .essalem-sticky-cta .button {
+    flex: 1;
+    padding: 16px 12px;
+    font-size: 1.4rem;
+  }
+}
+
+/* ===== SECTION: FEATURED COLLECTION ===== */
+.featured-collection__title,
+.collection-list__title {
+  font-family: var(--font-luxury);
+  font-size: clamp(2.8rem, 4vw, 4.5rem);
+  font-weight: 400;
+  color: var(--essalem-black);
+}
+
+/* ===== PAGE SECTIONS ===== */
+.essalem-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.essalem-page__title {
+  font-family: var(--font-luxury);
+  font-size: clamp(3rem, 4vw, 5rem);
+  font-weight: 400;
+  color: var(--essalem-black);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.essalem-page__subtitle {
+  font-family: var(--font-modern);
+  font-size: 1.5rem;
+  color: var(--essalem-gray);
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* FAQ styles */
+.essalem-faq__item {
+  border-bottom: 1px solid var(--essalem-light-gray);
+  padding: 24px 0;
+}
+
+.essalem-faq__question {
+  font-family: var(--font-luxury);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--essalem-black);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  list-style: none;
+  transition: color 0.2s ease;
+}
+
+.essalem-faq__question:hover {
+  color: var(--essalem-gold);
+}
+
+.essalem-faq__answer {
+  font-family: var(--font-modern);
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: var(--essalem-gray);
+  margin-top: 16px;
+  padding-right: 40px;
+}
+
+/* About page */
+.essalem-about__hero {
+  background: linear-gradient(135deg, var(--essalem-black), #1a1a1a);
+  padding: 100px 20px;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.essalem-about__hero-title {
+  font-family: var(--font-luxury);
+  font-size: clamp(4rem, 6vw, 7rem);
+  font-weight: 300;
+  color: var(--essalem-white);
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.essalem-about__hero-title span {
+  color: var(--essalem-gold);
+  font-style: italic;
+}
+
+.essalem-about__values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  margin: 60px 0;
+}
+
+.essalem-about__value {
+  text-align: center;
+  padding: 32px 20px;
+  border: 1px solid var(--essalem-light-gray);
+}
+
+.essalem-about__value-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.essalem-about__value-title {
+  font-family: var(--font-luxury);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--essalem-gold);
+  margin-bottom: 12px;
+}
+
+.essalem-about__value-text {
+  font-family: var(--font-modern);
+  font-size: 1.3rem;
+  color: var(--essalem-gray);
+  line-height: 1.6;
+}
+
+/* Thank you page */
+.essalem-thankyou {
+  text-align: center;
+  padding: 80px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.essalem-thankyou__emoji {
+  font-size: 6rem;
+  display: block;
+  margin-bottom: 24px;
+}
+
+.essalem-thankyou__title {
+  font-family: var(--font-luxury);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 400;
+  color: var(--essalem-black);
+  margin-bottom: 16px;
+}
+
+.essalem-thankyou__message {
+  font-family: var(--font-modern);
+  font-size: 1.6rem;
+  color: var(--essalem-gray);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.essalem-thankyou__delivery-info {
+  background-color: var(--essalem-cream);
+  padding: 28px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.essalem-thankyou__whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #25D366;
+  color: var(--essalem-white);
+  font-family: var(--font-modern);
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: var(--transition-smooth);
+}
+
+.essalem-thankyou__whatsapp-btn:hover {
+  background-color: #128C7E;
+  transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 989px) {
+  .essalem-contact__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .essalem-collections-grid__grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .essalem-hero {
+    min-height: 70vh;
+  }
+
+  .essalem-why-us__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .essalem-hero {
+    min-height: 60vh;
+    padding: 40px 0;
+  }
+
+  .essalem-hero__cta-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .essalem-hero__trust {
+    gap: 16px;
+  }
+
+  .essalem-why-us__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .essalem-collections-grid,
+  .essalem-why-us,
+  .essalem-testimonials,
+  .essalem-contact {
+    padding: 60px 0;
+  }
+
+  .essalem-collections-grid__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.essalem-gold-shimmer {
+  background: linear-gradient(90deg, var(--essalem-gold-dark), var(--essalem-gold-light), var(--essalem-gold-dark));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* RTL Support */
+[dir='rtl'] .essalem-collection-card__cta {
+  transform: translateX(8px);
+}
+
+[dir='rtl'] .essalem-collection-card:hover .essalem-collection-card__cta {
+  transform: translateX(0);
+}
+
+[dir='rtl'] .essalem-contact__channel:hover {
+  transform: translateX(-4px);
+}

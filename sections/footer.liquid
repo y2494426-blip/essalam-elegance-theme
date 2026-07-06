@@ -1,0 +1,124 @@
+<footer class="footer color-background-1 gradient section-{{ section.id }}-padding">
+  <div class="footer__content-top page-width">
+    <div class="footer__grid">
+      <!-- Brand Column -->
+      <div class="footer__col footer__col--brand">
+        <h3 class="footer__brand-name">{{ shop.name | upcase }}</h3>
+        <p class="footer__brand-tagline">{{ section.settings.brand_tagline }}</p>
+        <div class="footer__social">
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram" class="footer__social-link">Instagram</a>
+          {%- endif -%}
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook" class="footer__social-link">Facebook</a>
+          {%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}
+            <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" aria-label="TikTok" class="footer__social-link">TikTok</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Navigation Columns -->
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_list' -%}
+          <div class="footer__col" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h4 class="footer__col-heading">{{ block.settings.heading | upcase }}</h4>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              <ul class="footer__menu list-unstyled" role="list">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}" class="footer__menu-link">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <!-- Payment & Delivery Column -->
+      <div class="footer__col footer__col--payment">
+        <h4 class="footer__col-heading">LIVRAISON & PAIEMENT</h4>
+        <ul class="footer__menu list-unstyled" role="list">
+          <li><span class="footer__payment-badge">💳 Paiement à la livraison (COD)</span></li>
+          <li><span>🚚 Livraison 24–72h au Maroc</span></li>
+          <li><span>📦 Retours sous 7 jours</span></li>
+          <li><span>📞 Service client disponible</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__content-bottom page-width">
+    <div class="footer__bottom-bar">
+      <div class="footer__copyright">
+        <small>© {{ 'now' | date: "%Y" }} {{ shop.name }}. Tous droits réservés.</small>
+      </div>
+      <div class="footer__payment-methods">
+        <span class="footer__payment-text">Paiement sécurisé</span>
+        {%- for type in shop.enabled_payment_types -%}
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "footer-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_tagline",
+      "default": "Mode de luxe pour la femme marocaine moderne",
+      "label": "Slogan de la marque"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Navigation",
+          "label": "Titre"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pied de page",
+      "blocks": [
+        {
+          "type": "link_list",
+          "settings": {
+            "heading": "Collections",
+            "menu": "main-menu"
+          }
+        },
+        {
+          "type": "link_list",
+          "settings": {
+            "heading": "Aide",
+            "menu": "footer"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

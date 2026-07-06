@@ -1,0 +1,101 @@
+.banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 40rem;
+}
+
+@media screen and (min-width: 750px) {
+  .banner { flex-direction: row; }
+}
+
+.banner__media {
+  position: absolute;
+  inset: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .banner--medium { min-height: 60rem; }
+  .banner--large { min-height: 76.8rem; }
+}
+
+.banner__media--half {
+  position: relative;
+  width: 50%;
+  flex-shrink: 0;
+}
+
+.banner__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.banner--overlay .banner__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--color-foreground, 10,10,10), calc(var(--overlay-opacity, 0.3)));
+  z-index: 1;
+}
+
+.banner__content {
+  position: relative;
+  z-index: 10;
+  padding: 5rem 0;
+  width: 100%;
+  display: flex;
+}
+
+.banner__content--top-left    { align-items: flex-start; justify-content: flex-start; }
+.banner__content--top-center  { align-items: flex-start; justify-content: center; }
+.banner__content--top-right   { align-items: flex-start; justify-content: flex-end; }
+.banner__content--middle-left { align-items: center; justify-content: flex-start; }
+.banner__content--middle-center { align-items: center; justify-content: center; }
+.banner__content--middle-right  { align-items: center; justify-content: flex-end; }
+.banner__content--bottom-left   { align-items: flex-end; justify-content: flex-start; }
+.banner__content--bottom-center { align-items: flex-end; justify-content: center; }
+.banner__content--bottom-right  { align-items: flex-end; justify-content: flex-end; }
+
+.banner__box {
+  padding: 4rem;
+  max-width: 62rem;
+  width: 100%;
+}
+
+@media screen and (max-width: 749px) {
+  .banner__box { padding: 2rem; max-width: 100%; }
+  .banner__content { padding: 2rem 0; }
+}
+
+.banner__subheading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #C9A84C;
+  margin: 0 0 1.2rem;
+  display: block;
+}
+
+.banner__heading { margin: 0 0 1.5rem; }
+.banner__heading em { font-style: italic; color: #C9A84C; }
+.banner__text { margin: 0 0 2.5rem; }
+
+.banner__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.banner__media--placeholder {
+  background: rgba(var(--color-foreground, 10,10,10), 0.04);
+}
+
+.banner__media--placeholder .placeholder-svg {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,247 @@
+{% doc %}
+  @prompt
+    Un titre avec un effet lumineux animé
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-glowing-title-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-glowing-title__text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: {{ block.settings.font_weight }};
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(
+      90deg,
+      {{ block.settings.glow_color_1 }} 0%,
+      {{ block.settings.glow_color_2 }} 25%,
+      {{ block.settings.glow_color_3 }} 50%,
+      {{ block.settings.glow_color_2 }} 75%,
+      {{ block.settings.glow_color_1 }} 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ai-glowing-title-shine-{{ ai_gen_id }} {{ block.settings.animation_duration }}s linear infinite;
+    text-shadow: 
+      0 0 {{ block.settings.glow_intensity }}px {{ block.settings.glow_color_2 }},
+      0 0 {{ block.settings.glow_intensity | times: 2 }}px {{ block.settings.glow_color_2 }};
+  }
+
+  @keyframes ai-glowing-title-shine-{{ ai_gen_id }} {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-glowing-title__text-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.font_size }}px * 0.7);
+    }
+  }
+{% endstyle %}
+
+<glowing-title-{{ ai_gen_id }}
+  class="ai-glowing-title-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <h2 class="ai-glowing-title__text-{{ ai_gen_id }}">
+    {{ block.settings.title }}
+  </h2>
+</glowing-title-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class GlowingTitle{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+      }
+    }
+
+    customElements.define('glowing-title-{{ ai_gen_id }}', GlowingTitle{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Titre lumineux",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Montres de luxe"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignement",
+      "options": [
+        {
+          "value": "left",
+          "label": "Gauche"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Droite"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Largeur bureau",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Style du texte"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Taille de police",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Épaisseur",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Moyen"
+        },
+        {
+          "value": "600",
+          "label": "Semi-gras"
+        },
+        {
+          "value": "700",
+          "label": "Gras"
+        },
+        {
+          "value": "800",
+          "label": "Extra-gras"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Couleur de base",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Effet lumineux"
+    },
+    {
+      "type": "color",
+      "id": "glow_color_1",
+      "label": "Couleur 1",
+      "default": "#FFD700"
+    },
+    {
+      "type": "color",
+      "id": "glow_color_2",
+      "label": "Couleur 2",
+      "default": "#FFA500"
+    },
+    {
+      "type": "color",
+      "id": "glow_color_3",
+      "label": "Couleur 3",
+      "default": "#FF6347"
+    },
+    {
+      "type": "range",
+      "id": "glow_intensity",
+      "label": "Intensité",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "label": "Vitesse",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Haut",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bas",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Titre lumineux"
+    }
+  ]
+}
+{% endschema %}

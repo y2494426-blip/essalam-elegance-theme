@@ -1,0 +1,99 @@
+{% comment %} ESSALEM ELEGANCE - All Collections Grid (list-collections template) {% endcomment %}
+<section class="essalem-collections-grid">
+  <div class="essalem-section-header">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-section-eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    <h1 class="essalem-section-title">{{ section.settings.title }}</h1>
+    <div class="essalem-section-divider"></div>
+  </div>
+
+  {% case section.settings.sort %}
+    {% when 'title-ascending' %}
+      {% assign sorted_collections = collections | sort: 'title' %}
+    {% when 'title-descending' %}
+      {% assign sorted_collections = collections | sort: 'title' | reverse %}
+    {% when 'products-high' %}
+      {% assign sorted_collections = collections | sort: 'all_products_count' | reverse %}
+    {% when 'products-low' %}
+      {% assign sorted_collections = collections | sort: 'all_products_count' %}
+    {% else %}
+      {% assign sorted_collections = collections %}
+  {% endcase %}
+
+  <div class="essalem-collections-grid__grid">
+    {% for collection in sorted_collections %}
+      {% if collection.all_products_count > 0 or section.settings.show_empty %}
+        <a href="{{ collection.url }}" class="essalem-collection-card">
+          {% if collection.image %}
+            <img
+              class="essalem-collection-card__image"
+              src="{{ collection.image | image_url: width: 600 }}"
+              alt="{{ collection.title | escape }}"
+              loading="lazy"
+              width="600"
+            >
+          {% elsif collection.products.first.featured_image %}
+            <img
+              class="essalem-collection-card__image"
+              src="{{ collection.products.first.featured_image | image_url: width: 600 }}"
+              alt="{{ collection.title | escape }}"
+              loading="lazy"
+              width="600"
+            >
+          {% else %}
+            <div class="essalem-collection-card__placeholder">✨</div>
+          {% endif %}
+
+          <div class="essalem-collection-card__overlay"></div>
+
+          <div class="essalem-collection-card__content">
+            <span class="essalem-collection-card__name">{{ collection.title }}</span>
+            <span class="essalem-collection-card__cta">Découvrir &rarr;</span>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Liste des Collections",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus",
+      "default": "Nos Catégories"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre de section",
+      "default": "Toutes Nos Collections"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "label": "Trier par",
+      "options": [
+        {"value": "alphabetical", "label": "Ordre par défaut"},
+        {"value": "title-ascending", "label": "Nom (A-Z)"},
+        {"value": "title-descending", "label": "Nom (Z-A)"},
+        {"value": "products-high", "label": "Nombre de produits (décroissant)"},
+        {"value": "products-low", "label": "Nombre de produits (croissant)"}
+      ],
+      "default": "alphabetical"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_empty",
+      "label": "Afficher les collections vides",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

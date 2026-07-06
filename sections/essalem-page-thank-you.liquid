@@ -1,0 +1,215 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+
+<div class="lux-thankyou">
+
+  <div class="lux-thankyou__icon">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#C9A86A" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 12.5l2.5 2.5L16 9" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h1 class="lux-thankyou__title">{{ section.settings.title_fr | default: 'Merci pour votre commande !' }}</h1>
+  <h2 class="lux-thankyou__title-en">{{ section.settings.title_en | default: 'Thank you for your order!' }}</h2>
+  <h2 class="lux-thankyou__title-ar" dir="rtl" lang="ar">{{ section.settings.title_ar | default: 'شكراً على طلبك!' }}</h2>
+
+  <p class="lux-thankyou__message">{{ section.settings.message_fr | default: 'Votre commande a bien été reçue. Notre équipe va la traiter et vous contacter très bientôt pour confirmer la livraison.' }}</p>
+  <p class="lux-thankyou__message">{{ section.settings.message_en | default: 'Your order has been received successfully. Our team will process it and contact you shortly to confirm delivery.' }}</p>
+  <p class="lux-thankyou__message" dir="rtl" lang="ar">{{ section.settings.message_ar | default: 'لقد تم استلام طلبك بنجاح. سيتواصل معك فريقنا قريباً لتأكيحموعد الّتوسيل.' }}</p>
+
+  <div class="lux-thankyou__divider"></div>
+
+  <div class="lux-thankyou__info-grid">
+    <div class="lux-thankyou__info-item">
+      <span class="lux-thankyou__info-icon">🚚</span>
+      <div>
+        <p class="lux-thankyou__info-fr">Livraison gratuite partout au Maroc</p>
+        <p class="lux-thankyou__info-en">Free delivery anywhere in Morocco</p>
+        <p class="lux-thankyou__info-ar" dir="rtl" lang="ar">توصيل مجاني لجميع مناطق المفرب</p>
+      </div>
+    </div>
+    <div class="lux-thankyou__info-item">
+      <span class="lux-thankyou__info-icon">⏱️</span>
+      <div>
+        <p class="lux-thankyou__info-fr">Délai : 24 à 72 heures ouvrables</p>
+        <p class="lux-thankyou__info-en">Delivery time: 24 to 72 business hours</p>
+        <p class="lux-thankyou__info-ar" dir="rtl" lang="ar">مدة التوصيل: 24 إلى 72 ساعة عمل</p>
+      </div>
+    </div>
+    <div class="lux-thankyou__info-item">
+      <span class="lux-thankyou__info-icon">💳</span>
+      <div>
+        <p class="lux-thankyou__info-fr">Paiement à la réception (COD)</p>
+        <p class="lux-thankyou__info-en">Cash on delivery (COD)</p>
+        <p class="lux-thankyou__info-ar" dir="rtl" lang="ar">الدفع عند الاستلام</p>
+      </div>
+    </div>
+    <div class="lux-thankyou__info-item">
+      <span class="lux-thankyou__info-icon">📩</span>
+      <div>
+        <p class="lux-thankyou__info-fr">Vous recevrez un SMS de confirmation</p>
+        <p class="lux-thankyou__info-en">You will receive a confirmation SMS</p>
+        <p class="lux-thankyou__info-ar" dir="rtl" lang="ar">ستستلم رسالة نصية للتأكيح</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.me/{{ section.settings.whatsapp | remove: '+' | remove: ' ' | remove: '-' }}?text=Bonjour%2C%20je%20viens%20de%20passer%20une%20commande%20sur%20ESSALEM%20ELEGANCE"
+     class="lux-thankyou__whatsapp-btn"
+     target="_blank"
+     rel="noopener"
+     aria-label="WhatsApp">
+    💬
+  </a>
+
+  {%- if section.settings.discount_code != blank -%}
+    <div class="lux-thankyou__gift">
+      <p class="lux-thankyou__gift-label">🎁 Cadeau pour vous / A gift for you / هدّية لك</p>
+      <p class="lux-thankyou__gift-amount">{{ section.settings.discount_amount }}</p>
+      <p class="lux-thankyou__gift-code">{{ section.settings.discount_code }}</p>
+    </div>
+  {%- endif -%}
+
+  <a href="/collections/all" class="lux-btn lux-thankyou__continue">
+    Continuer les achats / Continue shopping / استمر التسوّق
+  </a>
+
+</div>
+
+<style>
+  .lux-thankyou {
+    background: var(--lux-beige);
+    min-height: 70vh;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px 100px;
+    text-align: center;
+  }
+  .lux-thankyou__icon { margin-bottom: 24px; }
+  .lux-thankyou__title {
+    font-family: var(--lux-font-serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 300;
+    color: var(--lux-black);
+    margin: 0 0 8px;
+  }
+  .lux-thankyou__title-en {
+    font-family: var(--lux-font-sans);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--lux-gray);
+    margin: 0 0 4px;
+  }
+  .lux-thankyou__title-ar {
+    font-family: 'Tahoma', 'Arial', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--lux-gold);
+    margin: 0 0 24px;
+  }
+  .lux-thankyou__message {
+    font-family: var(--lux-font-sans);
+    font-size: 0.92rem;
+    color: var(--lux-gray);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 8px;
+  }
+  .lux-thankyou__divider {
+    width: 60px;
+    height: 1px;
+    background: var(--lux-gold);
+    margin: 32px auto;
+  }
+  .lux-thankyou__info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: var(--lux-white);
+    border-radius: var(--lux-radius);
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    text-align: left;
+  }
+  @media (max-width: 600px) { .lux-thankyou__info-grid { grid-template-columns: 1fr; } }
+  .lux-thankyou__info-item { display: flex; gap: 12px; align-items: flex-start; }
+  .lux-thankyou__info-icon { font-size: 1.3rem; line-height: 1.2; }
+  .lux-thankyou__info-fr { font-family: var(--lux-font-sans); font-size: 0.85rem; font-weight: 600; color: var(--lux-black); margin: 0; }
+  .lux-thankyou__info-en { font-family: var(--lux-font-sans); font-size: 0.78rem; color: var(--lux-gray); margin: 2px 0; }
+  .lux-thankyou__info-ar { font-family: 'Tahoma', 'Arial', sans-serif; font-size: 0.8rem; color: var(--lux-gold); margin: 0; text-align: right; }
+
+  .lux-thankyou__whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: #25D366;
+    color: #fff;
+    font-size: 1.4rem;
+    text-decoration: none;
+    border-radius: 50%;
+    margin-bottom: 24px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  .lux-thankyou__whatsapp-btn:hover { opacity: 0.85; transform: scale(1.06); }
+
+  .lux-thankyou__gift {
+    border: 2px dashed var(--lux-gold);
+    padding: 24px;
+    margin: 0 0 32px;
+  }
+  .lux-thankyou__gift-label {
+    font-family: var(--lux-font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--lux-gold);
+    margin: 0 0 8px;
+  }
+  .lux-thankyou__gift-amount {
+    font-family: var(--lux-font-serif);
+    font-size: 1.4rem;
+    color: var(--lux-black);
+    margin: 0 0 4px;
+  }
+  .lux-thankyou__gift-code {
+    font-family: var(--lux-font-sans);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--lux-gold);
+    margin: 0;
+  }
+
+  .lux-thankyou__continue {
+    display: inline-block;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Page Merci",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Français" },
+    { "type": "text", "id": "title_fr", "label": "Titre (FR)", "default": "Merci pour votre commande !" },
+    { "type": "textarea", "id": "message_fr", "label": "Message (FR)" },
+    { "type": "header", "content": "English" },
+    { "type": "text", "id": "title_en", "label": "Title (EN)", "default": "Thank you for your order!" },
+    { "type": "textarea", "id": "message_en", "label": "Message (EN)" },
+    { "type": "header", "content": "العربية" },
+    { "type": "text", "id": "title_ar", "label": "العنوان (AR)", "default": "شكراً على طلبك!" },
+    { "type": "textarea", "id": "message_ar", "label": "الرسالة (AR)" },
+    { "type": "header", "content": "Contact & Promo" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp (avec indicatif)", "default": "+212718108323" },
+    { "type": "text", "id": "discount_code", "label": "Code promo (laisser vide pour masquer)", "default": "MERCI10" },
+    { "type": "text", "id": "discount_amount", "label": "Montant remise", "default": "10% de réduction" }
+  ],
+  "presets": [{"name": "Page Merci"}]
+}
+{% endschema %}

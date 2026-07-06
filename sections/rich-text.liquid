@@ -1,0 +1,125 @@
+<div class="rich-text section-{{ section.id }}-padding">
+  <div class="rich-text__wrapper page-width rich-text__wrapper--{{ section.settings.desktop_content_position }}">
+    <div class="rich-text__blocks">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow' -%}
+            <p class="rich-text__eyebrow" {{ block.shopify_attributes }}>{{ block.settings.eyebrow | upcase }}</p>
+          {%- when 'heading' -%}
+            <h2 class="rich-text__heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          {%- when 'text' -%}
+            <div class="rich-text__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- when 'button' -%}
+            <a href="{{ block.settings.button_link }}" class="button button--{{ block.settings.button_style }}" {{ block.shopify_attributes }}>{{ block.settings.button_label }}</a>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Texte enrichi",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        { "value": "left", "label": "Gauche" },
+        { "value": "center", "label": "Centre" },
+        { "value": "right", "label": "Droite" }
+      ],
+      "default": "center",
+      "label": "Position"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "Texte au-dessus",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "default": "Notre Histoire",
+          "label": "Texte"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Titre",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "L'Art de l'Élégance",
+          "label": "Titre"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            { "value": "h2", "label": "Petit" },
+            { "value": "h1", "label": "Moyen" },
+            { "value": "h0", "label": "Grand" }
+          ],
+          "default": "h1",
+          "label": "Taille"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texte",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Essalam Elegance incarne le luxe marocain moderne — des pièces soigneusement sélectionnées pour la femme qui allie tradition et sophistication.</p>",
+          "label": "Contenu"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Bouton",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Découvrir notre histoire",
+          "label": "Texte du bouton"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Lien"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "options": [
+            { "value": "primary", "label": "Primaire" },
+            { "value": "secondary", "label": "Secondaire" }
+          ],
+          "default": "secondary",
+          "label": "Style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Texte enrichi",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading" },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,8 @@
+{%- doc -%}
+  Renders an accessible "skip to content" link.
+  @param {string} href - the anchor to jump to
+  @param {string} text - translation key for the link text
+{%- enddoc -%}
+<a class="skip-to-content-link button visually-hidden" href="{{ href }}">
+  {{ text | t }}
+</a>

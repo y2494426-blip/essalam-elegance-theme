@@ -1,0 +1,74 @@
+{% comment %} ESSALEM ELEGANCE - FAQ Page {% endcomment %}
+<div class="essalem-page">
+  <h1 class="essalem-page__title">Questions Fréquentes</h1>
+  <p class="essalem-page__subtitle">Tout ce que vous devez savoir sur vos commandes</p>
+
+  <div class="essalem-section-divider" style="margin-bottom:48px;"></div>
+
+  {% for block in section.blocks %}
+    <details class="essalem-faq__item" {{ block.shopify_attributes }}>
+      <summary class="essalem-faq__question">
+        {{ block.settings.question }}
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;transition:transform 0.3s;">
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </summary>
+      <p class="essalem-faq__answer">{{ block.settings.answer }}</p>
+    </details>
+  {% endfor %}
+
+  <div style="text-align:center;margin-top:64px;padding:40px;background:var(--essalem-cream);">
+    <p style="font-family:var(--font-luxury);font-size:2rem;color:var(--essalem-black);margin-bottom:16px;">Vous n'avez pas trouvé votre réponse ?</p>
+    <a href="/pages/contact" style="display:inline-block;background:var(--essalem-gold);color:var(--essalem-black);font-family:var(--font-modern);font-size:1.3rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:14px 36px;text-decoration:none;">Nous Contacter</a>
+  </div>
+</div>
+
+<style>
+  details[open] summary svg {
+    transform: rotate(180deg);
+  }
+  details[open] .essalem-faq__question {
+    color: var(--essalem-gold);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Comment passer une commande ?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Réponse",
+          "default": "Réponse à la question"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {"type": "faq_item", "settings": {"question": "Comment passer une commande ?", "answer": "C'est très simple ! Choisissez votre produit, cliquez sur \"Ajouter au panier\", puis \"Commander\". Remplissez vos coordonnées (nom, adresse, téléphone) et confirmez. Vous recevrez un SMS de confirmation sous peu."}},
+        {"type": "faq_item", "settings": {"question": "Quels sont les délais de livraison ?", "answer": "La livraison prend généralement 24 à 72 heures ouvrables selon votre ville. Les grandes villes (Casablanca, Rabat, Marrakech, Fes, Agadir) sont livrées dans les 24h. Les régions éloignées peuvent prendre 48-72h."}},
+        {"type": "faq_item", "settings": {"question": "Le paiement est-il sécurisé ?", "answer": "Absolument ! Nous proposons le paiement à la livraison (COD) : vous payez uniquement quand vous recevez votre commande et que vous êtes satisfait. Aucune carte bancaire requise, aucun risque."}},
+        {"type": "faq_item", "settings": {"question": "Puis-je payer à la livraison ?", "answer": "Oui, c'est notre mode de paiement principal ! Vous payez en espèces directement au livreur lors de la réception de votre commande. Pas de prépaiement, pas de risque."}},
+        {"type": "faq_item", "settings": {"question": "La livraison est-elle vraiment gratuite ?", "answer": "Oui, 100% gratuite ! Nous offrons la livraison gratuite partout au Maroc, sans minimum d'achat. C'est notre engagement envers vous."}},
+        {"type": "faq_item", "settings": {"question": "Puis-je retourner un produit ?", "answer": "Oui, nous acceptons les retours sous 7 jours si le produit est défectueux ou ne correspond pas à la description. Contactez-nous sur WhatsApp avec des photos du produit et nous trouverons une solution."}},
+        {"type": "faq_item", "settings": {"question": "Comment suivre ma commande ?", "answer": "Après confirmation de votre commande, vous recevrez un SMS avec un numéro de suivi. Vous pouvez également nous contacter sur WhatsApp pour avoir des nouvelles de votre livraison en temps réel."}}
+      ]
+    }
+  ]
+}
+{% endschema %}
