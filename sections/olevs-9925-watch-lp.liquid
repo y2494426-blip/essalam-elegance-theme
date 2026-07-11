@@ -710,11 +710,8 @@ body { font-family: var(--ff); direction: rtl; color: var(--text); background: #
         name="add"
         class="ow-submit-btn"
         id="ow-submit-btn"
-        {% if current_variant.available == false %}disabled{% endif %}
       >
-        <span id="ow-submit-label">
-          {%- if current_variant.available -%}⌚ اطلب الآن — الدفع عند الاستلام{%- else -%}نفدت الكمية{%- endif -%}
-        </span>
+        <span id="ow-submit-label">⌚ اطلب الآن — الدفع عند الاستلام</span>
       </button>
     {%- endform -%}
 
@@ -930,7 +927,6 @@ body { font-family: var(--ff); direction: rtl; color: var(--text); background: #
         type="submit"
         name="add"
         class="ow-bottom-btn"
-        {% if current_variant.available == false %}disabled{% endif %}
       >
         ⌚ اطلب ساعتك الآن — 220 ريال
       </button>
@@ -1040,13 +1036,13 @@ body { font-family: var(--ff); direction: rtl; color: var(--text); background: #
       if (priceSave) priceSave.style.display = 'none';
     }
 
-    /* Availability */
+    /* Always allow ordering — EasySell handles availability */
     if (submitBtn) {
-      submitBtn.disabled = !v.available;
-      submitBtn.style.opacity = v.available ? '1' : '0.5';
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
     }
     if (submitLabel) {
-      submitLabel.textContent = v.available ? '⌚ اطلب الآن — الدفع عند الاستلام' : 'نفدت الكمية';
+      submitLabel.textContent = '⌚ اطلب الآن — الدفع عند الاستلام';
     }
 
     /* Image */
