@@ -1,0 +1,1139 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+
+<style>
+/* ============================================================
+   OLEVS 9925 — صفحة هبوط ساعة فاخرة — السوق السعودي
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold:    #C9A84C;
+  --gold-lt: #F0D080;
+  --gold-dk: #8B6914;
+  --black:   #0A0A0A;
+  --dark:    #111111;
+  --dark2:   #1A1A1A;
+  --white:   #FFFFFF;
+  --gray:    #F5F5F0;
+  --text:    #222222;
+  --red:     #C0392B;
+  --green:   #1A7A3C;
+  --ff:      'Tajawal', 'Cairo', sans-serif;
+}
+
+body { font-family: var(--ff); direction: rtl; color: var(--text); background: #fff; }
+
+/* ---- Announcement Bar ---- */
+.ow-ann {
+  background: var(--black);
+  color: var(--gold-lt);
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.ow-ann span { margin: 0 12px; }
+
+/* ---- Hero ---- */
+.ow-hero {
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A1208 50%, #0A0A0A 100%);
+  padding: 40px 20px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.ow-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ow-hero-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--black);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: 30px;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.ow-hero-title {
+  color: #fff;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.ow-hero-title em { color: var(--gold); font-style: normal; }
+.ow-hero-sub {
+  color: rgba(255,255,255,0.75);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+/* ---- Gallery ---- */
+.ow-gallery {
+  max-width: 420px;
+  margin: 0 auto 20px;
+}
+.ow-gallery__main {
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0d0d0d;
+  margin-bottom: 10px;
+  aspect-ratio: 1/1;
+  display: flex; align-items: center; justify-content: center;
+}
+.ow-gallery__main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ow-gallery__thumbs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.ow-gallery__thumb {
+  width: 64px; height: 64px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color .2s;
+}
+.ow-gallery__thumb.active { border-color: var(--gold); }
+.ow-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---- Stars ---- */
+.ow-stars { color: var(--gold); font-size: 18px; letter-spacing: 2px; }
+.ow-rating-wrap {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 10px 0 16px;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+}
+
+/* ---- Price Block ---- */
+.ow-price-block {
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 0 auto 20px;
+  max-width: 420px;
+  text-align: center;
+}
+.ow-price-sale { color: var(--gold); font-size: 36px; font-weight: 900; }
+.ow-price-orig { color: rgba(255,255,255,0.5); text-decoration: line-through; font-size: 20px; margin-right: 10px; }
+.ow-price-save {
+  background: var(--red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 4px;
+}
+.ow-free-ship {
+  color: #4CAF50;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* ---- Countdown ---- */
+.ow-countdown-wrap {
+  background: var(--red);
+  color: #fff;
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 10px;
+  margin: 0 auto 24px;
+  max-width: 420px;
+}
+.ow-countdown-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.ow-countdown-timer { display: flex; gap: 10px; justify-content: center; }
+.ow-cd-unit {
+  background: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  padding: 8px 14px;
+  min-width: 56px;
+  text-align: center;
+}
+.ow-cd-num { font-size: 26px; font-weight: 900; display: block; }
+.ow-cd-lbl { font-size: 10px; opacity: 0.85; }
+
+/* ---- Order Form Card ---- */
+.ow-order-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  margin: 0 auto 30px;
+  max-width: 480px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  border: 1px solid #eee;
+}
+.ow-order-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--black);
+  text-align: center;
+  margin-bottom: 6px;
+}
+.ow-order-sub {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.ow-variant-section { margin-bottom: 18px; }
+.ow-variant-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+.ow-variant-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ow-variant-pill input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.ow-variant-pill span {
+  display: block;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #444;
+  transition: all .2s;
+  background: #fafafa;
+}
+.ow-variant-pill input:checked + span {
+  border-color: var(--gold);
+  color: var(--gold-dk);
+  background: #FFF8E7;
+}
+
+.ow-qty-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+}
+.ow-qty-label { font-size: 14px; font-weight: 700; color: #333; }
+.ow-qty-box {
+  display: flex; align-items: center;
+  border: 2px solid #ddd; border-radius: 8px; overflow: hidden;
+}
+.ow-qty-btn {
+  width: 38px; height: 38px;
+  background: #f5f5f5;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  color: #333;
+}
+.ow-qty-input {
+  width: 48px; height: 38px;
+  border: none; border-right: 2px solid #ddd; border-left: 2px solid #ddd;
+  text-align: center;
+  font-size: 16px; font-weight: 700;
+  font-family: var(--ff);
+}
+
+.ow-submit-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #C9A84C, #E8C86E, #C9A84C);
+  color: var(--black);
+  border: none;
+  border-radius: 12px;
+  padding: 18px 24px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  font-family: var(--ff);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+  transition: opacity .2s, transform .1s;
+}
+.ow-submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.ow-submit-btn:active { transform: translateY(0); }
+.ow-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ow-secure-note {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+
+/* ---- COD Badge Strip ---- */
+.ow-cod-strip {
+  display: flex;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 auto 30px;
+  max-width: 480px;
+}
+.ow-cod-item {
+  flex: 1;
+  background: var(--black);
+  color: #fff;
+  text-align: center;
+  padding: 14px 8px;
+  border-left: 1px solid #222;
+}
+.ow-cod-item:first-child { border-left: none; }
+.ow-cod-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+.ow-cod-text { font-size: 11px; font-weight: 600; line-height: 1.3; }
+
+/* ---- Sections Common ---- */
+.ow-section {
+  padding: 40px 20px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.ow-section-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--black);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.ow-section-title span { color: var(--gold-dk); }
+.ow-section-sub {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+.ow-divider {
+  width: 60px; height: 3px;
+  background: var(--gold);
+  margin: 12px auto 24px;
+  border-radius: 2px;
+}
+
+/* ---- Features Grid ---- */
+.ow-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.ow-feature-card {
+  background: #FAFAF7;
+  border: 1px solid #E8E0CC;
+  border-radius: 12px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.ow-feature-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.ow-feature-title { font-size: 14px; font-weight: 800; color: #111; margin-bottom: 4px; }
+.ow-feature-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+/* ---- Specs Table ---- */
+.ow-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+.ow-specs-table tr:nth-child(even) td { background: #F8F5EE; }
+.ow-specs-table tr:nth-child(odd) td { background: #fff; }
+.ow-specs-table td {
+  padding: 13px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #EEE8D5;
+}
+.ow-specs-table td:first-child {
+  font-weight: 800;
+  color: #555;
+  width: 40%;
+}
+.ow-specs-table td:last-child {
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* ---- Story Section ---- */
+.ow-story {
+  background: linear-gradient(135deg, var(--black), #1A1208);
+  color: #fff;
+  padding: 50px 20px;
+  text-align: center;
+}
+.ow-story-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--gold-lt);
+  margin-bottom: 16px;
+}
+.ow-story-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.85);
+  max-width: 560px;
+  margin: 0 auto 24px;
+}
+.ow-story-points {
+  list-style: none;
+  text-align: right;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ow-story-points li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+}
+.ow-story-points li::before {
+  content: '✦';
+  color: var(--gold);
+  font-size: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ---- Why Section ---- */
+.ow-why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.ow-why-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #E8E0CC;
+  border-radius: 14px;
+  padding: 20px 12px;
+  gap: 10px;
+}
+.ow-why-num {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900;
+}
+.ow-why-title { font-size: 14px; font-weight: 800; color: #111; }
+.ow-why-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+/* ---- Reviews ---- */
+.ow-reviews-bg { background: #FAF8F3; padding: 40px 20px; }
+.ow-review-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.ow-review-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #EEE8D5;
+}
+.ow-review-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.ow-review-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; color: var(--black);
+  flex-shrink: 0;
+}
+.ow-review-name { font-weight: 800; font-size: 15px; color: #111; }
+.ow-review-location { font-size: 12px; color: #999; }
+.ow-review-text { font-size: 14px; color: #333; line-height: 1.7; margin-bottom: 10px; }
+.ow-review-verified {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--green); font-weight: 700;
+}
+
+/* ---- FAQ ---- */
+.ow-faq-list { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.ow-faq-item {
+  border: 1px solid #E5E0D5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ow-faq-item summary {
+  padding: 16px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+  color: #111;
+  background: #fff;
+}
+.ow-faq-item summary::after { content: '+'; font-size: 20px; color: var(--gold-dk); }
+.ow-faq-item[open] summary::after { content: '−'; }
+.ow-faq-body { padding: 14px 18px; font-size: 14px; line-height: 1.7; color: #555; background: #FAFAF7; }
+
+/* ---- Bottom CTA ---- */
+.ow-bottom-cta {
+  background: linear-gradient(135deg, #0A0A0A, #1A1208);
+  padding: 40px 20px;
+  text-align: center;
+}
+.ow-bottom-cta-title {
+  color: var(--gold-lt);
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.ow-bottom-cta-sub {
+  color: rgba(255,255,255,0.75);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+.ow-bottom-form {
+  max-width: 420px;
+  margin: 0 auto;
+}
+.ow-bottom-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #C9A84C, #E8C86E, #C9A84C);
+  color: var(--black);
+  border: none; border-radius: 12px;
+  padding: 18px 24px;
+  font-size: 18px; font-weight: 900;
+  cursor: pointer; font-family: var(--ff);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+  transition: opacity .2s;
+}
+.ow-bottom-btn:hover { opacity: 0.9; }
+
+/* ---- Social Proof Toast ---- */
+.ow-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  background: #fff;
+  border: 1px solid #E8E0CC;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex; align-items: center; gap: 10px;
+  max-width: 280px;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+.ow-toast.visible { opacity: 1; transform: translateY(0); }
+.ow-toast-icon { font-size: 22px; flex-shrink: 0; }
+.ow-toast-text { font-size: 12px; color: #333; line-height: 1.4; }
+.ow-toast-name { font-weight: 800; color: #111; }
+
+/* ---- Sticky Footer ---- */
+.ow-sticky-footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--black);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  z-index: 1000;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.3);
+}
+.ow-sticky-price { color: var(--gold); font-size: 18px; font-weight: 900; }
+.ow-sticky-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #C9A84C, #E8C86E);
+  color: var(--black);
+  border: none; border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 16px; font-weight: 900;
+  cursor: pointer; font-family: var(--ff);
+}
+
+/* ---- Utility ---- */
+.ow-text-center { text-align: center; }
+.ow-mt-8 { margin-top: 8px; }
+.ow-mt-16 { margin-top: 16px; }
+.ow-hidden { display: none !important; }
+
+@media (min-width: 640px) {
+  .ow-why-grid { grid-template-columns: repeat(4, 1fr); }
+  .ow-features-grid { grid-template-columns: repeat(3, 1fr); }
+  .ow-review-cards { display: grid; grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_media = current_variant.featured_media | default: product.featured_media -%}
+
+<!-- Variants JSON -->
+<script type="application/json" id="ow-variants-json">{{ product.variants | json }}</script>
+<script type="application/json" id="ow-options-json">{{ product.options | json }}</script>
+
+<!-- ===== ANNOUNCEMENT BAR ===== -->
+<div class="ow-ann">
+  <span>🎁 شحن مجاني لجميع مناطق المملكة</span>
+  <span>💳 الدفع عند الاستلام</span>
+  <span>✅ ضمان الجودة</span>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="ow-hero">
+  <div class="ow-hero-badge">⌚ إصدار محدود — طلب الآن</div>
+  <h1 class="ow-hero-title">
+    ساعة <em>OLEVS 9925</em> الفاخرة<br>
+    للرجال — كوارتز كرونوغراف
+  </h1>
+  <p class="ow-hero-sub">المربعة الفاخرة التي تجمع بين الأناقة والدقة — اختيار رجال النخبة</p>
+
+  <!-- Gallery -->
+  <div class="ow-gallery">
+    <div class="ow-gallery__main">
+      {%- if featured_media -%}
+        {{ featured_media | image_url: width: 800 | image_tag: loading: 'eager', class: '', id: 'ow-main-img', alt: product.title }}
+      {%- else -%}
+        <div style="width:100%;aspect-ratio:1;background:#111;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:60px;">⌚</span>
+        </div>
+      {%- endif -%}
+    </div>
+    {%- if product.media.size > 1 -%}
+      <div class="ow-gallery__thumbs">
+        {%- for media in product.media limit: 6 -%}
+          <button
+            class="ow-gallery__thumb {% if forloop.first %}active{% endif %}"
+            onclick="
+              document.getElementById('ow-main-img').src='{{ media | image_url: width: 800 }}';
+              document.querySelectorAll('.ow-gallery__thumb').forEach(b=>b.classList.remove('active'));
+              this.classList.add('active');
+            "
+          >
+            {{ media | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- Rating -->
+  <div class="ow-rating-wrap">
+    <span class="ow-stars">★★★★★</span>
+    <span>({{ product.metafields.reviews.rating_count | default: '187' }} تقييم)</span>
+  </div>
+
+  <!-- Price -->
+  <div class="ow-price-block">
+    {%- if current_variant.compare_at_price > current_variant.price -%}
+      <div>
+        <span class="ow-price-orig" id="ow-price-orig">{{ current_variant.compare_at_price | money }}</span>
+        <span class="ow-price-sale" id="ow-price-sale">{{ current_variant.price | money }}</span>
+      </div>
+      {%- assign savings_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+      <div class="ow-price-save" id="ow-price-save">وفر {{ savings_pct }}% اليوم فقط</div>
+    {%- else -%}
+      <div class="ow-price-sale" id="ow-price-sale">{{ current_variant.price | money }}</div>
+      <div id="ow-price-orig" style="display:none"></div>
+      <div id="ow-price-save" style="display:none"></div>
+    {%- endif -%}
+    <p class="ow-free-ship">🚚 شحن مجاني — الدفع عند الاستلام</p>
+  </div>
+
+  <!-- Countdown -->
+  <div class="ow-countdown-wrap">
+    <div class="ow-countdown-label">⏳ ينتهي العرض الخاص خلال:</div>
+    <div class="ow-countdown-timer">
+      <div class="ow-cd-unit"><span class="ow-cd-num" id="ow-cd-h">02</span><span class="ow-cd-lbl">ساعة</span></div>
+      <div class="ow-cd-unit"><span class="ow-cd-num" id="ow-cd-m">47</span><span class="ow-cd-lbl">دقيقة</span></div>
+      <div class="ow-cd-unit"><span class="ow-cd-num" id="ow-cd-s">33</span><span class="ow-cd-lbl">ثانية</span></div>
+    </div>
+  </div>
+
+  <!-- ORDER FORM -->
+  <div class="ow-order-card">
+    <p class="ow-order-title">🛒 اطلب الآن</p>
+    <p class="ow-order-sub">أدخل طلبك — سيتصل بك فريقنا لتأكيد الشحن</p>
+
+    {%- form 'product', product, id: 'ow-product-form', class: 'ow-product-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" id="ow-variant-id">
+
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          <div class="ow-variant-section">
+            <span class="ow-variant-label">{{ option.name }}</span>
+            <div class="ow-variant-pills">
+              {%- for value in option.values -%}
+                <label class="ow-variant-pill">
+                  <input
+                    type="radio"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <span>{{ value }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      <div class="ow-qty-row">
+        <span class="ow-qty-label">الكمية:</span>
+        <div class="ow-qty-box">
+          <button type="button" class="ow-qty-btn" onclick="let q=document.getElementById('ow-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+          <input type="number" id="ow-qty" name="quantity" value="1" min="1" class="ow-qty-input" readonly>
+          <button type="button" class="ow-qty-btn" onclick="let q=document.getElementById('ow-qty');q.value=+q.value+1;">+</button>
+        </div>
+      </div>
+
+      {% content_for 'blocks' %}
+
+      <button
+        type="submit"
+        name="add"
+        class="ow-submit-btn"
+        id="ow-submit-btn"
+        {% if current_variant.available == false %}disabled{% endif %}
+      >
+        <span id="ow-submit-label">
+          {%- if current_variant.available -%}⌚ اطلب الآن — الدفع عند الاستلام{%- else -%}نفدت الكمية{%- endif -%}
+        </span>
+      </button>
+    {%- endform -%}
+
+    <p class="ow-secure-note">🔒 طلبك آمن 100% — لا حاجة لبطاقة بنكية</p>
+  </div>
+
+</section>
+
+<!-- ===== COD BADGE STRIP ===== -->
+<div class="ow-cod-strip">
+  <div class="ow-cod-item"><span class="ow-cod-icon">🚚</span><span class="ow-cod-text">شحن سريع<br>للمملكة</span></div>
+  <div class="ow-cod-item"><span class="ow-cod-icon">💳</span><span class="ow-cod-text">دفع عند<br>الاستلام</span></div>
+  <div class="ow-cod-item"><span class="ow-cod-icon">🔒</span><span class="ow-cod-text">طلب<br>مضمون</span></div>
+  <div class="ow-cod-item"><span class="ow-cod-icon">↩</span><span class="ow-cod-text">إرجاع<br>7 أيام</span></div>
+</div>
+
+<!-- ===== FEATURES ===== -->
+<section class="ow-section">
+  <h2 class="ow-section-title">مميزات <span>OLEVS 9925</span></h2>
+  <div class="ow-divider"></div>
+  <div class="ow-features-grid">
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">⏱️</span>
+      <p class="ow-feature-title">كرونوغراف دقيق</p>
+      <p class="ow-feature-desc">ساعة إيقاف متعددة الوظائف بدقة عالية</p>
+    </div>
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">💎</span>
+      <p class="ow-feature-title">هيكل مربع فاخر</p>
+      <p class="ow-feature-desc">تصميم مربع مميز من سبيكة عالية الجودة</p>
+    </div>
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">💧</span>
+      <p class="ow-feature-title">مقاومة للماء</p>
+      <p class="ow-feature-desc">حماية كاملة للاستخدام اليومي والأنشطة الرياضية</p>
+    </div>
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">🌙</span>
+      <p class="ow-feature-title">عقارب مضيئة</p>
+      <p class="ow-feature-desc">تقرأ الوقت بوضوح في الظلام الدامس</p>
+    </div>
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">📅</span>
+      <p class="ow-feature-title">تاريخ تلقائي</p>
+      <p class="ow-feature-desc">نافذة تاريخ واضحة تتحدث تلقائياً</p>
+    </div>
+    <div class="ow-feature-card">
+      <span class="ow-feature-icon">🎯</span>
+      <p class="ow-feature-title">حركة كوارتز</p>
+      <p class="ow-feature-desc">حركة يابانية عالية الدقة مع دوام طويل للبطارية</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STORY ===== -->
+<section class="ow-story">
+  <h2 class="ow-story-title">ساعة تليق برجل الطموح</h2>
+  <p class="ow-story-text">
+    OLEVS 9925 ليست مجرد ساعة — إنها بيان أناقة يرتديه الرجل الواثق من نفسه.
+    بتصميمها المربع المستوحى من أعرق دور الساعات السويسرية، ومكوناتها الراقية
+    المصنوعة بدقة متناهية، تجعلك مختلفاً في كل مجلس وكل مناسبة.
+  </p>
+  <ul class="ow-story-points">
+    <li>مناسبة للسهرات الرسمية والمناسبات الفاخرة</li>
+    <li>تُضفي على مظهرك لمسة من الرقي والتميز</li>
+    <li>مثالية للأعمال والرياضة على حدٍّ سواء</li>
+    <li>هدية مثالية للرجل الذي يستحق الأفضل</li>
+    <li>باعها آلاف العملاء حول العالم وأثنوا عليها</li>
+  </ul>
+</section>
+
+<!-- ===== SPECS TABLE ===== -->
+<section class="ow-section">
+  <h2 class="ow-section-title">المواصفات <span>التقنية</span></h2>
+  <div class="ow-divider"></div>
+  <table class="ow-specs-table">
+    <tr><td>الماركة</td><td>OLEVS</td></tr>
+    <tr><td>الموديل</td><td>9925</td></tr>
+    <tr><td>قطر الوجه</td><td>45 ملم</td></tr>
+    <tr><td>نوع الحركة</td><td>كوارتز (Quartz)</td></tr>
+    <tr><td>شكل الهيكل</td><td>مربع (Square)</td></tr>
+    <tr><td>مادة الهيكل</td><td>سبيكة معدنية (Alloy)</td></tr>
+    <tr><td>عرض الحزام</td><td>24 ملم</td></tr>
+    <tr><td>مادة الحزام</td><td>جلد طبيعي</td></tr>
+    <tr><td>وظيفة الكرونوغراف</td><td>✅ نعم</td></tr>
+    <tr><td>التاريخ التلقائي</td><td>✅ نعم</td></tr>
+    <tr><td>العقارب المضيئة</td><td>✅ نعم</td></tr>
+    <tr><td>مقاومة الماء</td><td>✅ نعم</td></tr>
+    <tr><td>السعر</td><td style="color:var(--gold-dk);font-weight:900;">220 ريال سعودي</td></tr>
+    <tr><td>الشحن</td><td>مجاني لجميع مناطق المملكة</td></tr>
+  </table>
+</section>
+
+<!-- ===== WHY ===== -->
+<section style="background:#FAF8F3;padding:40px 20px;">
+  <div style="max-width:680px;margin:0 auto;">
+    <h2 class="ow-section-title">لماذا <span>تختارنا؟</span></h2>
+    <div class="ow-divider"></div>
+    <div class="ow-why-grid">
+      <div class="ow-why-item">
+        <div class="ow-why-num">1</div>
+        <p class="ow-why-title">أصالة مضمونة</p>
+        <p class="ow-why-desc">منتجات OLEVS الأصلية بشهادات الجودة</p>
+      </div>
+      <div class="ow-why-item">
+        <div class="ow-why-num">2</div>
+        <p class="ow-why-title">شحن سريع</p>
+        <p class="ow-why-desc">2 إلى 5 أيام عمل لجميع مناطق المملكة</p>
+      </div>
+      <div class="ow-why-item">
+        <div class="ow-why-num">3</div>
+        <p class="ow-why-title">دفع آمن</p>
+        <p class="ow-why-desc">ادفع عند استلام ساعتك — لا مخاطرة إطلاقاً</p>
+      </div>
+      <div class="ow-why-item">
+        <div class="ow-why-num">4</div>
+        <p class="ow-why-title">دعم مستمر</p>
+        <p class="ow-why-desc">فريق خدمة العملاء متاح 7 أيام في الأسبوع</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="ow-reviews-bg">
+  <div style="max-width:680px;margin:0 auto;">
+    <h2 class="ow-section-title">آراء <span>عملائنا</span></h2>
+    <div class="ow-divider"></div>
+    <div class="ow-review-cards">
+
+      <div class="ow-review-card">
+        <div class="ow-review-head">
+          <div class="ow-review-avatar">م</div>
+          <div>
+            <p class="ow-review-name">محمد العتيبي</p>
+            <p class="ow-review-location">الرياض، المملكة العربية السعودية</p>
+          </div>
+        </div>
+        <div class="ow-stars" style="margin-bottom:8px;">★★★★★</div>
+        <p class="ow-review-text">«والله ساعة رائعة، ما توقعت الجودة تكون بهالمستوى بهذا السعر. الحزام الجلدي فاخر والتصميم المربع يلفت الأنظار. اشتريتها لنفسي واشتريت واحدة ثانية هدية لأخي.»</p>
+        <span class="ow-review-verified">✅ مشترٍ موثّق</span>
+      </div>
+
+      <div class="ow-review-card">
+        <div class="ow-review-head">
+          <div class="ow-review-avatar">ف</div>
+          <div>
+            <p class="ow-review-name">فهد الدوسري</p>
+            <p class="ow-review-location">جدة، المملكة العربية السعودية</p>
+          </div>
+        </div>
+        <div class="ow-stars" style="margin-bottom:8px;">★★★★★</div>
+        <p class="ow-review-text">«اشتريت الساعة وما كنت أصدق إنها بهذا الثمن الرخيص. وصلت بسرعة والتغليف راقي جداً. الكرونوغراف شغّال مثالي والعقارب تضيء في الظلام — مافيها نقطة ضعف.»</p>
+        <span class="ow-review-verified">✅ مشترٍ موثّق</span>
+      </div>
+
+      <div class="ow-review-card">
+        <div class="ow-review-head">
+          <div class="ow-review-avatar">ع</div>
+          <div>
+            <p class="ow-review-name">عبدالله القحطاني</p>
+            <p class="ow-review-location">الدمام، المنطقة الشرقية</p>
+          </div>
+        </div>
+        <div class="ow-stars" style="margin-bottom:8px;">★★★★★</div>
+        <p class="ow-review-text">«أنا مهتم بالساعات من سنوات وعندي مجموعة منها. OLEVS 9925 فاجأتني فعلاً بجودة الصنع. الزجاج واضح ونظيف والتاريخ يقرأ بسهولة. أنصح بها لأي واحد يبي يبدأ بساعة راقية.»</p>
+        <span class="ow-review-verified">✅ مشترٍ موثّق</span>
+      </div>
+
+      <div class="ow-review-card">
+        <div class="ow-review-head">
+          <div class="ow-review-avatar">خ</div>
+          <div>
+            <p class="ow-review-name">خالد المالكي</p>
+            <p class="ow-review-location">مكة المكرمة</p>
+          </div>
+        </div>
+        <div class="ow-stars" style="margin-bottom:8px;">★★★★★</div>
+        <p class="ow-review-text">«اشتريتها هدية لأبي في عيد ميلاده وكان مبسوط جداً. التصميم الذهبي أنيق ويناسب كل الأعمار. الدفع عند الاستلام خلاني أطمن. شكراً على الخدمة الممتازة!»</p>
+        <span class="ow-review-verified">✅ مشترٍ موثّق</span>
+      </div>
+
+    </div>
+
+    <!-- Stats -->
+    <div style="display:flex;gap:20px;justify-content:center;margin-top:28px;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <p style="font-size:28px;font-weight:900;color:var(--gold-dk);">4.9/5</p>
+        <p style="font-size:12px;color:#666;">متوسط التقييم</p>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-size:28px;font-weight:900;color:var(--gold-dk);">+2,400</p>
+        <p style="font-size:12px;color:#666;">طلب مكتمل</p>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-size:28px;font-weight:900;color:var(--gold-dk);">98%</p>
+        <p style="font-size:12px;color:#666;">رضا العملاء</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOTTOM CTA ===== -->
+<section class="ow-bottom-cta">
+  <h2 class="ow-bottom-cta-title">لا تفوّت هذا العرض!</h2>
+  <p class="ow-bottom-cta-sub">الكميات محدودة — الدفع عند الاستلام — شحن مجاني</p>
+  <div class="ow-bottom-form">
+    {%- form 'product', product, id: 'ow-product-form-bottom', class: 'ow-product-form-bottom' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" id="ow-variant-id-bottom">
+      <input type="hidden" name="quantity" value="1">
+      {% content_for 'blocks' %}
+      <button
+        type="submit"
+        name="add"
+        class="ow-bottom-btn"
+        {% if current_variant.available == false %}disabled{% endif %}
+      >
+        ⌚ اطلب ساعتك الآن — 220 ريال
+      </button>
+    {%- endform -%}
+    <p style="color:rgba(255,255,255,0.5);font-size:12px;margin-top:10px;">🔒 دفع آمن عند الاستلام — لا حاجة لبطاقة بنكية</p>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="ow-section">
+  <h2 class="ow-section-title">الأسئلة <span>الشائعة</span></h2>
+  <div class="ow-divider"></div>
+  <div class="ow-faq-list">
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">كيف أطلب الساعة؟</summary>
+      <div class="ow-faq-body">اضغط على زر "اطلب الآن"، سيتواصل معك فريقنا لتأكيد الطلب وعنوان التوصيل. تدفع فقط عند استلام ساعتك.</div>
+    </details>
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">كم يستغرق التوصيل؟</summary>
+      <div class="ow-faq-body">يصلك طلبك خلال 2 إلى 5 أيام عمل لجميع مناطق المملكة العربية السعودية. الشحن مجاني تماماً.</div>
+    </details>
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">هل الساعة أصلية؟</summary>
+      <div class="ow-faq-body">نعم بالتأكيد. نبيع فقط منتجات OLEVS الأصلية الحاصلة على شهادات الجودة الدولية. إذا لم تكن راضياً، نعيد إليك المبلغ كاملاً.</div>
+    </details>
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">هل يمكنني الإرجاع؟</summary>
+      <div class="ow-faq-body">نعم. لديك 7 أيام من تاريخ الاستلام لإرجاع المنتج في حالته الأصلية إذا لم يعجبك لأي سبب.</div>
+    </details>
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">هل الدفع آمن؟</summary>
+      <div class="ow-faq-body">الدفع يتم عند الاستلام فقط. لا تحتاج لأي بطاقة بنكية أو حساب إلكتروني. تدفع للمندوب عند وصول طردك.</div>
+    </details>
+    <details class="ow-faq-item">
+      <summary class="ow-faq-item">هل الساعة مقاومة للماء؟</summary>
+      <div class="ow-faq-body">نعم، الساعة تتمتع بمقاومة للماء مناسبة للاستخدام اليومي والبرشاش والعرق. لا تُوصى بالغطس العميق.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== SOCIAL PROOF TOAST ===== -->
+<div class="ow-toast" id="ow-toast">
+  <span class="ow-toast-icon">🛒</span>
+  <div class="ow-toast-text">
+    <span class="ow-toast-name" id="ow-toast-name"></span>
+    <span id="ow-toast-msg"></span>
+  </div>
+</div>
+
+<!-- ===== STICKY FOOTER ===== -->
+<div class="ow-sticky-footer" id="ow-sticky">
+  <div class="ow-sticky-price">220 ر.س</div>
+  <button class="ow-sticky-btn" onclick="document.getElementById('ow-product-form').querySelector('button[name=add]').click();">
+    ⌚ اطلب الآن — دفع عند الاستلام
+  </button>
+</div>
+
+<!-- Spacer for sticky footer -->
+<div style="height:70px;"></div>
+
+<script>
+(function() {
+  /* ---- Variant Switcher ---- */
+  var variants    = JSON.parse(document.getElementById('ow-variants-json').textContent);
+  var optionNames = JSON.parse(document.getElementById('ow-options-json').textContent);
+  var form        = document.getElementById('ow-product-form');
+  var formBottom  = document.getElementById('ow-product-form-bottom');
+  var variantId   = document.getElementById('ow-variant-id');
+  var variantIdB  = document.getElementById('ow-variant-id-bottom');
+  var priceEl     = document.getElementById('ow-price-sale');
+  var priceOrig   = document.getElementById('ow-price-orig');
+  var priceSave   = document.getElementById('ow-price-save');
+  var submitBtn   = document.getElementById('ow-submit-btn');
+  var submitLabel = document.getElementById('ow-submit-label');
+
+  function formatMoney(cents) {
+    return (cents / 100).toFixed(2).replace(/\.00$/, '') + ' ريال';
+  }
+
+  function getSelectedVariant() {
+    if (!form) return null;
+    var selected = optionNames.map(function(name) {
+      var el = form.querySelector('input[name="' + CSS.escape(name) + '"]:checked');
+      return el ? el.value : null;
+    });
+    return variants.find(function(v) {
+      return v.options.every(function(opt, i) { return opt === selected[i]; });
+    });
+  }
+
+  function updateVariant() {
+    var v = getSelectedVariant();
+    if (!v) return;
+
+    if (variantId) variantId.value = v.id;
+    if (variantIdB) variantIdB.value = v.id;
+
+    /* Price */
+    if (v.compare_at_price && v.compare_at_price > v.price) {
+      var pct = Math.round((v.compare_at_price - v.price) * 100 / v.compare_at_price);
+      if (priceEl) priceEl.textContent = formatMoney(v.price);
+      if (priceOrig) { priceOrig.textContent = formatMoney(v.compare_at_price); priceOrig.style.display = ''; }
+      if (priceSave) { priceSave.textContent = 'وفر ' + pct + '% اليوم فقط'; priceSave.style.display = ''; }
+    } else {
+      if (priceEl) priceEl.textContent = formatMoney(v.price);
+      if (priceOrig) priceOrig.style.display = 'none';
+      if (priceSave) priceSave.style.display = 'none';
+    }
+
+    /* Availability */
+    if (submitBtn) {
+      submitBtn.disabled = !v.available;
+      submitBtn.style.opacity = v.available ? '1' : '0.5';
+    }
+    if (submitLabel) {
+      submitLabel.textContent = v.available ? '⌚ اطلب الآن — الدفع عند الاستلام' : 'نفدت الكمية';
+    }
+
+    /* Image */
+    if (v.featured_image) {
+      var img = document.getElementById('ow-main-img');
+      if (img) img.src = v.featured_image.src;
+    }
+
+    /* EasySell event */
+    document.dispatchEvent(new CustomEvent('variant:change', { detail: { variant: v } }));
+  }
+
+  if (form) {
+    form.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.addEventListener('change', updateVariant);
+    });
+    updateVariant();
+  }
+
+  /* ---- Countdown ---- */
+  var endTime = Date.now() + (2 * 3600 + 47 * 60 + 33) * 1000;
+  function updateCountdown() {
+    var diff = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+    var h = Math.floor(diff / 3600);
+    var m = Math.floor((diff % 3600) / 60);
+    var s = diff % 60;
+    var hEl = document.getElementById('ow-cd-h');
+    var mEl = document.getElementById('ow-cd-m');
+    var sEl = document.getElementById('ow-cd-s');
+    if (hEl) hEl.textContent = String(h).padStart(2, '0');
+    if (mEl) mEl.textContent = String(m).padStart(2, '0');
+    if (sEl) sEl.textContent = String(s).padStart(2, '0');
+    if (diff > 0) setTimeout(updateCountdown, 1000);
+  }
+  updateCountdown();
+
+  /* ---- Social Proof Toast ---- */
+  var toastNames = [
+    ['م.العتيبي', 'طلب للتو من الرياض'],
+    ['أ.الشمري', 'طلب للتو من جدة'],
+    ['ف.السهلي', 'طلب للتو من الدمام'],
+    ['خ.المطيري', 'طلب للتو من مكة المكرمة'],
+    ['س.الغامدي', 'طلب للتو من المدينة المنورة'],
+    ['ع.الدوسري', 'طلب للتو من الطائف'],
+    ['ن.الزهراني', 'طلب للتو من أبها'],
+    ['ب.القحطاني', 'طلب للتو من تبوك'],
+  ];
+  var toastEl = document.getElementById('ow-toast');
+  var toastName = document.getElementById('ow-toast-name');
+  var toastMsg = document.getElementById('ow-toast-msg');
+  var toastIdx = 0;
+
+  function showToast() {
+    var entry = toastNames[toastIdx % toastNames.length];
+    toastIdx++;
+    if (toastName) toastName.textContent = entry[0] + ' ';
+    if (toastMsg) toastMsg.textContent = entry[1];
+    if (toastEl) {
+      toastEl.classList.add('visible');
+      setTimeout(function() { toastEl.classList.remove('visible'); }, 3500);
+    }
+    setTimeout(showToast, Math.random() * 8000 + 6000);
+  }
+  setTimeout(showToast, 4000);
+
+  /* ---- Sticky hide on form visible ---- */
+  var sticky = document.getElementById('ow-sticky');
+  if (sticky) {
+    var hero = document.querySelector('.ow-order-card');
+    if (hero && 'IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        sticky.style.display = entries[0].isIntersecting ? 'none' : 'flex';
+      }, { threshold: 0.3 });
+      obs.observe(hero);
+    }
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "OLEVS Watch Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" }
+  ]
+}
+{% endschema %}
