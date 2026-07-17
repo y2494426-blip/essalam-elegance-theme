@@ -1,0 +1,373 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_image_1 = product.media[0]
+  assign product_image_2 = product.media[1]
+  assign product_image_3 = product.media[2]
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --black:#0B0B0D;
+    --dark:#141416;
+    --dark2:#1D1D20;
+    --orange:#E85D2C;
+    --orange-lt:#FF8F5E;
+    --orange-dk:#B8431A;
+    --white:#FFFFFF;
+    --gray:#A8A8AF;
+    --gray-dk:#6E6E76;
+    --line: rgba(255,255,255,0.09);
+    --cream:#F5F4F1;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.8;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.disp{ font-family:'Rajdhani','Tajawal',sans-serif; font-weight:700; }
+  img{max-width:100%; display:block;}
+  .nc-wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  .nc-topbar{ background:var(--orange); color:var(--black); text-align:center; font-size:13px; font-weight:800; padding:9px 12px; letter-spacing:.3px; }
+
+  header.nc-nav{ padding:20px 24px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--line); }
+  .nc-brand{ font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700; letter-spacing:1px; color:var(--white); }
+  .nc-brand span{ color:var(--orange); }
+
+  .nc-hero{ position:relative; padding:50px 0 30px; overflow:hidden; }
+  .nc-hero-blob{ position:absolute; top:-160px; right:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(232,93,44,0.25) 0%, transparent 70%); pointer-events:none; }
+  .nc-hero-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1.05fr; gap:44px; align-items:center; }
+  .nc-hero-eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; letter-spacing:1.5px; color:var(--orange-lt); background:rgba(232,93,44,0.12); border:1px solid rgba(232,93,44,0.4); padding:6px 14px; border-radius:30px; margin-bottom:18px; }
+  .nc-hero h1{ font-size:48px; line-height:1.15; color:var(--white); margin-bottom:16px; }
+  .nc-hero h1 em{ font-style:normal; color:var(--orange); }
+  .nc-hero p.nc-lead{ font-size:16.5px; color:var(--gray); max-width:460px; margin-bottom:26px; }
+  .nc-price-row{ display:flex; align-items:baseline; gap:14px; margin-bottom:28px; }
+  .nc-price-now{ font-family:'Rajdhani',sans-serif; font-size:42px; font-weight:700; color:var(--white); }
+  .nc-price-old{ font-size:19px; color:var(--gray-dk); text-decoration:line-through; }
+  .nc-price-tag{ font-size:13px; background:var(--orange); color:var(--black); font-weight:800; padding:5px 12px; border-radius:20px; }
+  .nc-cta{ display:inline-flex; align-items:center; gap:10px; background:var(--orange); color:var(--black); font-size:16px; font-weight:900; padding:16px 34px; border-radius:8px; border:none; cursor:pointer; text-decoration:none; transition:transform .25s ease, background .25s ease; box-shadow:0 10px 26px rgba(232,93,44,0.28); }
+  .nc-cta:hover{ background:var(--orange-lt); transform:translateY(-2px); }
+  .nc-hero-note{ margin-top:14px; font-size:13px; color:var(--gray-dk); }
+  .nc-hero-media img{ border-radius:18px; border:1px solid var(--line); }
+
+  .nc-strip{ background:var(--dark2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:13px 0; overflow:hidden; white-space:nowrap; }
+  .nc-strip-track{ display:inline-block; animation:nc-scroll 20s linear infinite; font-size:14px; letter-spacing:1px; color:var(--gray); }
+  .nc-strip-track span{ margin:0 26px; color:var(--orange-lt); font-weight:700; }
+  @keyframes nc-scroll{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+  .nc-section{ padding:66px 0; }
+  .nc-section-head{ text-align:center; max-width:620px; margin:0 auto 42px; }
+  .nc-kicker{ font-size:13px; letter-spacing:2px; color:var(--orange); display:block; margin-bottom:10px; font-weight:700; }
+  .nc-section-head h2{ font-size:36px; color:var(--white); }
+
+  .nc-benefits{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .nc-b-card{ background:var(--dark); border:1px solid var(--line); border-radius:16px; padding:26px 20px; text-align:center; transition:border-color .2s ease, transform .2s ease; }
+  .nc-b-card:hover{ border-color:var(--orange); transform:translateY(-4px); }
+  .nc-b-icon{ font-size:30px; margin-bottom:14px; }
+  .nc-b-card h3{ font-size:16px; color:var(--white); margin-bottom:8px; }
+  .nc-b-card p{ font-size:13px; color:var(--gray); }
+
+  .nc-split{ display:grid; grid-template-columns:1fr 1fr; gap:46px; align-items:center; }
+  .nc-split.reverse .nc-split-media{ order:2; }
+  .nc-split-media img{ border-radius:16px; border:1px solid var(--line); }
+  .nc-split h2{ font-size:30px; color:var(--white); margin-bottom:16px; }
+  .nc-split p{ color:var(--gray); font-size:15px; margin-bottom:14px; }
+  .nc-split ul{ list-style:none; }
+  .nc-split ul li{ display:flex; gap:10px; align-items:flex-start; font-size:14.5px; color:var(--gray); margin-bottom:10px; }
+  .nc-split ul li::before{ content:"◆"; color:var(--orange); font-size:10px; margin-top:5px; }
+
+  .nc-specs-table{ width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; border:1px solid var(--line); }
+  .nc-specs-table tr:nth-child(even) td{ background:var(--dark2); }
+  .nc-specs-table tr:nth-child(odd) td{ background:var(--dark); }
+  .nc-specs-table td{ padding:14px 18px; font-size:14.5px; border-bottom:1px solid var(--line); }
+  .nc-specs-table td:first-child{ font-weight:800; color:var(--gray); width:40%; }
+  .nc-specs-table td:last-child{ color:var(--white); font-weight:600; }
+
+  .nc-badges{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .nc-badge{ text-align:center; background:var(--dark); border-radius:12px; padding:20px 10px; border:1px solid var(--line); }
+  .nc-badge .nc-ic{ font-size:24px; margin-bottom:8px; }
+  .nc-badge span{ font-size:12.5px; color:var(--gray); display:block; }
+
+  .nc-order{ background:var(--dark); border:1px solid var(--line); border-radius:26px; padding:52px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:46px; }
+  .nc-order-info .nc-kicker{ color:var(--orange-lt); }
+  .nc-order-info h2{ font-size:32px; color:var(--white); margin:12px 0 16px; }
+  .nc-order-info p{ color:var(--gray); font-size:15px; margin-bottom:22px; }
+  .nc-order-price{ display:flex; align-items:center; gap:14px; background:rgba(232,93,44,0.08); border:1px solid rgba(232,93,44,0.3); border-radius:14px; padding:18px 22px; margin-bottom:20px; }
+  .nc-order-price .nc-amount{ font-family:'Rajdhani',sans-serif; font-size:36px; color:var(--orange-lt); font-weight:700; }
+  .nc-order-price .nc-label{ font-size:13px; color:var(--gray); }
+  .nc-order-perks li{ list-style:none; display:flex; gap:10px; align-items:center; font-size:14px; color:var(--gray); margin-bottom:10px; }
+  .nc-order-perks li::before{ content:"✓"; color:var(--orange-lt); font-weight:700; }
+
+  .nc-product-form{ background:var(--black); border:1px solid var(--line); border-radius:18px; padding:32px; display:flex; flex-direction:column; gap:15px; }
+  .nc-product-form h3{ font-size:19px; color:var(--white); margin-bottom:2px; }
+  .nc-submit-btn{ margin-top:6px; background:var(--orange); color:var(--black); font-weight:900; font-size:16px; border:none; padding:16px; border-radius:9px; cursor:pointer; transition:background .2s ease, transform .2s ease; width:100%; }
+  .nc-submit-btn:hover{ background:var(--orange-lt); transform:translateY(-1px); }
+  .nc-form-foot{ font-size:12px; color:var(--gray-dk); text-align:center; }
+
+  .nc-footer{ text-align:center; padding:34px 0 44px; color:var(--gray-dk); font-size:13px; border-top:1px solid var(--line); }
+  .nc-footer .nc-brand{ font-size:20px; margin-bottom:8px; }
+
+  @media(max-width:860px){
+    .nc-hero-inner{ grid-template-columns:1fr; text-align:center; }
+    .nc-hero p.nc-lead{ margin-inline:auto; }
+    .nc-price-row{ justify-content:center; }
+    .nc-hero-media{ order:-1; }
+    .nc-hero h1{ font-size:36px; }
+    .nc-benefits{ grid-template-columns:repeat(2,1fr); }
+    .nc-split, .nc-split.reverse .nc-split-media{ grid-template-columns:1fr; order:0; }
+    .nc-split{ grid-template-columns:1fr; }
+    .nc-badges{ grid-template-columns:repeat(2,1fr); }
+    .nc-order{ grid-template-columns:1fr; padding:30px; }
+  }
+</style>
+
+<div class="nc-topbar">🚚 التوصيل خلال <b>٢-٤ أيام</b> لجميع مدن المملكة &nbsp;|&nbsp; 💵 الدفع <b>عند الاستلام</b></div>
+
+<header class="nc-nav">
+  <div class="nc-brand">{{ shop.name | split: ' ' | first }}<span>{{ shop.name | split: ' ' | last }}</span></div>
+</header>
+
+<!-- HERO -->
+<div class="nc-hero">
+  <div class="nc-hero-blob"></div>
+  <div class="nc-wrap nc-hero-inner">
+    <div>
+      <span class="nc-hero-eyebrow">{{ product.metafields.custom.eyebrow | default: '⟳ منتج مميز' }}</span>
+      <h1>{{ product.title }}</h1>
+      <p class="nc-lead">{{ product.description | strip_html | truncate: 200 }}</p>
+      <div class="nc-price-row">
+        <span class="nc-price-now" id="nc-price-now">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            {{ current_variant.price | money }}
+          {%- else -%}
+            {{ product.price | money }}
+          {%- endif -%}
+        </span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="nc-price-old">{{ current_variant.compare_at_price | money }}</span>
+          {%- assign saving = current_variant.compare_at_price | minus: current_variant.price | money -%}
+          <span class="nc-price-tag">وفّر {{ saving }}</span>
+        {%- endif -%}
+      </div>
+      <a href="#nc-order" class="nc-cta">🛒 اطلبه الآن — الدفع عند الاستلام</a>
+      <div class="nc-hero-note">✔ منتج أصلي 100% &nbsp; ✔ يُرسل من داخل السعودية &nbsp; ✔ ضمان الجودة</div>
+    </div>
+    <div class="nc-hero-media">
+      {%- if product_image_1 -%}
+        {{ product_image_1 | image_url: width: 900 | image_tag: alt: product.title, loading: 'eager' }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<div class="nc-strip">
+  <div class="nc-strip-track">
+    {%- for tag in product.tags -%}
+      <span>{{ tag }}</span>•
+    {%- endfor -%}
+    {%- for tag in product.tags -%}
+      <span>{{ tag }}</span>•
+    {%- endfor -%}
+  </div>
+</div>
+
+<!-- BENEFITS -->
+<section class="nc-section nc-wrap">
+  <div class="nc-section-head">
+    <span class="nc-kicker">لماذا هذا المنتج</span>
+    <h2>مزايا تفرّق عن أي منتج عادي</h2>
+  </div>
+  <div class="nc-benefits">
+    {%- assign benefit_1 = product.metafields.custom.benefit_1 | default: '⟳' -%}
+    {%- assign benefit_2 = product.metafields.custom.benefit_2 | default: '📐' -%}
+    {%- assign benefit_3 = product.metafields.custom.benefit_3 | default: '🧊' -%}
+    {%- assign benefit_4 = product.metafields.custom.benefit_4 | default: '📱' -%}
+    <div class="nc-b-card"><div class="nc-b-icon">{{ benefit_1 }}</div><h3>{{ product.metafields.custom.benefit_title_1 | default: 'ميزة ١' }}</h3><p>{{ product.metafields.custom.benefit_desc_1 | default: '' }}</p></div>
+    <div class="nc-b-card"><div class="nc-b-icon">{{ benefit_2 }}</div><h3>{{ product.metafields.custom.benefit_title_2 | default: 'ميزة ٢' }}</h3><p>{{ product.metafields.custom.benefit_desc_2 | default: '' }}</p></div>
+    <div class="nc-b-card"><div class="nc-b-icon">{{ benefit_3 }}</div><h3>{{ product.metafields.custom.benefit_title_3 | default: 'ميزة ٣' }}</h3><p>{{ product.metafields.custom.benefit_desc_3 | default: '' }}</p></div>
+    <div class="nc-b-card"><div class="nc-b-icon">{{ benefit_4 }}</div><h3>{{ product.metafields.custom.benefit_title_4 | default: 'ميزة ٤' }}</h3><p>{{ product.metafields.custom.benefit_desc_4 | default: '' }}</p></div>
+  </div>
+</section>
+
+<!-- SPLIT IMAGE 1 -->
+{%- if product_image_2 -%}
+<section class="nc-section nc-wrap">
+  <div class="nc-split">
+    <div class="nc-split-media">
+      {{ product_image_2 | image_url: width: 700 | image_tag: alt: product.title, loading: 'lazy' }}
+    </div>
+    <div>
+      <h2>{{ product.metafields.custom.feature_title_1 | default: product.title }}</h2>
+      <p>{{ product.metafields.custom.feature_desc_1 | default: product.description | strip_html | truncate: 300 }}</p>
+      {%- if product.metafields.custom.feature_points_1 -%}
+        <ul>
+          {%- for point in product.metafields.custom.feature_points_1.value -%}
+            <li>{{ point }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<!-- SPLIT IMAGE 2 -->
+{%- if product_image_3 -%}
+<section class="nc-section nc-wrap">
+  <div class="nc-split reverse">
+    <div class="nc-split-media">
+      {{ product_image_3 | image_url: width: 700 | image_tag: alt: product.title, loading: 'lazy' }}
+    </div>
+    <div>
+      <h2>{{ product.metafields.custom.feature_title_2 | default: product.title }}</h2>
+      <p>{{ product.metafields.custom.feature_desc_2 | default: product.description | strip_html | truncate: 300 }}</p>
+      {%- if product.metafields.custom.feature_points_2 -%}
+        <ul>
+          {%- for point in product.metafields.custom.feature_points_2.value -%}
+            <li>{{ point }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<!-- SPECS -->
+<section class="nc-section nc-wrap">
+  <div class="nc-section-head">
+    <span class="nc-kicker">المواصفات التقنية</span>
+    <h2>تفاصيل <span style="color:var(--orange)">المنتج</span></h2>
+  </div>
+  <table class="nc-specs-table">
+    {%- for variant in product.variants -%}
+      {%- unless variant.title == 'Default Title' -%}
+        <tr><td>{{ variant.option1 }}</td><td>{{ variant.title }} — {{ variant.price | money }}</td></tr>
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- for option in product.options_with_values -%}
+      <tr><td>{{ option.name }}</td><td>{{ option.values | join: ' / ' }}</td></tr>
+    {%- endfor -%}
+    <tr><td>السعر</td><td style="color:var(--orange-lt);font-weight:900;">{{ product.price | money }}</td></tr>
+    <tr><td>الشحن</td><td>مجاني لجميع مناطق المملكة</td></tr>
+  </table>
+</section>
+
+<!-- BADGES -->
+<section class="nc-section nc-wrap">
+  <div class="nc-badges">
+    <div class="nc-badge"><div class="nc-ic">🚚</div><span>توصيل سريع للمملكة</span></div>
+    <div class="nc-badge"><div class="nc-ic">💵</div><span>دفع عند الاستلام</span></div>
+    <div class="nc-badge"><div class="nc-ic">🛡️</div><span>ضمان الجودة</span></div>
+    <div class="nc-badge"><div class="nc-ic">↩</div><span>إرجاع خلال ٧ أيام</span></div>
+  </div>
+</section>
+
+<!-- ORDER FORM (EasySell) -->
+<section class="nc-section nc-wrap" id="nc-order">
+  <div class="nc-order">
+    <div class="nc-order-info">
+      <span class="nc-kicker">اطلبه الآن</span>
+      <h2>الدفع عند الاستلام</h2>
+      <p>عبّئ بياناتك وسيتواصل معك فريقنا لتأكيد الطلب. التوصيل لجميع مدن المملكة العربية السعودية.</p>
+      <div class="nc-order-price">
+        <div class="nc-amount" id="nc-order-price">{{ current_variant.price | money }}</div>
+        <div class="nc-label">شامل التوصيل<br>{{ product.title }}</div>
+      </div>
+      <ul class="nc-order-perks">
+        <li>الدفع نقداً عند الاستلام</li>
+        <li>توصيل ٢-٤ أيام لجميع المناطق</li>
+        <li>إمكانية الإرجاع خلال ٧ أيام</li>
+      </ul>
+    </div>
+
+    <div class="nc-product-form">
+      <h3>بيانات الطلب</h3>
+      {%- form 'product', product, id: 'nc-product-form', class: 'nc-product-form-inner' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" id="nc-variant-id">
+        {%- if product.has_only_default_variant == false -%}
+          {%- for option in product.options_with_values -%}
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+              <label style="font-size:13px;color:var(--gray);">{{ option.name }}</label>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                {%- for value in option.values -%}
+                  <label style="cursor:pointer;">
+                    <input type="radio" name="option{{ forloop.index }}" value="{{ value }}" class="nc-option-radio" style="display:none;"
+                      {% if option.selected_value == value %}checked{% endif %}>
+                    <span style="display:inline-block;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--dark);color:var(--white);font-size:14px;transition:all .2s;"
+                      onclick="this.parentElement.querySelector('input').checked=true;ncUpdateVariant();">{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+        {% content_for 'blocks' %}
+        <button type="submit" name="add" class="nc-submit-btn" id="nc-submit-btn">
+          🛒 تأكيد الطلب — الدفع عند الاستلام
+        </button>
+        <div class="nc-form-foot">بالضغط على "تأكيد الطلب" أنت توافق على شروط الدفع عند الاستلام</div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<footer class="nc-footer">
+  <div class="nc-brand disp">{{ shop.name | split: ' ' | first }}<span style="color:var(--orange)">{{ shop.name | split: ' ' | last }}</span></div>
+  <p>{{ shop.description | default: 'Smart Products' }}</p>
+  <p style="margin-top:10px;">© {{ 'now' | date: '%Y' }} {{ shop.name }} — جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+  var ncVariants = {{ product.variants | json }};
+  var ncOptions = {{ product.options | json }};
+
+  function ncUpdateVariant() {
+    var selected = {};
+    document.querySelectorAll('.nc-option-radio:checked').forEach(function(r, i) {
+      selected[i] = r.value;
+    });
+
+    var match = ncVariants.find(function(v) {
+      return ncOptions.every(function(_, i) {
+        return v['option' + (i+1)] === selected[i];
+      });
+    });
+
+    if (match) {
+      document.getElementById('nc-variant-id').value = match.id;
+      var price = (match.price / 100).toFixed(0);
+      document.getElementById('nc-price-now').textContent = price + ' ر.س';
+      document.getElementById('nc-order-price').textContent = price + ' ر.س';
+
+      // Update selected styles
+      document.querySelectorAll('.nc-option-radio').forEach(function(r) {
+        var span = r.nextElementSibling;
+        span.style.borderColor = r.checked ? 'var(--orange)' : 'var(--line)';
+        span.style.color = r.checked ? 'var(--orange-lt)' : 'var(--white)';
+      });
+    }
+  }
+
+  // Init styles
+  document.addEventListener('DOMContentLoaded', ncUpdateVariant);
+</script>
+
+{% schema %}
+{
+  "name": "Novacart Landing Page",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" }
+  ]
+}
+{% endschema %}
