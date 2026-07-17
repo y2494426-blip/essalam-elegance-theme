@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "novacart-lamp-lp": {
+      "type": "novacart-lamp-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["novacart-lamp-lp"]
+}
