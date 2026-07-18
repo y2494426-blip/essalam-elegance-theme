@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "carseat-gap-lp": {
+      "type": "carseat-gap-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["carseat-gap-lp"]
+}
