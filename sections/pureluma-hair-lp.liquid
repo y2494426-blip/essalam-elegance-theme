@@ -1,0 +1,768 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+:root{
+  --pl-green:#4D6B45;--pl-green-light:#6B8F62;--pl-green-pale:#E8F0E6;--pl-beige:#F8F8F5;
+  --pl-white:#FFFFFF;--pl-dark:#1A1F1A;--pl-gray:#6B7280;--pl-gold:#C9A84C;
+  --pl-shadow:0 4px 24px rgba(77,107,69,.12);--pl-shadow-lg:0 16px 48px rgba(77,107,69,.18);
+  --pl-r:18px;--pl-r-sm:12px;--pl-r-xs:8px
+}
+.pl-page*{box-sizing:border-box;margin:0;padding:0}
+.pl-page{font-family:'Tajawal',sans-serif;direction:rtl;background:var(--pl-white);color:var(--pl-dark);overflow-x:hidden}
+/* LOADER */
+.pl-loader{position:fixed;inset:0;background:var(--pl-white);z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+.pl-loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.pl-loader__inner{text-align:center}
+.pl-loader__leaf{width:56px;height:56px;border:3px solid var(--pl-green-pale);border-top-color:var(--pl-green);border-radius:50%;animation:pl-spin 0.8s linear infinite;margin:0 auto 14px}
+.pl-loader__txt{font-size:14px;color:var(--pl-green);font-weight:600;letter-spacing:.5px}
+@keyframes pl-spin{to{transform:rotate(360deg)}}
+/* PROGRESS */
+.pl-progress{position:fixed;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,var(--pl-green-light),var(--pl-green));transform-origin:right;z-index:9999;transform:scaleX(0)}
+/* TOAST */
+.pl-toast{position:fixed;bottom:90px;right:16px;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;z-index:8500;transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:270px;border-right:3px solid var(--pl-green)}
+.pl-toast.show{transform:translateX(0)}
+.pl-toast__txt{font-size:12px;line-height:1.5;color:#333}
+.pl-toast__txt strong{color:var(--pl-green);display:block;font-size:13px}
+/* VIEWERS */
+.pl-viewers{position:fixed;bottom:158px;right:16px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-radius:30px;padding:7px 13px;box-shadow:var(--pl-shadow);display:flex;align-items:center;gap:6px;z-index:8499;font-size:12px;color:var(--pl-dark);animation:pl-fadein .5s 2.5s both}
+.pl-viewers__dot{width:7px;height:7px;background:#4CAF50;border-radius:50%;animation:pl-pulse-dot 2s infinite}
+/* EXIT POPUP */
+.pl-exit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99990;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.pl-exit-overlay.open{opacity:1;pointer-events:all}
+.pl-exit-popup{background:#fff;border-radius:24px;padding:36px 28px;max-width:440px;width:100%;text-align:center;transform:scale(.9) translateY(20px);transition:transform .3s;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.2)}
+.pl-exit-overlay.open .pl-exit-popup{transform:scale(1) translateY(0)}
+.pl-exit-close{position:absolute;top:14px;left:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--pl-gray);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.pl-exit-close:hover{background:var(--pl-beige)}
+.pl-exit-popup__badge{display:inline-block;background:var(--pl-green);color:#fff;font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+.pl-exit-popup__title{font-size:22px;font-weight:800;color:var(--pl-dark);margin-bottom:8px}
+.pl-exit-popup__sub{font-size:14px;color:var(--pl-gray);margin-bottom:20px;line-height:1.7}
+.pl-exit-popup__price{font-size:32px;font-weight:900;color:var(--pl-green);margin-bottom:4px}
+.pl-exit-popup__old{font-size:15px;color:var(--pl-gray);text-decoration:line-through;margin-bottom:22px}
+.pl-exit-btn{display:block;width:100%;padding:16px;background:var(--pl-green);color:#fff;font-family:'Tajawal',sans-serif;font-size:17px;font-weight:800;border:none;border-radius:14px;cursor:pointer;transition:background .2s,transform .2s}
+.pl-exit-btn:hover{background:var(--pl-green-light);transform:translateY(-1px)}
+/* WHATSAPP */
+.pl-wa{position:fixed;bottom:90px;left:16px;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);z-index:8400;text-decoration:none;animation:pl-fadein .5s 3s both;transition:transform .2s}
+.pl-wa:hover{transform:scale(1.1)}
+.pl-wa svg{width:28px;height:28px;fill:#fff}
+/* ANIMS */
+@keyframes pl-fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pl-pulse-dot{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+@keyframes pl-shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes pl-badge-pop{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes pl-ripple{0%{transform:scale(0);opacity:.4}100%{transform:scale(4);opacity:0}}
+.pl-anim{opacity:0;transform:translateY(24px);transition:all .65s cubic-bezier(.22,1,.36,1)}
+.pl-anim.visible{opacity:1;transform:translateY(0)}
+.pl-d1{transition-delay:.1s}.pl-d2{transition-delay:.2s}.pl-d3{transition-delay:.3s}.pl-d4{transition-delay:.4s}.pl-d5{transition-delay:.5s}.pl-d6{transition-delay:.6s}
+/* HEADER BAR */
+.pl-header{background:var(--pl-green);padding:10px 20px;text-align:center;position:relative}
+.pl-header__txt{font-size:13px;color:rgba(255,255,255,.9);font-weight:500}
+.pl-header__txt strong{color:#fff}
+/* HERO */
+.pl-hero{background:var(--pl-beige);padding:60px 20px 40px;position:relative;overflow:hidden}
+.pl-hero__bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.pl-hero__blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.25}
+.pl-hero__blob1{width:500px;height:500px;background:var(--pl-green-pale);top:-100px;left:-150px}
+.pl-hero__blob2{width:400px;height:400px;background:#d4e8d0;bottom:-100px;right:-100px}
+.pl-hero__inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:48px;align-items:center;position:relative;z-index:1}
+@media(min-width:768px){.pl-hero__inner{grid-template-columns:1fr 1fr}}
+.pl-hero__content{text-align:center}
+@media(min-width:768px){.pl-hero__content{text-align:right}}
+.pl-hero__kicker{display:inline-flex;align-items:center;gap:7px;background:rgba(77,107,69,.1);border:1px solid rgba(77,107,69,.2);border-radius:30px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--pl-green);margin-bottom:18px;animation:pl-badge-pop .5s .4s both}
+.pl-hero__title{font-size:clamp(26px,6vw,48px);font-weight:900;color:var(--pl-dark);line-height:1.25;margin-bottom:16px;animation:pl-fadein .6s .3s both}
+.pl-hero__title em{font-style:normal;color:var(--pl-green)}
+.pl-hero__desc{font-size:clamp(14px,3vw,17px);color:var(--pl-gray);line-height:1.8;margin-bottom:24px;animation:pl-fadein .6s .4s both}
+.pl-hero__prices{display:flex;align-items:center;gap:12px;margin-bottom:24px;justify-content:center;animation:pl-fadein .6s .5s both}
+@media(min-width:768px){.pl-hero__prices{justify-content:flex-start}}
+.pl-hero__price{font-size:36px;font-weight:900;color:var(--pl-green)}
+.pl-hero__old{font-size:20px;color:var(--pl-gray);text-decoration:line-through}
+.pl-hero__save{background:#FEF2F2;color:#DC2626;font-size:13px;font-weight:700;padding:4px 10px;border-radius:20px}
+.pl-hero__btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;animation:pl-fadein .6s .6s both}
+@media(min-width:768px){.pl-hero__btns{justify-content:flex-start}}
+.pl-btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--pl-green);color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;padding:14px 28px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.pl-btn-primary:hover{background:var(--pl-green-light);transform:translateY(-1px);box-shadow:0 8px 24px rgba(77,107,69,.35)}
+.pl-btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--pl-green);font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;padding:14px 28px;border-radius:50px;border:2px solid var(--pl-green);cursor:pointer;transition:all .2s}
+.pl-btn-ghost:hover{background:var(--pl-green-pale)}
+.pl-ripple{position:absolute;background:rgba(255,255,255,.3);border-radius:50%;width:20px;height:20px;pointer-events:none;animation:pl-ripple .6s linear;transform:translate(-50%,-50%)}
+.pl-hero__badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;animation:pl-fadein .6s .7s both}
+@media(min-width:768px){.pl-hero__badges{justify-content:flex-start}}
+.pl-hero__badge-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--pl-dark);font-weight:500}
+.pl-hero__badge-item span:first-child{color:var(--pl-green)}
+.pl-hero__img-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+.pl-hero__img{width:100%;max-width:380px;border-radius:28px;box-shadow:var(--pl-shadow-lg);animation:pl-float 5s ease-in-out infinite;cursor:zoom-in;transition:transform .3s}
+.pl-hero__img:hover{transform:scale(1.03)}
+.pl-hero__img-badge{position:absolute;top:16px;right:16px;background:var(--pl-green);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;box-shadow:0 4px 14px rgba(77,107,69,.4)}
+.pl-hero__rating{display:flex;align-items:center;gap:8px;position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:30px;padding:7px 14px;box-shadow:var(--pl-shadow)}
+.pl-hero__rating__stars{color:#F59E0B;font-size:14px}
+.pl-hero__rating__txt{font-size:12px;font-weight:600;color:var(--pl-dark)}
+/* COUNTDOWN */
+.pl-countdown{background:linear-gradient(135deg,#2D4A26,#4D6B45);padding:20px;text-align:center}
+.pl-countdown__inner{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.pl-countdown__lbl{color:rgba(255,255,255,.9);font-size:14px;font-weight:600}
+.pl-countdown__timer{display:flex;align-items:center;gap:6px}
+.pl-countdown__unit{background:rgba(255,255,255,.15);border-radius:8px;width:46px;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pl-countdown__num{font-size:20px;font-weight:900;color:#fff;line-height:1}
+.pl-countdown__ulbl{font-size:9px;color:rgba(255,255,255,.7);margin-top:1px}
+.pl-countdown__sep{font-size:20px;font-weight:900;color:rgba(255,255,255,.6);margin-bottom:6px}
+.pl-countdown__stock{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:13px;color:#fff;font-weight:600}
+.pl-countdown__stock-dot{width:8px;height:8px;background:#F87171;border-radius:50%;animation:pl-pulse-dot 1.5s infinite}
+/* SECTIONS */
+.pl-section{padding:70px 20px}
+.pl-section--beige{background:var(--pl-beige)}
+.pl-section--green{background:linear-gradient(135deg,#2D4A26,#4D6B45)}
+.pl-container{max-width:1100px;margin:0 auto}
+.pl-section-lbl{display:inline-block;background:var(--pl-green-pale);color:var(--pl-green);font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.8px;margin-bottom:12px;text-transform:uppercase}
+.pl-section-lbl--white{background:rgba(255,255,255,.2);color:#fff}
+.pl-h2{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--pl-dark);line-height:1.3;margin-bottom:14px}
+.pl-h2--white{color:#fff}
+.pl-p{font-size:15px;color:var(--pl-gray);line-height:1.8}
+.pl-p--white{color:rgba(255,255,255,.8)}
+.pl-header-center{text-align:center;margin-bottom:48px}
+/* BENEFITS */
+.pl-benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.pl-benefits-grid{grid-template-columns:repeat(3,1fr)}}
+.pl-benefit-card{background:#fff;border-radius:var(--pl-r);padding:24px 16px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.05);transition:all .3s}
+.pl-benefit-card:hover{transform:translateY(-4px);box-shadow:var(--pl-shadow);border-color:var(--pl-green-pale)}
+.pl-benefit-card__icon{font-size:32px;margin-bottom:12px}
+.pl-benefit-card__title{font-size:15px;font-weight:700;color:var(--pl-dark);margin-bottom:6px}
+.pl-benefit-card__desc{font-size:12px;color:var(--pl-gray);line-height:1.6}
+/* INGREDIENTS */
+.pl-ing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.pl-ing-grid{grid-template-columns:repeat(3,1fr)}}
+.pl-ing-card{background:#fff;border-radius:var(--pl-r);padding:20px;display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.05);border:1px solid var(--pl-green-pale);transition:all .3s;cursor:default}
+.pl-ing-card:hover{background:var(--pl-green-pale);transform:translateY(-3px);box-shadow:var(--pl-shadow)}
+.pl-ing-card__icon{font-size:30px;margin-bottom:10px;display:block}
+.pl-ing-card__name{font-size:14px;font-weight:700;color:var(--pl-green);margin-bottom:5px}
+.pl-ing-card__desc{font-size:12px;color:var(--pl-gray);line-height:1.5}
+/* HOW TO USE */
+.pl-timeline{display:flex;flex-direction:column;gap:0;max-width:500px;margin:0 auto;position:relative}
+.pl-timeline-item{display:flex;gap:16px;align-items:flex-start;position:relative}
+.pl-timeline-item:not(:last-child)::after{content:'';position:absolute;right:19px;top:44px;width:2px;background:linear-gradient(180deg,var(--pl-green),var(--pl-green-pale));height:calc(100% - 8px);transform:translateX(50%)}
+.pl-timeline-num{min-width:40px;height:40px;background:var(--pl-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;box-shadow:0 4px 14px rgba(77,107,69,.3);flex-shrink:0}
+.pl-timeline-content{padding:8px 0 28px}
+.pl-timeline-content h4{font-size:15px;font-weight:700;color:var(--pl-dark);margin-bottom:3px}
+.pl-timeline-content p{font-size:13px;color:var(--pl-gray);line-height:1.6}
+/* SPECS */
+.pl-specs-grid{display:grid;grid-template-columns:1fr;gap:2px;max-width:600px;margin:0 auto;border-radius:var(--pl-r);overflow:hidden;box-shadow:var(--pl-shadow)}
+.pl-spec-row{display:flex;align-items:center;gap:16px;padding:16px 20px;background:#fff}
+.pl-spec-row:nth-child(odd){background:var(--pl-beige)}
+.pl-spec-row__label{font-size:13px;color:var(--pl-gray);min-width:140px;font-weight:500}
+.pl-spec-row__value{font-size:14px;font-weight:700;color:var(--pl-dark)}
+/* BEFORE/AFTER */
+.pl-ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:700px;margin:0 auto}
+.pl-ba-card{border-radius:var(--pl-r);padding:28px 20px;text-align:center}
+.pl-ba-card--before{background:#FEF2F2;border:1.5px solid #FECACA}
+.pl-ba-card--after{background:var(--pl-green-pale);border:1.5px solid rgba(77,107,69,.25)}
+.pl-ba-card__tag{font-size:14px;font-weight:800;margin-bottom:16px;display:block}
+.pl-ba-card--before .pl-ba-card__tag{color:#DC2626}
+.pl-ba-card--after .pl-ba-card__tag{color:var(--pl-green)}
+.pl-ba-card__item{font-size:14px;line-height:2;color:var(--pl-dark)}
+.pl-ba-arrow{display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--pl-green);align-self:center}
+/* WHY */
+.pl-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.pl-why-grid{grid-template-columns:repeat(3,1fr)}}
+.pl-why-card{background:rgba(255,255,255,.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:var(--pl-r);padding:22px 16px;text-align:center;transition:all .3s}
+.pl-why-card:hover{background:rgba(255,255,255,.2);transform:translateY(-3px)}
+.pl-why-card__icon{font-size:28px;margin-bottom:10px;display:block}
+.pl-why-card__title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.pl-why-card__desc{font-size:12px;color:rgba(255,255,255,.75);line-height:1.5}
+/* REVIEWS */
+.pl-reviews-rating{display:flex;align-items:center;gap:20px;background:var(--pl-green-pale);border-radius:var(--pl-r);padding:22px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.pl-rating-big__num{font-size:52px;font-weight:900;color:var(--pl-green);line-height:1}
+.pl-rating-big__stars{color:#F59E0B;font-size:20px}
+.pl-rating-big__lbl{font-size:12px;color:var(--pl-gray);margin-top:3px}
+.pl-reviews-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:600px){.pl-reviews-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.pl-reviews-grid{grid-template-columns:repeat(3,1fr)}}
+.pl-rev-card{background:#fff;border:1px solid var(--pl-green-pale);border-radius:var(--pl-r);padding:20px;transition:all .3s}
+.pl-rev-card:hover{transform:translateY(-3px);box-shadow:var(--pl-shadow)}
+.pl-rev-card__hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pl-rev-card__av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pl-green),#6B8F62);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
+.pl-rev-card__name{font-size:14px;font-weight:700;color:var(--pl-dark)}
+.pl-rev-card__city{font-size:12px;color:var(--pl-gray)}
+.pl-rev-card__stars{color:#F59E0B;font-size:14px;margin-bottom:8px}
+.pl-rev-card__txt{font-size:13px;color:#374151;line-height:1.7;font-style:italic}
+.pl-rev-card__verified{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#4CAF50;font-weight:600;margin-top:8px}
+/* OFFER BOX */
+.pl-offer-box{background:linear-gradient(135deg,#2D4A26,#4D6B45);border-radius:28px;padding:48px 28px;text-align:center;max-width:600px;margin:0 auto;position:relative;overflow:hidden}
+.pl-offer-box__glow{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
+.pl-offer-box__label{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:13px;font-weight:700;padding:5px 18px;border-radius:20px;margin-bottom:20px}
+.pl-offer-box__old{font-size:24px;color:rgba(255,255,255,.6);text-decoration:line-through;margin-bottom:6px}
+.pl-offer-box__price{font-size:60px;font-weight:900;color:#fff;line-height:1;margin-bottom:8px}
+.pl-offer-box__dh{font-size:28px;font-weight:600}
+.pl-offer-box__save{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:28px}
+.pl-offer-box__perks{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.pl-offer-box__perk{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,.9)}
+.pl-offer-box__btn{display:block;width:100%;max-width:320px;margin:0 auto 12px;padding:18px;background:#fff;color:var(--pl-green);font-family:'Tajawal',sans-serif;font-size:18px;font-weight:900;border:none;border-radius:50px;cursor:pointer;transition:all .2s;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.pl-offer-box__btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.pl-offer-box__note{font-size:12px;color:rgba(255,255,255,.6)}
+/* ORDER */
+.pl-order{background:var(--pl-beige);padding:60px 20px}
+.pl-order__box{background:#fff;border-radius:24px;padding:32px 22px;max-width:560px;margin:0 auto;box-shadow:var(--pl-shadow-lg);border:1px solid var(--pl-green-pale)}
+.pl-order__title{text-align:center;font-size:21px;font-weight:800;color:var(--pl-dark);margin-bottom:4px}
+.pl-order__sub{text-align:center;font-size:13px;color:var(--pl-gray);margin-bottom:24px}
+.pl-order__form-wrap input,.pl-order__form-wrap select,.pl-order__form-wrap textarea{width:100%;padding:13px 15px;border:1.5px solid #E5E7EB;border-radius:var(--pl-r-sm);font-family:'Tajawal',sans-serif;font-size:15px;margin-bottom:10px;transition:border-color .2s,box-shadow .2s;outline:none;direction:rtl;color:var(--pl-dark);background:#fff}
+.pl-order__form-wrap input:focus,.pl-order__form-wrap select:focus{border-color:var(--pl-green);box-shadow:0 0 0 3px rgba(77,107,69,.1)}
+.pl-order__form-wrap button[type="submit"],.pl-order__form-wrap button[name="add"]{width:100%;padding:17px;background:var(--pl-green);color:#fff;font-family:'Tajawal',sans-serif;font-size:18px;font-weight:800;border:none;border-radius:50px;cursor:pointer;transition:all .2s}
+.pl-order__form-wrap button[type="submit"]:hover,.pl-order__form-wrap button[name="add"]:hover{background:var(--pl-green-light);transform:translateY(-1px);box-shadow:0 8px 24px rgba(77,107,69,.3)}
+.pl-order__gtees{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.pl-order__gtee{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--pl-gray)}
+/* FAQ */
+.pl-faq__list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.pl-faq-item{background:#fff;border-radius:var(--pl-r-sm);border:1px solid var(--pl-green-pale);overflow:hidden;transition:box-shadow .3s}
+.pl-faq-item:hover{box-shadow:var(--pl-shadow)}
+.pl-faq-item__btn{width:100%;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;background:none;border:none;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;color:var(--pl-dark);cursor:pointer;text-align:right;gap:10px}
+.pl-faq-item__icon{width:28px;height:28px;min-width:28px;background:var(--pl-green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--pl-green);font-size:18px;transition:all .3s}
+.pl-faq-item.open .pl-faq-item__icon{transform:rotate(45deg);background:var(--pl-green);color:#fff}
+.pl-faq-item__body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.pl-faq-item.open .pl-faq-item__body{max-height:200px}
+.pl-faq-item__inner{padding:0 18px 16px;font-size:14px;color:var(--pl-gray);line-height:1.8}
+/* FINAL CTA */
+.pl-final-cta{background:var(--pl-beige);padding:60px 20px;text-align:center}
+/* FOOTER */
+.pl-footer{background:var(--pl-dark);padding:40px 20px;text-align:center}
+.pl-footer__logo{font-size:24px;font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:4px}
+.pl-footer__tagline{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:20px}
+.pl-footer__links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:16px}
+.pl-footer__link{font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;transition:color .2s}
+.pl-footer__link:hover{color:#fff}
+.pl-footer__copy{font-size:12px;color:rgba(255,255,255,.3)}
+/* STICKY */
+.pl-sticky{position:fixed;bottom:0;right:0;left:0;background:#fff;border-top:1px solid var(--pl-green-pale);padding:12px 18px;z-index:8000;box-shadow:0 -6px 24px rgba(0,0,0,.08);display:none;align-items:center;gap:10px}
+@media(max-width:767px){.pl-sticky{display:flex}}
+.pl-sticky__price{display:flex;flex-direction:column}
+.pl-sticky__price-lbl{font-size:11px;color:var(--pl-gray)}
+.pl-sticky__price-val{font-size:20px;font-weight:900;color:var(--pl-green);line-height:1}
+.pl-sticky__btn{flex:1;background:var(--pl-green);color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;padding:14px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.pl-sticky__btn:active{transform:scale(.98)}
+/* LIGHTBOX */
+.pl-lb{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.pl-lb.open{opacity:1;pointer-events:all}
+.pl-lb img{max-width:100%;max-height:90vh;border-radius:14px;transform:scale(.92);transition:transform .3s}
+.pl-lb.open img{transform:scale(1)}
+.pl-lb__close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* DIVIDER */
+.pl-divider{width:48px;height:3px;background:var(--pl-green);border-radius:2px;margin:14px auto 0}
+/* Glassmorphism Card */
+.pl-glass{background:rgba(255,255,255,.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.5)}
+</style>
+
+<!-- LOADER -->
+<div class="pl-loader" id="pl-loader">
+  <div class="pl-loader__inner">
+    <div class="pl-loader__leaf"></div>
+    <div class="pl-loader__txt">PURELUMA</div>
+  </div>
+</div>
+<!-- PROGRESS -->
+<div class="pl-progress" id="pl-progress"></div>
+<!-- TOAST -->
+<div class="pl-toast" id="pl-toast">
+  <span style="font-size:22px">✨</span>
+  <div class="pl-toast__txt"><strong id="pl-toast-name">فاطمة من الدار البيضاء</strong>اشترت للتو سيروم PURELUMA 💚</div>
+</div>
+<!-- VIEWERS -->
+<div class="pl-viewers"><div class="pl-viewers__dot"></div><span id="pl-viewers">24</span> شخص يتصفح هذا المنتج الآن</div>
+<!-- LIGHTBOX -->
+<div class="pl-lb" id="pl-lb" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="pl-lb__close" onclick="document.getElementById('pl-lb').classList.remove('open')">✕</button>
+  <img id="pl-lb-img" src="" alt="">
+</div>
+<!-- EXIT POPUP -->
+<div class="pl-exit-overlay" id="pl-exit-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="pl-exit-popup">
+    <button class="pl-exit-close" onclick="document.getElementById('pl-exit-overlay').classList.remove('open')">✕</button>
+    <div class="pl-exit-popup__badge">🎁 عرض خاص قبل المغادرة</div>
+    <h3 class="pl-exit-popup__title">انتظري! هدية ليكِ</h3>
+    <p class="pl-exit-popup__sub">احصلي على خصم إضافي 10% عند الطلب الآن. العرض لمدة محدودة فقط.</p>
+    <div class="pl-exit-popup__price">198 <span style="font-size:20px">درهم</span></div>
+    <div class="pl-exit-popup__old">220 درهم</div>
+    <button class="pl-exit-btn" onclick="plScrollOrder();document.getElementById('pl-exit-overlay').classList.remove('open')">🛒 اطلبي الآن بالسعر الخاص</button>
+  </div>
+</div>
+<!-- WHATSAPP -->
+<a class="pl-wa" href="https://wa.me/212600000000" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.518 5.83L.057 23.855a.5.5 0 00.608.608l6.024-1.462A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.034-1.387l-.36-.214-3.733.906.92-3.642-.235-.373A9.818 9.818 0 012.182 12C2.182 6.574 6.574 2.182 12 2.182S21.818 6.574 21.818 12 17.426 21.818 12 21.818z"/></svg>
+</a>
+
+<div class="pl-page" dir="rtl">
+
+<!-- HEADER BAR -->
+<div class="pl-header">
+  <div class="pl-header__txt">🔥 <strong>الأكثر مبيعاً في المغرب</strong> — شحن سريع داخل 24/72 ساعة — الدفع عند الاستلام</div>
+</div>
+
+<!-- HERO -->
+<section class="pl-hero">
+  <div class="pl-hero__bg"><div class="pl-hero__blob pl-hero__blob1"></div><div class="pl-hero__blob pl-hero__blob2"></div></div>
+  <div class="pl-hero__inner">
+    <div class="pl-hero__content">
+      <div class="pl-hero__kicker">🌿 PURELUMA — Beauté & Soins</div>
+      <h1 class="pl-hero__title">✨ شعر <em>ناعم، صحي</em> ولامع من أول استعمال</h1>
+      <p class="pl-hero__desc">امنحي شعرك الترطيب العميق واللمعان الطبيعي مع سيروم PURELUMA المصنوع بمكونات طبيعية مختارة بعناية. بدون كيمياء ضارة — مصنوع في المغرب 🇲🇦</p>
+      <div class="pl-hero__prices">
+        <span class="pl-hero__price">220 <span style="font-size:20px;font-weight:500">DH</span></span>
+        <span class="pl-hero__old">299 DH</span>
+        <span class="pl-hero__save">وفري 79 DH</span>
+      </div>
+      <div class="pl-hero__btns">
+        <button class="pl-btn-primary" onclick="plScrollOrder(this)">🛒 اطلبي الآن</button>
+        <button class="pl-btn-ghost" onclick="document.getElementById('pl-benefits').scrollIntoView({behavior:'smooth'})">شاهدي المميزات ↓</button>
+      </div>
+      <div class="pl-hero__badges">
+        <div class="pl-hero__badge-item"><span>✔</span> الدفع عند الاستلام</div>
+        <div class="pl-hero__badge-item"><span>✔</span> صنع في المغرب</div>
+        <div class="pl-hero__badge-item"><span>✔</span> شحن سريع</div>
+        <div class="pl-hero__badge-item"><span>✔</span> مكونات طبيعية</div>
+      </div>
+    </div>
+    <div class="pl-hero__img-wrap">
+      {%- if product.media[0] -%}
+        <img class="pl-hero__img" src="{{ product.media[0] | image_url: width: 700 }}" alt="{{ product.title }}" loading="eager" width="700" onclick="plLB('{{ product.media[0] | image_url: width: 1200 }}')">
+      {%- endif -%}
+      <div class="pl-hero__img-badge">🏆 الأكثر مبيعاً</div>
+      <div class="pl-hero__rating"><span class="pl-hero__rating__stars">★★★★★</span><span class="pl-hero__rating__txt">4.9 · +500 تقييم</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<div class="pl-countdown">
+  <div class="pl-countdown__inner">
+    <div class="pl-countdown__lbl">⏳ العرض ينتهي خلال:</div>
+    <div class="pl-countdown__timer">
+      <div class="pl-countdown__unit"><div class="pl-countdown__num" id="pl-cdh">23</div><div class="pl-countdown__ulbl">ساعة</div></div>
+      <div class="pl-countdown__sep">:</div>
+      <div class="pl-countdown__unit"><div class="pl-countdown__num" id="pl-cdm">59</div><div class="pl-countdown__ulbl">دقيقة</div></div>
+      <div class="pl-countdown__sep">:</div>
+      <div class="pl-countdown__unit"><div class="pl-countdown__num" id="pl-cds">59</div><div class="pl-countdown__ulbl">ثانية</div></div>
+    </div>
+    <div class="pl-countdown__stock"><div class="pl-countdown__stock-dot"></div>⚠️ بقيت كمية محدودة</div>
+  </div>
+</div>
+
+<!-- BENEFITS -->
+<section class="pl-section" id="pl-benefits">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">فوائد السيروم</span>
+      <h2 class="pl-h2">6 أسباب تخلي شعرك يعشق PURELUMA</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div class="pl-benefits-grid">
+      {%- assign b_icons  = '💧,✨,🌿,💪,❤️,🥑' | split: ',' -%}
+      {%- assign b_titles = 'ترطيب عميق,لمعان طبيعي,مكونات طبيعية,يقلل الهيشان,مناسب لجميع أنواع الشعر,تغذية مكثفة' | split: ',' -%}
+      {%- assign b_descs  = 'يرطب الشعر من الداخل ويبقيه ناعماً طوال اليوم,يمنح شعرك لمعاناً طبيعياً صحياً دون أي تغطية اصطناعية,تركيبة طبيعية 100% بدون سلفات ولا مواد ضارة,يروّض الشعر المتمرد ويقلل الهيشان بشكل ملحوظ,فعّال مع الشعر المجعد والناعم والكيمياء والمصبوغ,يغذي الشعر بزيوت طبيعية فاخرة من الطبيعة المغربية' | split: ',' -%}
+      {%- for icon in b_icons -%}
+        <div class="pl-benefit-card pl-anim pl-d{{ forloop.index }}">
+          <div class="pl-benefit-card__icon">{{ icon }}</div>
+          <div class="pl-benefit-card__title">{{ b_titles[forloop.index0] }}</div>
+          <div class="pl-benefit-card__desc">{{ b_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="pl-section pl-section--beige">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">المكونات</span>
+      <h2 class="pl-h2">مكونات طبيعية مختارة بعناية</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:40px;align-items:center;max-width:1000px;margin:0 auto">
+      <div>
+        <div class="pl-ing-grid">
+          {%- assign ing_icons  = '🌿,🥑,🌰,🥥,🍊,🌱' | split: ',' -%}
+          {%- assign ing_names  = 'سيليكون طبيعي,زيت الأفوكادو,زيت اللوز الحلو,زيت جوز الهند,فيتامين C,جل الألوفيرا' | split: ',' -%}
+          {%- assign ing_descs  = 'يحمي الشعر ويمنحه ملمساً ناعماً دون ثقل,غني بالفيتامينات يغذي ويرطب الشعر عمقياً,يلين الشعر ويمنحه مرونة طبيعية رائعة,مرطب قوي يعيد الحيوية للشعر الجاف والتالف,مضاد أكسدة يحمي الشعر ويعزز بريقه الطبيعي,يهدئ فروة الرأس ويرطب الشعر بشكل مكثف' | split: ',' -%}
+          {%- for icon in ing_icons -%}
+            <div class="pl-ing-card pl-anim pl-d{{ forloop.index }}">
+              <span class="pl-ing-card__icon">{{ icon }}</span>
+              <div class="pl-ing-card__name">{{ ing_names[forloop.index0] }}</div>
+              <div class="pl-ing-card__desc">{{ ing_descs[forloop.index0] }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+    {%- if product.media[1] -%}
+      <div style="text-align:center;margin-top:40px" class="pl-anim">
+        <img src="{{ product.media[1] | image_url: width: 500 }}" alt="مكونات السيروم" loading="lazy" width="500" style="max-width:280px;border-radius:20px;box-shadow:var(--pl-shadow-lg);cursor:zoom-in" onclick="plLB('{{ product.media[1] | image_url: width: 1000 }}')">
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="pl-section pl-section--green">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl pl-section-lbl--white">طريقة الاستخدام</span>
+      <h2 class="pl-h2 pl-h2--white">خطوات بسيطة — نتائج مذهلة</h2>
+      <div class="pl-divider" style="background:rgba(255,255,255,.4)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:40px;align-items:center;max-width:900px;margin:0 auto">
+      <div class="pl-anim">
+        <div class="pl-timeline">
+          {%- assign step_hs = 'اغسلي الشعر,ضعي كمية صغيرة,وزعي السيروم,صففي الشعر,كرري يومياً' | split: ',' -%}
+          {%- assign step_ps = 'اغسلي شعرك بشامبو لطيف واتركيه رطباً نوعاً ما,ضعي بضع قطرات من السيروم على راحة يدك,وزعي السيروم بالتساوي على أطراف الشعر دون المسّ بفروة الرأس,صففي شعرك كالعادة أو اتركيه يجفف طبيعياً,استخدميه يومياً للحصول على أفضل النتائج' | split: ',' -%}
+          {%- for h in step_hs -%}
+            <div class="pl-timeline-item pl-anim pl-d{{ forloop.index }}">
+              <div class="pl-timeline-num">{{ forloop.index }}</div>
+              <div class="pl-timeline-content" style="{% unless forloop.last %}padding-bottom:28px{% endunless %}">
+                <h4 style="color:#fff">{{ h }}</h4>
+                <p style="color:rgba(255,255,255,.75)">{{ step_ps[forloop.index0] }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- if product.media[2] -%}
+        <div class="pl-anim pl-d2" style="text-align:center">
+          <img src="{{ product.media[2] | image_url: width: 500 }}" alt="طريقة الاستخدام" loading="lazy" width="500" style="max-width:280px;border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.3);cursor:zoom-in" onclick="plLB('{{ product.media[2] | image_url: width: 1000 }}')">
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section class="pl-section">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">المواصفات</span>
+      <h2 class="pl-h2">تفاصيل المنتج</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div class="pl-specs-grid pl-anim">
+      <div class="pl-spec-row"><div class="pl-spec-row__label">اسم المنتج</div><div class="pl-spec-row__value">PURELUMA سيروم ترطيب الشعر</div></div>
+      <div class="pl-spec-row"><div class="pl-spec-row__label">الحجم</div><div class="pl-spec-row__value">100 ml</div></div>
+      <div class="pl-spec-row"><div class="pl-spec-row__label">بلد الصنع</div><div class="pl-spec-row__value">المغرب 🇲🇦</div></div>
+      <div class="pl-spec-row"><div class="pl-spec-row__label">مناسب لـ</div><div class="pl-spec-row__value">جميع أنواع الشعر</div></div>
+      <div class="pl-spec-row"><div class="pl-spec-row__label">يحتوي على سلفات</div><div class="pl-spec-row__value">❌ لا يحتوي</div></div>
+      <div class="pl-spec-row"><div class="pl-spec-row__label">التخزين</div><div class="pl-spec-row__value">مكان بارد وجاف بعيداً عن الأطفال</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="pl-section pl-section--beige">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">قبل وبعد</span>
+      <h2 class="pl-h2">الفرق واضح من أول استعمال</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div class="pl-ba-grid pl-anim">
+      <div class="pl-ba-card pl-ba-card--before">
+        <span class="pl-ba-card__tag">❌ قبل</span>
+        <div class="pl-ba-card__item">شعر جاف</div>
+        <div class="pl-ba-card__item">هيشان</div>
+        <div class="pl-ba-card__item">فقدان اللمعان</div>
+        <div class="pl-ba-card__item">شعر متقصف</div>
+        <div class="pl-ba-card__item">تلف ظاهر</div>
+      </div>
+      <div class="pl-ba-card pl-ba-card--after">
+        <span class="pl-ba-card__tag">✅ بعد</span>
+        <div class="pl-ba-card__item">نعومة ملحوظة</div>
+        <div class="pl-ba-card__item">لمعان طبيعي</div>
+        <div class="pl-ba-card__item">ترطيب عميق</div>
+        <div class="pl-ba-card__item">شعر ممتلئ</div>
+        <div class="pl-ba-card__item">صحة وحيوية</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY PURELUMA -->
+<section class="pl-section pl-section--green">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl pl-section-lbl--white">لماذا PURELUMA</span>
+      <h2 class="pl-h2 pl-h2--white">ما يميّزنا عن غيرنا</h2>
+      <div class="pl-divider" style="background:rgba(255,255,255,.4)"></div>
+    </div>
+    <div class="pl-why-grid">
+      {%- assign why_icons  = '🌿,🇲🇦,🧴,🚫,🚚,💵' | split: ',' -%}
+      {%- assign why_titles = '100% مكونات طبيعية,صنع في المغرب,سيليكون طبيعي,بدون سلفات,توصيل سريع,الدفع عند الاستلام' | split: ',' -%}
+      {%- assign why_descs  = 'تركيبة نباتية صافية بدون مواد كيمياء ضارة,منتج مغربي أصيل يدعم المنتج المحلي,يحمي الشعر دون إثقاله أو تلويثه,لطيف على فروة الرأس والشعر الحساس,نصل إليكِ خلال 24 إلى 72 ساعة,لا دفع مسبق — تدفعين عند الاستلام' | split: ',' -%}
+      {%- for icon in why_icons -%}
+        <div class="pl-why-card pl-anim pl-d{{ forloop.index }}">
+          <span class="pl-why-card__icon">{{ icon }}</span>
+          <div class="pl-why-card__title">{{ why_titles[forloop.index0] }}</div>
+          <div class="pl-why-card__desc">{{ why_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="pl-section">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">آراء الزبونات</span>
+      <h2 class="pl-h2">ماذا قالت الزبونات؟</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div class="pl-reviews-rating pl-anim">
+      <div class="pl-rating-big">
+        <div class="pl-rating-big__num">4.9</div>
+        <div class="pl-rating-big__stars">★★★★★</div>
+        <div class="pl-rating-big__lbl">+500 تقييم موثق</div>
+      </div>
+      <div style="font-size:14px;color:var(--pl-gray);max-width:280px;line-height:1.7">"الجودة والنتائج هي اللي خلات الزبونات يرجعن مراراً وتكراراً لـ PURELUMA"</div>
+    </div>
+    <div class="pl-reviews-grid">
+      {%- assign r_names  = 'فاطمة الزهراء,خديجة,مريم,سكينة,لطيفة,هند' | split: ',' -%}
+      {%- assign r_cities = 'الدار البيضاء,الرباط,مراكش,طنجة,أكادير,فاس' | split: ',' -%}
+      {%- assign r_inits  = 'ف,خ,م,س,ل,ه' | split: ',' -%}
+      {%- assign r_texts  = '"أول مرة شعري يولي ناعم بهاد الشكل. منتج رائع حقاً!","ريحة زوينة بزاف وكيعطي لمعان مزيان. مرضية على المنتج.","وصلني في 24 ساعة والمنتج جاء محكم التغليف. الجودة ممتازة!","منتج رائع كنصح بيه لكل صديقاتي. غيّر شعري بالكامل.","بقيت كنستعملو كل نهار، شعري ما بغاش يفارقه!","أنصح به بصح! مكونات طبيعية وريحة زوينة وفعّال جداً."' | split: ',' -%}
+      {%- for name in r_names -%}
+        <div class="pl-rev-card pl-anim pl-d{{ forloop.index | modulo: 3 | plus: 1 }}">
+          <div class="pl-rev-card__hd">
+            <div class="pl-rev-card__av">{{ r_inits[forloop.index0] }}</div>
+            <div><div class="pl-rev-card__name">{{ name }}</div><div class="pl-rev-card__city">📍 {{ r_cities[forloop.index0] }}</div></div>
+          </div>
+          <div class="pl-rev-card__stars">★★★★★</div>
+          <div class="pl-rev-card__txt">{{ r_texts[forloop.index0] }}</div>
+          <div class="pl-rev-card__verified">✅ شراء موثق</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- OFFER BOX -->
+<section class="pl-section pl-section--beige">
+  <div class="pl-container">
+    <div class="pl-offer-box pl-anim">
+      <div class="pl-offer-box__glow"></div>
+      <div class="pl-offer-box__label">⏳ اليوم فقط</div>
+      <div class="pl-offer-box__old">299 DH</div>
+      <div class="pl-offer-box__price">220 <span class="pl-offer-box__dh">DH</span></div>
+      <div class="pl-offer-box__save">🎉 وفري 79 درهم</div>
+      <div class="pl-offer-box__perks">
+        <div class="pl-offer-box__perk">✔ الدفع عند الاستلام</div>
+        <div class="pl-offer-box__perk">✔ شحن سريع</div>
+        <div class="pl-offer-box__perk">✔ ضمان الجودة</div>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:12px;margin-bottom:22px;font-size:13px;color:rgba(255,255,255,.9)">🎁 اشتري 2 وخذي خصم إضافي — شحن مجاني من قطعتين!</div>
+      <button class="pl-offer-box__btn" onclick="plScrollOrder(this)">🛒 اطلبي الآن</button>
+      <div class="pl-offer-box__note">⚡ بقيت كمية محدودة — لا تفوّتي الفرصة</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="pl-order" id="pl-order">
+  <div class="pl-container">
+    <div class="pl-order__box pl-anim">
+      <h3 class="pl-order__title">🛒 أكملي طلبك الآن</h3>
+      <p class="pl-order__sub">الدفع عند الاستلام — شحن سريع داخل المغرب</p>
+      <div class="pl-order__form-wrap">
+        {%- form 'product', product, id: 'pl-form', novalidate: true -%}
+          <input type="hidden" name="id" id="pl-vid" value="{{ product.variants[0].id }}">
+          {% content_for 'blocks' %}
+        {%- endform -%}
+      </div>
+      <div class="pl-order__gtees">
+        <div class="pl-order__gtee">🔒 طلب آمن</div>
+        <div class="pl-order__gtee">🚚 شحن سريع</div>
+        <div class="pl-order__gtee">💵 دفع عند الاستلام</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="pl-section">
+  <div class="pl-container">
+    <div class="pl-header-center pl-anim">
+      <span class="pl-section-lbl">الأسئلة الشائعة</span>
+      <h2 class="pl-h2">أسئلة تدور في بالك؟</h2>
+      <div class="pl-divider"></div>
+    </div>
+    <div class="pl-faq__list">
+      {%- assign fqs = 'هل السيروم مناسب لجميع أنواع الشعر؟,هل يحتوي على السلفات؟,هل مصنوع في المغرب؟,كم مدة التوصيل؟,هل يوجد الدفع عند الاستلام؟,كيف نستعمله؟,هل يصلح للشعر المصبوغ؟,هل يمكنني الإرجاع؟' | split: ',' -%}
+      {%- assign fas = 'نعم، فعّال مع الشعر المجعد والناعم والكيمياء والمصبوغ وجميع أنواع الشعر.,لا، تركيبتنا خالية تماماً من السلفات ومناسبة للشعر الحساس.,نعم، PURELUMA منتج مغربي 100% — Beauté & Soins — Made in Morocco 🇲🇦,التوصيل يستغرق بين 24 و72 ساعة داخل المغرب حسب المدينة.,نعم، الدفع عند الاستلام متاح في جميع أرجاء المغرب. لا دفع مسبق.,اغسلي الشعر وضعي كمية صغيرة على الأطراف ووزعيها بالتساوي. يمكن استخدامه يومياً.,نعم، آمن للشعر المصبوغ والمعالج كيمياوياً. يساعد على ترميمه وتغذيته.,في حالة وجود مشكلة في المنتج يمكنك التواصل معنا لحل مرضي.' | split: ',' -%}
+      {%- for q in fqs -%}
+        <div class="pl-faq-item pl-anim">
+          <button class="pl-faq-item__btn" onclick="plFaq(this)">
+            <span>{{ q }}</span>
+            <span class="pl-faq-item__icon">+</span>
+          </button>
+          <div class="pl-faq-item__body"><div class="pl-faq-item__inner">{{ fas[forloop.index0] }}</div></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="pl-section pl-section--beige" style="padding:30px 20px">
+  <div class="pl-container">
+    <p style="font-size:12px;color:var(--pl-gray);line-height:1.7;text-align:center;max-width:700px;margin:0 auto">
+      ⚠️ <strong>تنبيه:</strong> لم يتم تقييم هذه التصريحات من قبل إدارة الغذاء والدواء. هذا المنتج ليس مخصصاً لتشخيص أو علاج أو شفاء أو الوقاية من أي مرض. يحفظ بعيداً عن متناول الأطفال.
+    </p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="pl-final-cta">
+  <div class="pl-container">
+    <div class="pl-anim" style="text-align:center">
+      <span class="pl-section-lbl">الفرصة الأخيرة</span>
+      <h2 class="pl-h2" style="margin-bottom:10px">جاهزة تمنحي شعرك الترطيب الذي يستحقه؟</h2>
+      <p class="pl-p" style="margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto">انضمي لأكثر من 500 زبونة سعيدة اكتشفن الفرق مع PURELUMA</p>
+      <button class="pl-btn-primary" style="font-size:18px;padding:16px 40px" onclick="plScrollOrder(this)">🛒 اطلبي الآن — 220 DH فقط</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="pl-footer">
+  <div class="pl-footer__logo">PURELUMA</div>
+  <div class="pl-footer__tagline">Beauté & Soins — Made in Morocco 🇲🇦</div>
+  <div class="pl-footer__links">
+    <a class="pl-footer__link" href="#">Instagram</a>
+    <a class="pl-footer__link" href="#">سياسة الخصوصية</a>
+    <a class="pl-footer__link" href="#">شروط الاستخدام</a>
+  </div>
+  <div class="pl-footer__copy">© 2025 PURELUMA — جميع الحقوق محفوظة</div>
+</footer>
+
+</div><!-- /pl-page -->
+
+<!-- STICKY -->
+<div class="pl-sticky" id="pl-sticky">
+  <div class="pl-sticky__price"><div class="pl-sticky__price-lbl">السعر الخاص</div><div class="pl-sticky__price-val">220 DH</div></div>
+  <button class="pl-sticky__btn" onclick="plScrollOrder(this)">🛒 اطلبي الآن</button>
+</div>
+
+<script>
+(function(){
+  // Loader
+  window.addEventListener('load',function(){
+    setTimeout(function(){document.getElementById('pl-loader').classList.add('gone');},600);
+  });
+
+  // Progress
+  var pb=document.getElementById('pl-progress');
+  window.addEventListener('scroll',function(){
+    var max=document.body.scrollHeight-window.innerHeight;
+    if(pb&&max>0)pb.style.transform='scaleX('+(window.scrollY/max)+')';
+  },{passive:true});
+
+  // Scroll anims
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.pl-anim').forEach(function(el){obs.observe(el);});
+
+  // Toast
+  var toasts=[
+    {n:'فاطمة من الدار البيضاء',t:'اشترت سيروم PURELUMA 💚'},
+    {n:'خديجة من الرباط',t:'أضافت المنتج للسلة ✨'},
+    {n:'مريم من مراكش',t:'طلبت للمرة الثالثة 🌿'},
+    {n:'سكينة من طنجة',t:'اشترت للتو سيروم PURELUMA'},
+    {n:'لطيفة من أكادير',t:'قيّمت المنتج 5 نجوم ⭐'},
+    {n:'هند من فاس',t:'طلبت قطعتين بخصم 🎁'}
+  ];
+  var tEl=document.getElementById('pl-toast');
+  var tN=document.getElementById('pl-toast-name');
+  var tT=tEl&&tEl.querySelector('span+div .pl-toast__txt');
+  var ti=0;
+  function showToast(){
+    if(!tEl)return;
+    var t=toasts[ti%toasts.length]; ti++;
+    tN.textContent=t.n;
+    tEl.classList.add('show');
+    setTimeout(function(){tEl.classList.remove('show');},3500);
+    setTimeout(showToast,9000+Math.random()*5000);
+  }
+  setTimeout(showToast,3000);
+
+  // Viewers
+  var vEl=document.getElementById('pl-viewers');
+  if(vEl){setInterval(function(){var c=parseInt(vEl.textContent);vEl.textContent=Math.max(14,Math.min(32,c+(Math.random()>.5?1:-1)));},5000);}
+
+  // Countdown
+  var end=Date.now()+(23*3600+59*60+59)*1000;
+  function cdUpdate(){
+    var d=Math.max(0,end-Date.now());
+    var h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);
+    var hEl=document.getElementById('pl-cdh'),mEl=document.getElementById('pl-cdm'),sEl=document.getElementById('pl-cds');
+    if(hEl)hEl.textContent=String(h).padStart(2,'0');
+    if(mEl)mEl.textContent=String(m).padStart(2,'0');
+    if(sEl)sEl.textContent=String(s).padStart(2,'0');
+  }
+  setInterval(cdUpdate,1000); cdUpdate();
+
+  // Sticky
+  var sticky=document.getElementById('pl-sticky'),ord=document.getElementById('pl-order');
+  if(sticky&&ord){
+    window.addEventListener('scroll',function(){
+      var r=ord.getBoundingClientRect();
+      sticky.style.display=r.top>window.innerHeight?'flex':'none';
+    },{passive:true});
+  }
+
+  // Exit intent
+  var exitShown=false;
+  document.addEventListener('mouseleave',function(e){
+    if(e.clientY<10&&!exitShown){
+      exitShown=true;
+      document.getElementById('pl-exit-overlay').classList.add('open');
+    }
+  });
+  // Mobile scroll back = exit intent
+  var lastScroll=0;
+  window.addEventListener('scroll',function(){
+    var cur=window.scrollY;
+    if(cur<50&&lastScroll>300&&!exitShown){exitShown=true;setTimeout(function(){document.getElementById('pl-exit-overlay').classList.add('open');},400);}
+    lastScroll=cur;
+  },{passive:true});
+
+  // Ripple
+  document.querySelectorAll('.pl-btn-primary').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      var r=document.createElement('span');r.className='pl-ripple';
+      var rect=btn.getBoundingClientRect();
+      r.style.left=(e.clientX-rect.left)+'px';r.style.top=(e.clientY-rect.top)+'px';
+      btn.appendChild(r);setTimeout(function(){r.remove();},700);
+    });
+  });
+})();
+
+function plScrollOrder(){
+  var el=document.getElementById('pl-order');
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function plFaq(btn){
+  var item=btn.closest('.pl-faq-item');
+  var open=item.classList.contains('open');
+  document.querySelectorAll('.pl-faq-item.open').forEach(function(i){i.classList.remove('open');});
+  if(!open)item.classList.add('open');
+}
+
+function plLB(src){
+  var lb=document.getElementById('pl-lb'),img=document.getElementById('pl-lb-img');
+  if(lb&&img){img.src=src;lb.classList.add('open');}
+}
+</script>
+
+{% schema %}
+{
+  "name": "Pureluma Hair Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Pureluma Hair Landing" }]
+}
+{% endschema %}

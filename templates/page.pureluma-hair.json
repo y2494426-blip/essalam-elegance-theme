@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "pureluma-hair-lp": {
+      "type": "pureluma-hair-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["pureluma-hair-lp"]
+}
