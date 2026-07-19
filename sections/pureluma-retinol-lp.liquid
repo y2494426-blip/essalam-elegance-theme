@@ -1,0 +1,660 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+:root{
+  --pr-pink:#E91E63;--pr-pink-dark:#C2185B;--pr-pink-light:#F48FB1;
+  --pr-pink-pale:#FCE4EC;--pr-pink-bg:#FFF0F5;
+  --pr-gold:#C9A227;--pr-gold-light:#F0D080;--pr-gold-pale:#FFF8E7;
+  --pr-white:#FFFFFF;--pr-dark:#222222;--pr-gray:#6B7280;--pr-light-gray:#F9F9F9;
+  --pr-shadow:0 4px 24px rgba(233,30,99,.1);--pr-shadow-lg:0 16px 56px rgba(233,30,99,.16);
+  --pr-shadow-gold:0 8px 32px rgba(201,162,39,.2);
+  --pr-r:20px;--pr-r-sm:14px;--pr-r-xs:8px
+}
+.pr-page*{box-sizing:border-box;margin:0;padding:0}
+.pr-page{font-family:'Tajawal',sans-serif;direction:rtl;background:var(--pr-white);color:var(--pr-dark);overflow-x:hidden}
+/* LOADER */
+.pr-loader{position:fixed;inset:0;background:var(--pr-white);z-index:99999;display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+.pr-loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.pr-loader__ring{width:52px;height:52px;border:3px solid var(--pr-pink-pale);border-top-color:var(--pr-pink);border-radius:50%;animation:pr-spin .8s linear infinite;margin:0 auto 12px}
+.pr-loader__logo{font-size:15px;font-weight:800;color:var(--pr-pink);letter-spacing:1px}
+@keyframes pr-spin{to{transform:rotate(360deg)}}
+/* PROGRESS */
+.pr-progress{position:fixed;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,var(--pr-pink-light),var(--pr-pink));transform-origin:right;z-index:9999;transform:scaleX(0)}
+/* TOAST */
+.pr-toast{position:fixed;bottom:90px;right:16px;background:#fff;border-radius:16px;padding:12px 15px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;z-index:8500;transform:translateX(140%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:264px;border-right:3px solid var(--pr-pink)}
+.pr-toast.show{transform:translateX(0)}
+.pr-toast__txt{font-size:12px;line-height:1.5;color:#444}
+.pr-toast__txt strong{color:var(--pr-pink);display:block;font-size:13px}
+/* VIEWERS */
+.pr-viewers{position:fixed;bottom:158px;right:16px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-radius:30px;padding:7px 13px;box-shadow:var(--pr-shadow);display:flex;align-items:center;gap:6px;z-index:8499;font-size:12px;color:var(--pr-dark);animation:pr-fadein .5s 2.5s both}
+.pr-viewers__dot{width:7px;height:7px;background:#4CAF50;border-radius:50%;animation:pr-pulse 2s infinite}
+/* EXIT POPUP */
+.pr-exit-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99990;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center;padding:20px}
+.pr-exit-overlay.open{opacity:1;pointer-events:all}
+.pr-exit-popup{background:#fff;border-radius:28px;padding:38px 28px;max-width:420px;width:100%;text-align:center;transform:scale(.9) translateY(20px);transition:transform .3s;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.2)}
+.pr-exit-overlay.open .pr-exit-popup{transform:scale(1) translateY(0)}
+.pr-exit-close{position:absolute;top:14px;left:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--pr-gray);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.pr-exit-close:hover{background:var(--pr-pink-pale)}
+.pr-exit-popup__badge{display:inline-block;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));color:#fff;font-size:12px;font-weight:700;padding:4px 16px;border-radius:20px;margin-bottom:16px}
+.pr-exit-popup__title{font-size:22px;font-weight:800;color:var(--pr-dark);margin-bottom:8px}
+.pr-exit-popup__sub{font-size:14px;color:var(--pr-gray);margin-bottom:20px;line-height:1.7}
+.pr-exit-popup__price{font-size:36px;font-weight:900;color:var(--pr-pink);margin-bottom:4px}
+.pr-exit-popup__old{font-size:15px;color:var(--pr-gray);text-decoration:line-through;margin-bottom:22px}
+.pr-exit-btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));color:#fff;font-family:'Tajawal',sans-serif;font-size:17px;font-weight:800;border:none;border-radius:50px;cursor:pointer;transition:all .2s}
+.pr-exit-btn:hover{transform:translateY(-2px);box-shadow:var(--pr-shadow-lg)}
+/* WHATSAPP */
+.pr-wa{position:fixed;bottom:90px;left:16px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);z-index:8400;text-decoration:none;animation:pr-fadein .5s 3s both;transition:transform .2s}
+.pr-wa:hover{transform:scale(1.1)}
+.pr-wa svg{width:26px;height:26px;fill:#fff}
+/* ANIMS */
+@keyframes pr-fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pr-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(-1deg)}}
+@keyframes pr-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+@keyframes pr-ripple{0%{transform:scale(0);opacity:.4}100%{transform:scale(4);opacity:0}}
+@keyframes pr-shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes pr-glow-pink{0%,100%{box-shadow:0 0 20px rgba(233,30,99,.3)}50%{box-shadow:0 0 40px rgba(233,30,99,.6)}}
+.pr-anim{opacity:0;transform:translateY(24px);transition:all .65s cubic-bezier(.22,1,.36,1)}
+.pr-anim.visible{opacity:1;transform:translateY(0)}
+.pr-d1{transition-delay:.1s}.pr-d2{transition-delay:.2s}.pr-d3{transition-delay:.3s}
+.pr-d4{transition-delay:.4s}.pr-d5{transition-delay:.5s}.pr-d6{transition-delay:.6s}
+/* TOP BAR */
+.pr-topbar{background:linear-gradient(90deg,var(--pr-pink-dark),var(--pr-pink));padding:10px 20px;text-align:center}
+.pr-topbar__txt{font-size:13px;color:rgba(255,255,255,.92);font-weight:500}
+.pr-topbar__txt strong{color:#fff}
+/* HERO */
+.pr-hero{background:linear-gradient(160deg,#fff 0%,var(--pr-pink-bg) 50%,#fff 100%);padding:60px 20px 50px;position:relative;overflow:hidden}
+.pr-hero__bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.pr-hero__blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.2}
+.pr-hero__blob1{width:600px;height:600px;background:var(--pr-pink-pale);top:-150px;left:-200px}
+.pr-hero__blob2{width:400px;height:400px;background:var(--pr-gold-pale);bottom:-100px;right:-100px}
+.pr-hero__inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:52px;align-items:center;position:relative;z-index:1}
+@media(min-width:768px){.pr-hero__inner{grid-template-columns:1fr 1fr}}
+.pr-hero__content{text-align:center}
+@media(min-width:768px){.pr-hero__content{text-align:right}}
+.pr-hero__kicker{display:inline-flex;align-items:center;gap:7px;background:rgba(233,30,99,.08);border:1px solid rgba(233,30,99,.2);border-radius:30px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--pr-pink);margin-bottom:16px;animation:pr-fadein .5s .3s both}
+.pr-hero__title{font-size:clamp(24px,5.5vw,46px);font-weight:900;color:var(--pr-dark);line-height:1.25;margin-bottom:16px;animation:pr-fadein .6s .35s both}
+.pr-hero__title em{font-style:normal;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pr-hero__desc{font-size:clamp(14px,2.8vw,16px);color:var(--pr-gray);line-height:1.85;margin-bottom:22px;animation:pr-fadein .6s .4s both}
+.pr-hero__price-card{background:#fff;border-radius:var(--pr-r);padding:18px 20px;margin-bottom:22px;box-shadow:var(--pr-shadow);border:1px solid var(--pr-pink-pale);display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;animation:pr-fadein .6s .45s both}
+@media(min-width:768px){.pr-hero__price-card{justify-content:flex-start}}
+.pr-hero__price{font-size:34px;font-weight:900;color:var(--pr-pink);line-height:1}
+.pr-hero__old-price{font-size:18px;color:var(--pr-gray);text-decoration:line-through;font-weight:400}
+.pr-hero__save{background:linear-gradient(135deg,#FEF2F2,#FCE4EC);color:var(--pr-pink-dark);font-size:13px;font-weight:700;padding:4px 12px;border-radius:20px;border:1px solid var(--pr-pink-pale)}
+.pr-hero__ship{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#F0FFF4,#DCFCE7);border:1px solid #BBF7D0;border-radius:30px;padding:6px 14px;font-size:13px;color:#15803D;font-weight:600;margin-bottom:22px;animation:pr-fadein .6s .5s both}
+.pr-hero__btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:26px;animation:pr-fadein .6s .55s both}
+@media(min-width:768px){.pr-hero__btns{justify-content:flex-start}}
+.pr-btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;padding:14px 30px;border-radius:50px;border:none;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;animation:pr-glow-pink 3s 1s infinite}
+.pr-btn-primary:hover{transform:translateY(-2px);box-shadow:var(--pr-shadow-lg)}
+.pr-btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--pr-pink);font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;padding:14px 28px;border-radius:50px;border:2px solid var(--pr-pink-pale);cursor:pointer;transition:all .2s}
+.pr-btn-ghost:hover{background:var(--pr-pink-pale);border-color:var(--pr-pink-light)}
+.pr-ripple{position:absolute;background:rgba(255,255,255,.3);border-radius:50%;width:20px;height:20px;pointer-events:none;animation:pr-ripple .6s linear;transform:translate(-50%,-50%)}
+.pr-hero__badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;animation:pr-fadein .6s .6s both}
+@media(min-width:768px){.pr-hero__badges{justify-content:flex-start}}
+.pr-hero__badge-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--pr-dark);font-weight:500}
+.pr-hero__badge-item span:first-child{color:var(--pr-pink)}
+/* HERO IMAGE */
+.pr-hero__img-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+.pr-hero__img{width:100%;max-width:400px;border-radius:30px;box-shadow:var(--pr-shadow-lg);animation:pr-float 5s ease-in-out infinite;cursor:zoom-in;transition:transform .3s}
+.pr-hero__img:hover{transform:scale(1.03) rotate(-1deg)}
+.pr-hero__img-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--pr-gold),var(--pr-gold-light));color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;box-shadow:var(--pr-shadow-gold);text-shadow:0 1px 2px rgba(0,0,0,.15)}
+.pr-hero__rating-pill{position:absolute;bottom:14px;right:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:30px;padding:7px 14px;box-shadow:var(--pr-shadow);display:flex;align-items:center;gap:7px}
+.pr-hero__rating-stars{color:#F59E0B;font-size:14px}
+.pr-hero__rating-txt{font-size:12px;font-weight:600;color:var(--pr-dark)}
+/* COUNTDOWN */
+.pr-countdown{background:linear-gradient(90deg,var(--pr-pink-dark),var(--pr-pink),#D81B60);padding:18px 20px;text-align:center}
+.pr-countdown__inner{max-width:700px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.pr-countdown__lbl{color:rgba(255,255,255,.92);font-size:14px;font-weight:600;white-space:nowrap}
+.pr-countdown__timer{display:flex;align-items:center;gap:5px}
+.pr-countdown__unit{background:rgba(255,255,255,.15);border-radius:8px;width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pr-countdown__num{font-size:18px;font-weight:900;color:#fff;line-height:1}
+.pr-countdown__ulbl{font-size:9px;color:rgba(255,255,255,.7)}
+.pr-countdown__sep{font-size:18px;font-weight:900;color:rgba(255,255,255,.6);margin-bottom:5px}
+.pr-countdown__stock{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:13px;color:#fff;font-weight:600;white-space:nowrap}
+.pr-countdown__sdot{width:7px;height:7px;background:#FCD34D;border-radius:50%;animation:pr-pulse 1.5s infinite}
+/* SECTIONS */
+.pr-section{padding:72px 20px}
+.pr-section--pink{background:var(--pr-pink-bg)}
+.pr-section--gold{background:linear-gradient(135deg,#2D1B00,var(--pr-gold))}
+.pr-container{max-width:1100px;margin:0 auto}
+.pr-lbl{display:inline-block;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.8px;margin-bottom:12px;text-transform:uppercase}
+.pr-lbl--pink{background:var(--pr-pink-pale);color:var(--pr-pink)}
+.pr-lbl--gold{background:rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.pr-lbl--white{background:rgba(255,255,255,.15);color:#fff}
+.pr-h2{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--pr-dark);line-height:1.3;margin-bottom:14px}
+.pr-h2--white{color:#fff}
+.pr-p{font-size:15px;color:var(--pr-gray);line-height:1.8;max-width:680px}
+.pr-p--white{color:rgba(255,255,255,.8)}
+.pr-divider{width:44px;height:3px;border-radius:2px;margin:14px auto 0}
+.pr-divider--pink{background:linear-gradient(90deg,var(--pr-pink),var(--pr-pink-light))}
+.pr-divider--gold{background:linear-gradient(90deg,var(--pr-gold),var(--pr-gold-light))}
+.pr-header{text-align:center;margin-bottom:48px}
+/* BENEFITS */
+.pr-benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.pr-benefits-grid{grid-template-columns:repeat(3,1fr)}}
+.pr-benefit-card{background:#fff;border-radius:var(--pr-r);padding:24px 16px;text-align:center;box-shadow:0 2px 16px rgba(233,30,99,.06);border:1px solid var(--pr-pink-pale);transition:all .3s}
+.pr-benefit-card:hover{transform:translateY(-5px);box-shadow:var(--pr-shadow);border-color:var(--pr-pink-light)}
+.pr-benefit-card__icon{font-size:30px;margin-bottom:12px}
+.pr-benefit-card__title{font-size:14px;font-weight:700;color:var(--pr-dark);margin-bottom:5px}
+.pr-benefit-card__desc{font-size:12px;color:var(--pr-gray);line-height:1.6}
+/* INGREDIENTS */
+.pr-ing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:800px;margin:0 auto}
+@media(min-width:600px){.pr-ing-grid{grid-template-columns:repeat(3,1fr)}}
+.pr-ing-card{background:#fff;border-radius:var(--pr-r);padding:22px 16px;text-align:center;box-shadow:var(--pr-shadow-gold);border:1px solid var(--pr-gold-pale);transition:all .3s}
+.pr-ing-card:hover{transform:translateY(-4px);background:var(--pr-gold-pale)}
+.pr-ing-card__icon{font-size:28px;margin-bottom:10px}
+.pr-ing-card__name{font-size:14px;font-weight:700;color:var(--pr-gold);margin-bottom:5px}
+.pr-ing-card__desc{font-size:12px;color:var(--pr-gray);line-height:1.6}
+/* HOW TO USE */
+.pr-timeline{display:flex;flex-direction:column;gap:0;max-width:480px;margin:0 auto}
+.pr-tl-item{display:flex;gap:16px;align-items:flex-start;position:relative}
+.pr-tl-item:not(:last-child)::after{content:'';position:absolute;right:19px;top:44px;width:2px;background:linear-gradient(180deg,var(--pr-pink),var(--pr-pink-pale));height:calc(100% - 8px);transform:translateX(50%)}
+.pr-tl-num{min-width:40px;height:40px;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;box-shadow:0 4px 14px rgba(233,30,99,.3);flex-shrink:0}
+.pr-tl-body{padding:8px 0 28px}
+.pr-tl-body h4{font-size:15px;font-weight:700;color:var(--pr-dark);margin-bottom:3px}
+.pr-tl-body p{font-size:13px;color:var(--pr-gray);line-height:1.6}
+/* WHY */
+.pr-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.pr-why-grid{grid-template-columns:repeat(3,1fr)}}
+.pr-why-card{background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:var(--pr-r);padding:22px 16px;text-align:center;transition:all .3s}
+.pr-why-card:hover{background:rgba(255,255,255,.2);transform:translateY(-4px)}
+.pr-why-card__icon{font-size:26px;margin-bottom:10px}
+.pr-why-card__title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.pr-why-card__desc{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5}
+/* BEFORE/AFTER */
+.pr-ba-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:680px;margin:0 auto}
+.pr-ba-card{border-radius:var(--pr-r);padding:28px 20px;text-align:center}
+.pr-ba-card--before{background:#FEF2F2;border:1.5px solid #FECACA}
+.pr-ba-card--after{background:linear-gradient(135deg,#FFF0F5,var(--pr-pink-pale));border:1.5px solid var(--pr-pink-light)}
+.pr-ba-tag{font-size:14px;font-weight:800;margin-bottom:16px;display:block}
+.pr-ba-card--before .pr-ba-tag{color:#DC2626}
+.pr-ba-card--after .pr-ba-tag{color:var(--pr-pink)}
+.pr-ba-item{font-size:14px;line-height:2.1;color:var(--pr-dark)}
+/* SPECS */
+.pr-specs{display:grid;grid-template-columns:1fr;gap:2px;max-width:560px;margin:0 auto;border-radius:var(--pr-r);overflow:hidden;box-shadow:var(--pr-shadow)}
+.pr-spec-row{display:flex;align-items:center;gap:14px;padding:15px 20px;background:#fff}
+.pr-spec-row:nth-child(even){background:var(--pr-pink-bg)}
+.pr-spec-row__lbl{font-size:13px;color:var(--pr-gray);min-width:130px;font-weight:500}
+.pr-spec-row__val{font-size:14px;font-weight:700;color:var(--pr-dark)}
+/* REVIEWS */
+.pr-rating-box{display:flex;align-items:center;gap:20px;background:var(--pr-pink-pale);border-radius:var(--pr-r);padding:22px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.pr-rating-big__num{font-size:52px;font-weight:900;color:var(--pr-pink);line-height:1}
+.pr-rating-big__stars{color:#F59E0B;font-size:20px}
+.pr-rating-big__lbl{font-size:12px;color:var(--pr-gray);margin-top:3px}
+.pr-reviews-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:600px){.pr-reviews-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.pr-reviews-grid{grid-template-columns:repeat(3,1fr)}}
+.pr-rev-card{background:#fff;border:1px solid var(--pr-pink-pale);border-radius:var(--pr-r);padding:20px;transition:all .3s}
+.pr-rev-card:hover{transform:translateY(-3px);box-shadow:var(--pr-shadow)}
+.pr-rev-card__hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pr-rev-card__av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
+.pr-rev-card__name{font-size:14px;font-weight:700;color:var(--pr-dark)}
+.pr-rev-card__city{font-size:12px;color:var(--pr-gray)}
+.pr-rev-card__stars{color:#F59E0B;font-size:14px;margin-bottom:8px}
+.pr-rev-card__txt{font-size:13px;color:#374151;line-height:1.75;font-style:italic}
+.pr-rev-card__verified{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#16A34A;font-weight:600;margin-top:8px}
+/* OFFER */
+.pr-offer-box{background:linear-gradient(135deg,var(--pr-pink-dark) 0%,var(--pr-pink) 50%,#E91E8C 100%);border-radius:28px;padding:48px 28px;text-align:center;max-width:580px;margin:0 auto;position:relative;overflow:hidden}
+.pr-offer-box__shine{position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
+.pr-offer-box__shine2{position:absolute;bottom:-60px;left:-30px;width:180px;height:180px;background:rgba(255,255,255,.05);border-radius:50%;pointer-events:none}
+.pr-offer-box__lbl{display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:13px;font-weight:700;padding:5px 18px;border-radius:20px;margin-bottom:18px}
+.pr-offer-box__old{font-size:22px;color:rgba(255,255,255,.55);text-decoration:line-through;margin-bottom:6px}
+.pr-offer-box__price{font-size:62px;font-weight:900;color:#fff;line-height:1;margin-bottom:6px}
+.pr-offer-box__dh{font-size:28px;font-weight:600}
+.pr-offer-box__save{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:22px}
+.pr-offer-box__perks{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.pr-offer-box__perk{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,.9)}
+.pr-offer-box__btn{display:block;width:100%;max-width:300px;margin:0 auto 12px;padding:18px;background:#fff;color:var(--pr-pink);font-family:'Tajawal',sans-serif;font-size:18px;font-weight:900;border:none;border-radius:50px;cursor:pointer;transition:all .2s;box-shadow:0 8px 28px rgba(0,0,0,.2)}
+.pr-offer-box__btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.25)}
+.pr-offer-box__note{font-size:12px;color:rgba(255,255,255,.6)}
+/* ORDER */
+.pr-order{background:var(--pr-pink-bg);padding:60px 20px}
+.pr-order__box{background:#fff;border-radius:26px;padding:32px 22px;max-width:560px;margin:0 auto;box-shadow:var(--pr-shadow-lg);border:1px solid var(--pr-pink-pale)}
+.pr-order__title{text-align:center;font-size:21px;font-weight:800;color:var(--pr-dark);margin-bottom:4px}
+.pr-order__sub{text-align:center;font-size:13px;color:var(--pr-gray);margin-bottom:24px}
+.pr-form-wrap input,.pr-form-wrap select,.pr-form-wrap textarea{width:100%;padding:13px 15px;border:1.5px solid #E5E7EB;border-radius:var(--pr-r-sm);font-family:'Tajawal',sans-serif;font-size:15px;margin-bottom:10px;transition:border-color .2s,box-shadow .2s;outline:none;direction:rtl;color:var(--pr-dark);background:#fff}
+.pr-form-wrap input:focus,.pr-form-wrap select:focus{border-color:var(--pr-pink);box-shadow:0 0 0 3px rgba(233,30,99,.08)}
+.pr-form-wrap button[type="submit"],.pr-form-wrap button[name="add"]{width:100%;padding:17px;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));color:#fff;font-family:'Tajawal',sans-serif;font-size:18px;font-weight:800;border:none;border-radius:50px;cursor:pointer;transition:all .2s}
+.pr-form-wrap button[type="submit"]:hover,.pr-form-wrap button[name="add"]:hover{transform:translateY(-2px);box-shadow:var(--pr-shadow-lg)}
+.pr-order__gtees{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.pr-order__gtee{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--pr-gray)}
+/* FAQ */
+.pr-faq__list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.pr-faq-item{background:#fff;border-radius:var(--pr-r-sm);border:1px solid var(--pr-pink-pale);overflow:hidden;transition:box-shadow .3s}
+.pr-faq-item:hover{box-shadow:var(--pr-shadow)}
+.pr-faq-item__btn{width:100%;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;background:none;border:none;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;color:var(--pr-dark);cursor:pointer;text-align:right;gap:10px}
+.pr-faq-item__icon{width:28px;height:28px;min-width:28px;background:var(--pr-pink-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--pr-pink);font-size:18px;transition:all .3s}
+.pr-faq-item.open .pr-faq-item__icon{transform:rotate(45deg);background:var(--pr-pink);color:#fff}
+.pr-faq-item__body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.pr-faq-item.open .pr-faq-item__body{max-height:200px}
+.pr-faq-item__inner{padding:0 18px 16px;font-size:14px;color:var(--pr-gray);line-height:1.8}
+/* FINAL CTA */
+.pr-final-cta{background:linear-gradient(160deg,var(--pr-white),var(--pr-pink-bg));padding:70px 20px;text-align:center}
+/* FOOTER */
+.pr-footer{background:#1A0A0F;padding:40px 20px;text-align:center}
+.pr-footer__logo{font-size:24px;font-weight:900;letter-spacing:1px;margin-bottom:3px;background:linear-gradient(90deg,#fff,var(--pr-pink-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pr-footer__tagline{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:20px}
+.pr-footer__links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:14px}
+.pr-footer__link{font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;transition:color .2s}
+.pr-footer__link:hover{color:#fff}
+.pr-footer__copy{font-size:12px;color:rgba(255,255,255,.25)}
+/* STICKY */
+.pr-sticky{position:fixed;bottom:0;right:0;left:0;background:#fff;border-top:1px solid var(--pr-pink-pale);padding:12px 18px;z-index:8000;box-shadow:0 -6px 24px rgba(233,30,99,.08);display:none;align-items:center;gap:10px}
+@media(max-width:767px){.pr-sticky{display:flex}}
+.pr-sticky__price-lbl{font-size:11px;color:var(--pr-gray)}
+.pr-sticky__price-val{font-size:20px;font-weight:900;color:var(--pr-pink);line-height:1}
+.pr-sticky__btn{flex:1;background:linear-gradient(135deg,var(--pr-pink),var(--pr-pink-dark));color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;padding:14px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.pr-sticky__btn:active{transform:scale(.98)}
+/* LIGHTBOX */
+.pr-lb{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.pr-lb.open{opacity:1;pointer-events:all}
+.pr-lb img{max-width:100%;max-height:90vh;border-radius:14px;transform:scale(.9);transition:transform .3s}
+.pr-lb.open img{transform:scale(1)}
+.pr-lb__close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+</style>
+
+<!-- LOADER -->
+<div class="pr-loader" id="pr-loader"><div><div class="pr-loader__ring"></div><div class="pr-loader__logo">PURELUMA</div></div></div>
+<!-- PROGRESS -->
+<div class="pr-progress" id="pr-progress"></div>
+<!-- TOAST -->
+<div class="pr-toast" id="pr-toast"><span style="font-size:22px">💖</span><div class="pr-toast__txt"><strong id="pr-toast-name">نادية من الدار البيضاء</strong>اشترت كريم الريتينول للتو 🌸</div></div>
+<!-- VIEWERS -->
+<div class="pr-viewers"><div class="pr-viewers__dot"></div><span id="pr-viewers">31</span> شخص يتصفح المنتج الآن</div>
+<!-- LIGHTBOX -->
+<div class="pr-lb" id="pr-lb" onclick="if(event.target===this)this.classList.remove('open')"><button class="pr-lb__close" onclick="document.getElementById('pr-lb').classList.remove('open')">✕</button><img id="pr-lb-img" src="" alt=""></div>
+<!-- EXIT POPUP -->
+<div class="pr-exit-overlay" id="pr-exit-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="pr-exit-popup">
+    <button class="pr-exit-close" onclick="document.getElementById('pr-exit-overlay').classList.remove('open')">✕</button>
+    <div class="pr-exit-popup__badge">🎁 قبل أن تغادري</div>
+    <h3 class="pr-exit-popup__title">لا تفوّتي هذا العرض 💖</h3>
+    <p class="pr-exit-popup__sub">احصلي على كريم الريتينول بالسعر الخاص — توصيل مجاني ودفع عند الاستلام</p>
+    <div class="pr-exit-popup__price">199 <span style="font-size:20px">DH</span></div>
+    <div class="pr-exit-popup__old">299 DH</div>
+    <button class="pr-exit-btn" onclick="prScroll();document.getElementById('pr-exit-overlay').classList.remove('open')">🛒 اطلبي الآن</button>
+  </div>
+</div>
+<!-- WHATSAPP -->
+<a class="pr-wa" href="https://wa.me/212600000000" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.518 5.83L.057 23.855a.5.5 0 00.608.608l6.024-1.462A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.034-1.387l-.36-.214-3.733.906.92-3.642-.235-.373A9.818 9.818 0 012.182 12C2.182 6.574 6.574 2.182 12 2.182S21.818 6.574 21.818 12 17.426 21.818 12 21.818z"/></svg></a>
+
+<div class="pr-page" dir="rtl">
+
+<!-- TOP BAR -->
+<div class="pr-topbar"><div class="pr-topbar__txt">🚚 <strong>توصيل مجاني</strong> لجميع مدن المغرب | الدفع عند الاستلام | صنع في المغرب 🇲🇦</div></div>
+
+<!-- HERO -->
+<section class="pr-hero">
+  <div class="pr-hero__bg"><div class="pr-hero__blob pr-hero__blob1"></div><div class="pr-hero__blob pr-hero__blob2"></div></div>
+  <div class="pr-hero__inner">
+    <div class="pr-hero__content">
+      <div class="pr-hero__kicker">✨ الأكثر مبيعًا — كريم الريتينول</div>
+      <h1 class="pr-hero__title">✨ بشرة أكثر <em>نعومة وإشراقًا</em> مع كريم الريتينول من PURELUMA</h1>
+      <p class="pr-hero__desc">استمتعي بروتين عناية متكامل يساعد على تحسين مظهر البشرة وتقليل مظهر الخطوط الدقيقة والتجاعيد، مع تركيبة غنية بالريتينول وفيتامين C والألوفيرا للحصول على بشرة أكثر نعومة وإشراقًا مع الاستخدام المنتظم.</p>
+      <div class="pr-hero__price-card">
+        <span class="pr-hero__price">199 <span style="font-size:18px;font-weight:500">DH</span></span>
+        <span class="pr-hero__old-price">299 DH</span>
+        <span class="pr-hero__save">وفري 100 DH</span>
+      </div>
+      <div class="pr-hero__ship">🚚 التوصيل مجاني لجميع مدن المغرب</div>
+      <div class="pr-hero__btns">
+        <button class="pr-btn-primary" onclick="prScroll(this)">🛒 اطلبي الآن</button>
+        <button class="pr-btn-ghost" onclick="document.getElementById('pr-benefits').scrollIntoView({behavior:'smooth'})">اكتشفي المميزات ↓</button>
+      </div>
+      <div class="pr-hero__badges">
+        <div class="pr-hero__badge-item"><span>✔</span> الدفع عند الاستلام</div>
+        <div class="pr-hero__badge-item"><span>✔</span> صنع في المغرب</div>
+        <div class="pr-hero__badge-item"><span>✔</span> توصيل مجاني</div>
+        <div class="pr-hero__badge-item"><span>✔</span> مناسب لجميع أنواع البشرة</div>
+      </div>
+    </div>
+    <div class="pr-hero__img-wrap">
+      {%- if product.media[0] -%}
+        <img class="pr-hero__img" src="{{ product.media[0] | image_url: width: 700 }}" alt="{{ product.title }}" loading="eager" width="700" onclick="prLB('{{ product.media[0] | image_url: width: 1200 }}')">
+      {%- endif -%}
+      <div class="pr-hero__img-badge">✨ الأكثر مبيعًا</div>
+      <div class="pr-hero__rating-pill"><span class="pr-hero__rating-stars">★★★★★</span><span class="pr-hero__rating-txt">4.9 · +500 تقييم</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<div class="pr-countdown">
+  <div class="pr-countdown__inner">
+    <div class="pr-countdown__lbl">⏳ العرض ينتهي خلال:</div>
+    <div class="pr-countdown__timer">
+      <div class="pr-countdown__unit"><div class="pr-countdown__num" id="pr-cdh">23</div><div class="pr-countdown__ulbl">ساعة</div></div>
+      <div class="pr-countdown__sep">:</div>
+      <div class="pr-countdown__unit"><div class="pr-countdown__num" id="pr-cdm">59</div><div class="pr-countdown__ulbl">دقيقة</div></div>
+      <div class="pr-countdown__sep">:</div>
+      <div class="pr-countdown__unit"><div class="pr-countdown__num" id="pr-cds">59</div><div class="pr-countdown__ulbl">ثانية</div></div>
+    </div>
+    <div class="pr-countdown__stock"><div class="pr-countdown__sdot"></div>⚠️ بقيت كمية محدودة</div>
+  </div>
+</div>
+
+<!-- BENEFITS -->
+<section class="pr-section" id="pr-benefits">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">فوائد الكريم</span>
+      <h2 class="pr-h2">6 أسباب تجعل بشرتك تعشق PURELUMA</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-benefits-grid">
+      {%- assign b_icons  = '✨,🌸,💖,🌿,🍊,⭐' | split: ',' -%}
+      {%- assign b_titles = 'يساعد على تقليل مظهر التجاعيد,يمنح البشرة نعومة,يساعد على توحيد مظهر لون البشرة,غني بالألوفيرا,يحتوي على فيتامين C,يساعد على تجديد مظهر البشرة' | split: ',' -%}
+      {%- assign b_descs  = 'يساعد الريتينول على تحسين مظهر الخطوط الدقيقة والتجاعيد مع الاستخدام المنتظم,تركيبة خفيفة وسريعة الامتصاص تمنح البشرة ملمسًا ناعمًا ومخمليًا,يعمل على توحيد لون البشرة وتقليل مظهر البقع الداكنة,مكوّن مهدئ ومرطب يساعد على تغذية البشرة وترطيبها بعمق,مضاد أكسدة طبيعي يساعد على إشراقة البشرة وتوهجها,يساهم في تسريع تجديد مظهر البشرة لتبدو أكثر حيوية وجمالًا' | split: ',' -%}
+      {%- for icon in b_icons -%}
+        <div class="pr-benefit-card pr-anim pr-d{{ forloop.index }}">
+          <div class="pr-benefit-card__icon">{{ icon }}</div>
+          <div class="pr-benefit-card__title">{{ b_titles[forloop.index0] }}</div>
+          <div class="pr-benefit-card__desc">{{ b_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="pr-section pr-section--pink">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">المكونات</span>
+      <h2 class="pr-h2">تركيبة علمية متطورة</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-ing-grid">
+      {%- assign ing_icons  = '🔬,🍊,🌱,💧,✨' | split: ',' -%}
+      {%- assign ing_names  = 'ريتينول,فيتامين C,ألوفيرا,حمض اللاكتيك,مستحلب شمعي' | split: ',' -%}
+      {%- assign ing_descs  = 'يساعد على تجديد مظهر البشرة وتحسين ملمسها مع الاستخدام المنتظم,يساعد على تحسين إشراقة البشرة وتوحيد لونها بشكل ملحوظ,يساعد على ترطيب وتهدئة البشرة المهيجة ومنحها الرطوبة اللازمة,يساعد على تقشير لطيف وتحسين ملمس البشرة وتجديد خلاياها,يساهم في منح الكريم قوامًا ناعمًا وسهل التطبيق على البشرة' | split: ',' -%}
+      {%- for icon in ing_icons -%}
+        <div class="pr-ing-card pr-anim pr-d{{ forloop.index }}">
+          <div class="pr-ing-card__icon">{{ icon }}</div>
+          <div class="pr-ing-card__name">{{ ing_names[forloop.index0] }}</div>
+          <div class="pr-ing-card__desc">{{ ing_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if product.media[1] -%}
+      <div style="text-align:center;margin-top:44px" class="pr-anim">
+        <img src="{{ product.media[1] | image_url: width: 600 }}" alt="مكونات الكريم" loading="lazy" width="600" style="max-width:340px;border-radius:22px;box-shadow:var(--pr-shadow-lg);cursor:zoom-in" onclick="prLB('{{ product.media[1] | image_url: width: 1200 }}')">
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="pr-section">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">طريقة الاستخدام</span>
+      <h2 class="pr-h2">روتين بسيط — نتائج رائعة</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-timeline pr-anim">
+      {%- assign tl_hs = 'نظفي البشرة جيدًا,ضعي كمية صغيرة مساءً,وزعي الكريم على الوجه والرقبة,تجنبي منطقة العين,استخدمي واقي الشمس صباحًا' | split: ',' -%}
+      {%- assign tl_ps = 'اغسلي وجهك بمنظف لطيف وجففيه تمامًا قبل وضع الكريم,ضعي كمية صغيرة من كريم الريتينول — قطعة بحجم حبة البازلاء كافية,وزعي الكريم بلطف على الوجه والرقبة بحركات صاعدة دائرية,تجنبي منطقة العين الحساسة ومحيط الشفاه والأنف,الريتينول يجعل البشرة أكثر حساسية للشمس — واقي الشمس ضروري' | split: ',' -%}
+      {%- for h in tl_hs -%}
+        <div class="pr-tl-item pr-anim pr-d{{ forloop.index }}">
+          <div class="pr-tl-num">{{ forloop.index }}</div>
+          <div class="pr-tl-body{% unless forloop.last %}" style="padding-bottom:28px{% endunless %}">
+            <h4>{{ h }}</h4>
+            <p>{{ tl_ps[forloop.index0] }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div style="background:var(--pr-pink-pale);border-radius:var(--pr-r);padding:18px 20px;max-width:480px;margin:30px auto 0;text-align:center;border:1px solid var(--pr-pink-light)" class="pr-anim">
+      <p style="font-size:13px;color:var(--pr-pink-dark);font-weight:600">⚠️ تحذير: للاستخدام الخارجي فقط. يُحفظ بعيدًا عن متناول الأطفال. في حال حدوث تهيج يُوقف الاستخدام.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY PURELUMA -->
+<section class="pr-section" style="background:linear-gradient(135deg,#7B0A3C,var(--pr-pink))">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--white">لماذا PURELUMA</span>
+      <h2 class="pr-h2 pr-h2--white">ما يميّزنا عن غيرنا</h2>
+      <div class="pr-divider" style="background:rgba(255,255,255,.3);margin:14px auto 0"></div>
+    </div>
+    <div class="pr-why-grid">
+      {%- assign why_icons  = '🔬,🌿,🇲🇦,⭐,🚚,💵' | split: ',' -%}
+      {%- assign why_titles = 'تركيبة متطورة,غني بالريتينول,صناعة مغربية,جودة عالية,توصيل مجاني,الدفع عند الاستلام' | split: ',' -%}
+      {%- assign why_descs  = 'علم حديث في خدمة بشرتك — تركيبة تجمع أفضل المكونات الفعّالة,نسبة ريتينول مدروسة لنتائج فعّالة مع الحفاظ على صحة البشرة,منتج مغربي أصيل بمعايير جودة دولية,خضع الكريم لاختبارات دقيقة لضمان أعلى مستويات الجودة,نوصلك مجانًا لجميع مدن المغرب خلال 24 إلى 72 ساعة,لا دفع مسبق — تدفعين للمندوب عند استلام طلبك' | split: ',' -%}
+      {%- for icon in why_icons -%}
+        <div class="pr-why-card pr-anim pr-d{{ forloop.index }}">
+          <span class="pr-why-card__icon">{{ icon }}</span>
+          <div class="pr-why-card__title">{{ why_titles[forloop.index0] }}</div>
+          <div class="pr-why-card__desc">{{ why_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS / BEFORE AFTER -->
+<section class="pr-section pr-section--pink">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">النتائج</span>
+      <h2 class="pr-h2">الفرق واضح مع الاستخدام المنتظم</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-ba-wrap pr-anim">
+      <div class="pr-ba-card pr-ba-card--before">
+        <span class="pr-ba-tag">❌ قبل</span>
+        <div class="pr-ba-item">بشرة باهتة</div>
+        <div class="pr-ba-item">ملمس غير متجانس</div>
+        <div class="pr-ba-item">خطوط دقيقة ظاهرة</div>
+        <div class="pr-ba-item">بشرة جافة</div>
+        <div class="pr-ba-item">مسام واسعة</div>
+      </div>
+      <div class="pr-ba-card pr-ba-card--after">
+        <span class="pr-ba-tag">✅ بعد</span>
+        <div class="pr-ba-item">أكثر نعومة</div>
+        <div class="pr-ba-item">مظهر أكثر إشراقًا</div>
+        <div class="pr-ba-item">ملمس أكثر تجانسًا</div>
+        <div class="pr-ba-item">بشرة مرطبة</div>
+        <div class="pr-ba-item">مسام أقل ظهورًا</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section class="pr-section">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">تفاصيل المنتج</span>
+      <h2 class="pr-h2">مواصفات كريم الريتينول</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-specs pr-anim">
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">اسم المنتج</div><div class="pr-spec-row__val">PURELUMA Retinol Cream</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">الحجم</div><div class="pr-spec-row__val">100 ml</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">بلد الصنع</div><div class="pr-spec-row__val">المغرب 🇲🇦</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">السعر</div><div class="pr-spec-row__val" style="color:var(--pr-pink);font-size:18px">199 DH</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">التوصيل</div><div class="pr-spec-row__val" style="color:#16A34A">مجاني 🚚</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">مناسب لـ</div><div class="pr-spec-row__val">جميع أنواع البشرة</div></div>
+      <div class="pr-spec-row"><div class="pr-spec-row__lbl">وقت الاستخدام</div><div class="pr-spec-row__val">مساءً (بعد التنظيف)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="pr-section pr-section--pink">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">آراء الزبونات</span>
+      <h2 class="pr-h2">ماذا قالت الزبونات؟</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-rating-box pr-anim">
+      <div><div class="pr-rating-big__num">4.9</div><div class="pr-rating-big__stars">★★★★★</div><div class="pr-rating-big__lbl">+500 تقييم موثق</div></div>
+      <div style="font-size:14px;color:var(--pr-gray);max-width:240px;line-height:1.7;font-style:italic">"تركيبة متطورة في خدمة بشرتك — نتائج تتحدث عن نفسها"</div>
+    </div>
+    <div class="pr-reviews-grid">
+      {%- assign r_names  = 'نادية,إيمان,سلمى,ريم,حنان,رجاء' | split: ',' -%}
+      {%- assign r_cities = 'الدار البيضاء,مراكش,الرباط,طنجة,أكادير,فاس' | split: ',' -%}
+      {%- assign r_inits  = 'ن,إ,س,ر,ح,ر' | split: ',' -%}
+      {%- assign r_clrs   = 'E91E63,C2185B,AD1457,880E4F,E91E63,C2185B' | split: ',' -%}
+      {%- assign r_texts  = '"أصبح ملمس بشرتي أنعم بشكل ملحوظ مع الاستخدام المنتظم. راضية جدًا عن النتائج!","الكريم خفيف جدًا وسهل الامتصاص — لا يترك أي طبقة دهنية على البشرة.","وصلني في 24 ساعة فقط والتغليف كان ممتازًا. المنتج أصلي وفعّال.","أحببت قوامه الخفيف ورائحته الطبيعية — أضفته لروتيني الليلي.","أصبح جزءًا أساسيًا من روتين العناية الليلي بالبشرة — لا أستغني عنه.","أنصح به لكل من تبحث عن عناية فعّالة بالبشرة بسعر مناسب."' | split: ',' -%}
+      {%- for name in r_names -%}
+        <div class="pr-rev-card pr-anim pr-d{{ forloop.index | modulo: 3 | plus: 1 }}">
+          <div class="pr-rev-card__hd">
+            <div class="pr-rev-card__av" style="background:linear-gradient(135deg,#{{ r_clrs[forloop.index0] }},var(--pr-pink-light))">{{ r_inits[forloop.index0] }}</div>
+            <div><div class="pr-rev-card__name">{{ name }}</div><div class="pr-rev-card__city">📍 {{ r_cities[forloop.index0] }}</div></div>
+          </div>
+          <div class="pr-rev-card__stars">★★★★★</div>
+          <div class="pr-rev-card__txt">{{ r_texts[forloop.index0] }}</div>
+          <div class="pr-rev-card__verified">✅ شراء موثق</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section class="pr-section">
+  <div class="pr-container">
+    <div class="pr-offer-box pr-anim">
+      <div class="pr-offer-box__shine"></div><div class="pr-offer-box__shine2"></div>
+      <div class="pr-offer-box__lbl">💖 اليوم فقط</div>
+      <div class="pr-offer-box__old">299 DH</div>
+      <div class="pr-offer-box__price">199 <span class="pr-offer-box__dh">DH</span></div>
+      <div class="pr-offer-box__save">🎉 وفري 100 درهم</div>
+      <div class="pr-offer-box__perks">
+        <div class="pr-offer-box__perk">✔ الدفع عند الاستلام</div>
+        <div class="pr-offer-box__perk">✔ توصيل مجاني</div>
+        <div class="pr-offer-box__perk">✔ ضمان الجودة</div>
+      </div>
+      <button class="pr-offer-box__btn" onclick="prScroll(this)">🛒 اطلبي الآن</button>
+      <div class="pr-offer-box__note">⚡ بقيت كمية محدودة — سارعي بالطلب</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="pr-order" id="pr-order">
+  <div class="pr-container">
+    <div class="pr-order__box pr-anim">
+      <h3 class="pr-order__title">🛒 أكملي طلبك الآن</h3>
+      <p class="pr-order__sub">توصيل مجاني — دفع عند الاستلام</p>
+      <div class="pr-form-wrap">
+        {%- form 'product', product, id: 'pr-form', novalidate: true -%}
+          <input type="hidden" name="id" id="pr-vid" value="{{ product.variants[0].id }}">
+          {% content_for 'blocks' %}
+        {%- endform -%}
+      </div>
+      <div class="pr-order__gtees">
+        <div class="pr-order__gtee">🔒 طلب آمن</div>
+        <div class="pr-order__gtee">🚚 توصيل مجاني</div>
+        <div class="pr-order__gtee">💵 دفع عند الاستلام</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="pr-section">
+  <div class="pr-container">
+    <div class="pr-header pr-anim">
+      <span class="pr-lbl pr-lbl--pink">الأسئلة الشائعة</span>
+      <h2 class="pr-h2">أسئلة في بالك؟</h2>
+      <div class="pr-divider pr-divider--pink"></div>
+    </div>
+    <div class="pr-faq__list">
+      {%- assign fqs = 'هل يناسب جميع أنواع البشرة؟,متى يستخدم الكريم؟,هل يجب استخدام واقي الشمس؟,هل يوجد الدفع عند الاستلام؟,كم مدة التوصيل؟,هل يمكن الاستخدام يوميًا؟,ما هو الحجم الصحيح للاستخدام؟,هل يمكنني الإرجاع؟' | split: ',' -%}
+      {%- assign fas = 'نعم، مناسب لجميع أنواع البشرة. ينصح للبشرة الحساسة بالبدء تدريجيًا — مرة واحدة أسبوعيًا ثم زيادة الاستخدام تدريجيًا.,يُفضل الاستخدام مساءً على بشرة نظيفة وجافة — الريتينول يعمل أفضل في الليل.,نعم، استخدام واقٍ من الشمس خلال النهار ضروري عند استخدام الريتينول لحماية البشرة من حساسية الشمس.,نعم، الدفع عند الاستلام متاح في جميع مدن المغرب. لا دفع مسبق إطلاقًا.,التوصيل يستغرق بين 24 و72 ساعة داخل المغرب حسب المدينة.,نعم يمكن الاستخدام اليومي. للمبتدئات يُنصح بالبدء 2-3 مرات أسبوعيًا وزيادة التكرار تدريجيًا.,كمية بحجم حبة البازلاء كافية لتغطية الوجه والرقبة بالكامل.,في حالة وجود مشكلة في المنتج تواصلي معنا عبر الواتساب لإيجاد حل مرضٍ.' | split: ',' -%}
+      {%- for q in fqs -%}
+        <div class="pr-faq-item pr-anim">
+          <button class="pr-faq-item__btn" onclick="prFaq(this)">
+            <span>{{ q }}</span>
+            <span class="pr-faq-item__icon">+</span>
+          </button>
+          <div class="pr-faq-item__body"><div class="pr-faq-item__inner">{{ fas[forloop.index0] }}</div></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section style="padding:24px 20px;background:var(--pr-pink-bg)">
+  <div class="pr-container">
+    <p style="font-size:12px;color:var(--pr-gray);line-height:1.7;text-align:center;max-width:700px;margin:0 auto">⚠️ <strong>تنبيه:</strong> هذا المنتج مخصص للعناية بالبشرة وليس الغرض منه تشخيص أو علاج أو شفاء أو الوقاية من أي مرض. للاستخدام الخارجي فقط. يُحفظ بعيدًا عن متناول الأطفال.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="pr-final-cta">
+  <div class="pr-container">
+    <div class="pr-anim" style="text-align:center">
+      <span class="pr-lbl pr-lbl--pink">الفرصة الأخيرة</span>
+      <h2 class="pr-h2" style="margin-bottom:10px">جاهزة لمنح بشرتك العناية التي تستحقها؟</h2>
+      <p class="pr-p" style="margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto">انضمي لأكثر من 500 زبونة اكتشفن الفرق مع PURELUMA — توصيل مجاني ودفع عند الاستلام</p>
+      <button class="pr-btn-primary" style="font-size:18px;padding:16px 40px" onclick="prScroll(this)">🛒 اطلبي الآن — 199 DH فقط</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="pr-footer">
+  <div class="pr-footer__logo">PURELUMA</div>
+  <div class="pr-footer__tagline">Beauté & Soins — Made in Morocco 🇲🇦</div>
+  <div class="pr-footer__links">
+    <a class="pr-footer__link" href="#">Instagram</a>
+    <a class="pr-footer__link" href="#">سياسة الخصوصية</a>
+    <a class="pr-footer__link" href="#">شروط الاستخدام</a>
+  </div>
+  <div class="pr-footer__copy">© 2025 PURELUMA — جميع الحقوق محفوظة</div>
+</footer>
+
+</div><!-- /pr-page -->
+
+<!-- STICKY -->
+<div class="pr-sticky" id="pr-sticky">
+  <div><div class="pr-sticky__price-lbl">السعر الخاص</div><div class="pr-sticky__price-val">199 DH</div></div>
+  <button class="pr-sticky__btn" onclick="prScroll(this)">🛒 اطلبي الآن</button>
+</div>
+
+<script>
+(function(){
+  window.addEventListener('load',function(){setTimeout(function(){document.getElementById('pr-loader').classList.add('gone');},600);});
+  var pb=document.getElementById('pr-progress');
+  window.addEventListener('scroll',function(){var max=document.body.scrollHeight-window.innerHeight;if(pb&&max>0)pb.style.transform='scaleX('+(window.scrollY/max)+')';},{passive:true});
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.pr-anim').forEach(function(el){obs.observe(el);});
+  var toasts=[{n:'نادية من الدار البيضاء',t:'اشترت كريم الريتينول 💖'},{n:'إيمان من مراكش',t:'طلبت للمرة الثانية 🌸'},{n:'سلمى من الرباط',t:'أضافت للسلة ✨'},{n:'ريم من طنجة',t:'قيّمت 5 نجوم ⭐'},{n:'حنان من أكادير',t:'اشترت للتو 💖'},{n:'رجاء من فاس',t:'طلبت قطعتين 🎁'}];
+  var tEl=document.getElementById('pr-toast'),tN=document.getElementById('pr-toast-name'),ti=0;
+  function showT(){if(!tEl)return;var t=toasts[ti%toasts.length];ti++;tN.textContent=t.n;tEl.classList.add('show');setTimeout(function(){tEl.classList.remove('show');},3500);setTimeout(showT,9000+Math.random()*5000);}
+  setTimeout(showT,3000);
+  var vEl=document.getElementById('pr-viewers');
+  if(vEl){setInterval(function(){var c=parseInt(vEl.textContent);vEl.textContent=Math.max(18,Math.min(40,c+(Math.random()>.5?1:-1)));},5000);}
+  var end=Date.now()+(23*3600+59*60+59)*1000;
+  function cd(){var d=Math.max(0,end-Date.now());var h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);var hEl=document.getElementById('pr-cdh'),mEl=document.getElementById('pr-cdm'),sEl=document.getElementById('pr-cds');if(hEl)hEl.textContent=String(h).padStart(2,'0');if(mEl)mEl.textContent=String(m).padStart(2,'0');if(sEl)sEl.textContent=String(s).padStart(2,'0');}
+  setInterval(cd,1000);cd();
+  var sticky=document.getElementById('pr-sticky'),ord=document.getElementById('pr-order');
+  if(sticky&&ord){window.addEventListener('scroll',function(){var r=ord.getBoundingClientRect();sticky.style.display=r.top>window.innerHeight?'flex':'none';},{passive:true});}
+  var exitShown=false;
+  document.addEventListener('mouseleave',function(e){if(e.clientY<10&&!exitShown){exitShown=true;document.getElementById('pr-exit-overlay').classList.add('open');}});
+  var lastSc=0;
+  window.addEventListener('scroll',function(){var cur=window.scrollY;if(cur<50&&lastSc>300&&!exitShown){exitShown=true;setTimeout(function(){document.getElementById('pr-exit-overlay').classList.add('open');},400);}lastSc=cur;},{passive:true});
+  document.querySelectorAll('.pr-btn-primary').forEach(function(btn){btn.addEventListener('click',function(e){var r=document.createElement('span');r.className='pr-ripple';var rect=btn.getBoundingClientRect();r.style.left=(e.clientX-rect.left)+'px';r.style.top=(e.clientY-rect.top)+'px';btn.appendChild(r);setTimeout(function(){r.remove();},700);});});
+})();
+function prScroll(){var el=document.getElementById('pr-order');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function prFaq(btn){var item=btn.closest('.pr-faq-item');var open=item.classList.contains('open');document.querySelectorAll('.pr-faq-item.open').forEach(function(i){i.classList.remove('open');});if(!open)item.classList.add('open');}
+function prLB(src){var lb=document.getElementById('pr-lb'),img=document.getElementById('pr-lb-img');if(lb&&img){img.src=src;lb.classList.add('open');}}
+</script>
+
+{% schema %}
+{
+  "name": "Pureluma Retinol Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Pureluma Retinol Landing" }]
+}
+{% endschema %}
