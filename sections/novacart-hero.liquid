@@ -1,0 +1,674 @@
+{% comment %} NOVACART Hero — Premium Saudi Market — Upgraded from original {% endcomment %}
+
+<style>
+/* ─── RESET & FONT ─── */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+#nc-hero-{{ section.id }} *,
+#nc-hero-{{ section.id }} *::before,
+#nc-hero-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── TOKENS ─── */
+#nc-hero-{{ section.id }} {
+  --nh-white:   #FFFFFF;
+  --nh-beige:   #F8F5EF;
+  --nh-gray:    #F5F5F5;
+  --nh-black:   #111111;
+  --nh-dark:    #1A1A1A;
+  --nh-gold:    #C9A227;
+  --nh-gold-lt: #E8D48A;
+  --nh-green:   #15803D;
+  --nh-green-dk:#0f5f2d;
+  --nh-red:     #DC2626;
+  --nh-muted:   #6B7280;
+  --nh-border:  #E5E0D8;
+  --nh-shadow:  0 20px 60px rgba(0,0,0,0.10);
+  --nh-shadow-lg: 0 32px 80px rgba(0,0,0,0.14);
+  --nh-r:       20px;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+/* ─── SECTION WRAPPER ─── */
+#nc-hero-{{ section.id }} {
+  position: relative;
+  background: var(--nh-beige);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 80px 0 60px;
+}
+
+/* ─── BACKGROUND ─── */
+.nc-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.nc-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .04;
+}
+
+/* ─── DECORATIVE SHAPES ─── */
+#nc-hero-{{ section.id }}::before {
+  content: '';
+  position: absolute;
+  top: -140px;
+  left: -140px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,39,.10) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+#nc-hero-{{ section.id }}::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(21,128,61,.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── CONTAINER ─── */
+.nc-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── INNER GRID ─── */
+.nc-hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* ═══════════════════════════
+   LEFT COLUMN — TEXT
+═══════════════════════════ */
+.nc-hero__left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Badge */
+.nc-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--nh-gold);
+  background: rgba(201,162,39,.10);
+  border: 1px solid rgba(201,162,39,.35);
+  padding: 7px 16px;
+  border-radius: 50px;
+  margin-bottom: 24px;
+  width: fit-content;
+  animation: nh-fade-up .6s ease both;
+}
+
+/* Headline */
+.nc-hero__title {
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--nh-black);
+  margin-bottom: 20px;
+  white-space: pre-line;
+  animation: nh-fade-up .7s .1s ease both;
+}
+.nc-hero__title em {
+  font-style: normal;
+  color: var(--nh-green);
+  position: relative;
+}
+.nc-hero__title em::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--nh-green);
+  border-radius: 2px;
+  opacity: .35;
+}
+
+/* Subtitle */
+.nc-hero__subtitle {
+  font-size: 1.05rem;
+  color: var(--nh-muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 440px;
+  animation: nh-fade-up .7s .2s ease both;
+}
+
+/* Price block */
+.nc-hero__price-block {
+  background: #fff;
+  border: 1.5px solid var(--nh-border);
+  border-radius: var(--nh-r);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  animation: nh-fade-up .7s .25s ease both;
+}
+.nc-hero__price-old {
+  font-size: .9rem;
+  color: var(--nh-muted);
+  text-decoration: line-through;
+  display: block;
+  margin-bottom: 2px;
+}
+.nc-hero__price-now {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--nh-black);
+  line-height: 1;
+}
+.nc-hero__price-now span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--nh-muted);
+}
+.nc-hero__price-save {
+  background: var(--nh-red);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+.nc-hero__price-divider {
+  width: 1px;
+  height: 48px;
+  background: var(--nh-border);
+}
+
+/* CTA */
+.nc-hero__cta-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+  animation: nh-fade-up .7s .3s ease both;
+}
+.nc-btn--hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--nh-green), var(--nh-green-dk));
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  padding: 18px 44px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 10px 35px rgba(21,128,61,.38);
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+}
+.nc-btn--hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.nc-btn--hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(21,128,61,.48);
+}
+.nc-hero__microcopy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.nc-hero__micro-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .85rem;
+  color: var(--nh-muted);
+  font-weight: 500;
+}
+.nc-hero__micro-item .nh-check {
+  color: var(--nh-green);
+  font-weight: 900;
+}
+
+/* Social proof row */
+.nc-hero__proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--nh-border);
+  animation: nh-fade-up .7s .4s ease both;
+}
+.nc-hero__proof-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--nh-dark);
+}
+.nc-hero__proof-item .nh-icon {
+  font-size: 1.1rem;
+}
+
+/* ═══════════════════════════
+   RIGHT COLUMN — IMAGE
+═══════════════════════════ */
+.nc-hero__right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: nh-fade-up .7s .15s ease both;
+}
+
+/* Image card */
+.nc-hero__img-card {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: var(--nh-shadow-lg);
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  cursor: zoom-in;
+}
+.nc-hero__img-card img {
+  width: 100%;
+  display: block;
+  transition: transform .5s ease;
+  animation: nh-float 4s ease-in-out infinite;
+}
+.nc-hero__img-card:hover img {
+  transform: scale(1.04);
+  animation-play-state: paused;
+}
+@keyframes nh-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Floating benefit cards */
+.nc-hero__float-card {
+  position: absolute;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--nh-dark);
+  white-space: nowrap;
+  border: 1.5px solid var(--nh-border);
+  z-index: 2;
+}
+.nc-hero__float-card .nh-fc-icon { font-size: 1.1rem; }
+.nc-hero__float-card.top-right {
+  top: 14%;
+  left: -20px;
+  animation: nh-float-card 3.6s ease-in-out infinite;
+}
+.nc-hero__float-card.mid-left {
+  top: 48%;
+  right: -20px;
+  animation: nh-float-card 4.2s .6s ease-in-out infinite;
+}
+.nc-hero__float-card.bottom-right {
+  bottom: 14%;
+  left: -20px;
+  animation: nh-float-card 3.9s 1.2s ease-in-out infinite;
+}
+.nc-hero__float-card.bottom-left {
+  bottom: -5%;
+  right: 10%;
+  animation: nh-float-card 4.5s .9s ease-in-out infinite;
+}
+@keyframes nh-float-card {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%       { transform: translateY(-7px) rotate(1deg); }
+}
+
+/* Gold star */
+.nh-stars { color: #F59E0B; font-size: .95rem; }
+
+/* ─── BADGE STRIP on image card ─── */
+.nc-hero__img-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--nh-red);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 50px;
+  z-index: 3;
+  animation: nh-pulse 2s infinite;
+}
+@keyframes nh-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.4); }
+  50%      { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+}
+
+/* ─── SCROLL INDICATOR ─── */
+.nc-hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--nh-muted);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  z-index: 2;
+  animation: nh-fade-up 1s .8s ease both;
+}
+.nc-hero__scroll-line {
+  width: 1.5px;
+  height: 36px;
+  background: linear-gradient(to bottom, var(--nh-gold), transparent);
+  border-radius: 2px;
+  animation: nh-scroll-pulse 1.6s ease-in-out infinite;
+}
+@keyframes nh-scroll-pulse {
+  0%,100% { opacity: 1; transform: scaleY(1); }
+  50%      { opacity: .4; transform: scaleY(.6); }
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes nh-fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── OVERLAY (if using real bg image) ─── */
+.nc-hero__overlay { display: none; }
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media (max-width: 900px) {
+  #nc-hero-{{ section.id }} { padding: 40px 0 80px; min-height: auto; }
+  .nc-hero__inner { grid-template-columns: 1fr; gap: 32px; }
+  .nc-hero__right { order: -1; }
+  .nc-hero__img-card { max-width: 360px; margin: 0 auto; }
+  .nc-hero__float-card.top-right { top: 8%; left: -10px; }
+  .nc-hero__float-card.mid-left  { top: 42%; right: -10px; }
+  .nc-hero__float-card.bottom-right { display: none; }
+  .nc-hero__float-card.bottom-left  { display: none; }
+  .nc-hero__title { font-size: 1.9rem; }
+  .nc-hero__price-block { padding: 16px 18px; }
+  .nc-hero__proof { gap: 10px; }
+  .nc-hero__scroll { display: none; }
+}
+@media (max-width: 480px) {
+  .nc-hero__title { font-size: 1.65rem; }
+  .nc-hero__img-card { max-width: 300px; }
+  .nc-hero__price-now { font-size: 1.8rem; }
+  .nc-btn--hero { font-size: 1.05rem; padding: 16px 32px; }
+  .nc-hero__proof-item span { display: none; }
+}
+
+/* ─── STICKY MOBILE BUY ─── */
+#nh-sticky-{{ section.id }} {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-top: 2px solid var(--nh-green);
+  padding: 12px 16px;
+  z-index: 900;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.12);
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+#nh-sticky-{{ section.id }} .nh-st-price {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--nh-black);
+}
+#nh-sticky-{{ section.id }} .nh-st-price small {
+  display: block;
+  font-size: .75rem;
+  font-weight: 400;
+  color: var(--nh-muted);
+}
+#nh-sticky-{{ section.id }} .nc-btn--hero {
+  font-size: .95rem;
+  padding: 12px 28px;
+}
+@media (max-width: 900px) {
+  #nh-sticky-{{ section.id }} { display: flex; }
+}
+</style>
+
+<!-- STICKY MOBILE BUY -->
+<div id="nh-sticky-{{ section.id }}">
+  <div class="nh-st-price">
+    <small>السعر الآن</small>
+    {{ section.settings.price_now | default: '— ريال' }}
+  </div>
+  {%- if section.settings.btn1_label != blank -%}
+    <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nc-btn--hero">
+      🛒 {{ section.settings.btn1_label | default: 'اطلب الآن' }}
+    </a>
+  {%- endif -%}
+</div>
+
+<section class="nc-hero" id="nc-hero-{{ section.id }}">
+
+  <!-- Background -->
+  <div class="nc-hero__bg">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1920 | image_tag: loading: 'eager', fetchpriority: 'high', alt: section.settings.title }}
+    {%- endif -%}
+  </div>
+  <div class="nc-hero__overlay"></div>
+
+  <div class="nc-hero__content nc-container">
+    <div class="nc-hero__inner">
+
+      <!-- ══ LEFT — TEXT ══ -->
+      <div class="nc-hero__left">
+
+        {%- if section.settings.badge != blank -%}
+          <span class="nc-hero__badge">✦ {{ section.settings.badge }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h1 class="nc-hero__title">{{ section.settings.title }}</h1>
+        {%- endif -%}
+
+        {%- if section.settings.subtitle != blank -%}
+          <p class="nc-hero__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+
+        <!-- Price block -->
+        {%- if section.settings.price_now != blank -%}
+          <div class="nc-hero__price-block">
+            <div>
+              {%- if section.settings.price_old != blank -%}
+                <span class="nc-hero__price-old">بدلاً من {{ section.settings.price_old }}</span>
+              {%- endif -%}
+              <div class="nc-hero__price-now">
+                {{ section.settings.price_now }}
+                <span>ريال سعودي</span>
+              </div>
+            </div>
+            {%- if section.settings.price_save != blank -%}
+              <div class="nc-hero__price-divider"></div>
+              <span class="nc-hero__price-save">{{ section.settings.price_save }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <!-- CTA -->
+        <div class="nc-hero__cta-wrap">
+          {%- if section.settings.btn1_label != blank -%}
+            <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nc-btn--hero">
+              🛒 {{ section.settings.btn1_label }}
+            </a>
+          {%- endif -%}
+          <div class="nc-hero__microcopy">
+            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> الدفع عند الاستلام</span>
+            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> شحن مجاني</span>
+            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> توصيل سريع داخل السعودية</span>
+          </div>
+        </div>
+
+        <!-- Trust row -->
+        <div class="nc-hero__proof">
+          <span class="nc-hero__proof-item"><span class="nh-icon">⭐</span> <span>+5,000 عميل سعيد</span></span>
+          <span class="nc-hero__proof-item"><span class="nh-icon">🚚</span> <span>شحن سريع</span></span>
+          <span class="nc-hero__proof-item"><span class="nh-icon">💳</span> <span>الدفع عند الاستلام</span></span>
+          <span class="nc-hero__proof-item"><span class="nh-icon">🛡</span> <span>ضمان الجودة</span></span>
+        </div>
+
+      </div><!-- /left -->
+
+      <!-- ══ RIGHT — IMAGE ══ -->
+      <div class="nc-hero__right">
+
+        <!-- Floating benefit cards -->
+        <div class="nc-hero__float-card top-right">
+          <span class="nh-fc-icon">🚚</span>
+          <span>شحن مجاني</span>
+        </div>
+        <div class="nc-hero__float-card mid-left">
+          <span class="nh-fc-icon">💳</span>
+          <span>الدفع عند الاستلام</span>
+        </div>
+        <div class="nc-hero__float-card bottom-right">
+          <span class="nh-stars">★★★★★</span>
+          <span>4.9 / 5</span>
+        </div>
+        <div class="nc-hero__float-card bottom-left">
+          <span class="nh-fc-icon">🔥</span>
+          <span>الأكثر مبيعاً</span>
+        </div>
+
+        <!-- Product image card -->
+        <div class="nc-hero__img-card">
+          <span class="nc-hero__img-badge">🔥 الأكثر مبيعاً</span>
+          {%- if section.settings.product_image != blank -%}
+            {{ section.settings.product_image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.title, class: 'nc-hero__product-img' }}
+          {%- elsif section.settings.image != blank -%}
+            {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.title, class: 'nc-hero__product-img' }}
+          {%- else -%}
+            <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#F8F5EF,#EDE8DF);display:flex;align-items:center;justify-content:center;font-size:5rem">📦</div>
+          {%- endif -%}
+        </div>
+
+      </div><!-- /right -->
+
+    </div><!-- /inner -->
+  </div><!-- /container -->
+
+  <!-- Scroll indicator -->
+  <div class="nc-hero__scroll" aria-hidden="true">
+    <div class="nc-hero__scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+
+</section>
+
+<script>
+(function(){
+  var sec = document.getElementById('nc-hero-{{ section.id }}');
+  var sticky = document.getElementById('nh-sticky-{{ section.id }}');
+  if(!sec || !sticky) return;
+
+  // Hide sticky when hero is in view
+  var obs = new IntersectionObserver(function(entries){
+    sticky.style.display = entries[0].isIntersecting ? 'none' : '';
+  }, { threshold: .1 });
+  obs.observe(sec);
+
+  // Counter animation on the proof items
+  function animCount(el, target, suffix){
+    var start = 0, duration = 1600, step = duration / target;
+    var timer = setInterval(function(){
+      start += Math.ceil(target / (duration / 30));
+      if(start >= target){ start = target; clearInterval(timer); }
+      el.textContent = '+' + start.toLocaleString('ar-SA') + suffix;
+    }, 30);
+  }
+  var countObs = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){
+      countObs.disconnect();
+      var items = sec.querySelectorAll('.nc-hero__proof-item span');
+      // animate first item "5000 عميل"
+      if(items[0]) animCount(items[0], 5000, ' عميل سعيد');
+    }
+  }, { threshold: .5 });
+  countObs.observe(sec);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "NOVACART Hero",
+  "tag": "section",
+  "class": "novacart-hero-section",
+  "settings": [
+    { "type": "image_picker", "id": "image",         "label": "صورة الخلفية (اختياري)" },
+    { "type": "image_picker", "id": "product_image", "label": "صورة المنتج الرئيسية" },
+    { "type": "text",     "id": "badge",       "label": "Badge صغير",         "default": "Collection Premium" },
+    { "type": "textarea", "id": "title",       "label": "العنوان الرئيسي",     "default": "جودة استثنائية\nتُوصَّل إلى بابك" },
+    { "type": "textarea", "id": "subtitle",    "label": "النص التوضيحي",       "default": "منتجات مختارة بعناية فائقة. الدفع عند الاستلام. شحن مجاني لجميع مناطق المملكة." },
+    { "type": "text",     "id": "price_now",   "label": "السعر الحالي",        "default": "175" },
+    { "type": "text",     "id": "price_old",   "label": "السعر القديم",        "default": "250 ريال" },
+    { "type": "text",     "id": "price_save",  "label": "نص التوفير",          "default": "🎉 وفّر 75 ريال!" },
+    { "type": "text",     "id": "btn1_label",  "label": "نص زر الطلب",        "default": "اطلب الآن" },
+    { "type": "url",      "id": "btn1_url",    "label": "رابط زر الطلب" },
+    { "type": "text",     "id": "btn2_label",  "label": "زر ثانوي — نص",      "default": "" },
+    { "type": "url",      "id": "btn2_url",    "label": "زر ثانوي — رابط" }
+  ],
+  "presets": [{ "name": "NOVACART Hero" }]
+}
+{% endschema %}
