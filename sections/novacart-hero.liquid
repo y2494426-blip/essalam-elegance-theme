@@ -283,141 +283,225 @@
 }
 
 /* ════════════════════════
-   RIGHT — PRODUCT SHOWCASE
+   RIGHT — 7-PRODUCT CAROUSEL
 ════════════════════════ */
 .nch-right {
   position: relative;
-  height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 52px 0 16px;
   opacity: 0;
   animation: nch-fade .9s .2s ease forwards;
 }
 
-/* Card base */
-.nch-card {
-  position: absolute;
-  background: var(--c-card-bg);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid rgba(255,255,255,.85);
-  border-radius: 24px;
+/* Float keyframes (kept for chips) */
+@keyframes nch-float-1 {
+  0%,100% { transform: translateY(0) rotate(-.5deg); }
+  50%      { transform: translateY(-10px) rotate(.5deg); }
+}
+@keyframes nch-float-2 {
+  0%,100% { transform: translateY(0) rotate(.6deg); }
+  50%      { transform: translateY(-8px) rotate(-.4deg); }
+}
+@keyframes nch-float-3 {
+  0%,100% { transform: translateY(0) rotate(-.3deg); }
+  50%      { transform: translateY(-9px) rotate(.6deg); }
+}
+
+/* ── CAROUSEL WRAPPER ── */
+.nch-carousel {
+  overflow: hidden;
+  padding: 12px 4px 16px;   /* room for shadow + scale overflow */
+  position: relative;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nch-carousel:active { cursor: grabbing; }
+
+.nch-cr-track {
+  display: flex;
+  gap: 14px;
+  transition: transform .52s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+
+/* ── CAROUSEL CARD ── */
+.nch-cr-card {
+  flex: 0 0 162px;
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,.88);
+  border-radius: 20px;
   box-shadow:
-    0 4px 6px rgba(0,0,0,.04),
-    0 12px 40px rgba(0,0,0,.09),
-    0 32px 64px rgba(0,0,0,.06),
+    0 2px 8px rgba(0,0,0,.05),
+    0 8px 28px rgba(0,0,0,.08),
     inset 0 1px 0 rgba(255,255,255,.9);
   overflow: hidden;
-  transition: transform .4s ease, box-shadow .4s ease;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .32s ease, box-shadow .32s ease;
   cursor: pointer;
+  display: block;
+  position: relative;
 }
-.nch-card:hover {
+.nch-cr-card:hover {
+  transform: translateY(-7px) !important;
   box-shadow:
-    0 8px 12px rgba(0,0,0,.06),
-    0 24px 60px rgba(0,0,0,.14),
-    0 48px 80px rgba(0,0,0,.08),
+    0 6px 16px rgba(0,0,0,.08),
+    0 20px 50px rgba(0,0,0,.13),
     inset 0 1px 0 rgba(255,255,255,.9);
 }
 
-/* Card inner layout */
-.nch-card-img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-  transition: transform .5s ease;
+/* Center / featured card */
+.nch-cr-card.nch-cr-center {
+  transform: scale(1.07);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.10),
+    0 20px 50px rgba(0,0,0,.12),
+    0 0 0 1.5px rgba(184,150,62,.38),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  z-index: 2;
 }
-.nch-card:hover .nch-card-img { transform: scale(1.04); }
+.nch-cr-card.nch-cr-center:hover {
+  transform: scale(1.07) translateY(-7px) !important;
+}
 
-.nch-card-body {
-  padding: 14px 16px 16px;
+/* Card image */
+.nch-cr-img-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 148px;
+}
+.nch-cr-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .45s ease;
+}
+.nch-cr-card:hover .nch-cr-img-wrap img { transform: scale(1.06); }
+.nch-cr-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  background: linear-gradient(135deg, #F0EBE1, #E4DDD0);
+}
+
+/* Badge on image */
+.nch-cr-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #C0392B;
+  color: #fff;
+  font-family: var(--font);
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 50px;
+  letter-spacing: .3px;
+  line-height: 1.4;
+  z-index: 2;
+}
+.nch-cr-badge.gold {
+  background: var(--c-gold);
+  color: #fff;
+}
+
+/* Card body */
+.nch-cr-body {
+  padding: 11px 13px 13px;
   background: #fff;
 }
-.nch-card-label {
-  font-size: .7rem;
+.nch-cr-cat {
+  font-size: .62rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--c-gold);
   margin-bottom: 4px;
 }
-.nch-card-name {
-  font-size: .95rem;
+.nch-cr-name {
+  font-size: .85rem;
   font-weight: 700;
   color: var(--c-black);
-  margin-bottom: 8px;
   line-height: 1.3;
+  margin-bottom: 9px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.nch-card-footer {
+.nch-cr-prices {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 6px;
 }
-.nch-card-price {
-  font-size: 1.05rem;
+.nch-cr-price-wrap { display: flex; flex-direction: column; gap: 1px; }
+.nch-cr-old {
+  font-size: .72rem;
+  color: var(--c-muted);
+  text-decoration: line-through;
+  line-height: 1;
+}
+.nch-cr-now {
+  font-size: .98rem;
   font-weight: 900;
   color: var(--c-black);
+  line-height: 1;
 }
-.nch-card-price small {
-  font-size: .75rem;
+.nch-cr-now small {
+  font-size: .68rem;
   font-weight: 400;
   color: var(--c-muted);
 }
-.nch-card-btn {
-  width: 32px;
-  height: 32px;
+.nch-cr-arrow {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--c-black);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .85rem;
-  text-decoration: none;
-  transition: background .2s, transform .2s;
+  font-size: .78rem;
   flex-shrink: 0;
+  transition: background .2s, transform .2s;
 }
-.nch-card-btn:hover { background: var(--c-green); transform: scale(1.12); }
+.nch-cr-card:hover .nch-cr-arrow {
+  background: var(--c-green);
+  transform: scale(1.1);
+}
 
-/* CARD 1 — Main large card */
-.nch-card-1 {
-  width: 240px;
-  top: 40px;
-  right: 30px;
-  animation: nch-float-1 5s ease-in-out infinite;
-  z-index: 3;
+/* ── DOTS ── */
+.nch-cr-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  padding: 4px 0 0;
 }
-.nch-card-1 .nch-card-img { height: 180px; }
-
-/* CARD 2 — Top left */
-.nch-card-2 {
-  width: 195px;
-  top: 0;
-  left: 60px;
-  animation: nch-float-2 5.8s .8s ease-in-out infinite;
-  z-index: 2;
+.nch-cr-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.18);
+  cursor: pointer;
+  transition: all .3s ease;
+  border: none;
+  padding: 0;
 }
-.nch-card-2 .nch-card-img { height: 150px; }
-
-/* CARD 3 — Bottom center */
-.nch-card-3 {
-  width: 210px;
-  bottom: 30px;
-  right: 100px;
-  animation: nch-float-3 6.2s 1.4s ease-in-out infinite;
-  z-index: 2;
-}
-.nch-card-3 .nch-card-img { height: 160px; }
-
-/* Float animations */
-@keyframes nch-float-1 {
-  0%,100% { transform: translateY(0) rotate(-.5deg); }
-  50%      { transform: translateY(-14px) rotate(.5deg); }
-}
-@keyframes nch-float-2 {
-  0%,100% { transform: translateY(0) rotate(.8deg); }
-  50%      { transform: translateY(-10px) rotate(-.5deg); }
-}
-@keyframes nch-float-3 {
-  0%,100% { transform: translateY(0) rotate(-.3deg); }
-  50%      { transform: translateY(-12px) rotate(.8deg); }
+.nch-cr-dot.active {
+  width: 22px;
+  border-radius: 4px;
+  background: var(--c-gold);
 }
 
 /* ── Glass chip cards ── */
@@ -578,15 +662,14 @@
   .nch-main {
     grid-template-columns: 1fr;
     padding: 40px 0 100px;
-    gap: 50px;
+    gap: 40px;
   }
   .nch-left { align-items: center; text-align: center; }
   .nch-sub { text-align: center; }
   .nch-flag { justify-content: center; }
-  .nch-right { height: 420px; width: 100%; }
-  .nch-card-1 { width: 195px; right: 50%; transform: translateX(60%); top: 20px; }
-  .nch-card-2 { width: 160px; left: 8%; top: 10px; }
-  .nch-card-3 { width: 170px; right: 8%; bottom: 20px; }
+  .nch-right { padding-top: 44px; }
+  .nch-cr-card { flex: 0 0 148px; }
+  .nch-cr-img-wrap { height: 130px; }
   .nch-trust { justify-content: center; }
   .nch-cta-group { justify-content: center; }
   #nch-sticky-{{ section.id }} { display: flex; }
@@ -596,10 +679,11 @@
   #nch-{{ section.id }} { min-height: auto; }
   .nch-headline { font-size: 2rem; }
   .nch-sub { font-size: .95rem; }
-  .nch-right { height: 360px; }
-  .nch-card-1 { width: 170px; }
-  .nch-card-2 { width: 140px; }
-  .nch-card-3 { width: 150px; }
+  /* Mobile carousel: 2.3 cards visible for swipe discovery */
+  .nch-cr-card { flex: 0 0 calc(45vw - 14px); }
+  .nch-cr-img-wrap { height: 120px; }
+  .nch-cr-card.nch-cr-center { transform: scale(1.04); }
+  .nch-cr-card.nch-cr-center:hover { transform: scale(1.04) translateY(-5px) !important; }
   .nch-chip-sold { display: none; }
   .nch-scroll { display: none; }
   .nch-trust-divider { display: none; }
@@ -687,7 +771,7 @@
 
     </div><!-- /left -->
 
-    <!-- ══ RIGHT — PRODUCT COMPOSITION ══ -->
+    <!-- ══ RIGHT — 7-PRODUCT CAROUSEL ══ -->
     <div class="nch-right">
 
       <!-- Background glow -->
@@ -711,56 +795,78 @@
         <span>وصل حديثاً ✦</span>
       </div>
 
-      <!-- CARD 1 — Main -->
-      <a href="{{ section.settings.product_url_1 | default: '/collections/all' }}" class="nch-card nch-card-1" aria-label="{{ section.settings.product_title_1 }}">
-        {%- if section.settings.product_image_1 != blank -%}
-          {{ section.settings.product_image_1 | image_url: width: 480 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_1 }}
-        {%- else -%}
-          <div style="width:100%;height:180px;background:linear-gradient(135deg,#F0EBE1,#E8E0D0);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🛒</div>
-        {%- endif -%}
-        <div class="nch-card-body">
-          <div class="nch-card-label">منتج مميز</div>
-          <div class="nch-card-name">{{ section.settings.product_title_1 | default: 'المنتج الأول' }}</div>
-          <div class="nch-card-footer">
-            <div class="nch-card-price">{{ section.settings.product_price_1 | default: '— ريال' }} <small>ريال</small></div>
-            <span class="nch-card-btn">←</span>
-          </div>
-        </div>
-      </a>
+      <!-- ── CAROUSEL ── -->
+      <div class="nch-carousel" id="nch-cr-{{ section.id }}">
+        <div class="nch-cr-track" id="nch-cr-track-{{ section.id }}">
 
-      <!-- CARD 2 — Top left -->
-      <a href="{{ section.settings.product_url_2 | default: '/collections/all' }}" class="nch-card nch-card-2" aria-label="{{ section.settings.product_title_2 }}">
-        {%- if section.settings.product_image_2 != blank -%}
-          {{ section.settings.product_image_2 | image_url: width: 380 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_2 }}
-        {%- else -%}
-          <div style="width:100%;height:150px;background:linear-gradient(135deg,#EEE8DE,#E2DACE);display:flex;align-items:center;justify-content:center;font-size:3rem">✨</div>
-        {%- endif -%}
-        <div class="nch-card-body">
-          <div class="nch-card-label">الأكثر مبيعاً</div>
-          <div class="nch-card-name">{{ section.settings.product_title_2 | default: 'المنتج الثاني' }}</div>
-          <div class="nch-card-footer">
-            <div class="nch-card-price">{{ section.settings.product_price_2 | default: '— ريال' }} <small>ريال</small></div>
-            <span class="nch-card-btn">←</span>
-          </div>
-        </div>
-      </a>
+          {%- assign p_ids   = '1,2,3,4,5,6,7' | split: ',' -%}
+          {%- assign p_emojis = '🛒,✨,🎁,⭐,🔥,💎,🎯' | split: ',' -%}
+          {%- assign p_cats   = 'منتج مميز,الأكثر مبيعاً,عرض خاص,وصل حديثاً,الأكثر طلباً,مجموعة فاخرة,اختيار المحرر' | split: ',' -%}
 
-      <!-- CARD 3 — Bottom -->
-      <a href="{{ section.settings.product_url_3 | default: '/collections/all' }}" class="nch-card nch-card-3" aria-label="{{ section.settings.product_title_3 }}">
-        {%- if section.settings.product_image_3 != blank -%}
-          {{ section.settings.product_image_3 | image_url: width: 420 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_3 }}
-        {%- else -%}
-          <div style="width:100%;height:160px;background:linear-gradient(135deg,#EBE4D8,#DDD6C8);display:flex;align-items:center;justify-content:center;font-size:3rem">🎁</div>
-        {%- endif -%}
-        <div class="nch-card-body">
-          <div class="nch-card-label">عرض خاص</div>
-          <div class="nch-card-name">{{ section.settings.product_title_3 | default: 'المنتج الثالث' }}</div>
-          <div class="nch-card-footer">
-            <div class="nch-card-price">{{ section.settings.product_price_3 | default: '— ريال' }} <small>ريال</small></div>
-            <span class="nch-card-btn">←</span>
-          </div>
-        </div>
-      </a>
+          {%- for pid in p_ids -%}
+            {%- assign img_key   = 'product_image_'   | append: pid -%}
+            {%- assign title_key = 'product_title_'   | append: pid -%}
+            {%- assign price_key = 'product_price_'   | append: pid -%}
+            {%- assign old_key   = 'product_old_'     | append: pid -%}
+            {%- assign badge_key = 'product_badge_'   | append: pid -%}
+            {%- assign url_key   = 'product_url_'     | append: pid -%}
+            {%- assign idx0      = forloop.index0 -%}
+
+            <a
+              href="{{ section.settings[url_key] | default: '/collections/all' }}"
+              class="nch-cr-card"
+              aria-label="{{ section.settings[title_key] }}"
+              data-idx="{{ idx0 }}"
+            >
+              <div class="nch-cr-img-wrap">
+                {%- if section.settings[badge_key] != blank -%}
+                  <span class="nch-cr-badge">{{ section.settings[badge_key] }}</span>
+                {%- endif -%}
+                {%- if section.settings[img_key] != blank -%}
+                  {{ section.settings[img_key] | image_url: width: 400 | image_tag:
+                      loading: 'lazy',
+                      alt: section.settings[title_key],
+                      class: 'nch-cr-card-img' }}
+                {%- else -%}
+                  <div class="nch-cr-placeholder">{{ p_emojis[idx0] }}</div>
+                {%- endif -%}
+              </div>
+              <div class="nch-cr-body">
+                <div class="nch-cr-cat">{{ p_cats[idx0] }}</div>
+                <div class="nch-cr-name">
+                  {%- if section.settings[title_key] != blank -%}
+                    {{ section.settings[title_key] }}
+                  {%- else -%}
+                    المنتج {{ pid }}
+                  {%- endif -%}
+                </div>
+                <div class="nch-cr-prices">
+                  <div class="nch-cr-price-wrap">
+                    {%- if section.settings[old_key] != blank -%}
+                      <span class="nch-cr-old">{{ section.settings[old_key] }} ريال</span>
+                    {%- endif -%}
+                    <span class="nch-cr-now">
+                      {{ section.settings[price_key] | default: '—' }} <small>ريال</small>
+                    </span>
+                  </div>
+                  <span class="nch-cr-arrow">←</span>
+                </div>
+              </div>
+            </a>
+
+          {%- endfor -%}
+
+        </div><!-- /track -->
+      </div><!-- /carousel -->
+
+      <!-- Dots -->
+      <div class="nch-cr-dots" id="nch-cr-dots-{{ section.id }}">
+        <button class="nch-cr-dot active" data-dot="0" aria-label="1"></button>
+        <button class="nch-cr-dot" data-dot="1" aria-label="2"></button>
+        <button class="nch-cr-dot" data-dot="2" aria-label="3"></button>
+        <button class="nch-cr-dot" data-dot="3" aria-label="4"></button>
+        <button class="nch-cr-dot" data-dot="4" aria-label="5"></button>
+      </div>
 
     </div><!-- /right -->
   </div><!-- /main -->
@@ -775,7 +881,7 @@
 
 <script>
 (function(){
-  // Live counter fluctuation
+  /* ── Live counter ── */
   var el = document.getElementById('nch-live-{{ section.id }}');
   if(el){
     var v = parseInt(el.textContent);
@@ -786,7 +892,7 @@
     }, 3800);
   }
 
-  // Sticky hide when hero in view
+  /* ── Sticky hide ── */
   var sec    = document.getElementById('nch-{{ section.id }}');
   var sticky = document.getElementById('nch-sticky-{{ section.id }}');
   if(sec && sticky){
@@ -796,7 +902,7 @@
     io.observe(sec);
   }
 
-  // Ripple on primary CTA
+  /* ── Ripple ── */
   var btn = document.getElementById('nch-primary-btn-{{ section.id }}');
   if(btn){
     btn.addEventListener('click', function(e){
@@ -815,14 +921,122 @@
       setTimeout(function(){ r.remove(); }, 600);
     });
   }
-
-  // Inject ripple keyframes once
   if(!document.getElementById('nch-rip-style')){
     var s = document.createElement('style');
     s.id = 'nch-rip-style';
     s.textContent = '@keyframes nch_rip{to{transform:scale(3.5);opacity:0}}';
     document.head.appendChild(s);
   }
+
+  /* ══════════════════════════════════════
+     7-PRODUCT CAROUSEL
+  ══════════════════════════════════════ */
+  var carousel  = document.getElementById('nch-cr-{{ section.id }}');
+  var track     = document.getElementById('nch-cr-track-{{ section.id }}');
+  var dotsWrap  = document.getElementById('nch-cr-dots-{{ section.id }}');
+  if(!carousel || !track) return;
+
+  var CARDS      = track.querySelectorAll('.nch-cr-card');
+  var TOTAL      = CARDS.length;           // 7
+  var VISIBLE    = 3;                      // cards shown at once
+  var MAX_OFFSET = TOTAL - VISIBLE;        // 4  (offsets 0-4)
+  var offset     = 0;
+  var autoTimer  = null;
+  var GAP        = 14;                     // matches CSS gap
+
+  /* ── measure a card width after layout ── */
+  function cardW(){
+    return CARDS[0] ? CARDS[0].getBoundingClientRect().width : 162;
+  }
+
+  /* ── apply offset + highlight center card ── */
+  function goTo(n, animate){
+    offset = Math.max(0, Math.min(MAX_OFFSET, n));
+    var step = cardW() + GAP;
+    /* RTL: carousel track slides in positive X direction */
+    track.style.transition = animate === false ? 'none' : '';
+    track.style.transform  = 'translateX(' + (offset * step) + 'px)';
+
+    /* center card = offset + 1, clamped to valid index */
+    var centerIdx = Math.min(offset + 1, TOTAL - 1);
+    CARDS.forEach(function(c, i){
+      c.classList.toggle('nch-cr-center', i === centerIdx);
+    });
+
+    /* dots */
+    if(dotsWrap){
+      dotsWrap.querySelectorAll('.nch-cr-dot').forEach(function(d){
+        d.classList.toggle('active', parseInt(d.dataset.dot) === offset);
+      });
+    }
+  }
+
+  /* ── auto-advance ── */
+  function startAuto(){
+    stopAuto();
+    autoTimer = setInterval(function(){
+      goTo(offset < MAX_OFFSET ? offset + 1 : 0);
+    }, 4200);
+  }
+  function stopAuto(){ clearInterval(autoTimer); }
+
+  /* ── dots click ── */
+  if(dotsWrap){
+    dotsWrap.querySelectorAll('.nch-cr-dot').forEach(function(d){
+      d.addEventListener('click', function(){
+        stopAuto();
+        goTo(parseInt(this.dataset.dot));
+        startAuto();
+      });
+    });
+  }
+
+  /* ── Pointer drag / swipe ── */
+  var dragStart = null, dragStartOffset = null, dragging = false;
+  carousel.addEventListener('pointerdown', function(e){
+    dragStart = e.clientX;
+    dragStartOffset = offset;
+    dragging = false;
+    stopAuto();
+    carousel.setPointerCapture(e.pointerId);
+  });
+  carousel.addEventListener('pointermove', function(e){
+    if(dragStart === null) return;
+    var dx = e.clientX - dragStart;
+    if(Math.abs(dx) > 6) dragging = true;
+    if(dragging){
+      var step = cardW() + GAP;
+      /* RTL inversion: dragging right (positive dx) = going to previous */
+      var virtual = dragStartOffset - dx / step;
+      track.style.transition = 'none';
+      track.style.transform  = 'translateX(' + (Math.max(0, Math.min(MAX_OFFSET, virtual)) * step) + 'px)';
+    }
+  });
+  carousel.addEventListener('pointerup', function(e){
+    if(dragStart === null) return;
+    var dx = e.clientX - dragStart;
+    dragStart = null;
+    if(dragging){
+      /* RTL: drag right = prev, drag left = next */
+      if(dx > 50)       goTo(dragStartOffset - 1);
+      else if(dx < -50) goTo(dragStartOffset + 1);
+      else              goTo(dragStartOffset);
+    }
+    dragging = false;
+    startAuto();
+  });
+  /* Prevent card link navigation when it was a drag */
+  carousel.addEventListener('click', function(e){
+    if(dragging) e.preventDefault();
+  }, true);
+
+  /* ── pause on hover ── */
+  carousel.addEventListener('mouseenter', stopAuto);
+  carousel.addEventListener('mouseleave', startAuto);
+
+  /* ── init ── */
+  goTo(0, false);
+  startAuto();
 })();
 </script>
 
@@ -848,25 +1062,71 @@
       "content": "المنتج الأول (الكارد الرئيسي)"
     },
     { "type": "image_picker", "id": "product_image_1", "label": "صورة المنتج 1" },
-    { "type": "text",         "id": "product_title_1", "label": "اسم المنتج 1",  "default": "منتج مميز" },
-    { "type": "text",         "id": "product_price_1", "label": "سعر المنتج 1",  "default": "175" },
+    { "type": "text",         "id": "product_title_1", "label": "اسم المنتج 1",    "default": "منتج مميز" },
+    { "type": "text",         "id": "product_price_1", "label": "السعر الحالي 1",  "default": "175" },
+    { "type": "text",         "id": "product_old_1",   "label": "السعر القديم 1 (اختياري)" },
+    { "type": "text",         "id": "product_badge_1", "label": "Badge 1 (مثل: جديد)" },
     { "type": "url",          "id": "product_url_1",   "label": "رابط المنتج 1" },
     {
       "type": "header",
-      "content": "المنتج الثاني (كارد أعلى اليسار)"
+      "content": "المنتج الثاني"
     },
     { "type": "image_picker", "id": "product_image_2", "label": "صورة المنتج 2" },
-    { "type": "text",         "id": "product_title_2", "label": "اسم المنتج 2",  "default": "الأكثر مبيعاً" },
-    { "type": "text",         "id": "product_price_2", "label": "سعر المنتج 2",  "default": "220" },
+    { "type": "text",         "id": "product_title_2", "label": "اسم المنتج 2",    "default": "الأكثر مبيعاً" },
+    { "type": "text",         "id": "product_price_2", "label": "السعر الحالي 2",  "default": "220" },
+    { "type": "text",         "id": "product_old_2",   "label": "السعر القديم 2 (اختياري)" },
+    { "type": "text",         "id": "product_badge_2", "label": "Badge 2" },
     { "type": "url",          "id": "product_url_2",   "label": "رابط المنتج 2" },
     {
       "type": "header",
-      "content": "المنتج الثالث (كارد أسفل)"
+      "content": "المنتج الثالث"
     },
     { "type": "image_picker", "id": "product_image_3", "label": "صورة المنتج 3" },
     { "type": "text",         "id": "product_title_3", "label": "اسم المنتج 3",  "default": "عرض خاص" },
-    { "type": "text",         "id": "product_price_3", "label": "سعر المنتج 3",  "default": "299" },
-    { "type": "url",          "id": "product_url_3",   "label": "رابط المنتج 3" }
+    { "type": "text",         "id": "product_price_3", "label": "السعر الحالي 3", "default": "299" },
+    { "type": "text",         "id": "product_old_3",   "label": "السعر القديم 3 (اختياري)" },
+    { "type": "text",         "id": "product_badge_3", "label": "Badge 3 (مثل: عرض خاص)" },
+    { "type": "url",          "id": "product_url_3",   "label": "رابط المنتج 3" },
+    {
+      "type": "header",
+      "content": "المنتج الرابع"
+    },
+    { "type": "image_picker", "id": "product_image_4", "label": "صورة المنتج 4" },
+    { "type": "text",         "id": "product_title_4", "label": "اسم المنتج 4",  "default": "منتج رابع" },
+    { "type": "text",         "id": "product_price_4", "label": "السعر الحالي 4", "default": "199" },
+    { "type": "text",         "id": "product_old_4",   "label": "السعر القديم 4 (اختياري)" },
+    { "type": "text",         "id": "product_badge_4", "label": "Badge 4" },
+    { "type": "url",          "id": "product_url_4",   "label": "رابط المنتج 4" },
+    {
+      "type": "header",
+      "content": "المنتج الخامس"
+    },
+    { "type": "image_picker", "id": "product_image_5", "label": "صورة المنتج 5" },
+    { "type": "text",         "id": "product_title_5", "label": "اسم المنتج 5",  "default": "منتج خامس" },
+    { "type": "text",         "id": "product_price_5", "label": "السعر الحالي 5", "default": "149" },
+    { "type": "text",         "id": "product_old_5",   "label": "السعر القديم 5 (اختياري)" },
+    { "type": "text",         "id": "product_badge_5", "label": "Badge 5" },
+    { "type": "url",          "id": "product_url_5",   "label": "رابط المنتج 5" },
+    {
+      "type": "header",
+      "content": "المنتج السادس"
+    },
+    { "type": "image_picker", "id": "product_image_6", "label": "صورة المنتج 6" },
+    { "type": "text",         "id": "product_title_6", "label": "اسم المنتج 6",  "default": "منتج سادس" },
+    { "type": "text",         "id": "product_price_6", "label": "السعر الحالي 6", "default": "249" },
+    { "type": "text",         "id": "product_old_6",   "label": "السعر القديم 6 (اختياري)" },
+    { "type": "text",         "id": "product_badge_6", "label": "Badge 6" },
+    { "type": "url",          "id": "product_url_6",   "label": "رابط المنتج 6" },
+    {
+      "type": "header",
+      "content": "المنتج السابع"
+    },
+    { "type": "image_picker", "id": "product_image_7", "label": "صورة المنتج 7" },
+    { "type": "text",         "id": "product_title_7", "label": "اسم المنتج 7",  "default": "منتج سابع" },
+    { "type": "text",         "id": "product_price_7", "label": "السعر الحالي 7", "default": "189" },
+    { "type": "text",         "id": "product_old_7",   "label": "السعر القديم 7 (اختياري)" },
+    { "type": "text",         "id": "product_badge_7", "label": "Badge 7" },
+    { "type": "url",          "id": "product_url_7",   "label": "رابط المنتج 7" }
   ],
   "presets": [{ "name": "NOVACART Hero" }]
 }
