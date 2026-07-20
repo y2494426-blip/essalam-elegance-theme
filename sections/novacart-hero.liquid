@@ -1,652 +1,828 @@
-{% comment %} NOVACART Hero — Premium Saudi Market — Upgraded from original {% endcomment %}
+{% comment %} NOVACART Hero — World-Class Luxury Brand Hero — Saudi Market {% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* ─── RESET & FONT ─── */
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
-
-#nc-hero-{{ section.id }} *,
-#nc-hero-{{ section.id }} *::before,
-#nc-hero-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ─── TOKENS ─── */
-#nc-hero-{{ section.id }} {
-  --nh-white:   #FFFFFF;
-  --nh-beige:   #F8F5EF;
-  --nh-gray:    #F5F5F5;
-  --nh-black:   #111111;
-  --nh-dark:    #1A1A1A;
-  --nh-gold:    #C9A227;
-  --nh-gold-lt: #E8D48A;
-  --nh-green:   #15803D;
-  --nh-green-dk:#0f5f2d;
-  --nh-red:     #DC2626;
-  --nh-muted:   #6B7280;
-  --nh-border:  #E5E0D8;
-  --nh-shadow:  0 20px 60px rgba(0,0,0,0.10);
-  --nh-shadow-lg: 0 32px 80px rgba(0,0,0,0.14);
-  --nh-r:       20px;
-  font-family: 'Tajawal', sans-serif;
-  direction: rtl;
+/* ══════════════════════════════════════════════
+   NOVACART HERO — LUXURY BRAND LEVEL
+   Prefix: nch-   Scope: #nch-{{ section.id }}
+══════════════════════════════════════════════ */
+#nch-{{ section.id }},
+#nch-{{ section.id }} *,
+#nch-{{ section.id }} *::before,
+#nch-{{ section.id }} *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ─── SECTION WRAPPER ─── */
-#nc-hero-{{ section.id }} {
+/* ── TOKENS ── */
+#nch-{{ section.id }} {
+  --c-bg:       #F7F4EE;
+  --c-bg2:      #FFFFFF;
+  --c-black:    #0A0A0A;
+  --c-dark:     #1A1A1A;
+  --c-muted:    #7A7572;
+  --c-gold:     #B8963E;
+  --c-gold-lt:  #D4B96A;
+  --c-green:    #15803D;
+  --c-green-dk: #0E5F2C;
+  --c-border:   rgba(0,0,0,.08);
+  --c-card-bg:  rgba(255,255,255,0.72);
+  --c-glass-bg: rgba(255,255,255,0.55);
+  --font:       'Tajawal', sans-serif;
+  font-family:  var(--font);
+  direction:    rtl;
+}
+
+/* ── SECTION ── */
+#nch-{{ section.id }} {
   position: relative;
-  background: var(--nh-beige);
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   overflow: hidden;
-  padding: 80px 0 60px;
+  background: var(--c-bg);
 }
 
-/* ─── BACKGROUND ─── */
-.nc-hero__bg {
+/* ── TEXTURE OVERLAY ── */
+#nch-{{ section.id }}::before {
+  content: '';
   position: absolute;
   inset: 0;
-  z-index: 0;
-}
-.nc-hero__bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: .04;
-}
-
-/* ─── DECORATIVE SHAPES ─── */
-#nc-hero-{{ section.id }}::before {
-  content: '';
-  position: absolute;
-  top: -140px;
-  left: -140px;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,162,39,.10) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-#nc-hero-{{ section.id }}::after {
-  content: '';
-  position: absolute;
-  bottom: -100px;
-  right: -100px;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(21,128,61,.07) 0%, transparent 70%);
+  background-image:
+    radial-gradient(circle at 8% 20%, rgba(184,150,62,.09) 0%, transparent 40%),
+    radial-gradient(circle at 92% 80%, rgba(21,128,61,.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,.015) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* ─── CONTAINER ─── */
-.nc-container {
-  max-width: 1240px;
+/* Dot grid texture */
+#nch-{{ section.id }}::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .5;
+}
+
+/* ── CONTAINER ── */
+.nch-wrap {
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 40px;
+  width: 100%;
   position: relative;
   z-index: 1;
 }
 
-/* ─── INNER GRID ─── */
-.nc-hero__inner {
+/* ── TOPBAR ── */
+.nch-topbar {
+  width: 100%;
+  background: var(--c-black);
+  color: rgba(255,255,255,.85);
+  font-family: var(--font);
+  font-size: .82rem;
+  font-weight: 500;
+  letter-spacing: .5px;
+  text-align: center;
+  padding: 10px 16px;
+  position: relative;
+  z-index: 2;
+  direction: rtl;
+}
+.nch-topbar span { color: var(--c-gold-lt); font-weight: 700; }
+
+/* ── MAIN AREA ── */
+.nch-main {
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 0;
   align-items: center;
+  padding: 70px 0 60px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ═══════════════════════════
-   LEFT COLUMN — TEXT
-═══════════════════════════ */
-.nc-hero__left {
+/* ════════════════════════
+   LEFT — TEXT COLUMN
+════════════════════════ */
+.nch-left {
+  padding: 0 20px 0 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0;
 }
 
-/* Badge */
-.nc-hero__badge {
+/* Brand flag */
+.nch-flag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: .8rem;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: nch-up .7s .05s ease forwards;
+}
+.nch-flag-line {
+  width: 32px;
+  height: 2px;
+  background: var(--c-gold);
+  border-radius: 2px;
+}
+.nch-flag-text {
+  font-size: .75rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--nh-gold);
-  background: rgba(201,162,39,.10);
-  border: 1px solid rgba(201,162,39,.35);
-  padding: 7px 16px;
-  border-radius: 50px;
-  margin-bottom: 24px;
-  width: fit-content;
-  animation: nh-fade-up .6s ease both;
+  color: var(--c-gold);
 }
 
 /* Headline */
-.nc-hero__title {
-  font-size: clamp(2rem, 3.8vw, 3.2rem);
+.nch-headline {
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
   font-weight: 900;
-  line-height: 1.2;
-  color: var(--nh-black);
-  margin-bottom: 20px;
+  line-height: 1.15;
+  color: var(--c-black);
+  margin-bottom: 24px;
   white-space: pre-line;
-  animation: nh-fade-up .7s .1s ease both;
+  opacity: 0;
+  animation: nch-up .8s .15s ease forwards;
 }
-.nc-hero__title em {
-  font-style: normal;
-  color: var(--nh-green);
+.nch-headline .nch-hl-accent {
   position: relative;
+  display: inline-block;
+  color: var(--c-black);
 }
-.nc-hero__title em::after {
+.nch-headline .nch-hl-accent::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: 4px;
   right: 0;
   left: 0;
-  height: 3px;
-  background: var(--nh-green);
-  border-radius: 2px;
-  opacity: .35;
+  height: 6px;
+  background: linear-gradient(90deg, var(--c-gold), var(--c-gold-lt));
+  opacity: .28;
+  border-radius: 3px;
+  z-index: -1;
 }
 
 /* Subtitle */
-.nc-hero__subtitle {
+.nch-sub {
   font-size: 1.05rem;
-  color: var(--nh-muted);
-  line-height: 1.7;
-  margin-bottom: 28px;
-  max-width: 440px;
-  animation: nh-fade-up .7s .2s ease both;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--c-muted);
+  max-width: 420px;
+  margin-bottom: 38px;
+  opacity: 0;
+  animation: nch-up .8s .25s ease forwards;
 }
 
-/* Price block */
-.nc-hero__price-block {
-  background: #fff;
-  border: 1.5px solid var(--nh-border);
-  border-radius: var(--nh-r);
-  padding: 20px 24px;
+/* CTA group */
+.nch-cta-group {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 28px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-  animation: nh-fade-up .7s .25s ease both;
-}
-.nc-hero__price-old {
-  font-size: .9rem;
-  color: var(--nh-muted);
-  text-decoration: line-through;
-  display: block;
-  margin-bottom: 2px;
-}
-.nc-hero__price-now {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: var(--nh-black);
-  line-height: 1;
-}
-.nc-hero__price-now span {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--nh-muted);
-}
-.nc-hero__price-save {
-  background: var(--nh-red);
-  color: #fff;
-  font-size: .8rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 50px;
-  white-space: nowrap;
-}
-.nc-hero__price-divider {
-  width: 1px;
-  height: 48px;
-  background: var(--nh-border);
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: nch-up .8s .35s ease forwards;
 }
 
-/* CTA */
-.nc-hero__cta-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 24px;
-  animation: nh-fade-up .7s .3s ease both;
-}
-.nc-btn--hero {
+/* Primary button */
+.nch-btn-primary {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
-  background: linear-gradient(135deg, var(--nh-green), var(--nh-green-dk));
+  background: var(--c-black);
   color: #fff;
-  font-family: 'Tajawal', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 800;
-  padding: 18px 44px;
-  border: none;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 16px 36px;
+  border: 2px solid var(--c-black);
   border-radius: 50px;
-  cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 10px 35px rgba(21,128,61,.38);
-  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
-  width: fit-content;
+  transition: background .25s, color .25s, transform .2s, box-shadow .25s;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  letter-spacing: .3px;
 }
-.nc-btn--hero::before {
+.nch-btn-primary::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 60%);
   pointer-events: none;
 }
-.nc-btn--hero:hover {
+.nch-btn-primary:hover {
+  background: var(--c-dark);
   transform: translateY(-3px);
-  box-shadow: 0 16px 50px rgba(21,128,61,.48);
+  box-shadow: 0 16px 44px rgba(0,0,0,.28);
 }
-.nc-hero__microcopy {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+.nch-btn-primary .nch-arrow {
+  font-size: .9rem;
+  transition: transform .25s;
 }
-.nc-hero__micro-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .85rem;
-  color: var(--nh-muted);
-  font-weight: 500;
-}
-.nc-hero__micro-item .nh-check {
-  color: var(--nh-green);
-  font-weight: 900;
-}
+.nch-btn-primary:hover .nch-arrow { transform: translateX(-6px); }
 
-/* Social proof row */
-.nc-hero__proof {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-top: 24px;
-  border-top: 1px solid var(--nh-border);
-  animation: nh-fade-up .7s .4s ease both;
-}
-.nc-hero__proof-item {
-  display: flex;
+/* Secondary button */
+.nch-btn-secondary {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: .85rem;
+  background: transparent;
+  color: var(--c-black);
+  font-family: var(--font);
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--nh-dark);
+  padding: 16px 28px;
+  border: 1.5px solid rgba(0,0,0,.2);
+  border-radius: 50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .25s, background .25s, transform .2s;
+  letter-spacing: .3px;
 }
-.nc-hero__proof-item .nh-icon {
-  font-size: 1.1rem;
+.nch-btn-secondary:hover {
+  border-color: var(--c-black);
+  background: rgba(0,0,0,.04);
+  transform: translateY(-2px);
 }
 
-/* ═══════════════════════════
-   RIGHT COLUMN — IMAGE
-═══════════════════════════ */
-.nc-hero__right {
+/* Trust pills */
+.nch-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  opacity: 0;
+  animation: nch-up .8s .45s ease forwards;
+}
+.nch-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--c-muted);
+}
+.nch-trust-item .nch-ti { font-size: 1rem; }
+.nch-trust-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(0,0,0,.15);
+  align-self: center;
+}
+
+/* ════════════════════════
+   RIGHT — PRODUCT SHOWCASE
+════════════════════════ */
+.nch-right {
   position: relative;
+  height: 580px;
+  opacity: 0;
+  animation: nch-fade .9s .2s ease forwards;
+}
+
+/* Card base */
+.nch-card {
+  position: absolute;
+  background: var(--c-card-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 24px;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.09),
+    0 32px 64px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  overflow: hidden;
+  transition: transform .4s ease, box-shadow .4s ease;
+  cursor: pointer;
+}
+.nch-card:hover {
+  box-shadow:
+    0 8px 12px rgba(0,0,0,.06),
+    0 24px 60px rgba(0,0,0,.14),
+    0 48px 80px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* Card inner layout */
+.nch-card-img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.nch-card:hover .nch-card-img { transform: scale(1.04); }
+
+.nch-card-body {
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+.nch-card-label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-bottom: 4px;
+}
+.nch-card-name {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--c-black);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.nch-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nch-card-price {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--c-black);
+}
+.nch-card-price small {
+  font-size: .75rem;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+.nch-card-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--c-black);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: nh-fade-up .7s .15s ease both;
+  font-size: .85rem;
+  text-decoration: none;
+  transition: background .2s, transform .2s;
+  flex-shrink: 0;
+}
+.nch-card-btn:hover { background: var(--c-green); transform: scale(1.12); }
+
+/* CARD 1 — Main large card */
+.nch-card-1 {
+  width: 240px;
+  top: 40px;
+  right: 30px;
+  animation: nch-float-1 5s ease-in-out infinite;
+  z-index: 3;
+}
+.nch-card-1 .nch-card-img { height: 180px; }
+
+/* CARD 2 — Top left */
+.nch-card-2 {
+  width: 195px;
+  top: 0;
+  left: 60px;
+  animation: nch-float-2 5.8s .8s ease-in-out infinite;
+  z-index: 2;
+}
+.nch-card-2 .nch-card-img { height: 150px; }
+
+/* CARD 3 — Bottom center */
+.nch-card-3 {
+  width: 210px;
+  bottom: 30px;
+  right: 100px;
+  animation: nch-float-3 6.2s 1.4s ease-in-out infinite;
+  z-index: 2;
+}
+.nch-card-3 .nch-card-img { height: 160px; }
+
+/* Float animations */
+@keyframes nch-float-1 {
+  0%,100% { transform: translateY(0) rotate(-.5deg); }
+  50%      { transform: translateY(-14px) rotate(.5deg); }
+}
+@keyframes nch-float-2 {
+  0%,100% { transform: translateY(0) rotate(.8deg); }
+  50%      { transform: translateY(-10px) rotate(-.5deg); }
+}
+@keyframes nch-float-3 {
+  0%,100% { transform: translateY(0) rotate(-.3deg); }
+  50%      { transform: translateY(-12px) rotate(.8deg); }
 }
 
-/* Image card */
-.nc-hero__img-card {
-  background: #fff;
-  border-radius: 28px;
-  box-shadow: var(--nh-shadow-lg);
-  overflow: hidden;
-  width: 100%;
-  max-width: 500px;
-  position: relative;
-  cursor: zoom-in;
-}
-.nc-hero__img-card img {
-  width: 100%;
-  display: block;
-  transition: transform .5s ease;
-  animation: nh-float 4s ease-in-out infinite;
-}
-.nc-hero__img-card:hover img {
-  transform: scale(1.04);
-  animation-play-state: paused;
-}
-@keyframes nh-float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-12px); }
-}
-
-/* Floating benefit cards */
-.nc-hero__float-card {
+/* ── Glass chip cards ── */
+.nch-chip {
   position: absolute;
-  background: #fff;
-  border-radius: 14px;
-  padding: 10px 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+  background: var(--c-glass-bg);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 50px;
+  padding: 10px 18px;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: .85rem;
+  font-family: var(--font);
+  font-size: .82rem;
   font-weight: 700;
-  color: var(--nh-dark);
+  color: var(--c-dark);
+  box-shadow: 0 8px 28px rgba(0,0,0,.10);
   white-space: nowrap;
-  border: 1.5px solid var(--nh-border);
-  z-index: 2;
-}
-.nc-hero__float-card .nh-fc-icon { font-size: 1.1rem; }
-.nc-hero__float-card.top-right {
-  top: 14%;
-  left: -20px;
-  animation: nh-float-card 3.6s ease-in-out infinite;
-}
-.nc-hero__float-card.mid-left {
-  top: 48%;
-  right: -20px;
-  animation: nh-float-card 4.2s .6s ease-in-out infinite;
-}
-.nc-hero__float-card.bottom-right {
-  bottom: 14%;
-  left: -20px;
-  animation: nh-float-card 3.9s 1.2s ease-in-out infinite;
-}
-.nc-hero__float-card.bottom-left {
-  bottom: -5%;
-  right: 10%;
-  animation: nh-float-card 4.5s .9s ease-in-out infinite;
-}
-@keyframes nh-float-card {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50%       { transform: translateY(-7px) rotate(1deg); }
+  z-index: 4;
 }
 
-/* Gold star */
-.nh-stars { color: #F59E0B; font-size: .95rem; }
+/* Stars chip */
+.nch-chip-stars {
+  top: 160px;
+  left: 10px;
+  animation: nch-float-2 4.5s 2s ease-in-out infinite;
+}
+.nch-chip-stars .nch-chip-star { color: #F59E0B; font-size: .9rem; letter-spacing: 1px; }
 
-/* ─── BADGE STRIP on image card ─── */
-.nc-hero__img-badge {
+/* Sold chip */
+.nch-chip-sold {
+  bottom: 160px;
+  left: 40px;
+  animation: nch-float-3 5.5s .5s ease-in-out infinite;
+}
+.nch-chip-sold .nch-chip-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-green);
+  box-shadow: 0 0 0 3px rgba(21,128,61,.2);
+  animation: nch-pulse 1.6s infinite;
+  flex-shrink: 0;
+}
+
+/* New badge chip */
+.nch-chip-new {
+  top: -16px;
+  left: 30%;
+  animation: nch-float-1 4s 1s ease-in-out infinite;
+}
+.nch-chip-new .nch-chip-dot-gold {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-gold);
+  flex-shrink: 0;
+}
+
+@keyframes nch-pulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(21,128,61,.2); }
+  50%      { box-shadow: 0 0 0 6px rgba(21,128,61,0); }
+}
+
+/* ── BACKGROUND GLOW behind cards ── */
+.nch-right-glow {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: var(--nh-red);
-  color: #fff;
-  font-size: .75rem;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 50px;
-  z-index: 3;
-  animation: nh-pulse 2s infinite;
-}
-@keyframes nh-pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.4); }
-  50%      { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,150,62,.12) 0%, transparent 65%);
+  top: 50%;
+  right: 50%;
+  transform: translate(50%,-50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* ─── SCROLL INDICATOR ─── */
-.nc-hero__scroll {
+/* ── SCROLL CARET ── */
+.nch-scroll {
   position: absolute;
-  bottom: 32px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  color: var(--nh-muted);
-  font-size: .75rem;
+  gap: 6px;
+  color: var(--c-muted);
+  font-family: var(--font);
+  font-size: .7rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   z-index: 2;
-  animation: nh-fade-up 1s .8s ease both;
+  opacity: 0;
+  animation: nch-up .8s 1s ease forwards;
 }
-.nc-hero__scroll-line {
-  width: 1.5px;
-  height: 36px;
-  background: linear-gradient(to bottom, var(--nh-gold), transparent);
-  border-radius: 2px;
-  animation: nh-scroll-pulse 1.6s ease-in-out infinite;
+.nch-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--c-gold), transparent);
+  animation: nch-scroll-ani 1.8s ease-in-out infinite;
 }
-@keyframes nh-scroll-pulse {
-  0%,100% { opacity: 1; transform: scaleY(1); }
-  50%      { opacity: .4; transform: scaleY(.6); }
+@keyframes nch-scroll-ani {
+  0%,100% { transform: scaleY(1); opacity: .8; }
+  50%      { transform: scaleY(.5); opacity: .3; }
 }
 
-/* ─── ANIMATIONS ─── */
-@keyframes nh-fade-up {
-  from { opacity: 0; transform: translateY(22px); }
+/* ── ENTRY ANIMATIONS ── */
+@keyframes nch-up {
+  from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-/* ─── OVERLAY (if using real bg image) ─── */
-.nc-hero__overlay { display: none; }
-
-/* ═══════════════════════════
-   RESPONSIVE
-═══════════════════════════ */
-@media (max-width: 900px) {
-  #nc-hero-{{ section.id }} { padding: 40px 0 80px; min-height: auto; }
-  .nc-hero__inner { grid-template-columns: 1fr; gap: 32px; }
-  .nc-hero__right { order: -1; }
-  .nc-hero__img-card { max-width: 360px; margin: 0 auto; }
-  .nc-hero__float-card.top-right { top: 8%; left: -10px; }
-  .nc-hero__float-card.mid-left  { top: 42%; right: -10px; }
-  .nc-hero__float-card.bottom-right { display: none; }
-  .nc-hero__float-card.bottom-left  { display: none; }
-  .nc-hero__title { font-size: 1.9rem; }
-  .nc-hero__price-block { padding: 16px 18px; }
-  .nc-hero__proof { gap: 10px; }
-  .nc-hero__scroll { display: none; }
-}
-@media (max-width: 480px) {
-  .nc-hero__title { font-size: 1.65rem; }
-  .nc-hero__img-card { max-width: 300px; }
-  .nc-hero__price-now { font-size: 1.8rem; }
-  .nc-btn--hero { font-size: 1.05rem; padding: 16px 32px; }
-  .nc-hero__proof-item span { display: none; }
+@keyframes nch-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-/* ─── STICKY MOBILE BUY ─── */
-#nh-sticky-{{ section.id }} {
+/* ═══════════════════════════════════
+   STICKY MOBILE BUY
+═══════════════════════════════════ */
+#nch-sticky-{{ section.id }} {
   display: none;
   position: fixed;
   bottom: 0; left: 0; right: 0;
   background: #fff;
-  border-top: 2px solid var(--nh-green);
+  border-top: 1.5px solid rgba(0,0,0,.08);
   padding: 12px 16px;
-  z-index: 900;
+  z-index: 999;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 -4px 24px rgba(0,0,0,.12);
-  font-family: 'Tajawal', sans-serif;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.10);
+  font-family: var(--font);
   direction: rtl;
 }
-#nh-sticky-{{ section.id }} .nh-st-price {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--nh-black);
+#nch-sticky-{{ section.id }} .nch-st-label {
+  font-size: .8rem;
+  color: var(--c-muted);
+  margin-bottom: 2px;
 }
-#nh-sticky-{{ section.id }} .nh-st-price small {
-  display: block;
-  font-size: .75rem;
-  font-weight: 400;
-  color: var(--nh-muted);
+#nch-sticky-{{ section.id }} .nch-st-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--c-black);
 }
-#nh-sticky-{{ section.id }} .nc-btn--hero {
-  font-size: .95rem;
-  padding: 12px 28px;
+#nch-sticky-{{ section.id }} .nch-btn-primary {
+  font-size: .9rem;
+  padding: 12px 26px;
+  white-space: nowrap;
 }
-@media (max-width: 900px) {
-  #nh-sticky-{{ section.id }} { display: flex; }
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 980px) {
+  .nch-main {
+    grid-template-columns: 1fr;
+    padding: 40px 0 100px;
+    gap: 50px;
+  }
+  .nch-left { align-items: center; text-align: center; }
+  .nch-sub { text-align: center; }
+  .nch-flag { justify-content: center; }
+  .nch-right { height: 420px; width: 100%; }
+  .nch-card-1 { width: 195px; right: 50%; transform: translateX(60%); top: 20px; }
+  .nch-card-2 { width: 160px; left: 8%; top: 10px; }
+  .nch-card-3 { width: 170px; right: 8%; bottom: 20px; }
+  .nch-trust { justify-content: center; }
+  .nch-cta-group { justify-content: center; }
+  #nch-sticky-{{ section.id }} { display: flex; }
+}
+
+@media (max-width: 600px) {
+  #nch-{{ section.id }} { min-height: auto; }
+  .nch-headline { font-size: 2rem; }
+  .nch-sub { font-size: .95rem; }
+  .nch-right { height: 360px; }
+  .nch-card-1 { width: 170px; }
+  .nch-card-2 { width: 140px; }
+  .nch-card-3 { width: 150px; }
+  .nch-chip-sold { display: none; }
+  .nch-scroll { display: none; }
+  .nch-trust-divider { display: none; }
+  .nch-wrap { padding: 0 18px; }
 }
 </style>
 
-<!-- STICKY MOBILE BUY -->
-<div id="nh-sticky-{{ section.id }}">
-  <div class="nh-st-price">
-    <small>السعر الآن</small>
-    {{ section.settings.price_now | default: '— ريال' }}
+<!-- STICKY MOBILE -->
+<div id="nch-sticky-{{ section.id }}">
+  <div>
+    <div class="nch-st-label">اكتشف المجموعة الكاملة</div>
+    <div class="nch-st-name">NOVACART</div>
   </div>
-  {%- if section.settings.btn1_label != blank -%}
-    <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nc-btn--hero">
-      🛒 {{ section.settings.btn1_label | default: 'اطلب الآن' }}
-    </a>
-  {%- endif -%}
+  <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nch-btn-primary">
+    ابدأ التسوق <span class="nch-arrow">←</span>
+  </a>
 </div>
 
-<section class="nc-hero" id="nc-hero-{{ section.id }}">
+<div id="nch-{{ section.id }}">
 
-  <!-- Background -->
-  <div class="nc-hero__bg">
-    {%- if section.settings.image != blank -%}
-      {{ section.settings.image | image_url: width: 1920 | image_tag: loading: 'eager', fetchpriority: 'high', alt: section.settings.title }}
-    {%- endif -%}
+  <!-- TOP BAR -->
+  <div class="nch-topbar">
+    ✦ &nbsp;شحن مجاني لجميع مناطق المملكة &nbsp;|&nbsp; الدفع عند الاستلام &nbsp;|&nbsp; <span>عروض حصرية هذا الأسبوع</span>&nbsp; ✦
   </div>
-  <div class="nc-hero__overlay"></div>
 
-  <div class="nc-hero__content nc-container">
-    <div class="nc-hero__inner">
+  <!-- MAIN GRID -->
+  <div class="nch-main nch-wrap">
 
-      <!-- ══ LEFT — TEXT ══ -->
-      <div class="nc-hero__left">
+    <!-- ══ LEFT ══ -->
+    <div class="nch-left">
 
-        {%- if section.settings.badge != blank -%}
-          <span class="nc-hero__badge">✦ {{ section.settings.badge }}</span>
-        {%- endif -%}
+      <!-- Flag -->
+      <div class="nch-flag">
+        <div class="nch-flag-line"></div>
+        <span class="nch-flag-text">
+          {%- if section.settings.badge != blank -%}{{ section.settings.badge }}{%- else -%}منتجات مختارة بعناية{%- endif -%}
+        </span>
+      </div>
 
+      <!-- Headline -->
+      <h1 class="nch-headline">
         {%- if section.settings.title != blank -%}
-          <h1 class="nc-hero__title">{{ section.settings.title }}</h1>
+          {{ section.settings.title }}
+        {%- else -%}
+          اكتشف ما يستحق<br><span class="nch-hl-accent">اهتمامك حقاً</span>
         {%- endif -%}
+      </h1>
 
+      <!-- Subtitle -->
+      <p class="nch-sub">
         {%- if section.settings.subtitle != blank -%}
-          <p class="nc-hero__subtitle">{{ section.settings.subtitle }}</p>
+          {{ section.settings.subtitle }}
+        {%- else -%}
+          منتجات استثنائية بجودة عالمية، تُوصَّل إلى باب منزلك في المملكة العربية السعودية. الدفع عند الاستلام، الشحن مجاناً.
         {%- endif -%}
+      </p>
 
-        <!-- Price block -->
-        {%- if section.settings.price_now != blank -%}
-          <div class="nc-hero__price-block">
-            <div>
-              {%- if section.settings.price_old != blank -%}
-                <span class="nc-hero__price-old">بدلاً من {{ section.settings.price_old }}</span>
-              {%- endif -%}
-              <div class="nc-hero__price-now">
-                {{ section.settings.price_now }}
-                <span>ريال سعودي</span>
-              </div>
-            </div>
-            {%- if section.settings.price_save != blank -%}
-              <div class="nc-hero__price-divider"></div>
-              <span class="nc-hero__price-save">{{ section.settings.price_save }}</span>
-            {%- endif -%}
-          </div>
+      <!-- CTAs -->
+      <div class="nch-cta-group">
+        <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nch-btn-primary" id="nch-primary-btn-{{ section.id }}">
+          {%- if section.settings.btn1_label != blank -%}{{ section.settings.btn1_label }}{%- else -%}ابدأ التسوق{%- endif -%}
+          <span class="nch-arrow">←</span>
+        </a>
+        {%- if section.settings.btn2_label != blank -%}
+          <a href="{{ section.settings.btn2_url | default: '/collections/all' }}" class="nch-btn-secondary">
+            {{ section.settings.btn2_label }}
+          </a>
+        {%- else -%}
+          <a href="/collections/all" class="nch-btn-secondary">اكتشف المنتجات</a>
         {%- endif -%}
+      </div>
 
-        <!-- CTA -->
-        <div class="nc-hero__cta-wrap">
-          {%- if section.settings.btn1_label != blank -%}
-            <a href="{{ section.settings.btn1_url | default: '/collections/all' }}" class="nc-btn--hero">
-              🛒 {{ section.settings.btn1_label }}
-            </a>
-          {%- endif -%}
-          <div class="nc-hero__microcopy">
-            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> الدفع عند الاستلام</span>
-            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> شحن مجاني</span>
-            <span class="nc-hero__micro-item"><span class="nh-check">✔</span> توصيل سريع داخل السعودية</span>
+      <!-- Trust -->
+      <div class="nch-trust">
+        <span class="nch-trust-item"><span class="nch-ti">🚚</span> شحن سريع</span>
+        <span class="nch-trust-divider"></span>
+        <span class="nch-trust-item"><span class="nch-ti">💳</span> الدفع عند الاستلام</span>
+        <span class="nch-trust-divider"></span>
+        <span class="nch-trust-item"><span class="nch-ti">🔒</span> دفع آمن</span>
+        <span class="nch-trust-divider"></span>
+        <span class="nch-trust-item"><span class="nch-ti">⭐</span> آلاف العملاء</span>
+        <span class="nch-trust-divider"></span>
+        <span class="nch-trust-item"><span class="nch-ti">🛡</span> ضمان الجودة</span>
+      </div>
+
+    </div><!-- /left -->
+
+    <!-- ══ RIGHT — PRODUCT COMPOSITION ══ -->
+    <div class="nch-right">
+
+      <!-- Background glow -->
+      <div class="nch-right-glow"></div>
+
+      <!-- Glass chip: Stars -->
+      <div class="nch-chip nch-chip-stars">
+        <span class="nch-chip-star">★★★★★</span>
+        <span>4.9 / 5</span>
+      </div>
+
+      <!-- Glass chip: Live orders -->
+      <div class="nch-chip nch-chip-sold">
+        <span class="nch-chip-dot"></span>
+        <span id="nch-live-{{ section.id }}">47</span> طلب الآن
+      </div>
+
+      <!-- Glass chip: New -->
+      <div class="nch-chip nch-chip-new">
+        <span class="nch-chip-dot-gold"></span>
+        <span>وصل حديثاً ✦</span>
+      </div>
+
+      <!-- CARD 1 — Main -->
+      <a href="{{ section.settings.product_url_1 | default: '/collections/all' }}" class="nch-card nch-card-1" aria-label="{{ section.settings.product_title_1 }}">
+        {%- if section.settings.product_image_1 != blank -%}
+          {{ section.settings.product_image_1 | image_url: width: 480 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_1 }}
+        {%- else -%}
+          <div style="width:100%;height:180px;background:linear-gradient(135deg,#F0EBE1,#E8E0D0);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🛒</div>
+        {%- endif -%}
+        <div class="nch-card-body">
+          <div class="nch-card-label">منتج مميز</div>
+          <div class="nch-card-name">{{ section.settings.product_title_1 | default: 'المنتج الأول' }}</div>
+          <div class="nch-card-footer">
+            <div class="nch-card-price">{{ section.settings.product_price_1 | default: '— ريال' }} <small>ريال</small></div>
+            <span class="nch-card-btn">←</span>
           </div>
         </div>
+      </a>
 
-        <!-- Trust row -->
-        <div class="nc-hero__proof">
-          <span class="nc-hero__proof-item"><span class="nh-icon">⭐</span> <span>+5,000 عميل سعيد</span></span>
-          <span class="nc-hero__proof-item"><span class="nh-icon">🚚</span> <span>شحن سريع</span></span>
-          <span class="nc-hero__proof-item"><span class="nh-icon">💳</span> <span>الدفع عند الاستلام</span></span>
-          <span class="nc-hero__proof-item"><span class="nh-icon">🛡</span> <span>ضمان الجودة</span></span>
+      <!-- CARD 2 — Top left -->
+      <a href="{{ section.settings.product_url_2 | default: '/collections/all' }}" class="nch-card nch-card-2" aria-label="{{ section.settings.product_title_2 }}">
+        {%- if section.settings.product_image_2 != blank -%}
+          {{ section.settings.product_image_2 | image_url: width: 380 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_2 }}
+        {%- else -%}
+          <div style="width:100%;height:150px;background:linear-gradient(135deg,#EEE8DE,#E2DACE);display:flex;align-items:center;justify-content:center;font-size:3rem">✨</div>
+        {%- endif -%}
+        <div class="nch-card-body">
+          <div class="nch-card-label">الأكثر مبيعاً</div>
+          <div class="nch-card-name">{{ section.settings.product_title_2 | default: 'المنتج الثاني' }}</div>
+          <div class="nch-card-footer">
+            <div class="nch-card-price">{{ section.settings.product_price_2 | default: '— ريال' }} <small>ريال</small></div>
+            <span class="nch-card-btn">←</span>
+          </div>
         </div>
+      </a>
 
-      </div><!-- /left -->
-
-      <!-- ══ RIGHT — IMAGE ══ -->
-      <div class="nc-hero__right">
-
-        <!-- Floating benefit cards -->
-        <div class="nc-hero__float-card top-right">
-          <span class="nh-fc-icon">🚚</span>
-          <span>شحن مجاني</span>
+      <!-- CARD 3 — Bottom -->
+      <a href="{{ section.settings.product_url_3 | default: '/collections/all' }}" class="nch-card nch-card-3" aria-label="{{ section.settings.product_title_3 }}">
+        {%- if section.settings.product_image_3 != blank -%}
+          {{ section.settings.product_image_3 | image_url: width: 420 | image_tag: loading: 'eager', class: 'nch-card-img', alt: section.settings.product_title_3 }}
+        {%- else -%}
+          <div style="width:100%;height:160px;background:linear-gradient(135deg,#EBE4D8,#DDD6C8);display:flex;align-items:center;justify-content:center;font-size:3rem">🎁</div>
+        {%- endif -%}
+        <div class="nch-card-body">
+          <div class="nch-card-label">عرض خاص</div>
+          <div class="nch-card-name">{{ section.settings.product_title_3 | default: 'المنتج الثالث' }}</div>
+          <div class="nch-card-footer">
+            <div class="nch-card-price">{{ section.settings.product_price_3 | default: '— ريال' }} <small>ريال</small></div>
+            <span class="nch-card-btn">←</span>
+          </div>
         </div>
-        <div class="nc-hero__float-card mid-left">
-          <span class="nh-fc-icon">💳</span>
-          <span>الدفع عند الاستلام</span>
-        </div>
-        <div class="nc-hero__float-card bottom-right">
-          <span class="nh-stars">★★★★★</span>
-          <span>4.9 / 5</span>
-        </div>
-        <div class="nc-hero__float-card bottom-left">
-          <span class="nh-fc-icon">🔥</span>
-          <span>الأكثر مبيعاً</span>
-        </div>
+      </a>
 
-        <!-- Product image card -->
-        <div class="nc-hero__img-card">
-          <span class="nc-hero__img-badge">🔥 الأكثر مبيعاً</span>
-          {%- if section.settings.product_image != blank -%}
-            {{ section.settings.product_image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.title, class: 'nc-hero__product-img' }}
-          {%- elsif section.settings.image != blank -%}
-            {{ section.settings.image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.title, class: 'nc-hero__product-img' }}
-          {%- else -%}
-            <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#F8F5EF,#EDE8DF);display:flex;align-items:center;justify-content:center;font-size:5rem">📦</div>
-          {%- endif -%}
-        </div>
+    </div><!-- /right -->
+  </div><!-- /main -->
 
-      </div><!-- /right -->
-
-    </div><!-- /inner -->
-  </div><!-- /container -->
-
-  <!-- Scroll indicator -->
-  <div class="nc-hero__scroll" aria-hidden="true">
-    <div class="nc-hero__scroll-line"></div>
-    <span>Défiler</span>
+  <!-- Scroll caret -->
+  <div class="nch-scroll">
+    <div class="nch-scroll-line"></div>
+    <span>استكشف</span>
   </div>
 
-</section>
+</div><!-- /section -->
 
 <script>
 (function(){
-  var sec = document.getElementById('nc-hero-{{ section.id }}');
-  var sticky = document.getElementById('nh-sticky-{{ section.id }}');
-  if(!sec || !sticky) return;
-
-  // Hide sticky when hero is in view
-  var obs = new IntersectionObserver(function(entries){
-    sticky.style.display = entries[0].isIntersecting ? 'none' : '';
-  }, { threshold: .1 });
-  obs.observe(sec);
-
-  // Counter animation on the proof items
-  function animCount(el, target, suffix){
-    var start = 0, duration = 1600, step = duration / target;
-    var timer = setInterval(function(){
-      start += Math.ceil(target / (duration / 30));
-      if(start >= target){ start = target; clearInterval(timer); }
-      el.textContent = '+' + start.toLocaleString('ar-SA') + suffix;
-    }, 30);
+  // Live counter fluctuation
+  var el = document.getElementById('nch-live-{{ section.id }}');
+  if(el){
+    var v = parseInt(el.textContent);
+    setInterval(function(){
+      v += Math.random() > .5 ? 1 : -1;
+      v = Math.max(30, Math.min(90, v));
+      el.textContent = v;
+    }, 3800);
   }
-  var countObs = new IntersectionObserver(function(entries){
-    if(entries[0].isIntersecting){
-      countObs.disconnect();
-      var items = sec.querySelectorAll('.nc-hero__proof-item span');
-      // animate first item "5000 عميل"
-      if(items[0]) animCount(items[0], 5000, ' عميل سعيد');
-    }
-  }, { threshold: .5 });
-  countObs.observe(sec);
+
+  // Sticky hide when hero in view
+  var sec    = document.getElementById('nch-{{ section.id }}');
+  var sticky = document.getElementById('nch-sticky-{{ section.id }}');
+  if(sec && sticky){
+    var io = new IntersectionObserver(function(e){
+      sticky.style.display = e[0].isIntersecting ? 'none' : '';
+    }, { threshold: .05 });
+    io.observe(sec);
+  }
+
+  // Ripple on primary CTA
+  var btn = document.getElementById('nch-primary-btn-{{ section.id }}');
+  if(btn){
+    btn.addEventListener('click', function(e){
+      var r = document.createElement('span');
+      var rect = btn.getBoundingClientRect();
+      var sz = Math.max(rect.width, rect.height);
+      r.style.cssText = [
+        'position:absolute','border-radius:50%','pointer-events:none',
+        'width:'+sz+'px','height:'+sz+'px',
+        'top:'+(e.clientY-rect.top-sz/2)+'px',
+        'right:'+(rect.right-e.clientX-sz/2)+'px',
+        'background:rgba(255,255,255,.22)',
+        'transform:scale(0)','animation:nch_rip .55s ease forwards'
+      ].join(';');
+      btn.appendChild(r);
+      setTimeout(function(){ r.remove(); }, 600);
+    });
+  }
+
+  // Inject ripple keyframes once
+  if(!document.getElementById('nch-rip-style')){
+    var s = document.createElement('style');
+    s.id = 'nch-rip-style';
+    s.textContent = '@keyframes nch_rip{to{transform:scale(3.5);opacity:0}}';
+    document.head.appendChild(s);
+  }
 })();
 </script>
 
@@ -656,18 +832,41 @@
   "tag": "section",
   "class": "novacart-hero-section",
   "settings": [
-    { "type": "image_picker", "id": "image",         "label": "صورة الخلفية (اختياري)" },
-    { "type": "image_picker", "id": "product_image", "label": "صورة المنتج الرئيسية" },
-    { "type": "text",     "id": "badge",       "label": "Badge صغير",         "default": "Collection Premium" },
-    { "type": "textarea", "id": "title",       "label": "العنوان الرئيسي",     "default": "جودة استثنائية\nتُوصَّل إلى بابك" },
-    { "type": "textarea", "id": "subtitle",    "label": "النص التوضيحي",       "default": "منتجات مختارة بعناية فائقة. الدفع عند الاستلام. شحن مجاني لجميع مناطق المملكة." },
-    { "type": "text",     "id": "price_now",   "label": "السعر الحالي",        "default": "175" },
-    { "type": "text",     "id": "price_old",   "label": "السعر القديم",        "default": "250 ريال" },
-    { "type": "text",     "id": "price_save",  "label": "نص التوفير",          "default": "🎉 وفّر 75 ريال!" },
-    { "type": "text",     "id": "btn1_label",  "label": "نص زر الطلب",        "default": "اطلب الآن" },
-    { "type": "url",      "id": "btn1_url",    "label": "رابط زر الطلب" },
-    { "type": "text",     "id": "btn2_label",  "label": "زر ثانوي — نص" },
-    { "type": "url",      "id": "btn2_url",    "label": "زر ثانوي — رابط" }
+    {
+      "type": "header",
+      "content": "نصوص الهيرو"
+    },
+    { "type": "text",     "id": "badge",    "label": "Badge صغير",        "default": "منتجات مختارة بعناية" },
+    { "type": "textarea", "id": "title",    "label": "العنوان الرئيسي",    "default": "اكتشف ما يستحق\nاهتمامك حقاً" },
+    { "type": "textarea", "id": "subtitle", "label": "النص التوضيحي",      "default": "منتجات استثنائية بجودة عالمية، تُوصَّل إلى باب منزلك في المملكة. الدفع عند الاستلام، الشحن مجاناً." },
+    { "type": "text",     "id": "btn1_label","label": "زر رئيسي — نص",    "default": "ابدأ التسوق" },
+    { "type": "url",      "id": "btn1_url", "label": "زر رئيسي — رابط" },
+    { "type": "text",     "id": "btn2_label","label": "زر ثانوي — نص",    "default": "اكتشف المنتجات" },
+    { "type": "url",      "id": "btn2_url", "label": "زر ثانوي — رابط" },
+    {
+      "type": "header",
+      "content": "المنتج الأول (الكارد الرئيسي)"
+    },
+    { "type": "image_picker", "id": "product_image_1", "label": "صورة المنتج 1" },
+    { "type": "text",         "id": "product_title_1", "label": "اسم المنتج 1",  "default": "منتج مميز" },
+    { "type": "text",         "id": "product_price_1", "label": "سعر المنتج 1",  "default": "175" },
+    { "type": "url",          "id": "product_url_1",   "label": "رابط المنتج 1" },
+    {
+      "type": "header",
+      "content": "المنتج الثاني (كارد أعلى اليسار)"
+    },
+    { "type": "image_picker", "id": "product_image_2", "label": "صورة المنتج 2" },
+    { "type": "text",         "id": "product_title_2", "label": "اسم المنتج 2",  "default": "الأكثر مبيعاً" },
+    { "type": "text",         "id": "product_price_2", "label": "سعر المنتج 2",  "default": "220" },
+    { "type": "url",          "id": "product_url_2",   "label": "رابط المنتج 2" },
+    {
+      "type": "header",
+      "content": "المنتج الثالث (كارد أسفل)"
+    },
+    { "type": "image_picker", "id": "product_image_3", "label": "صورة المنتج 3" },
+    { "type": "text",         "id": "product_title_3", "label": "اسم المنتج 3",  "default": "عرض خاص" },
+    { "type": "text",         "id": "product_price_3", "label": "سعر المنتج 3",  "default": "299" },
+    { "type": "url",          "id": "product_url_3",   "label": "رابط المنتج 3" }
   ],
   "presets": [{ "name": "NOVACART Hero" }]
 }
