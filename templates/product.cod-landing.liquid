@@ -140,6 +140,41 @@
   .badge .ic{ font-size:24px; margin-bottom:8px; }
   .badge span{ font-size:12.5px; color:var(--gray); display:block; }
 
+  /* ---------- variant pills ---------- */
+  .cl-variant-section{ margin-bottom:16px; }
+  .cl-variant-label{ display:block; font-size:13px; font-weight:700; color:var(--gray); margin-bottom:8px; }
+  .cl-variant-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+  .cl-variant-pill input[type="radio"]{ position:absolute; opacity:0; width:0; height:0; }
+  .cl-variant-pill span{
+    display:block; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px;
+    padding:7px 15px; font-size:13.5px; font-weight:600; cursor:pointer;
+    color:var(--gray); background:rgba(255,255,255,0.04); transition:all .2s;
+    font-family:'Tajawal',sans-serif;
+  }
+  .cl-variant-pill input:checked + span{ border-color:var(--orange); color:var(--orange-lt); background:rgba(232,93,44,0.12); }
+
+  /* ---------- qty ---------- */
+  .cl-qty-row{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+  .cl-qty-label{ font-size:13px; font-weight:700; color:var(--gray); }
+  .cl-qty-box{ display:flex; align-items:center; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; overflow:hidden; }
+  .cl-qty-btn{ width:36px; height:36px; background:rgba(255,255,255,0.05); border:none; font-size:19px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--white); font-family:'Tajawal',sans-serif; }
+  .cl-qty-btn:hover{ background:rgba(232,93,44,0.15); color:var(--orange-lt); }
+  .cl-qty-input{ width:44px; height:36px; border:none; border-right:1.5px solid rgba(255,255,255,0.15); border-left:1.5px solid rgba(255,255,255,0.15); text-align:center; font-size:15px; font-weight:700; font-family:'Tajawal',sans-serif; background:transparent; color:var(--white); }
+
+  /* ---------- submit ---------- */
+  .cl-submit{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; background:linear-gradient(135deg, var(--orange), #ff6b3d, var(--orange));
+    color:var(--black); border:none; border-radius:10px;
+    padding:17px 24px; font-size:17px; font-weight:900; cursor:pointer;
+    font-family:'Tajawal',sans-serif;
+    box-shadow:0 6px 22px rgba(232,93,44,0.35);
+    transition:opacity .2s, transform .1s;
+  }
+  .cl-submit:hover{ opacity:.9; transform:translateY(-1px); }
+  .cl-submit:active{ transform:translateY(0); }
+  .cl-secure{ text-align:center; font-size:12px; color:var(--gray-dk); margin-top:10px; }
+
   footer{ text-align:center; padding:34px 0 44px; color:var(--gray-dk); font-size:13px; border-top:1px solid var(--line); }
   footer .brand{ font-size:20px; margin-bottom:8px; }
 
@@ -213,15 +248,51 @@
         <div class="hero-note">✔ منتج أصلي 100% &nbsp; ✔ {% if shop.address.country %}يُرسل من داخل {{ shop.address.country }}{% endif %} &nbsp; ✔ ضمان الجودة</div>
 
         <!-- ===== COD FORM داخل الهيرو ===== -->
-        <div class="hero-form" id="order" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+        <div class="hero-form" id="order">
           <p class="form-lead">🛒 اطلب الآن — الدفع عند الاستلام</p>
           <p class="form-sub">أدخل طلبك وسيتصل بك فريقنا لتأكيد الشحن</p>
-          {% comment %}
-            فعّل EasySell App Block من Theme Customizer داخل هذا القسم،
-            أو استبدل السطر التالي بـ snippet من EasySell مثل:
-            {% render 'easysell-cod-form', product: product, variant: variant %}
-          {% endcomment %}
-          {% content_for 'blocks' %}
+
+          {%- form 'product', product, id: 'cl-product-form', novalidate: true -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" id="cl-variant-id">
+
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <div class="cl-variant-section">
+                  <span class="cl-variant-label">{{ option.name }}</span>
+                  <div class="cl-variant-pills">
+                    {%- for value in option.values -%}
+                      <label class="cl-variant-pill">
+                        <input
+                          type="radio"
+                          name="{{ option.name }}"
+                          value="{{ value | escape }}"
+                          {% if option.selected_value == value %}checked{% endif %}
+                        >
+                        <span>{{ value }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endunless -%}
+
+            <div class="cl-qty-row">
+              <span class="cl-qty-label">الكمية:</span>
+              <div class="cl-qty-box">
+                <button type="button" class="cl-qty-btn" onclick="var q=document.getElementById('cl-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+                <input type="number" id="cl-qty" name="quantity" value="1" min="1" class="cl-qty-input" readonly>
+                <button type="button" class="cl-qty-btn" onclick="var q=document.getElementById('cl-qty');q.value=+q.value+1;">+</button>
+              </div>
+            </div>
+
+            {% content_for 'blocks' %}
+
+            <button type="submit" name="add" class="cl-submit">
+              🛒 اطلب الآن — الدفع عند الاستلام
+            </button>
+          {%- endform -%}
+
+          <p class="cl-secure">🔒 طلبك آمن 100% — لا حاجة لبطاقة بنكية</p>
         </div>
       </div>
 
