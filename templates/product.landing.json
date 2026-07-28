@@ -1,0 +1,88 @@
+{
+  "sections": {
+    "main": {
+      "type": "essalem-landing-vacuum",
+      "settings": {},
+      "blocks": {
+        "trust-1": { "type": "trust_badge", "settings": { "icon": "✅", "text": "الدفع عند الاستلام" } },
+        "trust-2": { "type": "trust_badge", "settings": { "icon": "🚚", "text": "شحن سريع" } },
+        "trust-3": { "type": "trust_badge", "settings": { "icon": "⭐", "text": "جودة عالية" } },
+        "trust-4": { "type": "trust_badge", "settings": { "icon": "🔒", "text": "ضمان رضا العملاء" } },
+
+        "price-1": { "type": "price_offer", "settings": { "label": "قطعة واحدة", "price": "170", "note": "", "qty": 1, "featured": false, "badge_text": "" } },
+        "price-2": { "type": "price_offer", "settings": { "label": "قطعتان", "price": "289", "note": "وفر أكثر عند شراء قطعتين", "qty": 2, "featured": true, "badge_text": "الأكثر طلباً" } },
+
+        "benefit-1": { "type": "benefit", "settings": { "icon": "✔", "text": "تنظيف سريع للمكتب" } },
+        "benefit-2": { "type": "benefit", "settings": { "icon": "✔", "text": "يزيل الغبار والفتات بسهولة" } },
+        "benefit-3": { "type": "benefit", "settings": { "icon": "✔", "text": "مثالي للمكتب والمنزل والسيارة" } },
+        "benefit-4": { "type": "benefit", "settings": { "icon": "✔", "text": "يعمل لمدة تصل إلى 120 دقيقة" } },
+        "benefit-5": { "type": "benefit", "settings": { "icon": "✔", "text": "شحن USB" } },
+        "benefit-6": { "type": "benefit", "settings": { "icon": "✔", "text": "صغير وسهل الحمل" } },
+        "benefit-7": { "type": "benefit", "settings": { "icon": "✔", "text": "تصميم أنيق" } },
+        "benefit-8": { "type": "benefit", "settings": { "icon": "✔", "text": "مناسب للطلاب والموظفين" } },
+
+        "us-1": { "type": "our_point", "settings": { "text": "سريع" } },
+        "us-2": { "type": "our_point", "settings": { "text": "هادئ" } },
+        "us-3": { "type": "our_point", "settings": { "text": "قابل للشحن" } },
+        "us-4": { "type": "our_point", "settings": { "text": "صغير" } },
+        "us-5": { "type": "our_point", "settings": { "text": "تصميم فاخر" } },
+
+        "them-1": { "type": "traditional_point", "settings": { "text": "متعب" } },
+        "them-2": { "type": "traditional_point", "settings": { "text": "بطيء" } },
+        "them-3": { "type": "traditional_point", "settings": { "text": "غير عملي" } },
+
+        "feature-1": { "type": "feature_spec", "settings": { "icon": "🔋", "title": "بطارية 1200mAh" } },
+        "feature-2": { "type": "feature_spec", "settings": { "icon": "⏱️", "title": "حتى 120 دقيقة استخدام" } },
+        "feature-3": { "type": "feature_spec", "settings": { "icon": "🔌", "title": "شحن USB" } },
+        "feature-4": { "type": "feature_spec", "settings": { "icon": "⚡", "title": "3 ساعات للشحن الكامل" } },
+        "feature-5": { "type": "feature_spec", "settings": { "icon": "💨", "title": "قوة شفط ممتازة" } },
+        "feature-6": { "type": "feature_spec", "settings": { "icon": "🧹", "title": "فرشاة تنظيف مرفقة" } },
+        "feature-7": { "type": "feature_spec", "settings": { "icon": "🎨", "title": "تصميم صغير وأنيق" } },
+        "feature-8": { "type": "feature_spec", "settings": { "icon": "🪶", "title": "وزن خفيف" } },
+
+        "step-1": { "type": "step", "settings": { "title": "اشحن الجهاز" } },
+        "step-2": { "type": "step", "settings": { "title": "اضغط زر التشغيل" } },
+        "step-3": { "type": "step", "settings": { "title": "مرر المكنسة فوق المكتب" } },
+        "step-4": { "type": "step", "settings": { "title": "استمتع بمكتب نظيف" } },
+
+        "life-1": { "type": "lifestyle", "settings": { "image": null, "label": "المكتب" } },
+        "life-2": { "type": "lifestyle", "settings": { "image": null, "label": "لوحة المفاتيح" } },
+        "life-3": { "type": "lifestyle", "settings": { "image": null, "label": "السيارة" } },
+        "life-4": { "type": "lifestyle", "settings": { "image": null, "label": "غرفة الدراسة" } },
+        "life-5": { "type": "lifestyle", "settings": { "image": null, "label": "المنزل" } },
+
+        "spec-1": { "type": "spec_row", "settings": { "label": "البطارية", "value": "1200mAh" } },
+        "spec-2": { "type": "spec_row", "settings": { "label": "مدة التشغيل", "value": "120 دقيقة" } },
+        "spec-3": { "type": "spec_row", "settings": { "label": "الشحن", "value": "USB" } },
+        "spec-4": { "type": "spec_row", "settings": { "label": "وقت الشحن", "value": "3 ساعات" } },
+        "spec-5": { "type": "spec_row", "settings": { "label": "الوزن", "value": "135 جرام" } },
+        "spec-6": { "type": "spec_row", "settings": { "label": "الأبعاد", "value": "88×88×70 مم" } },
+        "spec-7": { "type": "spec_row", "settings": { "label": "المادة", "value": "ABS" } },
+
+        "review-1": { "type": "review", "settings": { "stars": 5, "text": "أفضل جهاز اشتريته لتنظيف المكتب." } },
+        "review-2": { "type": "review", "settings": { "stars": 5, "text": "صغير لكن قوة الشفط ممتازة." } },
+        "review-3": { "type": "review", "settings": { "stars": 5, "text": "مفيد جداً ويعمل لفترة طويلة." } },
+        "review-4": { "type": "review", "settings": { "stars": 5, "text": "أنصح به لكل شخص يعمل على مكتب." } },
+
+        "faq-1": { "type": "faq_item", "settings": { "question": "هل تعمل بدون سلك؟", "answer": "نعم، تعمل ببطارية قابلة للشحن." } },
+        "faq-2": { "type": "faq_item", "settings": { "question": "كم تدوم البطارية؟", "answer": "حتى 120 دقيقة." } },
+        "faq-3": { "type": "faq_item", "settings": { "question": "هل الشحن عبر USB؟", "answer": "نعم." } },
+        "faq-4": { "type": "faq_item", "settings": { "question": "هل تصلح للسيارة؟", "answer": "نعم." } }
+      },
+      "block_order": [
+        "trust-1", "trust-2", "trust-3", "trust-4",
+        "price-1", "price-2",
+        "benefit-1", "benefit-2", "benefit-3", "benefit-4", "benefit-5", "benefit-6", "benefit-7", "benefit-8",
+        "us-1", "us-2", "us-3", "us-4", "us-5",
+        "them-1", "them-2", "them-3",
+        "feature-1", "feature-2", "feature-3", "feature-4", "feature-5", "feature-6", "feature-7", "feature-8",
+        "step-1", "step-2", "step-3", "step-4",
+        "life-1", "life-2", "life-3", "life-4", "life-5",
+        "spec-1", "spec-2", "spec-3", "spec-4", "spec-5", "spec-6", "spec-7",
+        "review-1", "review-2", "review-3", "review-4",
+        "faq-1", "faq-2", "faq-3", "faq-4"
+      ]
+    }
+  },
+  "order": ["main"]
+}

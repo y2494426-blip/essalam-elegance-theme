@@ -1,0 +1,743 @@
+{% comment %}
+  ESSALEM ELEGANCE - Premium Arabic RTL product landing page (Apple / Dyson style).
+  Assign this template to any product from Shopify admin > Product > Theme template.
+  Hero + gallery pull from the product's own media/price; every other section is block-based
+  so the same template can be reused for future COD products.
+{% endcomment %}
+
+{{ 'landing-premium.css' | asset_url | stylesheet_tag }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign hero_media = current_variant.featured_media | default: product.featured_media -%}
+
+<div class="essalem-landing" dir="rtl" lang="ar">
+
+  {%- comment -%} ===== HERO ===== {%- endcomment -%}
+  <section class="essalem-hero-lp">
+    <span class="essalem-hero-lp__blob essalem-hero-lp__blob--1"></span>
+    <span class="essalem-hero-lp__blob essalem-hero-lp__blob--2"></span>
+    <div class="essalem-landing__inner essalem-hero-lp__grid">
+      <div data-lp-reveal>
+        {%- if section.settings.hero_eyebrow != blank -%}
+          <span class="essalem-landing__eyebrow">{{ section.settings.hero_eyebrow }}</span>
+        {%- endif -%}
+        <h1 class="essalem-landing__title">{{ section.settings.hero_title }}</h1>
+        <p class="essalem-landing__subtitle">{{ section.settings.hero_subtitle }}</p>
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="essalem-hero-lp__trust">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'trust_badge' -%}
+                <span class="essalem-hero-lp__trust-item" {{ block.shopify_attributes }}>
+                  <span>{{ block.settings.icon }}</span>{{ block.settings.text }}
+                </span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="essalem-hero-lp__actions">
+          <button type="button" class="essalem-landing__btn essalem-landing__btn--primary" data-lp-scroll-to="[data-lp-order]">
+            {{ section.settings.hero_cta_primary }}
+          </button>
+          <button type="button" class="essalem-landing__btn essalem-landing__btn--ghost" data-lp-scroll-to="#essalem-lp-features">
+            {{ section.settings.hero_cta_secondary }}
+          </button>
+        </div>
+      </div>
+
+      <div class="essalem-hero-lp__media" data-lp-reveal>
+        <div class="essalem-hero-lp__media-frame">
+          {%- if hero_media -%}
+            {{ hero_media | image_url: width: 800 | image_tag: loading: 'eager', class: 'essalem-hero-lp__media-img', alt: product.title }}
+          {%- else -%}
+            <div class="essalem-hero-lp__media-placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== PRICING ===== {%- endcomment -%}
+  {%- assign has_offers = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'price_offer' -%}{%- assign has_offers = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_offers -%}
+    <section class="essalem-pricing-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          {%- if section.settings.pricing_tag != blank -%}
+            <span class="essalem-landing__section-tag">{{ section.settings.pricing_tag }}</span>
+          {%- endif -%}
+          <h2 class="essalem-landing__section-title">{{ section.settings.pricing_title }}</h2>
+        </div>
+        <div class="essalem-pricing-lp__grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'price_offer' -%}
+              <div class="essalem-price-card{% if block.settings.featured %} essalem-price-card--featured{% endif %}" data-lp-reveal {{ block.shopify_attributes }}>
+                {%- if block.settings.featured -%}
+                  <span class="essalem-price-card__badge">{{ block.settings.badge_text | default: 'الأكثر طلباً' }}</span>
+                {%- endif -%}
+                <p class="essalem-price-card__label">{{ block.settings.label }}</p>
+                <p class="essalem-price-card__amount">{{ block.settings.price }} <span>ريال</span></p>
+                <p class="essalem-price-card__note">{{ block.settings.note }}</p>
+                <button
+                  type="button"
+                  class="essalem-landing__btn essalem-landing__btn--primary essalem-landing__btn--block"
+                  data-lp-offer
+                  data-lp-offer-qty="{{ block.settings.qty }}"
+                >
+                  {{ section.settings.hero_cta_primary }}
+                </button>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== BENEFITS ===== {%- endcomment -%}
+  {%- assign has_benefits = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'benefit' -%}{%- assign has_benefits = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_benefits -%}
+    <section class="essalem-grid-lp essalem-grid-lp--tint">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          {%- if section.settings.benefits_tag != blank -%}
+            <span class="essalem-landing__section-tag">{{ section.settings.benefits_tag }}</span>
+          {%- endif -%}
+          <h2 class="essalem-landing__section-title">{{ section.settings.benefits_title }}</h2>
+        </div>
+        <div class="essalem-cards-lp">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit' -%}
+              <div class="essalem-card-lp" data-lp-reveal {{ block.shopify_attributes }}>
+                <span class="essalem-card-lp__icon">{{ block.settings.icon }}</span>
+                <p class="essalem-card-lp__title">{{ block.settings.text }}</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== WHY CHOOSE US / COMPARISON ===== {%- endcomment -%}
+  {%- assign has_us_points = false -%}
+  {%- assign has_them_points = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'our_point' -%}{%- assign has_us_points = true -%}{%- endif -%}
+    {%- if block.type == 'traditional_point' -%}{%- assign has_them_points = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_us_points or has_them_points -%}
+    <section class="essalem-compare-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.compare_title }}</h2>
+        </div>
+        <div class="essalem-compare-lp__grid">
+          {%- if has_us_points -%}
+            <div class="essalem-compare-card essalem-compare-card--us" data-lp-reveal>
+              <h3 class="essalem-compare-card__title">{{ section.settings.compare_us_title }}</h3>
+              <ul class="essalem-compare-card__list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'our_point' -%}
+                    <li {{ block.shopify_attributes }}>✅ {{ block.settings.text }}</li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+          {%- if has_them_points -%}
+            <div class="essalem-compare-card essalem-compare-card--them" data-lp-reveal>
+              <h3 class="essalem-compare-card__title">{{ section.settings.compare_them_title }}</h3>
+              <ul class="essalem-compare-card__list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'traditional_point' -%}
+                    <li {{ block.shopify_attributes }}>❌ {{ block.settings.text }}</li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== FEATURES (specs icon grid) ===== {%- endcomment -%}
+  {%- assign has_features = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'feature_spec' -%}{%- assign has_features = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_features -%}
+    <section class="essalem-grid-lp" id="essalem-lp-features">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.features_title }}</h2>
+        </div>
+        <div class="essalem-cards-lp">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature_spec' -%}
+              <div class="essalem-card-lp" data-lp-reveal {{ block.shopify_attributes }}>
+                <span class="essalem-card-lp__icon">{{ block.settings.icon }}</span>
+                <p class="essalem-card-lp__title">{{ block.settings.title }}</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== HOW TO USE TIMELINE ===== {%- endcomment -%}
+  {%- assign has_steps = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'step' -%}{%- assign has_steps = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_steps -%}
+    <section class="essalem-timeline-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.timeline_title }}</h2>
+        </div>
+        <div class="essalem-timeline-lp__track">
+          {%- assign step_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step' -%}
+              {%- assign step_index = step_index | plus: 1 -%}
+              <div class="essalem-timeline-step" data-lp-reveal {{ block.shopify_attributes }}>
+                <div class="essalem-timeline-step__num">{{ step_index }}</div>
+                <p class="essalem-timeline-step__title">{{ block.settings.title }}</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== GALLERY ===== {%- endcomment -%}
+  <section class="essalem-gallery-lp">
+    <div class="essalem-landing__inner">
+      <div class="essalem-landing__section-head" data-lp-reveal>
+        <h2 class="essalem-landing__section-title">{{ section.settings.gallery_title }}</h2>
+      </div>
+      <div data-lp-gallery>
+        <div class="essalem-gallery-lp__track" data-lp-gallery-track>
+          {%- if product.media.size > 0 -%}
+            {%- for media in product.media limit: 8 -%}
+              <div class="essalem-gallery-lp__item" data-lp-gallery-item data-lp-reveal>
+                {{ media | image_url: width: 640 | image_tag: loading: 'lazy', alt: product.title }}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..3) -%}
+              <div class="essalem-gallery-lp__item" data-lp-gallery-item data-lp-reveal>
+                {{ 'product-1' | placeholder_svg_tag }}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        <div class="essalem-gallery-lp__nav">
+          <button type="button" class="essalem-gallery-lp__nav-btn" data-lp-gallery-prev aria-label="السابق">›</button>
+          <button type="button" class="essalem-gallery-lp__nav-btn" data-lp-gallery-next aria-label="التالي">‹</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== LIFESTYLE ===== {%- endcomment -%}
+  {%- assign has_lifestyle = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'lifestyle' -%}{%- assign has_lifestyle = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_lifestyle -%}
+    <section class="essalem-lifestyle-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.lifestyle_title }}</h2>
+        </div>
+        <div class="essalem-lifestyle-lp__grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'lifestyle' -%}
+              <div class="essalem-lifestyle-card" data-lp-reveal {{ block.shopify_attributes }}>
+                {%- if block.settings.image -%}
+                  {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: block.settings.label }}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag }}
+                {%- endif -%}
+                <span class="essalem-lifestyle-card__label">{{ block.settings.label }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== TECHNICAL SPECS ===== {%- endcomment -%}
+  {%- assign has_specs = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'spec_row' -%}{%- assign has_specs = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_specs -%}
+    <section class="essalem-specs-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.specs_title }}</h2>
+        </div>
+        <div class="essalem-specs-lp__table" data-lp-reveal>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'spec_row' -%}
+              <div class="essalem-specs-lp__row" {{ block.shopify_attributes }}>
+                <span class="essalem-specs-lp__label">{{ block.settings.label }}</span>
+                <span class="essalem-specs-lp__value">{{ block.settings.value }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== REVIEWS ===== {%- endcomment -%}
+  {%- assign has_reviews = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'review' -%}{%- assign has_reviews = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_reviews -%}
+    <section class="essalem-reviews-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.reviews_title }}</h2>
+        </div>
+        {%- if section.settings.reviews_avg != blank -%}
+          <p class="essalem-reviews-lp__avg">⭐⭐⭐⭐⭐ {{ section.settings.reviews_avg }}/5</p>
+        {%- endif -%}
+        <div class="essalem-reviews-lp__grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'review' -%}
+              <div class="essalem-review-card-lp" data-lp-reveal {{ block.shopify_attributes }}>
+                <div class="essalem-review-card-lp__stars">
+                  {%- for i in (1..block.settings.stars) -%}★{%- endfor -%}
+                </div>
+                <p class="essalem-review-card-lp__text">"{{ block.settings.text }}"</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== FAQ ===== {%- endcomment -%}
+  {%- assign has_faq = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'faq_item' -%}{%- assign has_faq = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if has_faq -%}
+    <section class="essalem-faq-lp">
+      <div class="essalem-landing__inner">
+        <div class="essalem-landing__section-head" data-lp-reveal>
+          <h2 class="essalem-landing__section-title">{{ section.settings.faq_title }}</h2>
+        </div>
+        <div class="essalem-faq-lp__list" data-lp-reveal>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'faq_item' -%}
+              <details class="essalem-faq-lp__item" {{ block.shopify_attributes }}>
+                <summary>{{ block.settings.question }}</summary>
+                <div class="essalem-faq-lp__answer">{{ block.settings.answer }}</div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== ORDER / CTA ===== {%- endcomment -%}
+  <section class="essalem-order-lp" data-lp-order>
+    <div class="essalem-landing__inner">
+      <div class="essalem-order-lp__box" data-lp-reveal>
+        <h2 class="essalem-order-lp__title">{{ section.settings.order_title }}</h2>
+        <p class="essalem-order-lp__price">{{ current_variant.price | money }}</p>
+
+        {%- form 'product', product, id: 'essalem-lp-form-{{ section.id }}' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+          <div class="essalem-order-lp__qty" data-lp-qty>
+            <button type="button" class="essalem-order-lp__qty-btn" data-lp-qty-minus>−</button>
+            <input type="number" name="quantity" value="1" min="1" class="essalem-order-lp__qty-input" data-lp-qty-input readonly>
+            <button type="button" class="essalem-order-lp__qty-btn" data-lp-qty-plus>+</button>
+          </div>
+
+          <div class="essalem-order-lp__cod-wrapper">
+            {%- comment -%}content_for 'blocks' renders the EasySell COD app block when it's added via the theme customizer{%- endcomment -%}
+            {% content_for 'blocks' %}
+            {%- comment -%}Fallback — plain AJAX add-to-cart, used only while no COD app block is active{%- endcomment -%}
+            <button
+              type="button"
+              class="essalem-landing__btn essalem-landing__btn--primary essalem-landing__btn--block"
+              data-lp-add-to-cart
+              {% if current_variant.available == false %}disabled{% endif %}
+            >
+              <span data-lp-add-to-cart-label>
+                {%- if current_variant.available -%}
+                  {{ section.settings.hero_cta_primary }}
+                {%- else -%}
+                  نفذت الكمية
+                {%- endif -%}
+              </span>
+            </button>
+          </div>
+        {%- endform -%}
+
+        <script>
+          (function () {
+            var scope = document.currentScript.closest('.essalem-order-lp__box');
+            var btn = scope && scope.querySelector('[data-lp-add-to-cart]');
+            if (!btn) return;
+            var form = btn.closest('form');
+            var label = btn.querySelector('[data-lp-add-to-cart-label]');
+            var originalText = label ? label.textContent : '';
+
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              if (btn.disabled) return;
+
+              var formData = new FormData(form);
+              btn.disabled = true;
+              if (label) label.textContent = 'جارٍ الإضافة...';
+
+              fetch('/cart/add.js', {
+                method: 'POST',
+                body: formData,
+                headers: { Accept: 'application/json' }
+              })
+                .then(function (res) {
+                  if (!res.ok) throw new Error('Add to cart failed');
+                  return res.json();
+                })
+                .then(function () {
+                  if (label) label.textContent = '✓ تمت الإضافة';
+                  return fetch('/cart.js')
+                    .then(function (res) { return res.json(); })
+                    .then(function (cart) {
+                      document
+                        .querySelectorAll('[data-lux-cart-count], .lux-cart-count, #lux-cart-count')
+                        .forEach(function (el) { el.textContent = cart.item_count; });
+                      document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+                    });
+                })
+                .catch(function () {
+                  if (label) label.textContent = 'خطأ، حاول مجدداً';
+                })
+                .finally(function () {
+                  setTimeout(function () {
+                    btn.disabled = false;
+                    if (label) label.textContent = originalText;
+                  }, 1800);
+                });
+            });
+          })();
+        </script>
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="essalem-order-lp__trust">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'trust_badge' -%}
+                <span>{{ block.settings.icon }} {{ block.settings.text }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="{{ 'landing-premium.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Landing Page Produit",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Texte au-dessus du titre"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Titre principal",
+      "default": "✨ اجعل مكتبك نظيفًا في ثوانٍ"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Sous-titre",
+      "default": "تخلص من الغبار، الفتات، وشعر الحيوانات الأليفة بسهولة مع المكنسة الكهربائية الصغيرة القابلة لإعادة الشحن عبر USB."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_primary",
+      "label": "Bouton principal (CTA)",
+      "default": "اطلب الآن"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_secondary",
+      "label": "Bouton secondaire",
+      "default": "شاهد المميزات"
+    },
+    {
+      "type": "header",
+      "content": "Prix"
+    },
+    {
+      "type": "text",
+      "id": "pricing_tag",
+      "label": "Étiquette",
+      "default": "عروض حصرية"
+    },
+    {
+      "type": "text",
+      "id": "pricing_title",
+      "label": "Titre section prix",
+      "default": "اختر عرضك"
+    },
+    {
+      "type": "header",
+      "content": "Avantages"
+    },
+    {
+      "type": "text",
+      "id": "benefits_tag",
+      "label": "Étiquette",
+      "default": "لماذا تختارها"
+    },
+    {
+      "type": "text",
+      "id": "benefits_title",
+      "label": "Titre section avantages",
+      "default": "مميزات ستعشقها"
+    },
+    {
+      "type": "header",
+      "content": "Comparaison"
+    },
+    {
+      "type": "text",
+      "id": "compare_title",
+      "label": "Titre section comparaison",
+      "default": "لماذا نتفوق على الطرق التقليدية؟"
+    },
+    {
+      "type": "text",
+      "id": "compare_us_title",
+      "label": "Titre carte \"نحن\"",
+      "default": "مكنستنا الذكية"
+    },
+    {
+      "type": "text",
+      "id": "compare_them_title",
+      "label": "Titre carte \"التنظيف التقليدي\"",
+      "default": "التنظيف التقليدي"
+    },
+    {
+      "type": "header",
+      "content": "Caractéristiques techniques (cartes)"
+    },
+    {
+      "type": "text",
+      "id": "features_title",
+      "label": "Titre section caractéristiques",
+      "default": "مواصفات تستحق الثقة"
+    },
+    {
+      "type": "header",
+      "content": "Comment l'utiliser"
+    },
+    {
+      "type": "text",
+      "id": "timeline_title",
+      "label": "Titre section utilisation",
+      "default": "كيف تستخدمها؟"
+    },
+    {
+      "type": "header",
+      "content": "Galerie"
+    },
+    {
+      "type": "text",
+      "id": "gallery_title",
+      "label": "Titre section galerie",
+      "default": "شاهدها عن قرب"
+    },
+    {
+      "type": "header",
+      "content": "Style de vie"
+    },
+    {
+      "type": "text",
+      "id": "lifestyle_title",
+      "label": "Titre section أماكن الاستخدام",
+      "default": "تستخدم في كل مكان"
+    },
+    {
+      "type": "header",
+      "content": "Spécifications"
+    },
+    {
+      "type": "text",
+      "id": "specs_title",
+      "label": "Titre section مواصفات",
+      "default": "المواصفات الفنية"
+    },
+    {
+      "type": "header",
+      "content": "Avis clients"
+    },
+    {
+      "type": "text",
+      "id": "reviews_title",
+      "label": "Titre section avis",
+      "default": "ماذا يقول عملاؤنا"
+    },
+    {
+      "type": "text",
+      "id": "reviews_avg",
+      "label": "Note moyenne",
+      "default": "4.9"
+    },
+    {
+      "type": "header",
+      "content": "FAQ"
+    },
+    {
+      "type": "text",
+      "id": "faq_title",
+      "label": "Titre section FAQ",
+      "default": "أسئلة شائعة"
+    },
+    {
+      "type": "header",
+      "content": "Commande"
+    },
+    {
+      "type": "text",
+      "id": "order_title",
+      "label": "Titre section commande",
+      "default": "اطلب الآن قبل نفاد الكمية"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "trust_badge",
+      "name": "Badge de confiance",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "✅" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "الدفع عند الاستلام" }
+      ]
+    },
+    {
+      "type": "price_offer",
+      "name": "Offre de prix",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Libellé", "default": "قطعة واحدة" },
+        { "type": "text", "id": "price", "label": "Prix", "default": "170" },
+        { "type": "text", "id": "note", "label": "Note", "default": "" },
+        { "type": "number", "id": "qty", "label": "Quantité liée", "default": 1 },
+        { "type": "checkbox", "id": "featured", "label": "Mise en avant", "default": false },
+        { "type": "text", "id": "badge_text", "label": "Texte du badge", "default": "الأكثر طلباً" }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Avantage",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "✔" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "تنظيف سريع للمكتب" }
+      ]
+    },
+    {
+      "type": "our_point",
+      "name": "Point positif (نحن)",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "سريع" }
+      ]
+    },
+    {
+      "type": "traditional_point",
+      "name": "Point négatif (التقليدي)",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "متعب" }
+      ]
+    },
+    {
+      "type": "feature_spec",
+      "name": "Caractéristique",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "🔋" },
+        { "type": "text", "id": "title", "label": "Texte", "default": "بطارية 1200mAh" }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "Étape d'utilisation",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Texte de l'étape", "default": "اشحن الجهاز" }
+      ]
+    },
+    {
+      "type": "lifestyle",
+      "name": "Image style de vie",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "label", "label": "Libellé", "default": "المكتب" }
+      ]
+    },
+    {
+      "type": "spec_row",
+      "name": "Ligne de spécification",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Libellé", "default": "البطارية" },
+        { "type": "text", "id": "value", "label": "Valeur", "default": "1200mAh" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        { "type": "range", "id": "stars", "label": "Étoiles", "min": 1, "max": 5, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Texte de l'avis", "default": "أفضل جهاز اشتريته لتنظيف المكتب." }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "Question FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "هل تعمل بدون سلك؟" },
+        { "type": "textarea", "id": "answer", "label": "Réponse", "default": "نعم، تعمل ببطارية قابلة للشحن." }
+      ]
+    }
+  ]
+}
+{% endschema %}

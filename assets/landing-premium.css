@@ -1,0 +1,844 @@
+/* ESSALEM ELEGANCE - Premium Arabic RTL Landing Page (Apple / Dyson style) */
+
+.essalem-landing {
+  --lp-white: #ffffff;
+  --lp-sky: #dff4ff;
+  --lp-gray: #f5f5f5;
+  --lp-silver: #e8e8e8;
+  --lp-blue: #0a84ff;
+  --lp-blue-deep: #0059c9;
+  --lp-ink: #0d1420;
+  --lp-ink-soft: #4a5568;
+  --lp-radius-lg: 28px;
+  --lp-radius-md: 20px;
+  --lp-radius-sm: 14px;
+  --lp-shadow-soft: 0 20px 60px -20px rgba(10, 30, 60, 0.18);
+  --lp-shadow-lift: 0 30px 80px -24px rgba(10, 30, 60, 0.28);
+  --lp-border: 1px solid rgba(13, 20, 32, 0.07);
+
+  direction: rtl;
+  font-family: 'Tajawal', 'Montserrat', Arial, sans-serif;
+  color: var(--lp-ink);
+  background: var(--lp-white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.essalem-landing * {
+  box-sizing: border-box;
+}
+
+.essalem-landing img {
+  max-width: 100%;
+  display: block;
+}
+
+.essalem-landing__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.essalem-landing__eyebrow {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--lp-blue-deep);
+  background: var(--lp-sky);
+  padding: 8px 18px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.essalem-landing__title {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 20px;
+  color: var(--lp-ink);
+}
+
+.essalem-landing__subtitle {
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  color: var(--lp-ink-soft);
+  line-height: 1.8;
+  margin: 0 0 32px;
+  max-width: 640px;
+}
+
+.essalem-landing__section-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px;
+}
+
+.essalem-landing__section-tag {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--lp-blue-deep);
+  background: var(--lp-sky);
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.essalem-landing__section-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: 800;
+  margin: 0;
+  color: var(--lp-ink);
+}
+
+.essalem-landing__section-sub {
+  color: var(--lp-ink-soft);
+  font-size: 1.05rem;
+  margin-top: 12px;
+  line-height: 1.7;
+}
+
+.essalem-landing__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 18px 38px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
+}
+
+.essalem-landing__btn--primary {
+  background: linear-gradient(135deg, var(--lp-blue) 0%, var(--lp-blue-deep) 100%);
+  color: #fff;
+  box-shadow: 0 16px 40px -10px rgba(10, 132, 255, 0.5);
+}
+
+.essalem-landing__btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 50px -12px rgba(10, 132, 255, 0.6);
+}
+
+.essalem-landing__btn--ghost {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--lp-ink);
+  border: var(--lp-border);
+  backdrop-filter: blur(10px);
+}
+
+.essalem-landing__btn--ghost:hover {
+  transform: translateY(-3px);
+  background: var(--lp-white);
+}
+
+.essalem-landing__btn--block {
+  width: 100%;
+}
+
+/* ===== HERO ===== */
+.essalem-hero-lp {
+  position: relative;
+  padding: 110px 0 100px;
+  background: linear-gradient(180deg, var(--lp-sky) 0%, var(--lp-white) 65%);
+  overflow: hidden;
+}
+
+.essalem-hero-lp__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.essalem-hero-lp__blob--1 {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: -100px;
+  background: radial-gradient(circle, var(--lp-blue) 0%, transparent 70%);
+  animation: essalem-float-slow 9s ease-in-out infinite;
+}
+
+.essalem-hero-lp__blob--2 {
+  width: 320px;
+  height: 320px;
+  bottom: -80px;
+  right: -60px;
+  background: radial-gradient(circle, var(--lp-silver) 0%, transparent 70%);
+  animation: essalem-float-slow 11s ease-in-out infinite reverse;
+}
+
+.essalem-hero-lp__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.essalem-hero-lp__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  margin-bottom: 30px;
+}
+
+.essalem-hero-lp__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--lp-ink-soft);
+}
+
+.essalem-hero-lp__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.essalem-hero-lp__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.essalem-hero-lp__media-frame {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--lp-radius-lg);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  border: var(--lp-border);
+  box-shadow: var(--lp-shadow-lift);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  animation: essalem-float 5s ease-in-out infinite;
+}
+
+.essalem-hero-lp__media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 30px 40px rgba(13, 20, 32, 0.22));
+}
+
+.essalem-hero-lp__media-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lp-ink-soft);
+}
+
+.essalem-hero-lp__media-placeholder svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.35;
+}
+
+@keyframes essalem-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+}
+
+@keyframes essalem-float-slow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.06); }
+}
+
+/* ===== PRICING ===== */
+.essalem-pricing-lp {
+  padding: 90px 0;
+  background: var(--lp-white);
+}
+
+.essalem-pricing-lp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 26px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.essalem-price-card {
+  position: relative;
+  background: var(--lp-gray);
+  border-radius: var(--lp-radius-md);
+  padding: 40px 32px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.essalem-price-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--lp-shadow-soft);
+}
+
+.essalem-price-card--featured {
+  background: var(--lp-white);
+  border-color: var(--lp-blue);
+  box-shadow: 0 0 0 6px rgba(10, 132, 255, 0.08), var(--lp-shadow-lift);
+}
+
+.essalem-price-card__badge {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--lp-blue) 0%, var(--lp-blue-deep) 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 7px 20px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.essalem-price-card__label {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lp-ink-soft);
+  margin-bottom: 10px;
+}
+
+.essalem-price-card__amount {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--lp-ink);
+  margin-bottom: 6px;
+}
+
+.essalem-price-card__amount span {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--lp-ink-soft);
+}
+
+.essalem-price-card__note {
+  font-size: 0.95rem;
+  color: var(--lp-blue-deep);
+  font-weight: 600;
+  margin-bottom: 22px;
+  min-height: 1.4em;
+}
+
+/* ===== BENEFITS / FEATURES GRID ===== */
+.essalem-grid-lp {
+  padding: 90px 0;
+}
+
+.essalem-grid-lp--tint {
+  background: var(--lp-gray);
+}
+
+.essalem-cards-lp {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.essalem-card-lp {
+  background: var(--lp-white);
+  border: var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+  padding: 30px 26px;
+  box-shadow: var(--lp-shadow-soft);
+  transition: transform 0.3s ease;
+}
+
+.essalem-card-lp:hover {
+  transform: translateY(-5px);
+}
+
+.essalem-card-lp__icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--lp-sky);
+}
+
+.essalem-card-lp__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lp-ink);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== COMPARISON ===== */
+.essalem-compare-lp {
+  padding: 90px 0;
+  background: var(--lp-white);
+}
+
+.essalem-compare-lp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.essalem-compare-card {
+  border-radius: var(--lp-radius-md);
+  padding: 36px 32px;
+}
+
+.essalem-compare-card--us {
+  background: linear-gradient(160deg, var(--lp-sky) 0%, var(--lp-white) 100%);
+  border: 2px solid var(--lp-blue);
+  box-shadow: var(--lp-shadow-lift);
+}
+
+.essalem-compare-card--them {
+  background: var(--lp-gray);
+  border: var(--lp-border);
+}
+
+.essalem-compare-card__title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 0 20px;
+}
+
+.essalem-compare-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.essalem-compare-card__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--lp-ink);
+}
+
+/* ===== TIMELINE ===== */
+.essalem-timeline-lp {
+  padding: 90px 0;
+  background: var(--lp-gray);
+}
+
+.essalem-timeline-lp__track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.essalem-timeline-step {
+  background: var(--lp-white);
+  border-radius: var(--lp-radius-sm);
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: var(--lp-shadow-soft);
+}
+
+.essalem-timeline-step__num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lp-blue) 0%, var(--lp-blue-deep) 100%);
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.essalem-timeline-step__title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+  color: var(--lp-ink);
+}
+
+/* ===== GALLERY ===== */
+.essalem-gallery-lp {
+  padding: 90px 0;
+  background: var(--lp-white);
+}
+
+.essalem-gallery-lp__track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 20px;
+  scrollbar-width: thin;
+}
+
+.essalem-gallery-lp__item {
+  flex: 0 0 auto;
+  width: min(320px, 78vw);
+  scroll-snap-align: center;
+  border-radius: var(--lp-radius-md);
+  overflow: hidden;
+  box-shadow: var(--lp-shadow-soft);
+  aspect-ratio: 4 / 5;
+}
+
+.essalem-gallery-lp__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.essalem-gallery-lp__item:hover img {
+  transform: scale(1.06);
+}
+
+.essalem-gallery-lp__nav {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.essalem-gallery-lp__nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: var(--lp-border);
+  background: var(--lp-white);
+  box-shadow: var(--lp-shadow-soft);
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--lp-ink);
+}
+
+/* ===== LIFESTYLE ===== */
+.essalem-lifestyle-lp {
+  padding: 90px 0;
+  background: var(--lp-gray);
+}
+
+.essalem-lifestyle-lp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.essalem-lifestyle-card {
+  position: relative;
+  border-radius: var(--lp-radius-md);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  box-shadow: var(--lp-shadow-soft);
+}
+
+.essalem-lifestyle-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.essalem-lifestyle-card:hover img {
+  transform: scale(1.08);
+}
+
+.essalem-lifestyle-card__label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 18px;
+  background: linear-gradient(to top, rgba(13, 20, 32, 0.75), transparent);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ===== SPECS ===== */
+.essalem-specs-lp {
+  padding: 90px 0;
+  background: var(--lp-white);
+}
+
+.essalem-specs-lp__table {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--lp-gray);
+  border-radius: var(--lp-radius-md);
+  overflow: hidden;
+}
+
+.essalem-specs-lp__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 28px;
+  border-bottom: 1px solid rgba(13, 20, 32, 0.08);
+}
+
+.essalem-specs-lp__row:last-child {
+  border-bottom: none;
+}
+
+.essalem-specs-lp__label {
+  font-weight: 700;
+  color: var(--lp-ink-soft);
+}
+
+.essalem-specs-lp__value {
+  font-weight: 700;
+  color: var(--lp-ink);
+}
+
+/* ===== REVIEWS ===== */
+.essalem-reviews-lp {
+  padding: 90px 0;
+  background: var(--lp-gray);
+}
+
+.essalem-reviews-lp__avg {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: var(--lp-ink);
+}
+
+.essalem-reviews-lp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.essalem-review-card-lp {
+  background: var(--lp-white);
+  border-radius: var(--lp-radius-sm);
+  padding: 28px 24px;
+  box-shadow: var(--lp-shadow-soft);
+}
+
+.essalem-review-card-lp__stars {
+  color: var(--lp-blue);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.essalem-review-card-lp__text {
+  color: var(--lp-ink);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* ===== FAQ ===== */
+.essalem-faq-lp {
+  padding: 90px 0;
+  background: var(--lp-white);
+}
+
+.essalem-faq-lp__list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.essalem-faq-lp__item {
+  background: var(--lp-gray);
+  border-radius: var(--lp-radius-sm);
+  padding: 4px 24px;
+}
+
+.essalem-faq-lp__item summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.essalem-faq-lp__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.essalem-faq-lp__item summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  color: var(--lp-blue);
+  transition: transform 0.25s ease;
+}
+
+.essalem-faq-lp__item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.essalem-faq-lp__answer {
+  padding: 0 0 20px;
+  color: var(--lp-ink-soft);
+  line-height: 1.8;
+}
+
+/* ===== ORDER / CTA ===== */
+.essalem-order-lp {
+  padding: 100px 0;
+  background: linear-gradient(180deg, var(--lp-white) 0%, var(--lp-sky) 100%);
+}
+
+.essalem-order-lp__box {
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(18px);
+  border: var(--lp-border);
+  border-radius: var(--lp-radius-lg);
+  box-shadow: var(--lp-shadow-lift);
+  padding: 48px 40px;
+  text-align: center;
+}
+
+.essalem-order-lp__title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 14px;
+}
+
+.essalem-order-lp__price {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--lp-blue-deep);
+  margin-bottom: 24px;
+}
+
+.essalem-order-lp__qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--lp-gray);
+  border-radius: 999px;
+  padding: 8px 10px;
+  margin-bottom: 24px;
+}
+
+.essalem-order-lp__qty-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--lp-white);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(13, 20, 32, 0.1);
+}
+
+.essalem-order-lp__qty-input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.essalem-order-lp__trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 20px;
+  margin-top: 22px;
+  font-size: 0.9rem;
+  color: var(--lp-ink-soft);
+  font-weight: 600;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.essalem-landing [data-lp-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.essalem-landing [data-lp-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .essalem-hero-lp__grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .essalem-hero-lp__trust,
+  .essalem-hero-lp__actions {
+    justify-content: center;
+  }
+  .essalem-hero-lp__media {
+    order: -1;
+  }
+  .essalem-compare-lp__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .essalem-hero-lp {
+    padding: 80px 0 60px;
+  }
+  .essalem-pricing-lp,
+  .essalem-grid-lp,
+  .essalem-compare-lp,
+  .essalem-timeline-lp,
+  .essalem-gallery-lp,
+  .essalem-lifestyle-lp,
+  .essalem-specs-lp,
+  .essalem-reviews-lp,
+  .essalem-faq-lp,
+  .essalem-order-lp {
+    padding: 60px 0;
+  }
+  .essalem-order-lp__box {
+    padding: 36px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .essalem-landing [data-lp-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .essalem-hero-lp__blob,
+  .essalem-hero-lp__media-frame {
+    animation: none;
+  }
+}
