@@ -277,11 +277,9 @@
       {%- if product -%}
         {%- form 'product', product, id: 'essalem-lp-form', novalidate: true -%}
           <input type="hidden" name="id" value="{{ lp_variant.id }}">
-          <!-- EasySell COD Form -->
           {% content_for 'blocks' %}
         {%- endform -%}
       {%- else -%}
-        <!-- EasySell COD Form -->
         <p class="text-center text-sm font-semibold text-slate-500">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
       {%- endif -%}
     </div>
