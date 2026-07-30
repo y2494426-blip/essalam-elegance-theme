@@ -1,4 +1,4 @@
-{%- comment -%} Essalem Elegance — single-file premium Arabic RTL landing page section (EasySell COD, no native Shopify buy form). {%- endcomment -%}
+{%- comment -%} PURELUMA — single-file premium Arabic RTL landing page section for the Beauty Pack (Hydrating Hair Serum 100ml + Eyelash Growth & Care Serum 10ml). EasySell COD app block, no native Shopify buy form. {%- endcomment -%}
 <section id="essalem-lp-root" dir="rtl" lang="ar">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -10,12 +10,10 @@
       extend: {
         fontFamily: { tajawal: ['Tajawal', 'Arial', 'sans-serif'] },
         colors: {
-          lpsky: '#dff4ff',
-          lpgray: '#f5f5f5',
-          lpsilver: '#e8e8e8',
-          lpblue: '#0a84ff',
-          lpblue2: '#0059c9',
-          lpink: '#0d1420'
+          plbeige: '#f8f6f2',
+          plgreen: '#36563a',
+          plgreendark: '#233a26',
+          plgold: '#c8a24c'
         },
         keyframes: {
           lpfloat: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-18px)' } },
@@ -35,7 +33,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-  #essalem-lp-root { font-family: 'Tajawal', Arial, sans-serif; background:#fff; color:#0d1420; overflow-x:hidden; direction: rtl; -webkit-font-smoothing:antialiased; }
+  #essalem-lp-root { font-family: 'Tajawal', Arial, sans-serif; background:#fff; color:#233a26; overflow-x:hidden; direction: rtl; -webkit-font-smoothing:antialiased; }
   #essalem-lp-root *{ box-sizing:border-box; }
   #essalem-lp-root img{ max-width:100%; display:block; }
   #essalem-lp-root [data-lp-reveal]{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
@@ -46,8 +44,8 @@
   #essalem-lp-root details summary::-webkit-details-marker{ display:none; }
   #essalem-lp-root details summary .lp-plus{ transition:transform .25s ease; }
   #essalem-lp-root details[open] summary .lp-plus{ transform:rotate(45deg); }
-  #essalem-lp-root .lp-blob{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.55; pointer-events:none; }
-  #essalem-lp-root .lp-glass{ background:rgba(255,255,255,.6); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(13,20,32,.08); }
+  #essalem-lp-root .lp-blob{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; }
+  #essalem-lp-root .lp-glass{ background:rgba(255,255,255,.6); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(35,58,38,.1); }
   @media (prefers-reduced-motion: reduce){
     #essalem-lp-root [data-lp-reveal]{ opacity:1; transform:none; transition:none; }
     #essalem-lp-root .animate-lpfloat, #essalem-lp-root .animate-lpfloatslow{ animation:none; }
@@ -62,35 +60,37 @@
 <div class="max-w-[1240px] mx-auto px-6">
 
   <!-- ===== HERO ===== -->
-  <section class="relative -mx-6 px-6 pt-24 pb-20 md:pt-28 md:pb-24 bg-gradient-to-b from-lpsky to-white overflow-hidden">
-    <span class="lp-blob w-80 h-80 -top-20 -left-16 bg-lpblue animate-lpfloatslow"></span>
-    <span class="lp-blob w-72 h-72 -bottom-16 -right-10 bg-lpsilver animate-lpfloatslow" style="animation-direction:reverse;"></span>
+  <section class="relative -mx-6 px-6 pt-24 pb-20 md:pt-28 md:pb-24 bg-gradient-to-b from-plbeige to-white overflow-hidden">
+    <span class="lp-blob w-80 h-80 -top-20 -left-16 bg-plgold animate-lpfloatslow"></span>
+    <span class="lp-blob w-72 h-72 -bottom-16 -right-10 bg-plgreen animate-lpfloatslow" style="animation-direction:reverse;"></span>
 
     <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
       <div data-lp-reveal>
-        <span class="inline-block text-sm font-bold tracking-wide text-lpblue2 bg-lpsky rounded-full px-4 py-2 mb-4">عروض حصرية</span>
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-5 text-lpink">✨ اجعل مكتبك نظيفًا في ثوانٍ</h1>
-        <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8 max-w-xl">تخلص من الغبار، الفتات، وشعر الحيوانات الأليفة بسهولة مع المكنسة الكهربائية الصغيرة القابلة لإعادة الشحن عبر USB.</p>
+        <span class="inline-flex items-center gap-2 text-sm font-bold tracking-wide text-plgreen bg-white border border-plgold/30 rounded-full px-4 py-2 mb-4">
+          <span class="text-plgold">✦</span> PURELUMA — Beauté &amp; Soins
+        </span>
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-5 text-plgreendark">روتين الجمال في باك واحد</h1>
+        <p class="text-lg md:text-xl text-plgreendark/70 leading-relaxed mb-8 max-w-xl">سيروم الشعر المرطب (100ml) + سيروم العناية بالرموش (10ml) — عناية يومية بمكونات طبيعية.</p>
 
-        <div class="flex flex-wrap gap-4 mb-8 text-sm font-semibold text-slate-600">
+        <div class="flex flex-wrap gap-4 mb-8 text-sm font-semibold text-plgreendark/70">
           <span>✅ الدفع عند الاستلام</span>
           <span>🚚 شحن سريع</span>
-          <span>⭐ جودة عالية</span>
-          <span>🔒 ضمان رضا العملاء</span>
+          <span>🇲🇦 صنع في المغرب</span>
+          <span>✅ ضمان رضا العميلات</span>
         </div>
 
         <div class="flex flex-wrap gap-4">
-          <button type="button" data-lp-scroll="#essalem-lp-order" class="inline-flex items-center justify-center gap-2 font-bold text-white text-base px-9 py-4 rounded-full bg-gradient-to-l from-lpblue to-lpblue2 shadow-[0_16px_40px_-10px_rgba(10,132,255,0.5)] hover:-translate-y-1 transition">اطلب الآن</button>
-          <button type="button" data-lp-scroll="#essalem-lp-features" class="inline-flex items-center justify-center gap-2 font-bold text-base px-9 py-4 rounded-full bg-white/70 backdrop-blur border border-black/10 hover:-translate-y-1 hover:bg-white transition">شاهد المميزات</button>
+          <button type="button" data-lp-scroll="#essalem-lp-order" class="inline-flex items-center justify-center gap-2 font-bold text-white text-base px-9 py-4 rounded-full bg-plgreen shadow-[0_16px_40px_-10px_rgba(54,86,58,0.45)] hover:-translate-y-1 hover:bg-plgreendark transition">اطلبي الآن</button>
+          <button type="button" data-lp-scroll="#essalem-lp-features" class="inline-flex items-center justify-center gap-2 font-bold text-base px-9 py-4 rounded-full bg-white/70 backdrop-blur border border-black/10 hover:-translate-y-1 hover:bg-white transition">شاهدي المميزات</button>
         </div>
       </div>
 
       <div class="flex items-center justify-center" data-lp-reveal>
-        <div class="relative w-full max-w-[420px] aspect-square rounded-[28px] lp-glass shadow-[0_30px_80px_-24px_rgba(10,30,60,0.28)] flex items-center justify-center p-8 animate-lpfloat">
+        <div class="relative w-full max-w-[420px] aspect-square rounded-[28px] lp-glass shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] flex items-center justify-center p-8 animate-lpfloat">
           {%- if lp_media -%}
             {{ lp_media | image_url: width: 800 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-contain drop-shadow-2xl' }}
           {%- else -%}
-            <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 text-slate-300" fill="none"><circle cx="100" cy="90" r="70" stroke="currentColor" stroke-width="10"/><path d="M60 160 L140 160" stroke="currentColor" stroke-width="10" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 text-plgreen/25" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
           {%- endif -%}
         </div>
       </div>
@@ -100,32 +100,130 @@
   <!-- ===== BENEFITS ===== -->
   <section class="py-20">
     <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-lpblue2 bg-lpsky rounded-full px-4 py-1.5 mb-3">لماذا تختارها</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">مميزات ستعشقها</h2>
+      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">فوائد الباك</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">عناية شاملة من الجذور إلى الرموش</h2>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-      {%- assign lp_benefits = 'تنظيف سريع للمكتب|يزيل الغبار والفتات بسهولة|مثالي للمكتب والمنزل والسيارة|يعمل لمدة تصل إلى 120 دقيقة|شحن USB|صغير وسهل الحمل|تصميم أنيق|مناسب للطلاب والموظفين' | split: '|' -%}
-      {%- for b in lp_benefits -%}
-        <div class="bg-white border border-black/5 rounded-2xl p-6 shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)] hover:-translate-y-1 transition" data-lp-reveal>
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-lpsky text-2xl mb-3">✔</span>
-          <p class="font-bold text-lpink leading-relaxed">{{ b }}</p>
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
+        <h3 class="text-xl font-extrabold text-plgreen mb-6">سيروم الشعر المرطب</h3>
+        <div class="grid grid-cols-2 gap-4">
+          {%- assign lp_hair_benefits = 'ترطيب الشعر|لمعان طبيعي|نعومة|تغذية|سهولة التصفيف' | split: '|' -%}
+          {%- for b in lp_hair_benefits -%}
+            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
+              <span class="text-plgold text-lg">✦</span>
+              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
+            </div>
+          {%- endfor -%}
         </div>
-      {%- endfor -%}
+      </div>
+      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
+        <h3 class="text-xl font-extrabold text-plgreen mb-6">سيروم العناية بالرموش</h3>
+        <div class="grid grid-cols-2 gap-4">
+          {%- assign lp_lash_benefits = 'العناية بالرموش|دعم مظهر الكثافة|روتين يومي بسيط|مكونات طبيعية|سهولة الاستخدام' | split: '|' -%}
+          {%- for b in lp_lash_benefits -%}
+            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
+              <span class="text-plgold text-lg">✦</span>
+              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ===== FEATURES ===== -->
-  <section id="essalem-lp-features" class="py-20 bg-lpgray -mx-6 px-6">
+  <!-- ===== INGREDIENTS ===== -->
+  <section id="essalem-lp-features" class="py-20 bg-plbeige -mx-6 px-6">
     <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">مواصفات تستحق الثقة</h2>
+      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">مكونات طبيعية</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">مختارة بعناية من الطبيعة</h2>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-      {%- assign lp_features_icons = '🔋|⏱️|🔌|⚡|💨|🧹|🎨|🪶' | split: '|' -%}
-      {%- assign lp_features_text = 'بطارية 1200mAh|حتى 120 دقيقة استخدام|شحن USB|3 ساعات للشحن الكامل|قوة شفط ممتازة|فرشاة تنظيف مرفقة|تصميم صغير وأنيق|وزن خفيف' | split: '|' -%}
-      {%- for icon in lp_features_icons -%}
-        <div class="bg-white border border-black/5 rounded-2xl p-6 shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)] hover:-translate-y-1 transition" data-lp-reveal>
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-lpsky text-2xl mb-3">{{ icon }}</span>
-          <p class="font-bold text-lpink leading-relaxed">{{ lp_features_text[forloop.index0] }}</p>
+    <div class="mb-10">
+      <h3 class="text-lg font-extrabold text-plgreen mb-5">سيروم الشعر</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        {%- assign lp_hair_ing_icons = '🌿|🥑|🌰|🥥|🍊|✨' | split: '|' -%}
+        {%- assign lp_hair_ing_names = 'ألوفيرا|زيت الأفوكادو|زيت اللوز الحلو|زيت جوز الهند|فيتامين C|سيليكون طبيعي' | split: '|' -%}
+        {%- for icon in lp_hair_ing_icons -%}
+          <div class="bg-white rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.2)]" data-lp-reveal>
+            <div class="text-3xl mb-2">{{ icon }}</div>
+            <p class="text-sm font-bold text-plgreendark">{{ lp_hair_ing_names[forloop.index0] }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div>
+      <h3 class="text-lg font-extrabold text-plgreen mb-5">سيروم الرموش</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
+        {%- assign lp_lash_ing_icons = '🌱|🌳|🥥|🌾|🌿|🧬|💧' | split: '|' -%}
+        {%- assign lp_lash_ing_names = 'زيت الخروع|زيت الأركان|زيت جوز الهند|فيتامين E|خلاصة الألوفيرا|بيوتين|ببتيدات طبيعية' | split: '|' -%}
+        {%- for icon in lp_lash_ing_icons -%}
+          <div class="bg-white rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.2)]" data-lp-reveal>
+            <div class="text-3xl mb-2">{{ icon }}</div>
+            <p class="text-sm font-bold text-plgreendark">{{ lp_lash_ing_names[forloop.index0] }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW TO USE (TIMELINE) ===== -->
+  <section class="py-20">
+    <div class="text-center max-w-2xl mx-auto mb-14" data-lp-reveal>
+      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">طريقة الاستخدام</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">روتين عناية يومي بسيط</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-10">
+      <div data-lp-reveal>
+        <h3 class="text-lg font-extrabold text-plgreen mb-6">☀️ سيروم الشعر — يومياً</h3>
+        <div class="flex flex-col gap-5">
+          {%- assign lp_hair_steps = 'نظفي شعرك:اغسلي شعرك كالمعتاد وجففيه قليلاً حتى يصبح رطباً.|ضعي السيروم:استخدمي يومياً على الشعر النظيف والرطب من الجذور إلى الأطراف.|دلكي بلطف:دلكي فروة الرأس بحركات دائرية لمنح لمعان وترطيب يدوم.' | split: '|' -%}
+          {%- for step in lp_hair_steps -%}
+            {%- assign step_parts = step | split: ':' -%}
+            <div class="flex gap-4">
+              <div class="w-9 h-9 rounded-full bg-plgold text-white font-extrabold flex items-center justify-center flex-shrink-0">{{ forloop.index }}</div>
+              <div>
+                <p class="font-bold text-plgreendark mb-1">{{ step_parts[0] }}</p>
+                <p class="text-sm text-plgreendark/70">{{ step_parts[1] }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div data-lp-reveal>
+        <h3 class="text-lg font-extrabold text-plgreen mb-6">🌙 سيروم الرموش — مساءً</h3>
+        <div class="flex flex-col gap-5">
+          {%- assign lp_lash_steps = 'أزيلي المكياج:نظفي منطقة العين والرموش جيداً قبل النوم.|طبّقي كل ليلة:ضعي السيروم بالفرشاة المرفقة على جذور الرموش النظيفة.|اجعليه روتيناً:داومي عليه ضمن روتينك المسائي للاستفادة القصوى.' | split: '|' -%}
+          {%- for step in lp_lash_steps -%}
+            {%- assign step_parts = step | split: ':' -%}
+            <div class="flex gap-4">
+              <div class="w-9 h-9 rounded-full bg-plgold text-white font-extrabold flex items-center justify-center flex-shrink-0">{{ forloop.index }}</div>
+              <div>
+                <p class="font-bold text-plgreendark mb-1">{{ step_parts[0] }}</p>
+                <p class="text-sm text-plgreendark/70">{{ step_parts[1] }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY CHOOSE PURELUMA ===== -->
+  <section class="py-20 bg-plbeige -mx-6 px-6">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">لماذا PURELUMA؟</h2>
+    </div>
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" data-lp-reveal>
+      <div class="grid grid-cols-3 bg-plgreen text-white font-bold text-center py-4 text-sm md:text-base">
+        <div></div>
+        <div>PURELUMA</div>
+        <div>غيرها</div>
+      </div>
+      {%- assign lp_compare = 'مكونات طبيعية|تركيبة فاخرة|صنع في المغرب|عناية يومية|تغليف أنيق' | split: '|' -%}
+      {%- for row in lp_compare -%}
+        <div class="grid grid-cols-3 items-center text-center py-4 px-4 {% unless forloop.last %}border-b border-plgreen/10{% endunless %}">
+          <div class="text-sm md:text-base font-semibold text-plgreendark text-right">{{ row }}</div>
+          <div class="text-plgreen text-xl">✅</div>
+          <div class="text-red-400 text-xl">❌</div>
         </div>
       {%- endfor -%}
     </div>
@@ -134,153 +232,104 @@
   <!-- ===== GALLERY ===== -->
   <section class="py-20">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">شاهدها عن قرب</h2>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">معرض المنتج</h2>
     </div>
     <div class="relative">
       <div id="essalem-lp-gallery-track" class="flex gap-5 overflow-x-auto lp-scrollbar-none pb-4" style="scroll-snap-type:x mandatory;">
         {%- if product.media.size > 0 -%}
-          {%- for media in product.media limit: 8 -%}
-            <div class="flex-none w-[78vw] max-w-[320px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)]" style="scroll-snap-align:center;" data-lp-reveal>
-              {{ media | image_url: width: 640 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- for media in product.media limit: 10 -%}
+            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-lp-reveal>
+              {{ media | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
             </div>
           {%- endfor -%}
         {%- else -%}
-          {%- for i in (1..3) -%}
-            <div class="flex-none w-[78vw] max-w-[320px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)] bg-lpgray flex items-center justify-center" style="scroll-snap-align:center;" data-lp-reveal>
-              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2 text-slate-300" fill="none"><rect x="30" y="30" width="140" height="140" rx="16" stroke="currentColor" stroke-width="8"/><circle cx="75" cy="80" r="14" stroke="currentColor" stroke-width="8"/><path d="M40 150 L90 110 L120 135 L160 95 L170 150 Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/></svg>
+          {%- for i in (1..4) -%}
+            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige flex items-center justify-center shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-lp-reveal>
+              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2 text-plgreen/20" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
             </div>
           {%- endfor -%}
         {%- endif -%}
       </div>
       <div class="flex justify-center gap-4 mt-2">
-        <button type="button" id="essalem-lp-gallery-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-black/10 bg-white shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)]">›</button>
-        <button type="button" id="essalem-lp-gallery-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-black/10 bg-white shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)]">‹</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== LIFESTYLE ===== -->
-  <section class="py-20 bg-lpgray -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">تستخدم في كل مكان</h2>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      {%- assign lp_lifestyle_icons = '💼|⌨️|🚗|📚|🏠' | split: '|' -%}
-      {%- assign lp_lifestyle_labels = 'المكتب|لوحة المفاتيح|السيارة|غرفة الدراسة|المنزل' | split: '|' -%}
-      {%- for icon in lp_lifestyle_icons -%}
-        <div class="relative rounded-2xl overflow-hidden aspect-[3/4] bg-white shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)] flex items-center justify-center" data-lp-reveal>
-          <span class="text-5xl">{{ icon }}</span>
-          <span class="absolute bottom-0 inset-x-0 py-3 text-center font-bold text-white text-sm bg-gradient-to-t from-lpink/80 to-transparent">{{ lp_lifestyle_labels[forloop.index0] }}</span>
-        </div>
-      {%- endfor -%}
-    </div>
-  </section>
-
-  <!-- ===== TECHNICAL SPECIFICATIONS ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">المواصفات الفنية</h2>
-    </div>
-    <div class="max-w-2xl mx-auto bg-lpgray rounded-3xl overflow-hidden" data-lp-reveal>
-      {%- assign lp_spec_labels = 'البطارية|مدة التشغيل|الشحن|وقت الشحن|الوزن|الأبعاد|المادة' | split: '|' -%}
-      {%- assign lp_spec_values = '1200mAh|120 دقيقة|USB|3 ساعات|135 جرام|88×88×70 مم|ABS' | split: '|' -%}
-      {%- for label in lp_spec_labels -%}
-        <div class="flex items-center justify-between gap-4 px-7 py-4 {% unless forloop.last %}border-b border-black/5{% endunless %}">
-          <span class="font-bold text-slate-500">{{ label }}</span>
-          <span class="font-bold text-lpink">{{ lp_spec_values[forloop.index0] }}</span>
-        </div>
-      {%- endfor -%}
-    </div>
-  </section>
-
-  <!-- ===== COMPARISON ===== -->
-  <section class="py-20 bg-lpgray -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">لماذا نتفوق على الطرق التقليدية؟</h2>
-    </div>
-    <div class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-      <div class="rounded-3xl p-8 bg-white border-2 border-lpblue shadow-[0_0_0_6px_rgba(10,132,255,0.08),0_30px_80px_-24px_rgba(10,30,60,0.28)]" data-lp-reveal>
-        <h3 class="text-lg font-extrabold text-lpink mb-5">مكنستنا الذكية</h3>
-        <ul class="flex flex-col gap-3">
-          {%- assign lp_us = 'سريع|هادئ|قابل للشحن|صغير|تصميم فاخر' | split: '|' -%}
-          {%- for p in lp_us -%}
-            <li class="flex items-center gap-2 font-semibold text-lpink">✅ {{ p }}</li>
-          {%- endfor -%}
-        </ul>
-      </div>
-      <div class="rounded-3xl p-8 bg-lpsilver/40 border border-black/5" data-lp-reveal>
-        <h3 class="text-lg font-extrabold text-lpink mb-5">التنظيف التقليدي</h3>
-        <ul class="flex flex-col gap-3">
-          {%- assign lp_them = 'متعب|بطيء|غير عملي' | split: '|' -%}
-          {%- for p in lp_them -%}
-            <li class="flex items-center gap-2 font-semibold text-lpink">❌ {{ p }}</li>
-          {%- endfor -%}
-        </ul>
+        <button type="button" id="essalem-lp-gallery-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">›</button>
+        <button type="button" id="essalem-lp-gallery-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">‹</button>
       </div>
     </div>
   </section>
 
   <!-- ===== REVIEWS ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink mb-3">ماذا يقول عملاؤنا</h2>
-      <p class="text-xl font-extrabold text-lpink">⭐⭐⭐⭐⭐ 4.9/5</p>
+  <section class="py-20 bg-plbeige -mx-6 px-6">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark mb-2">ماذا تقول عميلاتنا</h2>
+      <p class="text-plgold font-bold">⭐⭐⭐⭐⭐ 4.9/5</p>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {%- assign lp_reviews = 'أفضل جهاز اشتريته لتنظيف المكتب.|صغير لكن قوة الشفط ممتازة.|مفيد جداً ويعمل لفترة طويلة.|أنصح به لكل شخص يعمل على مكتب.' | split: '|' -%}
-      {%- for r in lp_reviews -%}
-        <div class="bg-white rounded-2xl p-6 shadow-[0_20px_60px_-20px_rgba(10,30,60,0.18)]" data-lp-reveal>
-          <div class="text-lpblue tracking-widest mb-3">★★★★★</div>
-          <p class="text-lpink leading-relaxed">"{{ r }}"</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {%- assign lp_review_names = 'فاطمة الزهراء، الدار البيضاء|سارة، الرباط|إيمان، مراكش|خديجة، فاس|سلمى، طنجة|نسرين، أكادير' | split: '|' -%}
+      {%- assign lp_review_texts = 'شعري أصبح أكثر لمعاناً ونعومة من أول استعمال، رائحته رائعة أيضاً.|روتين بسيط وسريع، أحس بترطيب حقيقي لشعري كل يوم.|سيروم الرموش خفيف وسهل الاستخدام، أصبح روتيني المسائي المفضل.|منتج مغربي أصيل بجودة عالية، التغليف أنيق جداً.|أحببت نعومة شعري بعد الاستخدام المنتظم، سأعيد الطلب أكيد.|تجربة ممتازة، التوصيل كان سريعاً والدفع عند الاستلام سهّل علي الطلب.' | split: '|' -%}
+      {%- for t in lp_review_texts -%}
+        <div class="bg-white rounded-2xl p-6 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
+          <div class="text-plgold tracking-widest mb-3">★★★★★</div>
+          <p class="text-plgreendark/90 leading-relaxed mb-4">"{{ t }}"</p>
+          <p class="text-sm font-bold text-plgreen">— {{ lp_review_names[forloop.index0] }}</p>
         </div>
       {%- endfor -%}
     </div>
   </section>
 
   <!-- ===== FAQ ===== -->
-  <section class="py-20 bg-lpgray -mx-6 px-6">
+  <section class="py-20">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink">أسئلة شائعة</h2>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">أسئلة شائعة</h2>
     </div>
     <div class="max-w-2xl mx-auto flex flex-col gap-3" data-lp-reveal>
-      {%- assign lp_faq_q = 'هل تعمل بدون سلك؟|كم تدوم البطارية؟|هل الشحن عبر USB؟|هل تصلح للسيارة؟' | split: '|' -%}
-      {%- assign lp_faq_a = 'نعم، تعمل ببطارية قابلة للشحن.|حتى 120 دقيقة.|نعم.|نعم.' | split: '|' -%}
+      {%- assign lp_faq_q = 'هل المكونات طبيعية وآمنة؟|كم مرة أستخدم كل سيروم؟|هل يناسب جميع أنواع الشعر والرموش؟|هل المنتج صنع في المغرب؟|هل يتوفر الدفع عند الاستلام؟|كم يستغرق التوصيل؟' | split: '|' -%}
+      {%- assign lp_faq_a = 'نعم، التركيبة مصممة بمكونات طبيعية مختارة بعناية لتناسب الاستخدام اليومي.|سيروم الشعر يُستخدم يومياً، وسيروم الرموش يُطبق كل ليلة ضمن روتين العناية.|نعم، الباك مصمم ليدخل ضمن روتين عناية يومي بسيط يناسب مختلف الأنواع.|نعم، PURELUMA علامة مغربية 100% تحرص على الجودة في كل مرحلة.|نعم، نوفر الدفع عند الاستلام في جميع المدن المغربية.|عادة بين 2 إلى 5 أيام عمل حسب المدينة.' | split: '|' -%}
       {%- for q in lp_faq_q -%}
-        <details class="bg-white rounded-2xl px-6">
-          <summary class="flex items-center justify-between py-4 font-bold">
+        <details class="bg-plbeige rounded-2xl px-6">
+          <summary class="flex items-center justify-between py-4 font-bold text-plgreendark">
             <span>{{ q }}</span>
-            <span class="lp-plus text-lpblue text-xl">+</span>
+            <span class="lp-plus text-plgold text-xl">+</span>
           </summary>
-          <div class="pb-5 text-slate-600 leading-relaxed">{{ lp_faq_a[forloop.index0] }}</div>
+          <div class="pb-5 text-plgreendark/70 leading-relaxed">{{ lp_faq_a[forloop.index0] }}</div>
         </details>
       {%- endfor -%}
     </div>
   </section>
 
+  <!-- ===== GUARANTEE ===== -->
+  <section class="py-16 bg-plgreen -mx-6 px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
+      <div data-lp-reveal><div class="text-3xl mb-2">🇲🇦</div><p class="font-bold text-sm">صنع في المغرب</p></div>
+      <div data-lp-reveal><div class="text-3xl mb-2">💳</div><p class="font-bold text-sm">الدفع عند الاستلام</p></div>
+      <div data-lp-reveal><div class="text-3xl mb-2">🚚</div><p class="font-bold text-sm">شحن سريع</p></div>
+      <div data-lp-reveal><div class="text-3xl mb-2">📦</div><p class="font-bold text-sm">تغليف آمن وأنيق</p></div>
+    </div>
+  </section>
+
   <!-- ===== اطلب الآن (EasySell COD Form) ===== -->
-  <section id="essalem-lp-order" class="py-24 bg-gradient-to-b from-white to-lpsky -mx-6 px-6">
+  <section id="essalem-lp-order" class="py-24 bg-gradient-to-b from-white to-plbeige -mx-6 px-6">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-lpblue2 bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-lpink mb-3">اطلب الآن</h2>
+      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark mb-3">اطلبي الآن</h2>
       {%- if product -%}
-        <p class="text-3xl font-extrabold text-lpblue2">{{ lp_variant.price | money }}</p>
+        <p class="text-3xl font-extrabold text-plgreen">{{ lp_variant.price | money }}</p>
       {%- endif -%}
-      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-sm font-semibold text-slate-600">
+      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-sm font-semibold text-plgreendark/70">
         <span>✅ الدفع عند الاستلام</span>
         <span>🚚 شحن سريع</span>
-        <span>⭐ جودة عالية</span>
-        <span>🔒 ضمان رضا العملاء</span>
+        <span>🇲🇦 صنع في المغرب</span>
+        <span>✅ ضمان رضا العميلات</span>
       </div>
     </div>
 
-    <div class="max-w-lg mx-auto lp-glass rounded-[28px] shadow-[0_30px_80px_-24px_rgba(10,30,60,0.28)] p-8 md:p-10" data-lp-reveal>
+    <div class="max-w-lg mx-auto lp-glass rounded-[28px] shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] p-8 md:p-10" data-lp-reveal>
       {%- if product -%}
         {%- form 'product', product, id: 'essalem-lp-form', novalidate: true -%}
           <input type="hidden" name="id" value="{{ lp_variant.id }}">
           {% content_for 'blocks' %}
         {%- endform -%}
       {%- else -%}
-        <p class="text-center text-sm font-semibold text-slate-500">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
+        <p class="text-center text-sm font-semibold text-plgreendark/60">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
       {%- endif -%}
     </div>
   </section>
@@ -289,23 +338,23 @@
   <footer class="py-14 border-t border-black/5">
     <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-right">
       <div>
-        <p class="font-extrabold text-lpink mb-2">🇲🇦 الدفع عند الاستلام</p>
-        <p class="text-sm text-slate-500">ادفع نقداً عند استلام طلبك بكل أمان.</p>
+        <p class="font-extrabold text-plgreendark mb-2">✅ الدفع عند الاستلام</p>
+        <p class="text-sm text-plgreendark/60">ادفعي نقداً عند استلام طلبك بكل أمان.</p>
       </div>
       <div>
-        <p class="font-extrabold text-lpink mb-2">🚚 شحن سريع</p>
-        <p class="text-sm text-slate-500">توصيل لجميع المدن خلال أيام قليلة.</p>
+        <p class="font-extrabold text-plgreendark mb-2">🚚 شحن سريع</p>
+        <p class="text-sm text-plgreendark/60">توصيل لجميع مدن المغرب خلال أيام قليلة.</p>
       </div>
       <div>
-        <p class="font-extrabold text-lpink mb-2">↩ سياسة الاستبدال</p>
-        <p class="text-sm text-slate-500">استبدال سهل خلال 7 أيام من الاستلام.</p>
+        <p class="font-extrabold text-plgreendark mb-2">↩ سياسة الاستبدال</p>
+        <p class="text-sm text-plgreendark/60">استبدال سهل خلال 7 أيام من الاستلام.</p>
       </div>
       <div>
-        <p class="font-extrabold text-lpink mb-2">🔒 الخصوصية والشروط</p>
-        <p class="text-sm text-slate-500">بياناتك محمية ومعاملتك آمنة معنا.</p>
+        <p class="font-extrabold text-plgreendark mb-2">🔒 الخصوصية والشروط</p>
+        <p class="text-sm text-plgreendark/60">بياناتك محمية ومعاملتك آمنة معنا.</p>
       </div>
     </div>
-    <p class="text-center text-xs text-slate-400 mt-10">© {{ 'now' | date: '%Y' }} جميع الحقوق محفوظة.</p>
+    <p class="text-center text-xs text-plgreendark/40 mt-10">© {{ 'now' | date: '%Y' }} PURELUMA — جميع الحقوق محفوظة.</p>
   </footer>
 
 </div>
