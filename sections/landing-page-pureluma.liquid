@@ -315,33 +315,23 @@
     </div>
   </section>
 
-  <!-- ===== ORDER FORM ===== -->
+  <!-- ===== اطلب الآن (EasySell COD Form) ===== -->
   <section id="pl-order" class="py-24 bg-plbeige -mx-6 px-6">
-    <div class="max-w-lg mx-auto pl-glass rounded-[32px] shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] p-8 md:p-10" data-pl-reveal>
-      <h2 class="pl-serif text-2xl md:text-3xl font-bold text-plgreendark text-center mb-2">أكملي طلبك الآن</h2>
+    <div class="text-center max-w-2xl mx-auto mb-10" data-pl-reveal>
+      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark mb-3">اطلب الآن</h2>
       {%- if product -%}
-        <p class="text-2xl font-bold text-plgreen text-center mb-6">{{ pl_variant.price | money }}</p>
+        <p class="text-2xl font-bold text-plgreen">{{ pl_variant.price | money }}</p>
       {%- endif -%}
+      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-sm font-semibold text-plgreendark/70">
+        <span>🇲🇦 صنع في المغرب</span>
+        <span>💳 الدفع عند الاستلام</span>
+        <span>🚚 شحن سريع</span>
+      </div>
+    </div>
 
-      <form id="pl-order-form" class="flex flex-col gap-4">
-        <input type="text" id="pl-name" required placeholder="الاسم الكامل" class="w-full rounded-xl border border-plgreen/20 bg-white px-4 py-3.5 text-sm font-medium text-plgreendark placeholder:text-plgreendark/40 focus:outline-none focus:border-plgold">
-        <input type="tel" id="pl-phone" required placeholder="رقم الهاتف" class="w-full rounded-xl border border-plgreen/20 bg-white px-4 py-3.5 text-sm font-medium text-plgreendark placeholder:text-plgreendark/40 focus:outline-none focus:border-plgold">
-        <input type="text" id="pl-city" required placeholder="المدينة" class="w-full rounded-xl border border-plgreen/20 bg-white px-4 py-3.5 text-sm font-medium text-plgreendark placeholder:text-plgreendark/40 focus:outline-none focus:border-plgold">
-        <textarea id="pl-address" required placeholder="العنوان الكامل" rows="2" class="w-full rounded-xl border border-plgreen/20 bg-white px-4 py-3.5 text-sm font-medium text-plgreendark placeholder:text-plgreendark/40 focus:outline-none focus:border-plgold resize-none"></textarea>
-
-        {%- if product -%}
-          <div class="flex items-center justify-center gap-4 bg-white rounded-full px-3 py-2 border border-plgreen/15 mx-auto">
-            <button type="button" id="pl-qty-minus" class="w-9 h-9 rounded-full bg-plbeige font-bold text-plgreen">−</button>
-            <span id="pl-qty" class="w-8 text-center font-bold text-plgreendark">1</span>
-            <button type="button" id="pl-qty-plus" class="w-9 h-9 rounded-full bg-plbeige font-bold text-plgreen">+</button>
-          </div>
-        {%- endif -%}
-
-        <button type="submit" id="pl-submit" class="w-full font-bold text-white text-base px-9 py-4 rounded-full bg-plgreen shadow-[0_18px_40px_-14px_rgba(54,86,58,0.55)] hover:-translate-y-1 hover:bg-plgreendark transition mt-2">
-          <span id="pl-submit-label">أكدي طلبي الآن</span>
-        </button>
-        <p id="pl-form-msg" class="text-center text-sm font-semibold text-plgreen hidden"></p>
-      </form>
+    <div class="max-w-lg mx-auto pl-glass rounded-[32px] shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] p-8 md:p-10" data-pl-reveal>
+      <!-- EasySell COD Form -->
     </div>
   </section>
 
@@ -401,67 +391,6 @@
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
     }
 
-    var qtyEl = root.querySelector('#pl-qty');
-    var qtyMinus = root.querySelector('#pl-qty-minus');
-    var qtyPlus = root.querySelector('#pl-qty-plus');
-    if (qtyEl && qtyMinus) qtyMinus.addEventListener('click', function () {
-      qtyEl.textContent = Math.max(1, (parseInt(qtyEl.textContent, 10) || 1) - 1);
-    });
-    if (qtyEl && qtyPlus) qtyPlus.addEventListener('click', function () {
-      qtyEl.textContent = Math.max(1, (parseInt(qtyEl.textContent, 10) || 1) + 1);
-    });
-
-    var form = root.querySelector('#pl-order-form');
-    if (form) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var submitBtn = root.querySelector('#pl-submit');
-        var submitLabel = root.querySelector('#pl-submit-label');
-        var msg = root.querySelector('#pl-form-msg');
-        var name = root.querySelector('#pl-name').value.trim();
-        var phone = root.querySelector('#pl-phone').value.trim();
-        var city = root.querySelector('#pl-city').value.trim();
-        var address = root.querySelector('#pl-address').value.trim();
-
-        if (!name || !phone || !city || !address) return;
-
-        submitBtn.disabled = true;
-        submitLabel.textContent = 'جارٍ التأكيد...';
-
-        {%- if product -%}
-          var variantId = {{ pl_variant.id | json }};
-          var qty = parseInt((qtyEl && qtyEl.textContent) || '1', 10) || 1;
-
-          fetch('/cart/add.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ id: variantId, quantity: qty })
-          })
-            .then(function (res) { if (!res.ok) throw new Error('add failed'); return res.json(); })
-            .then(function () {
-              return fetch('/cart/update.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                body: JSON.stringify({
-                  attributes: { 'الاسم': name, 'الهاتف': phone, 'المدينة': city, 'العنوان': address }
-                })
-              });
-            })
-            .then(function () { window.location.href = '/checkout'; })
-            .catch(function () {
-              submitBtn.disabled = false;
-              submitLabel.textContent = 'أكدي طلبي الآن';
-              if (msg) { msg.textContent = 'حدث خطأ، حاولي مجدداً.'; msg.classList.remove('hidden'); }
-            });
-        {%- else -%}
-          setTimeout(function () {
-            submitBtn.disabled = false;
-            submitLabel.textContent = 'أكدي طلبي الآن';
-            if (msg) { msg.textContent = 'أضيفي هذا القسم لصفحة منتج لتفعيل الطلب.'; msg.classList.remove('hidden'); }
-          }, 600);
-        {%- endif -%}
-      });
-    }
   })();
 </script>
 
