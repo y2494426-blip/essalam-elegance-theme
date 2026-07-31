@@ -1,4 +1,4 @@
-{%- comment -%} PURELUMA — single-file premium Arabic RTL landing page section for the Beauty Pack (Hydrating Hair Serum 100ml + Eyelash Growth & Care Serum 10ml). EasySell COD app block, no native Shopify buy form. {%- endcomment -%}
+{%- comment -%} مصباح إسقاط أمواج الماء LED — single-file premium Arabic RTL landing page section. EasySell COD app block, no native Shopify buy form. {%- endcomment -%}
 <section id="essalem-lp-root" dir="rtl" lang="ar">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -10,18 +10,22 @@
       extend: {
         fontFamily: { tajawal: ['Tajawal', 'Arial', 'sans-serif'] },
         colors: {
-          plbeige: '#f8f6f2',
-          plgreen: '#36563a',
-          plgreendark: '#233a26',
-          plgold: '#c8a24c'
+          lxblack: '#0e0d0b',
+          lxblack2: '#171512',
+          lxgold: '#c9a227',
+          lxgoldlight: '#e8c766',
+          lxwarm: '#fdf8ef',
+          lxbeige: '#f3ecd9'
         },
         keyframes: {
-          lpfloat: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-18px)' } },
-          lpfloatslow: { '0%,100%': { transform: 'translate(0,0) scale(1)' }, '50%': { transform: 'translate(20px,-20px) scale(1.06)' } }
+          lpfloat: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-16px)' } },
+          lpglow: { '0%,100%': { boxShadow: '0 0 0 rgba(201,162,39,0.0)' }, '50%': { boxShadow: '0 0 40px rgba(201,162,39,0.35)' } },
+          lpmarquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } }
         },
         animation: {
           lpfloat: 'lpfloat 5s ease-in-out infinite',
-          lpfloatslow: 'lpfloatslow 10s ease-in-out infinite'
+          lpglow: 'lpglow 2.4s ease-in-out infinite',
+          lpmarquee: 'lpmarquee 22s linear infinite'
         }
       }
     }
@@ -33,330 +37,465 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-  #essalem-lp-root { font-family: 'Tajawal', Arial, sans-serif; background:#fff; color:#233a26; overflow-x:hidden; direction: rtl; -webkit-font-smoothing:antialiased; }
+  #essalem-lp-root{ font-family:'Tajawal',Arial,sans-serif; background:#fdf8ef; color:#171512; overflow-x:hidden; direction:rtl; -webkit-font-smoothing:antialiased; }
   #essalem-lp-root *{ box-sizing:border-box; }
   #essalem-lp-root img{ max-width:100%; display:block; }
-  #essalem-lp-root [data-lp-reveal]{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+  #essalem-lp-root [data-lp-reveal]{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
   #essalem-lp-root [data-lp-reveal].is-visible{ opacity:1; transform:translateY(0); }
+  #essalem-lp-root [data-lp-reveal-scale]{ opacity:0; transform:scale(.92); transition:opacity .6s ease, transform .6s ease; }
+  #essalem-lp-root [data-lp-reveal-scale].is-visible{ opacity:1; transform:scale(1); }
   #essalem-lp-root .lp-scrollbar-none::-webkit-scrollbar{ display:none; }
   #essalem-lp-root .lp-scrollbar-none{ -ms-overflow-style:none; scrollbar-width:none; }
   #essalem-lp-root details summary{ cursor:pointer; list-style:none; }
   #essalem-lp-root details summary::-webkit-details-marker{ display:none; }
   #essalem-lp-root details summary .lp-plus{ transition:transform .25s ease; }
   #essalem-lp-root details[open] summary .lp-plus{ transform:rotate(45deg); }
-  #essalem-lp-root .lp-blob{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; }
-  #essalem-lp-root .lp-glass{ background:rgba(255,255,255,.6); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(35,58,38,.1); }
+  #essalem-lp-root .lp-glass{ background:rgba(255,255,255,.06); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(201,162,39,.25); }
+  #essalem-lp-root .lp-glass-light{ background:rgba(255,255,255,.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(14,13,11,.08); }
+  #essalem-lp-root .lp-marquee-track{ display:flex; width:max-content; animation:lpmarquee 22s linear infinite; }
+  #essalem-lp-root .lp-blob{ position:absolute; border-radius:9999px; filter:blur(70px); opacity:.35; pointer-events:none; }
+  @media (max-width:767px){ #essalem-lp-root{ padding-bottom:82px; } }
+  @media (min-width:768px){ #essalem-lp-sticky{ display:none; } }
+  #essalem-lp-lightbox{ position:fixed; inset:0; background:rgba(10,9,7,.94); z-index:99998; display:flex; align-items:center; justify-content:center; padding:24px; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+  #essalem-lp-lightbox.open{ opacity:1; pointer-events:all; }
+  #essalem-lp-lightbox img{ max-width:100%; max-height:88vh; border-radius:18px; transform:scale(.94); transition:transform .3s ease; }
+  #essalem-lp-lightbox.open img{ transform:scale(1); }
+  #essalem-lp-exit{ position:fixed; inset:0; background:rgba(10,9,7,.6); z-index:99990; opacity:0; pointer-events:none; transition:opacity .3s ease; display:flex; align-items:center; justify-content:center; padding:20px; }
+  #essalem-lp-exit.open{ opacity:1; pointer-events:all; }
+  #essalem-lp-exit .lp-exit-card{ transform:scale(.9) translateY(16px); transition:transform .3s ease; }
+  #essalem-lp-exit.open .lp-exit-card{ transform:scale(1) translateY(0); }
+  #essalem-lp-toast{ position:fixed; bottom:96px; right:16px; z-index:8500; transform:translateX(140%); transition:transform .45s cubic-bezier(.34,1.56,.64,1); max-width:280px; }
+  #essalem-lp-toast.show{ transform:translateX(0); }
   @media (prefers-reduced-motion: reduce){
-    #essalem-lp-root [data-lp-reveal]{ opacity:1; transform:none; transition:none; }
-    #essalem-lp-root .animate-lpfloat, #essalem-lp-root .animate-lpfloatslow{ animation:none; }
+    #essalem-lp-root [data-lp-reveal], #essalem-lp-root [data-lp-reveal-scale]{ opacity:1; transform:none; transition:none; }
+    #essalem-lp-root .animate-lpfloat, #essalem-lp-root .animate-lpglow, #essalem-lp-root .lp-marquee-track{ animation:none; }
   }
 </style>
 
 {%- if product -%}
   {%- assign lp_variant = product.selected_or_first_available_variant -%}
   {%- assign lp_media = lp_variant.featured_media | default: product.featured_media -%}
+  {%- assign lp_price = lp_variant.price | money_without_currency -%}
+  {%- assign lp_compare = lp_variant.compare_at_price | money_without_currency -%}
 {%- endif -%}
 
-<div class="max-w-[1240px] mx-auto px-6">
+{%- if product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": [{{ lp_media | image_url: width: 1200 | prepend: "https:" | json }}],
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  "sku": {{ lp_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ lp_variant.price | money_without_currency | json }},
+    "availability": "{% if lp_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  }
+}
+</script>
+{%- endif -%}
+
+<!-- ===== URGENCY MARQUEE BAR ===== -->
+<div class="bg-lxblack text-lxgoldlight py-2 overflow-hidden whitespace-nowrap">
+  <div class="lp-marquee-track text-sm font-bold">
+    {%- for i in (1..2) -%}
+      <span class="px-6">🚚 شحن مجاني لجميع مدن السعودية</span>
+      <span class="px-6">💳 الدفع عند الاستلام</span>
+      <span class="px-6">⚡ عرض خاص لفترة محدودة — خصم 33%</span>
+      <span class="px-6">🎁 هدية مثالية لمن تحب</span>
+    {%- endfor -%}
+  </div>
+</div>
+
+<div class="max-w-[1240px] mx-auto px-5">
 
   <!-- ===== HERO ===== -->
-  <section class="relative -mx-6 px-6 pt-24 pb-20 md:pt-28 md:pb-24 bg-gradient-to-b from-plbeige to-white overflow-hidden">
-    <span class="lp-blob w-80 h-80 -top-20 -left-16 bg-plgold animate-lpfloatslow"></span>
-    <span class="lp-blob w-72 h-72 -bottom-16 -right-10 bg-plgreen animate-lpfloatslow" style="animation-direction:reverse;"></span>
+  <section class="relative -mx-5 px-5 pt-10 pb-16 md:pt-14 md:pb-20 bg-lxblack overflow-hidden">
+    <span class="lp-blob w-96 h-96 -top-24 -right-24 bg-lxgold"></span>
+    <span class="lp-blob w-72 h-72 -bottom-16 -left-16 bg-lxgoldlight"></span>
 
-    <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+    <div class="relative z-10 grid md:grid-cols-2 gap-10 items-center">
       <div data-lp-reveal>
-        <span class="inline-flex items-center gap-2 text-sm font-bold tracking-wide text-plgreen bg-white border border-plgold/30 rounded-full px-4 py-2 mb-4">
-          <span class="text-plgold">✦</span> PURELUMA — Beauté &amp; Soins
-        </span>
-        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-5 text-plgreendark">روتين الجمال في باك واحد</h1>
-        <p class="text-lg md:text-xl text-plgreendark/70 leading-relaxed mb-8 max-w-xl">سيروم الشعر المرطب (100ml) + سيروم العناية بالرموش (10ml) — عناية يومية بمكونات طبيعية.</p>
+        <span class="inline-block bg-lxgoldlight text-lxblack font-extrabold text-xs px-4 py-2 rounded-full mb-4">✨ جديد</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4 text-lxwarm">✨ حوّل أي غرفة إلى عالم من الهدوء والجمال</h1>
+        <p class="text-base md:text-lg text-lxwarm/70 leading-relaxed mb-6 max-w-xl">استمتع بإضاءة ساحرة بتأثير أمواج الماء تمنح منزلك أجواء رومانسية ومريحة في ثوانٍ.</p>
 
-        <div class="flex flex-wrap gap-4 mb-8 text-sm font-semibold text-plgreendark/70">
-          <span>✅ الدفع عند الاستلام</span>
-          <span>🚚 شحن سريع</span>
-          <span>🇲🇦 صنع في المغرب</span>
-          <span>✅ ضمان رضا العميلات</span>
+        <div class="lp-glass rounded-3xl p-5 inline-flex flex-wrap items-center gap-4 mb-6">
+          <div>
+            <span class="block text-lxwarm/50 line-through text-lg">299 ريال</span>
+            <span class="block text-4xl font-extrabold text-lxgoldlight">199 <span class="text-lg font-semibold">ريال</span></span>
+          </div>
+          <span class="bg-red-600/90 text-white text-sm font-extrabold px-4 py-2 rounded-full">خصم 33%</span>
         </div>
 
         <div class="flex flex-wrap gap-4">
-          <button type="button" data-lp-scroll="#essalem-lp-order" class="inline-flex items-center justify-center gap-2 font-bold text-white text-base px-9 py-4 rounded-full bg-plgreen shadow-[0_16px_40px_-10px_rgba(54,86,58,0.45)] hover:-translate-y-1 hover:bg-plgreendark transition">اطلبي الآن</button>
-          <button type="button" data-lp-scroll="#essalem-lp-features" class="inline-flex items-center justify-center gap-2 font-bold text-base px-9 py-4 rounded-full bg-white/70 backdrop-blur border border-black/10 hover:-translate-y-1 hover:bg-white transition">شاهدي المميزات</button>
+          <button type="button" data-lp-scroll="#essalem-lp-order" class="animate-lpglow inline-flex items-center justify-center gap-2 font-extrabold text-lxblack text-base px-9 py-4 rounded-full bg-gradient-to-l from-lxgoldlight to-lxgold hover:-translate-y-1 transition">اطلب الآن</button>
+          <span class="inline-flex items-center gap-2 font-bold text-lxwarm text-sm px-6 py-4 rounded-full lp-glass">🚚 شحن مجاني</span>
+        </div>
+
+        <div class="flex flex-wrap gap-4 mt-6 text-xs font-semibold text-lxwarm/60">
+          <span>💳 الدفع عند الاستلام</span>
+          <span>⭐ آلاف العملاء السعداء</span>
         </div>
       </div>
 
-      <div class="flex items-center justify-center" data-lp-reveal>
-        <div class="relative w-full max-w-[420px] aspect-square rounded-[28px] lp-glass shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] flex items-center justify-center p-8 animate-lpfloat">
+      <div class="flex items-center justify-center" data-lp-reveal-scale>
+        <div class="relative w-full max-w-[440px] aspect-square rounded-[32px] lp-glass shadow-[0_30px_90px_-20px_rgba(0,0,0,0.6)] flex items-center justify-center p-8 animate-lpfloat">
           {%- if lp_media -%}
-            {{ lp_media | image_url: width: 800 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-contain drop-shadow-2xl' }}
+            {{ lp_media | image_url: width: 900 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-contain', id: 'essalem-lp-hero-img' }}
           {%- else -%}
-            <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 text-plgreen/25" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
+            <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 text-lxgold/40" fill="none"><path d="M100 20 C130 60 150 90 150 120 A50 50 0 1 1 50 120 C50 90 70 60 100 20 Z" stroke="currentColor" stroke-width="8"/></svg>
           {%- endif -%}
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===== TRUST BADGES ===== -->
+  <section class="py-8 -mx-5 px-5 bg-lxbeige">
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-bold text-lxblack/80">
+      <span>✅ الدفع عند الاستلام</span>
+      <span>🚚 شحن سريع لجميع مدن السعودية</span>
+      <span>🛡 ضمان الجودة</span>
+      <span>⭐ آلاف العملاء السعداء</span>
+      <span>↩ ضمان الاسترجاع</span>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEM ===== -->
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">هل تشعر أن غرفتك مملة؟</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {%- assign lp_problems = 'إضاءة عادية|أجواء بدون جمال|لا يوجد استرخاء|ديكور غير مميز' | split: '|' -%}
+      {%- for p in lp_problems -%}
+        <div class="bg-white border border-black/5 rounded-2xl p-5 text-center shadow-[0_16px_40px_-20px_rgba(14,13,11,0.25)]" data-lp-reveal>
+          <span class="text-2xl text-red-500">❌</span>
+          <p class="font-bold text-lxblack mt-2 text-sm">{{ p }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  <!-- ===== SOLUTION ===== -->
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxblack">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="order-2 md:order-1" data-lp-reveal>
+        <span class="inline-block text-sm font-bold text-lxgoldlight bg-white/10 rounded-full px-4 py-1.5 mb-4">✨ الحل الأمثل</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-lxwarm mb-4 leading-relaxed">مصباح إسقاط أمواج الماء يحول أي غرفة إلى مكان فاخر ومريح بإضاءة LED مذهلة وتأثيرات أمواج واقعية.</h2>
+        <p class="text-lxwarm/60 leading-relaxed">صمم خصيصاً ليمنحك تجربة استرخاء بصرية، بضغطة زر واحدة تتحول غرفتك لجو رومانسي هادئ يليق بأجمل اللحظات.</p>
+      </div>
+      <div class="order-1 md:order-2 flex justify-center" data-lp-reveal-scale>
+        <div class="w-full max-w-[380px] aspect-[4/5] rounded-[28px] overflow-hidden lp-glass shadow-[0_30px_90px_-20px_rgba(0,0,0,0.6)]">
+          {%- if product.media[1] -%}
+            {{ product.media[1] | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- elsif lp_media -%}
+            {{ lp_media | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- else -%}
+            <div class="w-full h-full flex items-center justify-center text-lxgold/40">
+              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2" fill="none"><path d="M100 20 C130 60 150 90 150 120 A50 50 0 1 1 50 120 C50 90 70 60 100 20 Z" stroke="currentColor" stroke-width="8"/></svg>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section id="essalem-lp-features" class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
+      <span class="inline-block text-sm font-bold text-lxgold bg-lxbeige rounded-full px-4 py-1.5 mb-3">المميزات</span>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">تصميم مدروس لكل التفاصيل</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {%- assign lp_feat_icons = '🌊|🎨|📡|👆|⏱|💡|🛏|💼|🎁|🧱|🔍' | split: '|' -%}
+      {%- assign lp_feat_text = 'إسقاط أمواج ماء واقعي|16 لون مختلف|جهاز تحكم عن بعد|تحكم باللمس|مؤقت تشغيل|إضاءة LED ناعمة|مناسب لغرفة النوم|مناسب للمكتب|هدية مثالية|خامة ABS عالية الجودة|غطاء أكريليك فاخر' | split: '|' -%}
+      {%- for icon in lp_feat_icons -%}
+        <div class="bg-white border border-black/5 rounded-2xl p-5 text-center shadow-[0_16px_40px_-20px_rgba(14,13,11,0.2)] hover:-translate-y-1 transition" data-lp-reveal>
+          <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-lxbeige text-xl mb-2">{{ icon }}</span>
+          <p class="font-bold text-lxblack text-sm leading-relaxed">{{ lp_feat_text[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
   <!-- ===== BENEFITS ===== -->
-  <section class="py-20">
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxbeige">
     <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">فوائد الباك</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">عناية شاملة من الجذور إلى الرموش</h2>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">لماذا سيصبح المفضل لديك؟</h2>
     </div>
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
-        <h3 class="text-xl font-extrabold text-plgreen mb-6">سيروم الشعر المرطب</h3>
-        <div class="grid grid-cols-2 gap-4">
-          {%- assign lp_hair_benefits = 'ترطيب الشعر|لمعان طبيعي|نعومة|تغذية|سهولة التصفيف' | split: '|' -%}
-          {%- for b in lp_hair_benefits -%}
-            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
-              <span class="text-plgold text-lg">✦</span>
-              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
-        <h3 class="text-xl font-extrabold text-plgreen mb-6">سيروم العناية بالرموش</h3>
-        <div class="grid grid-cols-2 gap-4">
-          {%- assign lp_lash_benefits = 'العناية بالرموش|دعم مظهر الكثافة|روتين يومي بسيط|مكونات طبيعية|سهولة الاستخدام' | split: '|' -%}
-          {%- for b in lp_lash_benefits -%}
-            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
-              <span class="text-plgold text-lg">✦</span>
-              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== INGREDIENTS ===== -->
-  <section id="essalem-lp-features" class="py-20 bg-plbeige -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">مكونات طبيعية</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">مختارة بعناية من الطبيعة</h2>
-    </div>
-    <div class="mb-10">
-      <h3 class="text-lg font-extrabold text-plgreen mb-5">سيروم الشعر</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        {%- assign lp_hair_ing_icons = '🌿|🥑|🌰|🥥|🍊|✨' | split: '|' -%}
-        {%- assign lp_hair_ing_names = 'ألوفيرا|زيت الأفوكادو|زيت اللوز الحلو|زيت جوز الهند|فيتامين C|سيليكون طبيعي' | split: '|' -%}
-        {%- for icon in lp_hair_ing_icons -%}
-          <div class="bg-white rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.2)]" data-lp-reveal>
-            <div class="text-3xl mb-2">{{ icon }}</div>
-            <p class="text-sm font-bold text-plgreendark">{{ lp_hair_ing_names[forloop.index0] }}</p>
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-    <div>
-      <h3 class="text-lg font-extrabold text-plgreen mb-5">سيروم الرموش</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
-        {%- assign lp_lash_ing_icons = '🌱|🌳|🥥|🌾|🌿|🧬|💧' | split: '|' -%}
-        {%- assign lp_lash_ing_names = 'زيت الخروع|زيت الأركان|زيت جوز الهند|فيتامين E|خلاصة الألوفيرا|بيوتين|ببتيدات طبيعية' | split: '|' -%}
-        {%- for icon in lp_lash_ing_icons -%}
-          <div class="bg-white rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.2)]" data-lp-reveal>
-            <div class="text-3xl mb-2">{{ icon }}</div>
-            <p class="text-sm font-bold text-plgreendark">{{ lp_lash_ing_names[forloop.index0] }}</p>
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== HOW TO USE (TIMELINE) ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">طريقة الاستخدام</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">روتين عناية يومي بسيط</h2>
-    </div>
-    <div class="grid md:grid-cols-2 gap-10">
-      <div data-lp-reveal>
-        <h3 class="text-lg font-extrabold text-plgreen mb-6">☀️ سيروم الشعر — يومياً</h3>
-        <div class="flex flex-col gap-5">
-          {%- assign lp_hair_steps = 'نظفي شعرك:اغسلي شعرك كالمعتاد وجففيه قليلاً حتى يصبح رطباً.|ضعي السيروم:استخدمي يومياً على الشعر النظيف والرطب من الجذور إلى الأطراف.|دلكي بلطف:دلكي فروة الرأس بحركات دائرية لمنح لمعان وترطيب يدوم.' | split: '|' -%}
-          {%- for step in lp_hair_steps -%}
-            {%- assign step_parts = step | split: ':' -%}
-            <div class="flex gap-4">
-              <div class="w-9 h-9 rounded-full bg-plgold text-white font-extrabold flex items-center justify-center flex-shrink-0">{{ forloop.index }}</div>
-              <div>
-                <p class="font-bold text-plgreendark mb-1">{{ step_parts[0] }}</p>
-                <p class="text-sm text-plgreendark/70">{{ step_parts[1] }}</p>
-              </div>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-      <div data-lp-reveal>
-        <h3 class="text-lg font-extrabold text-plgreen mb-6">🌙 سيروم الرموش — مساءً</h3>
-        <div class="flex flex-col gap-5">
-          {%- assign lp_lash_steps = 'أزيلي المكياج:نظفي منطقة العين والرموش جيداً قبل النوم.|طبّقي كل ليلة:ضعي السيروم بالفرشاة المرفقة على جذور الرموش النظيفة.|اجعليه روتيناً:داومي عليه ضمن روتينك المسائي للاستفادة القصوى.' | split: '|' -%}
-          {%- for step in lp_lash_steps -%}
-            {%- assign step_parts = step | split: ':' -%}
-            <div class="flex gap-4">
-              <div class="w-9 h-9 rounded-full bg-plgold text-white font-extrabold flex items-center justify-center flex-shrink-0">{{ forloop.index }}</div>
-              <div>
-                <p class="font-bold text-plgreendark mb-1">{{ step_parts[0] }}</p>
-                <p class="text-sm text-plgreendark/70">{{ step_parts[1] }}</p>
-              </div>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== WHY CHOOSE PURELUMA ===== -->
-  <section class="py-20 bg-plbeige -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">لماذا PURELUMA؟</h2>
-    </div>
-    <div class="max-w-2xl mx-auto bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" data-lp-reveal>
-      <div class="grid grid-cols-3 bg-plgreen text-white font-bold text-center py-4 text-sm md:text-base">
-        <div></div>
-        <div>PURELUMA</div>
-        <div>غيرها</div>
-      </div>
-      {%- assign lp_compare = 'مكونات طبيعية|تركيبة فاخرة|صنع في المغرب|عناية يومية|تغليف أنيق' | split: '|' -%}
-      {%- for row in lp_compare -%}
-        <div class="grid grid-cols-3 items-center text-center py-4 px-4 {% unless forloop.last %}border-b border-plgreen/10{% endunless %}">
-          <div class="text-sm md:text-base font-semibold text-plgreendark text-right">{{ row }}</div>
-          <div class="text-plgreen text-xl">✅</div>
-          <div class="text-red-400 text-xl">❌</div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {%- assign lp_benefits = 'يساعد على الاسترخاء|ديكور فاخر|مثالي للتصوير|مناسب للأطفال والكبار|يخلق أجواء رومانسية|يوفر إضاءة هادئة' | split: '|' -%}
+      {%- for b in lp_benefits -%}
+        <div class="bg-white rounded-2xl p-5 shadow-[0_16px_40px_-20px_rgba(14,13,11,0.2)]" data-lp-reveal>
+          <span class="text-lxgold text-xl">✔</span>
+          <p class="font-bold text-lxblack text-sm mt-2">{{ b }}</p>
         </div>
       {%- endfor -%}
     </div>
   </section>
 
   <!-- ===== GALLERY ===== -->
-  <section class="py-20">
+  <section class="py-16 md:py-20">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">معرض المنتج</h2>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">شاهد جمال الإضاءة عن قرب</h2>
     </div>
     <div class="relative">
       <div id="essalem-lp-gallery-track" class="flex gap-5 overflow-x-auto lp-scrollbar-none pb-4" style="scroll-snap-type:x mandatory;">
         {%- if product.media.size > 0 -%}
           {%- for media in product.media limit: 10 -%}
-            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-lp-reveal>
-              {{ media | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+            <div class="flex-none w-[78vw] max-w-[320px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_20px_60px_-20px_rgba(14,13,11,0.25)] cursor-zoom-in" style="scroll-snap-align:center;" data-lp-reveal data-lp-lightbox-item>
+              {{ media | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover hover:scale-105 transition duration-500' }}
             </div>
           {%- endfor -%}
         {%- else -%}
           {%- for i in (1..4) -%}
-            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige flex items-center justify-center shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-lp-reveal>
-              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2 text-plgreen/20" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
+            <div class="flex-none w-[78vw] max-w-[320px] aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_20px_60px_-20px_rgba(14,13,11,0.25)] bg-lxbeige flex items-center justify-center" style="scroll-snap-align:center;" data-lp-reveal>
+              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2 text-lxgold/40" fill="none"><path d="M100 20 C130 60 150 90 150 120 A50 50 0 1 1 50 120 C50 90 70 60 100 20 Z" stroke="currentColor" stroke-width="8"/></svg>
             </div>
           {%- endfor -%}
         {%- endif -%}
       </div>
       <div class="flex justify-center gap-4 mt-2">
-        <button type="button" id="essalem-lp-gallery-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">›</button>
-        <button type="button" id="essalem-lp-gallery-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">‹</button>
+        <button type="button" id="essalem-lp-gallery-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-black/10 bg-white shadow-[0_16px_40px_-20px_rgba(14,13,11,0.25)]">›</button>
+        <button type="button" id="essalem-lp-gallery-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-black/10 bg-white shadow-[0_16px_40px_-20px_rgba(14,13,11,0.25)]">‹</button>
       </div>
     </div>
   </section>
 
-  <!-- ===== REVIEWS ===== -->
-  <section class="py-20 bg-plbeige -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark mb-2">ماذا تقول عميلاتنا</h2>
-      <p class="text-plgold font-bold">⭐⭐⭐⭐⭐ 4.9/5</p>
+  <!-- ===== REMOTE CONTROL ===== -->
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxblack">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="flex justify-center" data-lp-reveal-scale>
+        <div class="lp-glass rounded-[28px] p-10 w-full max-w-[300px] aspect-[3/5] flex items-center justify-center">
+          <svg viewBox="0 0 100 180" class="w-2/3 text-lxgoldlight" fill="none">
+            <rect x="10" y="5" width="80" height="170" rx="20" stroke="currentColor" stroke-width="4"/>
+            <circle cx="50" cy="35" r="14" stroke="currentColor" stroke-width="4"/>
+            <circle cx="30" cy="70" r="7" stroke="currentColor" stroke-width="4"/>
+            <circle cx="50" cy="70" r="7" stroke="currentColor" stroke-width="4"/>
+            <circle cx="70" cy="70" r="7" stroke="currentColor" stroke-width="4"/>
+            <circle cx="30" cy="95" r="7" stroke="currentColor" stroke-width="4"/>
+            <circle cx="50" cy="95" r="7" stroke="currentColor" stroke-width="4"/>
+            <circle cx="70" cy="95" r="7" stroke="currentColor" stroke-width="4"/>
+            <rect x="25" y="120" width="50" height="14" rx="7" stroke="currentColor" stroke-width="4"/>
+            <rect x="25" y="145" width="50" height="14" rx="7" stroke="currentColor" stroke-width="4"/>
+          </svg>
+        </div>
+      </div>
+      <div data-lp-reveal>
+        <span class="inline-block text-sm font-bold text-lxgoldlight bg-white/10 rounded-full px-4 py-1.5 mb-4">جهاز تحكم عن بعد</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-lxwarm mb-6">تحكم كامل بضغطة زر</h2>
+        <div class="grid grid-cols-2 gap-4">
+          {%- assign lp_remote = '16 لون|عدة أوضاع|التحكم في السطوع|مؤقت|سهولة الاستخدام' | split: '|' -%}
+          {%- for r in lp_remote -%}
+            <div class="flex items-center gap-2 text-lxwarm/80 font-semibold text-sm">
+              <span class="text-lxgoldlight">●</span> {{ r }}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {%- assign lp_review_names = 'فاطمة الزهراء، الدار البيضاء|سارة، الرباط|إيمان، مراكش|خديجة، فاس|سلمى، طنجة|نسرين، أكادير' | split: '|' -%}
-      {%- assign lp_review_texts = 'شعري أصبح أكثر لمعاناً ونعومة من أول استعمال، رائحته رائعة أيضاً.|روتين بسيط وسريع، أحس بترطيب حقيقي لشعري كل يوم.|سيروم الرموش خفيف وسهل الاستخدام، أصبح روتيني المسائي المفضل.|منتج مغربي أصيل بجودة عالية، التغليف أنيق جداً.|أحببت نعومة شعري بعد الاستخدام المنتظم، سأعيد الطلب أكيد.|تجربة ممتازة، التوصيل كان سريعاً والدفع عند الاستلام سهّل علي الطلب.' | split: '|' -%}
-      {%- for t in lp_review_texts -%}
-        <div class="bg-white rounded-2xl p-6 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-lp-reveal>
-          <div class="text-plgold tracking-widest mb-3">★★★★★</div>
-          <p class="text-plgreendark/90 leading-relaxed mb-4">"{{ t }}"</p>
-          <p class="text-sm font-bold text-plgreen">— {{ lp_review_names[forloop.index0] }}</p>
+  </section>
+
+  <!-- ===== WHY US ===== -->
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">لماذا تختارنا؟</h2>
+    </div>
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-24px_rgba(14,13,11,0.25)]" data-lp-reveal>
+      <div class="grid grid-cols-3 bg-lxblack text-lxwarm font-bold text-center py-4 text-xs md:text-base">
+        <div></div>
+        <div>متاجر أخرى ❌</div>
+        <div class="text-lxgoldlight">متجرنا ✅</div>
+      </div>
+      {%- assign lp_compare_rows = 'منتج أصلي|شحن سريع|ضمان|دعم فني|جودة عالية' | split: '|' -%}
+      {%- for row in lp_compare_rows -%}
+        <div class="grid grid-cols-3 items-center text-center py-4 px-4 {% unless forloop.last %}border-b border-black/5{% endunless %}">
+          <div class="text-xs md:text-sm font-bold text-lxblack text-right">{{ row }}</div>
+          <div class="text-red-500 text-xl">❌</div>
+          <div class="text-lxgold text-xl">✅</div>
         </div>
       {%- endfor -%}
     </div>
   </section>
 
+  <!-- ===== REVIEWS ===== -->
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxbeige">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-lp-reveal>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack mb-2">آراء عملائنا</h2>
+      <p class="text-lxgold font-extrabold">⭐⭐⭐⭐⭐ 4.9/5 — أكثر من 1200 تقييم</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {%- assign lp_rev_names = 'محمد|سارة|عبدالله|نورة|فيصل|ريم|خالد|أمل|تركي|هند|ماجد|لطيفة' | split: '|' -%}
+      {%- assign lp_rev_cities = 'الرياض|جدة|الدمام|مكة المكرمة|المدينة المنورة|أبها|الرياض|جدة|الدمام|مكة المكرمة|المدينة المنورة|أبها' | split: '|' -%}
+      {%- assign lp_rev_texts = 'الإضاءة رائعة وتعطي الغرفة أجواء فخمة، أنصح فيه بشدة.|جودة عالية جداً وتصميم أنيق، غرفتي تغيرت تماماً.|وصل سريع والتغليف كان ممتاز، المصباح أجمل من الصور.|هدية مثالية لزوجي، فرحان بيه بزاف.|الألوان روعة والتحكم عن بعد سهل جداً.|أجواء رومانسية حقيقية، يستحق كل ريال.|منتج فخم فعلاً، حسيت أنه أغلى من سعره.|استخدمته في غرفة الأطفال وحبوه بزاف.|الشحن كان سريع والدفع عند الاستلام سهّل علي.|جودة الخامة ممتازة، ما توقعت هالمستوى.|أفضل قرار شريته هالسنة للديكور.|التأثيرات واقعية جداً وهادئة، أنصح فيه لكل بيت.' | split: '|' -%}
+      {%- for t in lp_rev_texts -%}
+        <div class="bg-white rounded-2xl p-6 shadow-[0_16px_40px_-20px_rgba(14,13,11,0.2)]" data-lp-reveal>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-lxblack text-lxgoldlight font-extrabold flex items-center justify-center flex-shrink-0">{{ lp_rev_names[forloop.index0] | slice: 0 }}</div>
+            <div>
+              <p class="font-bold text-lxblack text-sm">{{ lp_rev_names[forloop.index0] }}</p>
+              <p class="text-xs text-lxblack/50">📍 {{ lp_rev_cities[forloop.index0] }}</p>
+            </div>
+          </div>
+          <div class="text-lxgold mb-2">★★★★★</div>
+          <p class="text-lxblack/80 text-sm leading-relaxed">"{{ t }}"</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  <!-- ===== COUNTDOWN ===== -->
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxblack">
+    <div class="text-center" data-lp-reveal>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-lxwarm mb-6">⏳ العرض ينتهي قريباً</h2>
+      <div class="flex justify-center gap-3 md:gap-5" id="essalem-lp-countdown">
+        <div class="lp-glass rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-lxgoldlight" id="essalem-lp-cd-h">00</div>
+          <div class="text-xs text-lxwarm/50 mt-1">ساعة</div>
+        </div>
+        <div class="lp-glass rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-lxgoldlight" id="essalem-lp-cd-m">00</div>
+          <div class="text-xs text-lxwarm/50 mt-1">دقيقة</div>
+        </div>
+        <div class="lp-glass rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-lxgoldlight" id="essalem-lp-cd-s">00</div>
+          <div class="text-xs text-lxwarm/50 mt-1">ثانية</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="py-16 md:py-24 text-center">
+    <div data-lp-reveal>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-lxblack mb-4">لا تفوت العرض</h2>
+      <p class="text-4xl font-extrabold text-lxgold mb-8">199 ريال فقط</p>
+      <button type="button" data-lp-scroll="#essalem-lp-order" class="animate-lpglow inline-flex items-center justify-center gap-2 font-extrabold text-lxblack text-lg px-12 py-5 rounded-full bg-gradient-to-l from-lxgoldlight to-lxgold hover:-translate-y-1 transition">اطلب الآن</button>
+    </div>
+  </section>
+
   <!-- ===== FAQ ===== -->
-  <section class="py-20">
+  <section class="py-16 md:py-20 -mx-5 px-5 bg-lxbeige">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark">أسئلة شائعة</h2>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxblack">أسئلة شائعة</h2>
     </div>
     <div class="max-w-2xl mx-auto flex flex-col gap-3" data-lp-reveal>
-      {%- assign lp_faq_q = 'هل المكونات طبيعية وآمنة؟|كم مرة أستخدم كل سيروم؟|هل يناسب جميع أنواع الشعر والرموش؟|هل المنتج صنع في المغرب؟|هل يتوفر الدفع عند الاستلام؟|كم يستغرق التوصيل؟' | split: '|' -%}
-      {%- assign lp_faq_a = 'نعم، التركيبة مصممة بمكونات طبيعية مختارة بعناية لتناسب الاستخدام اليومي.|سيروم الشعر يُستخدم يومياً، وسيروم الرموش يُطبق كل ليلة ضمن روتين العناية.|نعم، الباك مصمم ليدخل ضمن روتين عناية يومي بسيط يناسب مختلف الأنواع.|نعم، PURELUMA علامة مغربية 100% تحرص على الجودة في كل مرحلة.|نعم، نوفر الدفع عند الاستلام في جميع المدن المغربية.|عادة بين 2 إلى 5 أيام عمل حسب المدينة.' | split: '|' -%}
+      {%- assign lp_faq_q = 'هل يوجد دفع عند الاستلام؟|كم مدة الشحن؟|هل يوجد ضمان؟|هل المنتج مناسب لغرفة النوم؟|كيف يتم التحكم؟' | split: '|' -%}
+      {%- assign lp_faq_a = 'نعم، نوفر خدمة الدفع عند الاستلام في جميع مدن المملكة العربية السعودية.|عادة بين 2 إلى 5 أيام عمل حسب المدينة.|نعم، المنتج يأتي بضمان الجودة وضمان استرجاع الأموال إذا لم يعجبك.|نعم، المصباح مصمم خصيصاً ليمنح غرفة النوم أجواء هادئة ورومانسية.|يمكنك التحكم عبر اللمس المباشر على المصباح أو عن طريق جهاز التحكم عن بعد المرفق.' | split: '|' -%}
       {%- for q in lp_faq_q -%}
-        <details class="bg-plbeige rounded-2xl px-6">
-          <summary class="flex items-center justify-between py-4 font-bold text-plgreendark">
+        <details class="bg-white rounded-2xl px-6">
+          <summary class="flex items-center justify-between py-4 font-bold text-lxblack">
             <span>{{ q }}</span>
-            <span class="lp-plus text-plgold text-xl">+</span>
+            <span class="lp-plus text-lxgold text-xl">+</span>
           </summary>
-          <div class="pb-5 text-plgreendark/70 leading-relaxed">{{ lp_faq_a[forloop.index0] }}</div>
+          <div class="pb-5 text-lxblack/60 leading-relaxed">{{ lp_faq_a[forloop.index0] }}</div>
         </details>
       {%- endfor -%}
     </div>
   </section>
 
-  <!-- ===== GUARANTEE ===== -->
-  <section class="py-16 bg-plgreen -mx-6 px-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-      <div data-lp-reveal><div class="text-3xl mb-2">🇲🇦</div><p class="font-bold text-sm">صنع في المغرب</p></div>
-      <div data-lp-reveal><div class="text-3xl mb-2">💳</div><p class="font-bold text-sm">الدفع عند الاستلام</p></div>
-      <div data-lp-reveal><div class="text-3xl mb-2">🚚</div><p class="font-bold text-sm">شحن سريع</p></div>
-      <div data-lp-reveal><div class="text-3xl mb-2">📦</div><p class="font-bold text-sm">تغليف آمن وأنيق</p></div>
-    </div>
-  </section>
-
   <!-- ===== اطلب الآن (EasySell COD Form) ===== -->
-  <section id="essalem-lp-order" class="py-24 bg-gradient-to-b from-white to-plbeige -mx-6 px-6">
+  <section id="essalem-lp-order" class="py-16 md:py-24 -mx-5 px-5 bg-lxblack">
     <div class="text-center max-w-2xl mx-auto mb-10" data-lp-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
-      <h2 class="text-3xl md:text-4xl font-extrabold text-plgreendark mb-3">اطلبي الآن</h2>
+      <span class="inline-block text-sm font-bold text-lxgoldlight bg-white/10 rounded-full px-4 py-1.5 mb-3">أكمل طلبك</span>
+      <h2 class="text-2xl md:text-4xl font-extrabold text-lxwarm mb-3">اطلب الآن</h2>
       {%- if product -%}
-        <p class="text-3xl font-extrabold text-plgreen">{{ lp_variant.price | money }}</p>
+        <p class="text-3xl font-extrabold text-lxgoldlight">{{ lp_variant.price | money }}</p>
       {%- endif -%}
-      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-sm font-semibold text-plgreendark/70">
+      <p class="text-sm font-bold text-red-400 mt-3">🔥 تبقى فقط 18 قطعة</p>
+      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-xs font-semibold text-lxwarm/50">
         <span>✅ الدفع عند الاستلام</span>
-        <span>🚚 شحن سريع</span>
-        <span>🇲🇦 صنع في المغرب</span>
-        <span>✅ ضمان رضا العميلات</span>
+        <span>🚚 شحن مجاني</span>
+        <span>🛡 ضمان الجودة</span>
       </div>
     </div>
 
-    <div class="max-w-lg mx-auto lp-glass rounded-[28px] shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] p-8 md:p-10" data-lp-reveal>
+    <div class="max-w-lg mx-auto lp-glass rounded-[28px] shadow-[0_30px_90px_-20px_rgba(0,0,0,0.5)] p-6 md:p-10" data-lp-reveal>
       {%- if product -%}
         {%- form 'product', product, id: 'essalem-lp-form', novalidate: true -%}
           <input type="hidden" name="id" value="{{ lp_variant.id }}">
           {% content_for 'blocks' %}
         {%- endform -%}
       {%- else -%}
-        <p class="text-center text-sm font-semibold text-plgreendark/60">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
+        <p class="text-center text-sm font-semibold text-lxwarm/60">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
       {%- endif -%}
     </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="py-14 border-t border-black/5">
-    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-right">
+  <footer class="py-14">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
       <div>
-        <p class="font-extrabold text-plgreendark mb-2">✅ الدفع عند الاستلام</p>
-        <p class="text-sm text-plgreendark/60">ادفعي نقداً عند استلام طلبك بكل أمان.</p>
+        <p class="font-extrabold text-lxblack mb-1">💳 الدفع عند الاستلام</p>
       </div>
       <div>
-        <p class="font-extrabold text-plgreendark mb-2">🚚 شحن سريع</p>
-        <p class="text-sm text-plgreendark/60">توصيل لجميع مدن المغرب خلال أيام قليلة.</p>
+        <p class="font-extrabold text-lxblack mb-1">🚚 شحن سريع</p>
       </div>
       <div>
-        <p class="font-extrabold text-plgreendark mb-2">↩ سياسة الاستبدال</p>
-        <p class="text-sm text-plgreendark/60">استبدال سهل خلال 7 أيام من الاستلام.</p>
+        <p class="font-extrabold text-lxblack mb-1">🛡 ضمان الجودة</p>
       </div>
       <div>
-        <p class="font-extrabold text-plgreendark mb-2">🔒 الخصوصية والشروط</p>
-        <p class="text-sm text-plgreendark/60">بياناتك محمية ومعاملتك آمنة معنا.</p>
+        <p class="font-extrabold text-lxblack mb-1">🎧 خدمة العملاء</p>
       </div>
     </div>
-    <p class="text-center text-xs text-plgreendark/40 mt-10">© {{ 'now' | date: '%Y' }} PURELUMA — جميع الحقوق محفوظة.</p>
+    <p class="text-center text-xs text-lxblack/40 mt-8">© {{ 'now' | date: '%Y' }} جميع الحقوق محفوظة.</p>
   </footer>
 
+</div>
+
+<!-- ===== STICKY BUY BAR (mobile) ===== -->
+<div id="essalem-lp-sticky" class="fixed bottom-0 inset-x-0 z-40 bg-lxblack/95 backdrop-blur border-t border-lxgold/30 px-4 py-3 flex items-center justify-between gap-3">
+  <div>
+    <p class="text-lxwarm/50 text-xs">السعر الآن</p>
+    {%- if product -%}
+      <p class="text-lxgoldlight font-extrabold text-lg">{{ lp_variant.price | money }}</p>
+    {%- else -%}
+      <p class="text-lxgoldlight font-extrabold text-lg">199 ريال</p>
+    {%- endif -%}
+  </div>
+  <button type="button" data-lp-scroll="#essalem-lp-order" class="font-extrabold text-lxblack text-sm px-7 py-3 rounded-full bg-gradient-to-l from-lxgoldlight to-lxgold">اطلب الآن</button>
+</div>
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+{%- comment -%} Update the phone number below (international format, no + or spaces) with the store's real WhatsApp number {%- endcomment -%}
+<a href="https://wa.me/966500000000" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب"
+   class="fixed bottom-24 md:bottom-8 left-5 z-40 w-14 h-14 rounded-full bg-[#25D366] shadow-[0_14px_30px_-8px_rgba(0,0,0,0.4)] flex items-center justify-center hover:scale-110 transition">
+  <svg viewBox="0 0 32 32" class="w-8 h-8 fill-white"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.3.6 4.4 1.7 6.3L4 29l7.9-1.6c1.8.9 3.9 1.5 6.1 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.7 1 1-4.6-.3-.4C4.8 17.6 4.2 15.9 4.2 15c0-6.5 5.3-11.8 11.8-11.8S27.8 8.5 27.8 15 22.5 24.8 16 24.8zm6.5-8.8c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.6 0-.8-.1-.2-.8-2-1.1-2.7-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.6 5.7 5.1.8.3 1.4.6 1.9.7.8.2 1.5.2 2.1.1.6-.1 2.1-.9 2.4-1.7.3-.8.3-1.5.2-1.7-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
+<!-- ===== LIVE VISITORS ===== -->
+<div id="essalem-lp-visitors" class="fixed bottom-[168px] md:bottom-[104px] right-4 z-40 bg-white/95 backdrop-blur rounded-full px-4 py-2 shadow-[0_10px_30px_-12px_rgba(14,13,11,0.4)] flex items-center gap-2 text-xs font-bold text-lxblack">
+  <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+  <span id="essalem-lp-visitors-count">27</span> شخص يتصفح المنتج الآن
+</div>
+
+<!-- ===== RECENT ORDER TOAST ===== -->
+<div id="essalem-lp-toast" class="bg-white rounded-2xl p-4 shadow-[0_12px_40px_-10px_rgba(14,13,11,0.4)] border-r-4 border-lxgold flex items-center gap-3">
+  <span class="text-2xl">🛍️</span>
+  <p class="text-xs text-lxblack leading-relaxed" id="essalem-lp-toast-text"></p>
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
+<div id="essalem-lp-lightbox">
+  <img id="essalem-lp-lightbox-img" src="" alt="">
+</div>
+
+<!-- ===== EXIT INTENT POPUP ===== -->
+<div id="essalem-lp-exit">
+  <div class="lp-exit-card bg-lxwarm rounded-[28px] p-8 max-w-sm w-full text-center relative">
+    <button type="button" id="essalem-lp-exit-close" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-lxbeige text-lxblack flex items-center justify-center">✕</button>
+    <span class="inline-block bg-lxgold text-white text-xs font-extrabold px-4 py-1.5 rounded-full mb-4">🎁 قبل أن تغادر</span>
+    <h3 class="text-xl font-extrabold text-lxblack mb-2">لا تفوّت هذا العرض</h3>
+    <p class="text-sm text-lxblack/60 mb-4">احصل على المصباح بالسعر الخاص — شحن مجاني ودفع عند الاستلام</p>
+    <p class="text-3xl font-extrabold text-lxgold mb-1">199 <span class="text-base font-semibold">ريال</span></p>
+    <p class="text-sm text-lxblack/40 line-through mb-5">299 ريال</p>
+    <button type="button" id="essalem-lp-exit-cta" class="w-full font-extrabold text-white px-6 py-4 rounded-full bg-lxblack hover:-translate-y-1 transition">🛒 اطلب الآن</button>
+  </div>
 </div>
 
 <script>
@@ -364,7 +503,8 @@
     var root = document.getElementById('essalem-lp-root');
     if (!root) return;
 
-    var reveals = root.querySelectorAll('[data-lp-reveal]');
+    /* Scroll reveal */
+    var reveals = root.querySelectorAll('[data-lp-reveal], [data-lp-reveal-scale]');
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -379,13 +519,15 @@
       reveals.forEach(function (el) { el.classList.add('is-visible'); });
     }
 
-    root.querySelectorAll('[data-lp-scroll]').forEach(function (btn) {
+    /* Smooth scroll buttons */
+    document.querySelectorAll('[data-lp-scroll]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var target = root.querySelector(btn.getAttribute('data-lp-scroll'));
+        var target = document.querySelector(btn.getAttribute('data-lp-scroll'));
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
 
+    /* Gallery nav */
     var track = root.querySelector('#essalem-lp-gallery-track');
     if (track) {
       var step = function () {
@@ -397,6 +539,107 @@
       if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
     }
+
+    /* Lightbox */
+    var lightbox = document.getElementById('essalem-lp-lightbox');
+    var lightboxImg = document.getElementById('essalem-lp-lightbox-img');
+    root.querySelectorAll('[data-lp-lightbox-item] img').forEach(function (img) {
+      img.addEventListener('click', function () {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = img.currentSrc || img.src;
+        lightbox.classList.add('open');
+      });
+    });
+    if (lightbox) {
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) lightbox.classList.remove('open');
+      });
+    }
+
+    /* Countdown (persists per browser for 6 hours) */
+    var cdKey = 'essalemLpDeadline';
+    var deadline = parseInt(localStorage.getItem(cdKey), 10);
+    if (!deadline || deadline < Date.now()) {
+      deadline = Date.now() + 6 * 60 * 60 * 1000;
+      localStorage.setItem(cdKey, deadline);
+    }
+    var cdH = document.getElementById('essalem-lp-cd-h');
+    var cdM = document.getElementById('essalem-lp-cd-m');
+    var cdS = document.getElementById('essalem-lp-cd-s');
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tickCountdown() {
+      var diff = Math.max(0, deadline - Date.now());
+      var h = Math.floor(diff / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      if (cdH) cdH.textContent = pad(h);
+      if (cdM) cdM.textContent = pad(m);
+      if (cdS) cdS.textContent = pad(s);
+    }
+    tickCountdown();
+    setInterval(tickCountdown, 1000);
+
+    /* Sticky bar visibility */
+    var sticky = document.getElementById('essalem-lp-sticky');
+    var order = document.getElementById('essalem-lp-order');
+    if (sticky && order) {
+      window.addEventListener('scroll', function () {
+        var r = order.getBoundingClientRect();
+        sticky.style.display = (r.top > window.innerHeight || r.bottom < 0) ? 'flex' : 'none';
+      }, { passive: true });
+    }
+
+    /* Live visitors fluctuation */
+    var visitorsEl = document.getElementById('essalem-lp-visitors-count');
+    if (visitorsEl) {
+      setInterval(function () {
+        var c = parseInt(visitorsEl.textContent, 10) || 27;
+        var next = Math.max(14, Math.min(52, c + (Math.random() > 0.5 ? 1 : -1)));
+        visitorsEl.textContent = next;
+      }, 4500);
+    }
+
+    /* Recent orders toast */
+    var toastNames = ['أحمد من الرياض', 'سارة من جدة', 'خالد من الدمام', 'نورة من مكة المكرمة', 'فيصل من المدينة المنورة', 'ريم من أبها', 'عبدالله من الرياض', 'هند من جدة'];
+    var toastEl = document.getElementById('essalem-lp-toast');
+    var toastText = document.getElementById('essalem-lp-toast-text');
+    var toastIndex = 0;
+    function showToast() {
+      if (!toastEl || !toastText) return;
+      var mins = 1 + Math.floor(Math.random() * 14);
+      toastText.innerHTML = '<strong>' + toastNames[toastIndex % toastNames.length] + '</strong><br>اشترى هذا المنتج منذ ' + mins + ' دقيقة';
+      toastIndex++;
+      toastEl.classList.add('show');
+      setTimeout(function () { toastEl.classList.remove('show'); }, 4500);
+      setTimeout(showToast, 11000 + Math.random() * 6000);
+    }
+    setTimeout(showToast, 4000);
+
+    /* Exit intent popup */
+    var exitOverlay = document.getElementById('essalem-lp-exit');
+    var exitShown = false;
+    function openExit() {
+      if (exitShown || !exitOverlay) return;
+      exitShown = true;
+      exitOverlay.classList.add('open');
+    }
+    document.addEventListener('mouseleave', function (e) {
+      if (e.clientY < 10) openExit();
+    });
+    var lastScroll = 0;
+    window.addEventListener('scroll', function () {
+      var cur = window.scrollY;
+      if (cur < 40 && lastScroll > 400) openExit();
+      lastScroll = cur;
+    }, { passive: true });
+    var exitClose = document.getElementById('essalem-lp-exit-close');
+    if (exitClose) exitClose.addEventListener('click', function () { exitOverlay.classList.remove('open'); });
+    var exitCta = document.getElementById('essalem-lp-exit-cta');
+    if (exitCta) exitCta.addEventListener('click', function () {
+      exitOverlay.classList.remove('open');
+      var target = document.getElementById('essalem-lp-order');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   })();
 </script>
 
