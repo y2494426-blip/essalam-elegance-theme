@@ -309,12 +309,16 @@
     fill.position.set(-3, 2, 3);
     scene.add(fill);
 
-    /* ===== Materials ===== */
+    /* ===== Materials (tuned to match the reference product photos) ===== */
     var goldMat = new THREE.MeshPhysicalMaterial({ color: 0xD4AF37, metalness: 1, roughness: 0.18, clearcoat: 0.6, clearcoatRoughness: 0.15, envMapIntensity: 1.5 });
     var goldMatSoft = new THREE.MeshPhysicalMaterial({ color: 0xE8C86B, metalness: 0.95, roughness: 0.28, clearcoat: 0.4, envMapIntensity: 1.3 });
-    var dialMat = new THREE.MeshPhysicalMaterial({ color: 0xF5E7C2, metalness: 0.25, roughness: 0.45, clearcoat: 0.3 });
+    var paveMat = new THREE.MeshPhysicalMaterial({ color: 0xFFFFFF, metalness: 0, roughness: 0.05, clearcoat: 1, envMapIntensity: 1.6 });
+    var steelMat = new THREE.MeshPhysicalMaterial({ color: 0xC7CBD1, metalness: 1, roughness: 0.22, clearcoat: 0.5, clearcoatRoughness: 0.2, envMapIntensity: 1.4 });
+    var blackDialMat = new THREE.MeshPhysicalMaterial({ color: 0x0d0d0d, metalness: 0.3, roughness: 0.35, clearcoat: 0.4 });
+    var strapMat = new THREE.MeshPhysicalMaterial({ color: 0x5b3a24, metalness: 0.05, roughness: 0.55, clearcoat: 0.25 });
+    var blackGlossMat = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0.15, roughness: 0.12, clearcoat: 0.85, clearcoatRoughness: 0.08, envMapIntensity: 1.2 });
     var glassMat = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0, roughness: 0.05, transmission: 0.85, thickness: 0.4, envMapIntensity: 1.2 });
-    var leatherMat = new THREE.MeshPhysicalMaterial({ color: 0x141210, metalness: 0.1, roughness: 0.4, clearcoat: 0.35, clearcoatRoughness: 0.25 });
+    var whiteBagMat = new THREE.MeshPhysicalMaterial({ color: 0xF4F2ED, metalness: 0, roughness: 0.6, clearcoat: 0.15, envMapIntensity: 0.9 });
 
     /* ===== Rig hierarchy =====
        sceneRig            -> subtle whole-scene mouse tilt
@@ -332,77 +336,113 @@
       return { outer: outer, inner: inner };
     }
 
-    /* ---- Luxury Gold Watch ---- */
+    /* ---- Classic steel watch, black dial, brown leather strap ---- */
     var watch = makeRig();
     (function buildWatch(g) {
-      var bezel = new THREE.Mesh(new THREE.TorusGeometry(1, 0.16, 32, 96), goldMat);
-      var face = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.08, 64), dialMat);
+      var bezel = new THREE.Mesh(new THREE.TorusGeometry(1, 0.14, 32, 96), steelMat);
+      var caseSide = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.22, 64), steelMat);
+      caseSide.rotation.x = Math.PI / 2;
+      var face = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.06, 64), blackDialMat);
       face.rotation.x = Math.PI / 2;
-      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.22, 16), goldMat);
+      face.position.z = 0.02;
+      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.18, 16), steelMat);
       crown.rotation.z = Math.PI / 2;
-      crown.position.set(1.08, 0, 0);
-      var hourHand = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.03), goldMat);
-      hourHand.position.set(0, 0.16, 0.05);
-      var minHand = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.62, 0.03), goldMat);
-      minHand.position.set(0.1, 0.2, 0.06);
+      crown.position.set(1.0, 0, 0);
+      var hourHand = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.36, 0.025), goldMatSoft);
+      hourHand.position.set(0, 0.14, 0.06);
+      var minHand = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.54, 0.025), goldMatSoft);
+      minHand.position.set(0.08, 0.18, 0.065);
       minHand.rotation.z = -0.6;
-      g.add(bezel, face, crown, hourHand, minHand);
+      g.add(bezel, caseSide, face, crown, hourHand, minHand);
+      /* hour markers */
+      for (var m = 0; m < 12; m++) {
+        var ang = (m / 12) * Math.PI * 2;
+        var mark = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.09, 0.02), goldMatSoft);
+        mark.position.set(Math.sin(ang) * 0.62, Math.cos(ang) * 0.62, 0.06);
+        mark.rotation.z = -ang;
+        g.add(mark);
+      }
+      /* curved leather strap bands, top and bottom */
+      function strapBand(sign) {
+        var curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(0, sign * 1.0, 0),
+          new THREE.Vector3(0.05, sign * 1.65, -0.06),
+          new THREE.Vector3(0.02, sign * 2.35, -0.12)
+        ]);
+        return new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.28, 8, false), strapMat);
+      }
+      g.add(strapBand(1), strapBand(-1));
     })(watch.inner);
     watch.outer.position.set(1.6, 0.8, -1.2);
     watch.outer.scale.setScalar(1.05);
     watch.inner.userData.idle = { spinAxis: 'y', spinSpeed: 0.12, floatAmp: 0.08, floatSpeed: 0.6, phase: 0 };
 
-    /* ---- MOSCOT-style luxury sunglasses ---- */
+    /* ---- Glossy black rectangular sunglasses ---- */
     var glasses = makeRig();
     (function buildGlasses(g) {
-      var lensL = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.075, 20, 60), goldMatSoft);
-      lensL.position.x = -0.55;
-      var glassL = new THREE.Mesh(new THREE.CircleGeometry(0.44, 48), glassMat);
-      glassL.position.x = -0.55;
-      var lensR = lensL.clone(); lensR.position.x = 0.55;
-      var glassR = glassL.clone(); glassR.position.x = 0.55;
-      var bridge = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.05, 0.05), goldMatSoft);
-      var templeL = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.1, 12), goldMatSoft);
-      templeL.rotation.z = Math.PI / 2;
-      templeL.position.set(-1.5, 0, -0.3);
-      templeL.rotation.y = 0.35;
+      function lensUnit(sign) {
+        var frame = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.6, 0.12), blackGlossMat);
+        var lens = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.42, 0.03), glassMat);
+        lens.position.z = 0.06;
+        var u = new THREE.Group();
+        u.add(frame, lens);
+        u.position.x = sign * 0.6;
+        return u;
+      }
+      var bridge = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.08, 0.08), blackGlossMat);
+      var templeL = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.06), blackGlossMat);
+      templeL.position.set(-1.5, -0.02, -0.4);
+      templeL.rotation.y = 0.4;
       var templeR = templeL.clone();
       templeR.position.x = 1.5;
-      templeR.rotation.y = -0.35;
-      g.add(lensL, glassL, lensR, glassR, bridge, templeL, templeR);
+      templeR.rotation.y = -0.4;
+      g.add(lensUnit(-1), lensUnit(1), bridge, templeL, templeR);
     })(glasses.inner);
     glasses.outer.position.set(4.8, -0.4, -2.4);
     glasses.outer.rotation.y = 0.4;
     glasses.inner.userData.idle = { spinAxis: 'y', spinSpeed: -0.15, floatAmp: 0.1, floatSpeed: 0.8, phase: 1.1 };
 
-    /* ---- Luxury bracelet (gold link chain) ---- */
+    /* ---- Gold double-band twisted bangle with a pavé strip ---- */
     var bracelet = makeRig();
     (function buildBracelet(g) {
-      var count = 22, radius = 1.15;
-      for (var i = 0; i < count; i++) {
-        var a = (i / count) * Math.PI * 2;
-        var link = new THREE.Mesh(new THREE.TorusGeometry(0.14, 0.05, 10, 20), i % 2 === 0 ? goldMat : goldMatSoft);
-        link.position.set(Math.cos(a) * radius, Math.sin(a) * radius, Math.sin(a * 3) * 0.05);
-        link.rotation.z = a + Math.PI / 2;
-        link.rotation.y = 0.4;
-        g.add(link);
+      var tilt = new THREE.Euler(Math.PI / 2.3, 0, 0.35);
+      var ringA = new THREE.Mesh(new THREE.TorusGeometry(1, 0.075, 20, 90), goldMat);
+      ringA.rotation.x = Math.PI / 2.3;
+      var ringB = new THREE.Mesh(new THREE.TorusGeometry(1, 0.06, 20, 90), goldMatSoft);
+      ringB.rotation.copy(tilt);
+      var knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.16, 0.045, 64, 8, 1, 1), goldMat);
+      knot.position.set(0, 1.0, 0);
+      knot.scale.setScalar(0.9);
+      g.add(ringA, ringB, knot);
+      /* pavé diamond strip along part of the second band */
+      var stoneCount = 26;
+      for (var i = 0; i < stoneCount; i++) {
+        var a = Math.PI * 0.15 + (i / stoneCount) * Math.PI * 0.7;
+        var v = new THREE.Vector3(Math.cos(a), Math.sin(a), 0).applyEuler(tilt);
+        var stone = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), paveMat);
+        stone.position.copy(v);
+        g.add(stone);
       }
     })(bracelet.inner);
     bracelet.outer.position.set(-2.2, -0.6, -1.8);
     bracelet.outer.rotation.x = 0.5;
     bracelet.inner.userData.idle = { spinAxis: 'z', spinSpeed: 0.22, floatAmp: 0.06, floatSpeed: 0.5, phase: 2.2 };
 
-    /* ---- Premium leather handbag ---- */
+    /* ---- Rounded white sculptural tote ---- */
     var bag = makeRig();
     (function buildBag(g) {
-      var body = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.95, 0.55), leatherMat);
-      var flap = new THREE.Mesh(new THREE.BoxGeometry(1.32, 0.42, 0.06), leatherMat);
-      flap.position.set(0, 0.18, 0.29);
-      var handle = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.045, 16, 40, Math.PI), goldMat);
-      handle.position.set(0, 0.78, 0);
-      var clasp = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 16), goldMat);
-      clasp.position.set(0, 0.02, 0.33);
-      g.add(body, flap, handle, clasp);
+      var body = new THREE.Mesh(new THREE.SphereGeometry(0.85, 48, 32), whiteBagMat);
+      body.scale.set(1.15, 0.72, 0.95);
+      function handleCurve(sign) {
+        return new THREE.CatmullRomCurve3([
+          new THREE.Vector3(sign * 0.28, 0.5, 0),
+          new THREE.Vector3(sign * 0.22, 1.15, 0),
+          new THREE.Vector3(0, 1.35, 0)
+        ]);
+      }
+      var handleL = new THREE.Mesh(new THREE.TubeGeometry(handleCurve(-1), 20, 0.06, 10, false), whiteBagMat);
+      var handleR = new THREE.Mesh(new THREE.TubeGeometry(handleCurve(1), 20, 0.06, 10, false), whiteBagMat);
+      g.add(body, handleL, handleR);
     })(bag.inner);
     bag.outer.position.set(-0.6, -1.4, -6);
     bag.outer.scale.setScalar(0.001); /* "comes from behind" — starts imperceptibly small/far */
@@ -459,14 +499,17 @@
       });
     }
 
-    /* ===== Scroll choreography (real 3D transforms via GSAP) ===== */
+    /* ===== Scroll choreography (real 3D transforms via GSAP) =====
+       No pin: pinning here was locking page scroll for an extra 130vh,
+       which read as the hero being "stuck". Instead the choreography is
+       simply scrubbed to the hero's own natural scroll range, so the
+       page always keeps moving under the user's scroll/trackpad. */
     var scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: heroEl,
         start: 'top top',
-        end: '+=130%',
-        scrub: 1,
-        pin: !isMobile /* skip pinning on small screens to keep native scroll snappy */
+        end: 'bottom top',
+        scrub: 1
       }
     });
     scrollTl
