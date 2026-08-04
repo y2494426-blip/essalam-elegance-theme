@@ -1,32 +1,29 @@
 {%- comment -%}
   ============================================================
-  LUXURY 3D HERO — cinematic homepage hero section
+  LUXURY HERO — simple, reliable version
   ------------------------------------------------------------
-  A single self-contained Shopify section: real Three.js 3D
-  objects (watch, sunglasses, bracelet, handbag) choreographed
-  with GSAP + ScrollTrigger, smooth-scrolled with Lenis, plus a
-  CSS-only luxury background (marble/rays/vignette/particles).
+  The previous Three.js + GSAP + Lenis build kept freezing —
+  almost certainly the async import() calls to external CDN
+  modules hanging or being blocked (Shopify's CSP / network),
+  with no fallback path once that happened.
 
-  Honest scope note (kept as a comment, not shown to visitors):
-  these are stylised procedural 3D forms built from primitive
-  geometry + physically-based gold/glass/leather materials —
-  Three.js has no access to real scanned product models, so this
-  is the closest a code-only build gets to "real 3D" without
-  shipping external .glb/.hdr asset files. Everything below is
-  genuine WebGL (no fake CSS 3D), and degrades to a static
-  luxury CSS background if WebGL/module scripts are unavailable.
+  This version drops all of that: no WebGL, no dynamic imports,
+  no external JS libraries at all (only Google Fonts, which has
+  already proven reliable elsewhere in this theme). The floating
+  "3D" cards are plain CSS 3D transforms (perspective + rotateX/
+  rotateY), driven by a small vanilla-JS scroll/mouse listener
+  that can't hang the page — worst case it just doesn't run and
+  the cards sit still, everything else keeps working.
   ============================================================
 {%- endcomment -%}
-<section id="essalem-lux3d-root">
+<section id="essalem-lux-root">
 
-{%- comment -%} Fonts: Cormorant Garamond for headings, Poppins for body copy {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  /* ===== Design tokens (CSS variables, per the brief's palette) ===== */
-  #essalem-lux3d-root {
+  #essalem-lux-root {
     --lux-bg: {{ section.settings.color_bg | default: '#050505' }};
     --lux-bg2: {{ section.settings.color_bg2 | default: '#101010' }};
     --lux-gold: {{ section.settings.color_gold | default: '#D4AF37' }};
@@ -38,10 +35,9 @@
     display: block;
     background: var(--lux-bg);
   }
-  #essalem-lux3d-root *{ box-sizing: border-box; }
+  #essalem-lux-root *{ box-sizing: border-box; }
 
-  /* ===== Hero shell ===== */
-  #essalem-lux3d-root .lux3d-hero {
+  #essalem-lux-root .lux-hero {
     position: relative;
     min-height: 100svh;
     overflow: hidden;
@@ -50,617 +46,238 @@
     font-family: var(--lux-font-body);
   }
 
-  /* ===== Layer 1: black marble depth (pure CSS, no image assets) ===== */
-  #essalem-lux3d-root .lux3d-marble {
+  /* ===== CSS-only depth background (no images, no JS needed) ===== */
+  #essalem-lux-root .lux-marble {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
       radial-gradient(circle at 20% 15%, rgba(232,200,107,.05), transparent 40%),
       radial-gradient(circle at 85% 75%, rgba(212,175,55,.06), transparent 45%),
       repeating-linear-gradient(115deg, rgba(255,255,255,.015) 0 2px, transparent 2px 40px),
       linear-gradient(180deg, #060606 0%, #0c0c0c 50%, #050505 100%);
-    opacity: .9;
   }
-  #essalem-lux3d-root .lux3d-grain {
-    position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  }
-
-  /* ===== Layer 2: slow rotating gold light rays ===== */
-  #essalem-lux3d-root .lux3d-rays {
-    position: absolute; z-index: 3; pointer-events: none;
+  #essalem-lux-root .lux-rays {
+    position: absolute; z-index: 2; pointer-events: none;
     top: 50%; left: 65%; width: 180vmax; height: 180vmax; margin: -90vmax 0 0 -90vmax;
     background: conic-gradient(from 0deg,
       transparent 0deg, rgba(232,200,107,.05) 8deg, transparent 20deg,
       transparent 160deg, rgba(212,175,55,.04) 170deg, transparent 185deg,
       transparent 340deg, rgba(232,200,107,.03) 350deg, transparent 360deg);
-    animation: lux3d-spin 90s linear infinite;
+    animation: lux-spin 90s linear infinite;
     mix-blend-mode: screen;
   }
-  @keyframes lux3d-spin { to { transform: rotate(360deg); } }
+  @keyframes lux-spin { to { transform: rotate(360deg); } }
 
-  /* ===== Layer 3: the WebGL canvas ===== */
-  #essalem-lux3d-root #lux3d-canvas {
-    position: absolute; inset: 0; z-index: 4;
-    width: 100%; height: 100%; display: block;
-    opacity: 0; transition: opacity 1.4s ease;
-  }
-  #essalem-lux3d-root #lux3d-canvas.is-ready { opacity: 1; }
-
-  /* ===== Layer 4: vignette for cinematic focus + text legibility ===== */
-  #essalem-lux3d-root .lux3d-vignette {
+  #essalem-lux-root .lux-vignette {
     position: absolute; inset: 0; z-index: 5; pointer-events: none;
     background:
-      linear-gradient(90deg, rgba(5,5,5,.85) 0%, rgba(5,5,5,.35) 42%, transparent 62%),
-      radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.55) 100%);
+      linear-gradient(90deg, rgba(5,5,5,.85) 0%, rgba(5,5,5,.3) 42%, transparent 62%),
+      radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.5) 100%);
+  }
+
+  /* ===== The "3D" stage: plain CSS perspective, no WebGL ===== */
+  #essalem-lux-root .lux-stage {
+    position: absolute; inset: 0; z-index: 3;
+    perspective: 1400px;
+  }
+  #essalem-lux-root .lux-stage-inner {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--lux-tilt-x, 0deg)) rotateY(var(--lux-tilt-y, 0deg));
+    transition: transform .3s ease-out;
+  }
+  #essalem-lux-root .lux-card {
+    position: absolute;
+    width: clamp(120px, 14vw, 190px);
+    aspect-ratio: 1;
+    border-radius: 24px;
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(212,175,55,.28);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), inset 0 0 30px rgba(232,200,107,.05);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--lux-gold-soft);
+    animation: lux-float 6s ease-in-out infinite;
+    transform: translate3d(var(--x, 0), var(--y, 0), var(--z, 0)) rotate(var(--r, 0deg));
+    will-change: transform;
+  }
+  #essalem-lux-root .lux-card svg { width: 56%; height: 56%; }
+  #essalem-lux-root .lux-card--watch   { top: 14%; right: 26%; animation-delay: 0s; }
+  #essalem-lux-root .lux-card--glasses { top: 42%; right: 6%;  animation-delay: 1.4s; }
+  #essalem-lux-root .lux-card--bracelet{ top: 60%; right: 34%; animation-delay: 2.6s; }
+  #essalem-lux-root .lux-card--bag     { top: 30%; right: 46%; animation-delay: .8s; }
+  @keyframes lux-float {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -18px; }
+  }
+
+  @media (max-width: 900px) {
+    #essalem-lux-root .lux-card { position: relative; margin: 0 !important; top: auto; right: auto; }
+    #essalem-lux-root .lux-stage { position: relative; inset: auto; height: 260px; perspective: none; }
+    #essalem-lux-root .lux-stage-inner {
+      position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      padding: 0 20px; transform: none !important;
+    }
   }
 
   /* ===== Content ===== */
-  #essalem-lux3d-root .lux3d-content {
+  #essalem-lux-root .lux-content {
     position: relative; z-index: 6;
     min-height: 100svh;
     display: flex; flex-direction: column; justify-content: center;
     max-width: 620px;
     padding: 120px 6vw 100px;
   }
-  #essalem-lux3d-root .lux3d-eyebrow {
-    font-family: var(--lux-font-body);
+  #essalem-lux-root .lux-eyebrow {
     font-size: .8rem; font-weight: 500; letter-spacing: .45em; text-transform: uppercase;
     color: var(--lux-gold-soft);
     margin-bottom: 22px;
-    opacity: 0; transform: translateY(14px);
-    animation: lux3d-fade-up .9s .2s cubic-bezier(.16,1,.3,1) forwards;
   }
-  #essalem-lux3d-root .lux3d-heading {
+  #essalem-lux-root .lux-heading {
     font-family: var(--lux-font-heading);
-    font-weight: 600; font-style: normal;
+    font-weight: 600;
     font-size: clamp(2.6rem, 6vw, 5rem);
     line-height: 1.08;
     margin: 0 0 22px;
     background: linear-gradient(100deg, var(--lux-white) 30%, var(--lux-gold-soft) 60%, var(--lux-champagne) 80%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    opacity: 0; transform: translateY(18px);
-    animation: lux3d-fade-up 1s .4s cubic-bezier(.16,1,.3,1) forwards;
   }
-  #essalem-lux3d-root .lux3d-sub {
+  #essalem-lux-root .lux-sub {
     font-size: 1rem; font-weight: 300; letter-spacing: .06em;
     color: rgba(255,255,255,.65);
     margin: 0 0 44px;
-    opacity: 0; transform: translateY(14px);
-    animation: lux3d-fade-up 1s .6s cubic-bezier(.16,1,.3,1) forwards;
   }
-  @keyframes lux3d-fade-up { to { opacity: 1; transform: translateY(0); } }
-
-  #essalem-lux3d-root .lux3d-ctas {
-    display: flex; flex-wrap: wrap; gap: 18px;
-    opacity: 0; transform: translateY(14px);
-    animation: lux3d-fade-up 1s .8s cubic-bezier(.16,1,.3,1) forwards;
-  }
-  #essalem-lux3d-root .lux3d-btn {
-    font-family: var(--lux-font-body);
+  #essalem-lux-root .lux-ctas { display: flex; flex-wrap: wrap; gap: 18px; }
+  #essalem-lux-root .lux-btn {
     font-size: .82rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
     padding: 18px 36px; border-radius: 2px; text-decoration: none;
     display: inline-flex; align-items: center; justify-content: center;
-    transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease, background .4s ease, color .4s ease;
+    transition: transform .35s ease, box-shadow .35s ease, color .35s ease, border-color .35s ease;
   }
-  #essalem-lux3d-root .lux3d-btn--gold {
+  #essalem-lux-root .lux-btn--gold {
     background: linear-gradient(120deg, var(--lux-gold-soft), var(--lux-gold));
     color: #10100c;
     box-shadow: 0 18px 40px -14px rgba(212,175,55,.55);
   }
-  #essalem-lux3d-root .lux3d-btn--gold:hover { transform: translateY(-3px); box-shadow: 0 24px 50px -14px rgba(212,175,55,.7); }
-  #essalem-lux3d-root .lux3d-btn--ghost {
-    background: transparent; color: var(--lux-white);
-    border: 1px solid rgba(255,255,255,.35);
+  #essalem-lux-root .lux-btn--gold:hover { transform: translateY(-3px); }
+  #essalem-lux-root .lux-btn--ghost {
+    background: transparent; color: var(--lux-white); border: 1px solid rgba(255,255,255,.35);
   }
-  #essalem-lux3d-root .lux3d-btn--ghost:hover { border-color: var(--lux-gold-soft); color: var(--lux-gold-soft); transform: translateY(-3px); }
+  #essalem-lux-root .lux-btn--ghost:hover { border-color: var(--lux-gold-soft); color: var(--lux-gold-soft); transform: translateY(-3px); }
 
-  /* ===== Scroll hint ===== */
-  #essalem-lux3d-root .lux3d-scroll-hint {
-    position: absolute; z-index: 6; bottom: 34px; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    color: rgba(255,255,255,.45); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
-    opacity: 0; animation: lux3d-fade-up 1s 1.2s cubic-bezier(.16,1,.3,1) forwards;
-  }
-  #essalem-lux3d-root .lux3d-scroll-hint::after {
-    content: ''; width: 1px; height: 34px;
-    background: linear-gradient(var(--lux-gold-soft), transparent);
-    animation: lux3d-scrollline 1.8s ease-in-out infinite;
-  }
-  @keyframes lux3d-scrollline { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
-
-  @media (max-width: 900px) {
-    #essalem-lux3d-root .lux3d-content { max-width: 100%; padding: 100px 24px 90px; text-align: right; }
-    #essalem-lux3d-root .lux3d-vignette {
-      background:
-        linear-gradient(180deg, rgba(5,5,5,.5) 0%, rgba(5,5,5,.85) 62%, rgba(5,5,5,.95) 100%),
-        radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.6) 100%);
-    }
-  }
+  #essalem-lux-root [data-lux-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .8s ease, transform .8s ease; }
+  #essalem-lux-root [data-lux-reveal].is-visible { opacity: 1; transform: translateY(0); }
 
   @media (prefers-reduced-motion: reduce) {
-    #essalem-lux3d-root .lux3d-eyebrow, #essalem-lux3d-root .lux3d-heading,
-    #essalem-lux3d-root .lux3d-sub, #essalem-lux3d-root .lux3d-ctas,
-    #essalem-lux3d-root .lux3d-scroll-hint { animation: none; opacity: 1; transform: none; }
-    #essalem-lux3d-root .lux3d-rays { animation: none; }
+    #essalem-lux-root .lux-card { animation: none; }
+    #essalem-lux-root .lux-rays { animation: none; }
+    #essalem-lux-root [data-lux-reveal] { opacity: 1; transform: none; transition: none; }
   }
 </style>
 
-<div class="lux3d-hero" id="lux3d-hero">
-  {%- comment -%} CSS-only depth layers — visible instantly, independent of WebGL {%- endcomment -%}
-  <div class="lux3d-marble"></div>
-  <div class="lux3d-grain"></div>
-  <div class="lux3d-rays"></div>
+<div class="lux-hero" id="lux-hero">
+  <div class="lux-marble"></div>
+  <div class="lux-rays"></div>
 
-  {%- comment -%} WebGL surface — the 4 floating luxury objects render here {%- endcomment -%}
-  <canvas id="lux3d-canvas" aria-hidden="true"></canvas>
-
-  <div class="lux3d-vignette"></div>
-
-  {%- comment -%} Hero copy, editable from the theme customizer {%- endcomment -%}
-  <div class="lux3d-content">
-    <span class="lux3d-eyebrow">{{ section.settings.eyebrow }}</span>
-    <h1 class="lux3d-heading">{{ section.settings.heading }}</h1>
-    <p class="lux3d-sub">{{ section.settings.subheading }}</p>
-    <div class="lux3d-ctas">
-      {%- if section.settings.cta_primary_text != blank -%}
-        <a href="{{ section.settings.cta_primary_url | default: '#' }}" class="lux3d-btn lux3d-btn--gold">{{ section.settings.cta_primary_text }}</a>
-      {%- endif -%}
-      {%- if section.settings.cta_secondary_text != blank -%}
-        <a href="{{ section.settings.cta_secondary_url | default: '#' }}" class="lux3d-btn lux3d-btn--ghost">{{ section.settings.cta_secondary_text }}</a>
-      {%- endif -%}
+  {%- comment -%} Simple CSS-3D floating cards — no WebGL, nothing that can hang {%- endcomment -%}
+  <div class="lux-stage">
+    <div class="lux-stage-inner" id="lux-stage-inner">
+      <div class="lux-card lux-card--watch" style="--z:40px;">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><circle cx="32" cy="32" r="20"/><path d="M32 20v12l8 6"/><rect x="26" y="4" width="12" height="8" rx="2"/><rect x="26" y="52" width="12" height="8" rx="2"/></svg>
+      </div>
+      <div class="lux-card lux-card--glasses" style="--z:10px;">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="22" width="22" height="16" rx="4"/><rect x="38" y="22" width="22" height="16" rx="4"/><path d="M26 28h12"/></svg>
+      </div>
+      <div class="lux-card lux-card--bracelet" style="--z:60px;">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><circle cx="32" cy="32" r="22"/><path d="M24 14l6 6-6 6"/></svg>
+      </div>
+      <div class="lux-card lux-card--bag" style="--z:0px;">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><rect x="10" y="24" width="44" height="32" rx="8"/><path d="M22 24v-6a10 10 0 0 1 20 0v6"/></svg>
+      </div>
     </div>
   </div>
 
-  <div class="lux3d-scroll-hint">Scroll</div>
+  <div class="lux-vignette"></div>
+
+  <div class="lux-content">
+    <span class="lux-eyebrow" data-lux-reveal>{{ section.settings.eyebrow }}</span>
+    <h1 class="lux-heading" data-lux-reveal>{{ section.settings.heading }}</h1>
+    <p class="lux-sub" data-lux-reveal>{{ section.settings.subheading }}</p>
+    <div class="lux-ctas" data-lux-reveal>
+      {%- if section.settings.cta_primary_text != blank -%}
+        <a href="{{ section.settings.cta_primary_url | default: '#' }}" class="lux-btn lux-btn--gold">{{ section.settings.cta_primary_text }}</a>
+      {%- endif -%}
+      {%- if section.settings.cta_secondary_text != blank -%}
+        <a href="{{ section.settings.cta_secondary_url | default: '#' }}" class="lux-btn lux-btn--ghost">{{ section.settings.cta_secondary_text }}</a>
+      {%- endif -%}
+    </div>
+  </div>
 </div>
 
-{%- comment -%}
-  Import map so the module script below can use bare specifiers
-  ("three", "three/addons/…") pointing at CDN builds — no local
-  assets to host, no build step required.
-{%- endcomment -%}
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
-  }
-}
-</script>
-
-<script type="module">
-  /* ============================================================
-     LUXURY 3D HERO — scene setup, materials, scroll choreography
-     ============================================================ */
-  (async function () {
-    var root = document.getElementById('essalem-lux3d-root');
-    var heroEl = document.getElementById('lux3d-hero');
-    var canvas = document.getElementById('lux3d-canvas');
-    if (!root || !heroEl || !canvas) return;
+<script>
+  (function () {
+    var root = document.getElementById('essalem-lux-root');
+    var heroEl = document.getElementById('lux-hero');
+    var stage = document.getElementById('lux-stage-inner');
+    if (!root || !heroEl) return;
 
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var isMobile = window.matchMedia('(max-width: 760px)').matches;
+    var isMobile = window.matchMedia('(max-width: 900px)').matches;
 
-    /* Feature detect WebGL — if unavailable, keep the CSS-only luxury
-       background (marble/rays/vignette) and simply skip 3D. */
-    function hasWebGL() {
-      try {
-        var c = document.createElement('canvas');
-        return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-      } catch (e) { return false; }
-    }
-    if (!hasWebGL()) return;
-
-    var THREE, RoomEnvironment, gsap, ScrollTrigger;
-    try {
-      var mods = await Promise.all([
-        import('three'),
-        import('three/addons/environments/RoomEnvironment.js'),
-        import('https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js'),
-        import('https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js')
-      ]);
-      THREE = mods[0];
-      RoomEnvironment = mods[1].RoomEnvironment;
-      gsap = mods[2].gsap || mods[2].default;
-      ScrollTrigger = mods[3].ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
-    } catch (e) {
-      return; /* CDN hiccup — CSS background still looks premium on its own */
-    }
-
-    /* Lenis smooth scroll is a nice-to-have; never let it block the 3D scene. */
-    var lenis = null;
-    try {
-      var LenisMod = await import('https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.mjs');
-      var Lenis = LenisMod.default || LenisMod.Lenis;
-      if (Lenis && !prefersReducedMotion) {
-        lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
-      }
-    } catch (e) { /* fine without it */ }
-
-    /* ===== Renderer / scene / camera ===== */
-    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-    camera.position.set(0, 0, 7);
-
-    /* Procedural environment map (no external .hdr file) for realistic
-       gold/glass reflections via Three's built-in RoomEnvironment. */
-    var pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-
-    /* ===== Lighting: ambient + warm key + cool rim ===== */
-    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
-    var key = new THREE.DirectionalLight(0xE8C86B, 1.6);
-    key.position.set(4, 5, 6);
-    scene.add(key);
-    var rim = new THREE.DirectionalLight(0x88aaff, 0.5);
-    rim.position.set(-5, -2, -4);
-    scene.add(rim);
-    var fill = new THREE.PointLight(0xD4AF37, 0.6, 20);
-    fill.position.set(-3, 2, 3);
-    scene.add(fill);
-
-    /* ===== Materials (tuned to match the reference product photos) ===== */
-    var goldMat = new THREE.MeshPhysicalMaterial({ color: 0xD4AF37, metalness: 1, roughness: 0.18, clearcoat: 0.6, clearcoatRoughness: 0.15, envMapIntensity: 1.5 });
-    var goldMatSoft = new THREE.MeshPhysicalMaterial({ color: 0xE8C86B, metalness: 0.95, roughness: 0.28, clearcoat: 0.4, envMapIntensity: 1.3 });
-    var paveMat = new THREE.MeshPhysicalMaterial({ color: 0xFFFFFF, metalness: 0, roughness: 0.05, clearcoat: 1, envMapIntensity: 1.6 });
-    var steelMat = new THREE.MeshPhysicalMaterial({ color: 0xC7CBD1, metalness: 1, roughness: 0.22, clearcoat: 0.5, clearcoatRoughness: 0.2, envMapIntensity: 1.4 });
-    var blackDialMat = new THREE.MeshPhysicalMaterial({ color: 0x0d0d0d, metalness: 0.3, roughness: 0.35, clearcoat: 0.4 });
-    var strapMat = new THREE.MeshPhysicalMaterial({ color: 0x5b3a24, metalness: 0.05, roughness: 0.55, clearcoat: 0.25 });
-    var blackGlossMat = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0.15, roughness: 0.12, clearcoat: 0.85, clearcoatRoughness: 0.08, envMapIntensity: 1.2 });
-    var glassMat = new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0, roughness: 0.05, transmission: 0.85, thickness: 0.4, envMapIntensity: 1.2 });
-    var whiteBagMat = new THREE.MeshPhysicalMaterial({ color: 0xF4F2ED, metalness: 0, roughness: 0.6, clearcoat: 0.15, envMapIntensity: 0.9 });
-
-    /* ===== Rig hierarchy =====
-       sceneRig            -> subtle whole-scene mouse tilt
-         outerGroup (x4)    -> GSAP scroll choreography (position/rotation)
-           innerGroup (x4)  -> continuous idle rotation / float (rAF)
-             meshes          -> the actual product geometry            */
-    var sceneRig = new THREE.Group();
-    scene.add(sceneRig);
-
-    function makeRig() {
-      var outer = new THREE.Group();
-      var inner = new THREE.Group();
-      outer.add(inner);
-      sceneRig.add(outer);
-      return { outer: outer, inner: inner };
-    }
-
-    /* ---- Classic steel watch, black dial, brown leather strap ---- */
-    var watch = makeRig();
-    (function buildWatch(g) {
-      var bezel = new THREE.Mesh(new THREE.TorusGeometry(1, 0.14, 32, 96), steelMat);
-      var caseSide = new THREE.Mesh(new THREE.CylinderGeometry(0.86, 0.86, 0.22, 64), steelMat);
-      caseSide.rotation.x = Math.PI / 2;
-      var face = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.06, 64), blackDialMat);
-      face.rotation.x = Math.PI / 2;
-      face.position.z = 0.02;
-      var crown = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.18, 16), steelMat);
-      crown.rotation.z = Math.PI / 2;
-      crown.position.set(1.0, 0, 0);
-      var hourHand = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.36, 0.025), goldMatSoft);
-      hourHand.position.set(0, 0.14, 0.06);
-      var minHand = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.54, 0.025), goldMatSoft);
-      minHand.position.set(0.08, 0.18, 0.065);
-      minHand.rotation.z = -0.6;
-      g.add(bezel, caseSide, face, crown, hourHand, minHand);
-      /* hour markers */
-      for (var m = 0; m < 12; m++) {
-        var ang = (m / 12) * Math.PI * 2;
-        var mark = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.09, 0.02), goldMatSoft);
-        mark.position.set(Math.sin(ang) * 0.62, Math.cos(ang) * 0.62, 0.06);
-        mark.rotation.z = -ang;
-        g.add(mark);
-      }
-      /* curved leather strap bands, top and bottom */
-      function strapBand(sign) {
-        var curve = new THREE.CatmullRomCurve3([
-          new THREE.Vector3(0, sign * 1.0, 0),
-          new THREE.Vector3(0.05, sign * 1.65, -0.06),
-          new THREE.Vector3(0.02, sign * 2.35, -0.12)
-        ]);
-        return new THREE.Mesh(new THREE.TubeGeometry(curve, 20, 0.28, 8, false), strapMat);
-      }
-      g.add(strapBand(1), strapBand(-1));
-    })(watch.inner);
-    watch.outer.position.set(1.6, 0.8, -1.2);
-    watch.outer.scale.setScalar(1.05);
-    watch.inner.userData.idle = { spinAxis: 'y', spinSpeed: 0.12, floatAmp: 0.08, floatSpeed: 0.6, phase: 0 };
-
-    /* ---- Glossy black rectangular sunglasses ---- */
-    var glasses = makeRig();
-    (function buildGlasses(g) {
-      function lensUnit(sign) {
-        var frame = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.6, 0.12), blackGlossMat);
-        var lens = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.42, 0.03), glassMat);
-        lens.position.z = 0.06;
-        var u = new THREE.Group();
-        u.add(frame, lens);
-        u.position.x = sign * 0.6;
-        return u;
-      }
-      var bridge = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.08, 0.08), blackGlossMat);
-      var templeL = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.06), blackGlossMat);
-      templeL.position.set(-1.5, -0.02, -0.4);
-      templeL.rotation.y = 0.4;
-      var templeR = templeL.clone();
-      templeR.position.x = 1.5;
-      templeR.rotation.y = -0.4;
-      g.add(lensUnit(-1), lensUnit(1), bridge, templeL, templeR);
-    })(glasses.inner);
-    glasses.outer.position.set(4.8, -0.4, -2.4);
-    glasses.outer.rotation.y = 0.4;
-    glasses.inner.userData.idle = { spinAxis: 'y', spinSpeed: -0.15, floatAmp: 0.1, floatSpeed: 0.8, phase: 1.1 };
-
-    /* ---- Gold double-band twisted bangle with a pavé strip ---- */
-    var bracelet = makeRig();
-    (function buildBracelet(g) {
-      var tilt = new THREE.Euler(Math.PI / 2.3, 0, 0.35);
-      var ringA = new THREE.Mesh(new THREE.TorusGeometry(1, 0.075, 20, 90), goldMat);
-      ringA.rotation.x = Math.PI / 2.3;
-      var ringB = new THREE.Mesh(new THREE.TorusGeometry(1, 0.06, 20, 90), goldMatSoft);
-      ringB.rotation.copy(tilt);
-      var knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.16, 0.045, 64, 8, 1, 1), goldMat);
-      knot.position.set(0, 1.0, 0);
-      knot.scale.setScalar(0.9);
-      g.add(ringA, ringB, knot);
-      /* pavé diamond strip along part of the second band */
-      var stoneCount = 26;
-      for (var i = 0; i < stoneCount; i++) {
-        var a = Math.PI * 0.15 + (i / stoneCount) * Math.PI * 0.7;
-        var v = new THREE.Vector3(Math.cos(a), Math.sin(a), 0).applyEuler(tilt);
-        var stone = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), paveMat);
-        stone.position.copy(v);
-        g.add(stone);
-      }
-    })(bracelet.inner);
-    bracelet.outer.position.set(-2.2, -0.6, -1.8);
-    bracelet.outer.rotation.x = 0.5;
-    bracelet.inner.userData.idle = { spinAxis: 'z', spinSpeed: 0.22, floatAmp: 0.06, floatSpeed: 0.5, phase: 2.2 };
-
-    /* ---- Rounded white sculptural tote ---- */
-    var bag = makeRig();
-    (function buildBag(g) {
-      var body = new THREE.Mesh(new THREE.SphereGeometry(0.85, 48, 32), whiteBagMat);
-      body.scale.set(1.15, 0.72, 0.95);
-      function handleCurve(sign) {
-        return new THREE.CatmullRomCurve3([
-          new THREE.Vector3(sign * 0.28, 0.5, 0),
-          new THREE.Vector3(sign * 0.22, 1.15, 0),
-          new THREE.Vector3(0, 1.35, 0)
-        ]);
-      }
-      var handleL = new THREE.Mesh(new THREE.TubeGeometry(handleCurve(-1), 20, 0.06, 10, false), whiteBagMat);
-      var handleR = new THREE.Mesh(new THREE.TubeGeometry(handleCurve(1), 20, 0.06, 10, false), whiteBagMat);
-      g.add(body, handleL, handleR);
-    })(bag.inner);
-    bag.outer.position.set(-0.6, -1.4, -6);
-    bag.outer.scale.setScalar(0.001); /* "comes from behind" — starts imperceptibly small/far */
-    bag.inner.userData.idle = { spinAxis: 'y', spinSpeed: 0.08, floatAmp: 0.05, floatSpeed: 0.45, phase: 3.4 };
-
-    var rigs = [watch, glasses, bracelet, bag];
-
-    /* ===== Gold dust particles (procedural sprite, no image assets) ===== */
-    function makeParticleTexture() {
-      var c = document.createElement('canvas'); c.width = c.height = 64;
-      var ctx = c.getContext('2d');
-      var grd = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      grd.addColorStop(0, 'rgba(245,231,194,1)');
-      grd.addColorStop(0.4, 'rgba(232,200,107,.6)');
-      grd.addColorStop(1, 'rgba(212,175,55,0)');
-      ctx.fillStyle = grd; ctx.fillRect(0, 0, 64, 64);
-      return new THREE.CanvasTexture(c);
-    }
-    var particleCount = isMobile ? 45 : 130;
-    var particlePositions = new Float32Array(particleCount * 3);
-    for (var p = 0; p < particleCount; p++) {
-      particlePositions[p * 3] = (Math.random() - 0.5) * 14;
-      particlePositions[p * 3 + 1] = (Math.random() - 0.5) * 8;
-      particlePositions[p * 3 + 2] = (Math.random() - 0.5) * 10;
-    }
-    var particleGeo = new THREE.BufferGeometry();
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    var particleMat = new THREE.PointsMaterial({
-      size: 0.05, map: makeParticleTexture(), transparent: true, depthWrite: false,
-      blending: THREE.AdditiveBlending, color: 0xE8C86B
+    /* reveal-on-load for the text */
+    root.querySelectorAll('[data-lux-reveal]').forEach(function (el, i) {
+      setTimeout(function () { el.classList.add('is-visible'); }, 150 + i * 150);
     });
-    var particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
 
-    /* ===== Resize handling ===== */
-    function resize() {
-      var w = heroEl.clientWidth, h = heroEl.clientHeight;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    /* ===== Mouse parallax — subtle whole-rig tilt toward cursor ===== */
-    var targetTiltX = 0, targetTiltY = 0;
-    if (!isMobile && !prefersReducedMotion) {
+    if (stage && !isMobile && !prefersReducedMotion) {
+      /* subtle mouse tilt — plain CSS custom properties, synchronous, nothing to hang on */
       heroEl.addEventListener('pointermove', function (e) {
         var rect = heroEl.getBoundingClientRect();
         var nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         var ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        targetTiltY = nx * 0.12;   /* a few degrees, never exaggerated */
-        targetTiltX = ny * 0.08;
-      });
-    }
-
-    /* ===== Scroll choreography (real 3D transforms via GSAP) =====
-       No pin: pinning here was locking page scroll for an extra 130vh,
-       which read as the hero being "stuck". Instead the choreography is
-       simply scrubbed to the hero's own natural scroll range, so the
-       page always keeps moving under the user's scroll/trackpad. */
-    var scrollTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: heroEl,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1
-      }
-    });
-    scrollTl
-      .to(watch.outer.position, { x: 0, y: 0.15, z: 0.6, duration: 1 }, 0)
-      .to(watch.outer.rotation, { y: Math.PI * 0.4, duration: 1 }, 0)
-      .to(glasses.outer.position, { x: 1.7, y: -0.35, z: -0.4, duration: 1 }, 0)
-      .to(glasses.outer.rotation, { y: -Math.PI * 0.3, duration: 1 }, 0)
-      .to(bracelet.outer.position, { x: -1.15, y: -0.15, z: 0.7, duration: 1 }, 0)
-      .to(bracelet.outer.rotation, { y: Math.PI * 2.4, x: 0.15, duration: 1 }, 0)
-      .to(bag.outer.position, { x: -1.9, y: -0.55, z: -0.3, duration: 1 }, 0)
-      .to(bag.outer.scale, { x: 1, y: 1, z: 1, duration: 1 }, 0);
-
-    /* ===== Visibility-based pause (perf) ===== */
-    var isVisible = true;
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        isVisible = entries[0].isIntersecting;
-      }, { threshold: 0.05 }).observe(heroEl);
-    }
-    document.addEventListener('visibilitychange', function () {
-      isVisible = isVisible && document.visibilityState === 'visible';
-    });
-
-    /* ===== Render loop ===== */
-    var clock = new THREE.Clock();
-    var currentTiltX = 0, currentTiltY = 0;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      if (!isVisible || document.visibilityState === 'hidden') return;
-
-      var dt = Math.min(clock.getDelta(), 0.05);
-      var t = clock.elapsedTime;
-
-      /* idle spin/float per object, layered under the scroll choreography */
-      rigs.forEach(function (rig) {
-        var idle = rig.inner.userData.idle;
-        if (!idle) return;
-        rig.inner.rotation[idle.spinAxis] += idle.spinSpeed * dt;
-        rig.inner.position.y = Math.sin(t * idle.floatSpeed + idle.phase) * idle.floatAmp;
+        stage.style.setProperty('--lux-tilt-y', (nx * 6) + 'deg');
+        stage.style.setProperty('--lux-tilt-x', (ny * -4) + 'deg');
       });
 
-      /* gentle mouse-follow tilt on the whole rig */
-      currentTiltX += (targetTiltX - currentTiltX) * 0.05;
-      currentTiltY += (targetTiltY - currentTiltY) * 0.05;
-      sceneRig.rotation.x = currentTiltX;
-      sceneRig.rotation.y = currentTiltY;
-
-      /* slow drifting gold dust */
-      particles.rotation.y += 0.01 * dt;
-
-      renderer.render(scene, camera);
+      /* gentle parallax drift on scroll */
+      window.addEventListener('scroll', function () {
+        var progress = Math.min(1, Math.max(0, -heroEl.getBoundingClientRect().top / heroEl.offsetHeight));
+        root.querySelectorAll('.lux-card').forEach(function (card, i) {
+          var dir = i % 2 === 0 ? 1 : -1;
+          card.style.setProperty('--x', (progress * 40 * dir) + 'px');
+          card.style.setProperty('--y', (progress * -60) + 'px');
+        });
+      }, { passive: true });
     }
-    animate();
-    canvas.classList.add('is-ready');
   })();
 </script>
 
+</section>
+
 {% schema %}
 {
-  "name": "Luxury 3D Hero",
+  "name": "Luxury Hero",
   "tag": "section",
-  "class": "section section--luxury-3d-hero",
+  "class": "section section--luxury-hero",
   "settings": [
-    {
-      "type": "header",
-      "content": "Texte"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Texte au-dessus du titre",
-      "default": "COLLECTION PREMIUM"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Titre",
-      "default": "Élégance qui rassemble"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Sous-titre",
-      "default": "Montres • Lunettes • Bracelets • Sacs"
-    },
-    {
-      "type": "header",
-      "content": "Boutons"
-    },
-    {
-      "type": "text",
-      "id": "cta_primary_text",
-      "label": "Bouton principal — texte",
-      "default": "Découvrir la collection"
-    },
-    {
-      "type": "url",
-      "id": "cta_primary_url",
-      "label": "Bouton principal — lien"
-    },
-    {
-      "type": "text",
-      "id": "cta_secondary_text",
-      "label": "Bouton secondaire — texte",
-      "default": "Voir les nouveautés"
-    },
-    {
-      "type": "url",
-      "id": "cta_secondary_url",
-      "label": "Bouton secondaire — lien"
-    },
-    {
-      "type": "header",
-      "content": "Couleurs"
-    },
-    {
-      "type": "color",
-      "id": "color_bg",
-      "label": "Fond principal",
-      "default": "#050505"
-    },
-    {
-      "type": "color",
-      "id": "color_bg2",
-      "label": "Fond secondaire",
-      "default": "#101010"
-    },
-    {
-      "type": "color",
-      "id": "color_gold",
-      "label": "Or",
-      "default": "#D4AF37"
-    },
-    {
-      "type": "color",
-      "id": "color_gold_soft",
-      "label": "Or doux",
-      "default": "#E8C86B"
-    },
-    {
-      "type": "color",
-      "id": "color_champagne",
-      "label": "Champagne",
-      "default": "#F5E7C2"
-    }
+    { "type": "header", "content": "Texte" },
+    { "type": "text", "id": "eyebrow", "label": "Texte au-dessus du titre", "default": "COLLECTION PREMIUM" },
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Élégance qui rassemble" },
+    { "type": "text", "id": "subheading", "label": "Sous-titre", "default": "Montres • Lunettes • Bracelets • Sacs" },
+    { "type": "header", "content": "Boutons" },
+    { "type": "text", "id": "cta_primary_text", "label": "Bouton principal — texte", "default": "Découvrir la collection" },
+    { "type": "url", "id": "cta_primary_url", "label": "Bouton principal — lien" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Bouton secondaire — texte", "default": "Voir les nouveautés" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Bouton secondaire — lien" },
+    { "type": "header", "content": "Couleurs" },
+    { "type": "color", "id": "color_bg", "label": "Fond principal", "default": "#050505" },
+    { "type": "color", "id": "color_bg2", "label": "Fond secondaire", "default": "#101010" },
+    { "type": "color", "id": "color_gold", "label": "Or", "default": "#D4AF37" },
+    { "type": "color", "id": "color_gold_soft", "label": "Or doux", "default": "#E8C86B" },
+    { "type": "color", "id": "color_champagne", "label": "Champagne", "default": "#F5E7C2" }
   ],
   "presets": [
-    {
-      "name": "Luxury 3D Hero"
-    }
+    { "name": "Luxury Hero" }
   ]
 }
 {% endschema %}
