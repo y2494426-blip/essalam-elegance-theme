@@ -284,7 +284,7 @@
   #essalem-collection-lux .ee-section-line { width: 56px; height: 3px; background: linear-gradient(90deg, transparent, var(--ee-gold), transparent); margin: 0 auto; }
 
   /* ===== HERO ===== */
-  #essalem-collection-lux .ee-hero { position: relative; min-height: 92svh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--ee-beige) 0%, var(--ee-beige-dark) 55%, #E7DEC9 100%); }
+  #essalem-collection-lux .ee-hero { position: relative; min-height: 92svh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: clamp(90px, 13vh, 150px); background: linear-gradient(160deg, var(--ee-beige) 0%, var(--ee-beige-dark) 55%, #E7DEC9 100%); }
   #essalem-collection-lux .ee-hero__bg { position: absolute; inset: 0; z-index: 0; }
   #essalem-collection-lux .ee-hero__img { width: 100%; height: 100%; object-fit: cover; }
   #essalem-collection-lux .ee-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,17,17,.15), rgba(17,17,17,.55)); }
@@ -294,16 +294,16 @@
   #essalem-collection-lux .ee-hero__ring--2 { width: 42vmax; height: 42vmax; bottom: -16vmax; left: -12vmax; animation: ee-spin 90s linear infinite reverse; }
   @keyframes ee-spin { to { transform: rotate(360deg); } }
   #essalem-collection-lux .ee-hero__glow { position: absolute; top: 10%; right: 12%; width: 420px; height: 420px; max-width: 60vw; max-height: 60vw; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.28), transparent 70%); filter: blur(10px); }
-  #essalem-collection-lux .ee-hero__silhouette { position: absolute; bottom: 0; left: 50%; transform: translateX(-42%); width: min(560px, 78vw); opacity: .92; }
+  #essalem-collection-lux .ee-hero__silhouette { position: absolute; bottom: -10px; left: 50%; transform: translateX(-42%); width: min(380px, 52vw); opacity: .5; -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 95%); mask-image: linear-gradient(to top, #000 45%, transparent 95%); }
   #essalem-collection-lux .ee-hero__silhouette svg { width: 100%; height: auto; display: block; }
   #essalem-collection-lux .ee-hero__particles { position: absolute; inset: 0; pointer-events: none; }
   #essalem-collection-lux .ee-hero__particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ee-gold); opacity: .8; box-shadow: 0 0 6px rgba(212,175,55,.7); left: calc((var(--i) * 5.4%) + 1%); top: 100%; animation: ee-rise calc(8s + (var(--i) * .5s)) linear infinite; animation-delay: calc(var(--i) * -0.6s); }
   @keyframes ee-rise { 0% { transform: translateY(0) scale(.6); opacity: 0; } 12% { opacity: .9; } 88% { opacity: .3; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
 
-  #essalem-collection-lux .ee-hero__content { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 120px 24px 80px; text-align: center; }
-  #essalem-collection-lux .ee-hero__eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .3em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 18px; }
-  #essalem-collection-lux .ee-hero__title { font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.25; color: var(--ee-black); margin: 0 0 20px; }
-  #essalem-collection-lux .ee-hero__subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: #3a3a3a; margin: 0 0 36px; line-height: 1.7; }
+  #essalem-collection-lux .ee-hero__content { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 0 24px 60px; text-align: center; }
+  #essalem-collection-lux .ee-hero__eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .3em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 18px; text-shadow: 0 1px 10px rgba(248,245,240,.9); }
+  #essalem-collection-lux .ee-hero__title { font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.25; color: var(--ee-black); margin: 0 0 20px; text-shadow: 0 2px 16px rgba(248,245,240,.95), 0 0 40px rgba(248,245,240,.7); }
+  #essalem-collection-lux .ee-hero__subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: #3a3a3a; margin: 0 0 36px; line-height: 1.7; text-shadow: 0 1px 12px rgba(248,245,240,.95), 0 0 30px rgba(248,245,240,.8); }
 
   #essalem-collection-lux .ee-hero__scroll { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; width: 30px; height: 46px; border: 2px solid rgba(17,17,17,.4); border-radius: 20px; background: transparent; cursor: pointer; }
   #essalem-collection-lux .ee-hero__scroll-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--ee-gold); margin: 8px auto 0; animation: ee-scroll-dot 1.8s ease-in-out infinite; }
