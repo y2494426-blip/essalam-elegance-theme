@@ -6,88 +6,90 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 
+{%- liquid
+  assign pid = section.id
+-%}
+
 <div id="essalem-collection-lux" dir="rtl">
 
-  {%- comment -%} ============ HERO ============ {%- endcomment -%}
-  <section class="ee-hero" id="ee-hero-{{ section.id }}">
-    <div class="ee-hero__bg">
+  {%- comment -%} ============================= HERO ============================= {%- endcomment -%}
+  <section class="ee-hero" id="ee-hero-{{ pid }}">
+    <div class="ee-hero__bg" id="ee-hero-bg-{{ pid }}">
       {%- if section.settings.hero_image != blank -%}
-        {{ section.settings.hero_image | image_url: width: 2200 | image_tag: loading: 'eager', class: 'ee-hero__img', alt: '' }}
-        <div class="ee-hero__overlay"></div>
+        {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', class: 'ee-hero__img', alt: '' }}
       {%- else -%}
-        <div class="ee-hero__art" aria-hidden="true">
-          <div class="ee-hero__ring ee-hero__ring--1"></div>
-          <div class="ee-hero__ring ee-hero__ring--2"></div>
-          <div class="ee-hero__glow"></div>
-          <div class="ee-hero__silhouette">
-            <svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="190" cy="330" rx="150" ry="26" fill="rgba(17,17,17,0.10)"/>
-              <path d="M150 360 C150 250 160 190 200 150 C220 130 230 108 226 84 C223 63 205 48 182 48 C157 48 138 66 138 90 C138 112 150 128 150 128 C110 145 88 190 88 250 L88 360 Z" fill="rgba(17,17,17,0.85)"/>
-              <circle cx="163" cy="205" r="13" fill="none" stroke="#D4AF37" stroke-width="3"/>
-              <rect x="157" y="188" width="12" height="8" rx="2" fill="#D4AF37"/>
-              <path d="M330 360 C330 240 322 178 292 140 C276 120 270 96 278 74 C286 52 308 40 330 46 C352 52 364 74 358 96 C353 115 338 128 338 128 C378 148 396 195 396 252 L396 360 Z" fill="rgba(17,17,17,0.7)"/>
-              <circle cx="316" cy="196" r="12" fill="none" stroke="#D4AF37" stroke-width="3"/>
-              <rect x="310" y="180" width="12" height="8" rx="2" fill="#D4AF37"/>
-              <path d="M226 84 C232 100 276 102 278 74" stroke="rgba(212,175,55,0.5)" stroke-width="2" fill="none"/>
-            </svg>
-          </div>
-          <div class="ee-hero__particles">
-            {%- for i in (1..18) -%}
-              <span class="ee-hero__particle" style="--i:{{ i }};"></span>
-            {%- endfor -%}
-          </div>
+        <div class="ee-scene ee-scene--dark" aria-hidden="true">
+          <div class="ee-bokeh ee-bokeh--1"></div>
+          <div class="ee-bokeh ee-bokeh--2"></div>
+          <div class="ee-bokeh ee-bokeh--3"></div>
+          <div class="ee-bokeh ee-bokeh--4"></div>
+          <div class="ee-rays"></div>
         </div>
       {%- endif -%}
+      <div class="ee-hero__overlay"></div>
+      <div class="ee-hero__vignette"></div>
+    </div>
+
+    <div class="ee-particles ee-hero__particles" id="ee-hero-particles-{{ pid }}" aria-hidden="true">
+      {%- for i in (1..22) -%}<span class="ee-particle" style="--i:{{ i }};"></span>{%- endfor -%}
     </div>
 
     <div class="ee-hero__content">
-      <p class="ee-hero__eyebrow" data-ee-reveal>ESSALAM ELEGANCE</p>
-      <h1 class="ee-hero__title" data-ee-reveal>{{ section.settings.hero_heading | default: '❤️ هدية مثالية ليك وللي كتحب' }}</h1>
-      <p class="ee-hero__subtitle" data-ee-reveal>{{ section.settings.hero_subheading | default: 'ساعات أنيقة للأزواج بجودة عالية وثمن مناسب' }}</p>
-      <a href="#ee-grid-{{ section.id }}" class="ee-btn ee-btn--gold ee-hero__cta" data-ee-reveal>
-        <span>🛒 {{ section.settings.hero_cta_text | default: 'شوف المجموعة' }}</span>
+      {%- if collection.title != blank -%}
+        <p class="ee-kicker" data-ee-reveal>{{ collection.title }} · ESSALAM ELEGANCE</p>
+      {%- endif -%}
+      <span class="ee-hero__heart" data-ee-reveal aria-hidden="true">❤</span>
+      <h1 class="ee-hero__title" data-ee-reveal>{{ section.settings.hero_heading | default: 'الوقت كيجمع القلوب' }}</h1>
+      <p class="ee-hero__subtitle" data-ee-reveal>{{ section.settings.hero_subheading | newline_to_br }}</p>
+      <a href="#ee-showroom-{{ pid }}" class="ee-cta ee-cta--glass" data-ee-reveal>
+        <span class="ee-cta__glow"></span>
+        <span class="ee-cta__label">{{ section.settings.hero_cta_text | default: 'اطلب دابا' }}</span>
       </a>
     </div>
 
-    <button type="button" class="ee-hero__scroll" aria-label="مرر للأسفل" onclick="document.getElementById('ee-grid-{{ section.id }}').scrollIntoView({behavior:'smooth'})">
-      <span class="ee-hero__scroll-dot"></span>
+    <button type="button" class="ee-hero__scroll" aria-label="مرر للأسفل" onclick="document.getElementById('ee-stats-{{ pid }}').scrollIntoView({behavior:'smooth'})">
+      <span></span>
     </button>
   </section>
 
-  {%- comment -%} ============ TRUST BAR ============ {%- endcomment -%}
-  <section class="ee-trust">
-    <div class="ee-trust__track">
+  {%- comment -%} ============================= STATS ============================= {%- endcomment -%}
+  <section class="ee-stats" id="ee-stats-{{ pid }}">
+    <div class="ee-stats__grid">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'trust_item' -%}
-          <div class="ee-trust__item" data-ee-reveal {{ block.shopify_attributes }}>
-            <span class="ee-trust__icon">{{ block.settings.icon }}</span>
-            <span class="ee-trust__text">{{ block.settings.text }}</span>
+        {%- if block.type == 'stat' -%}
+          <div class="ee-stat" data-ee-reveal {{ block.shopify_attributes }}>
+            <div class="ee-stat__icon">{{ block.settings.icon }}</div>
+            {%- if block.settings.number != blank -%}
+              <div class="ee-stat__value">
+                <span>{{ block.settings.number_prefix }}</span><span class="ee-stat__num" data-count="{{ block.settings.number }}">0</span><span>{{ block.settings.number_suffix }}</span>
+              </div>
+            {%- endif -%}
+            <p class="ee-stat__label">{{ block.settings.label }}</p>
           </div>
         {%- endif -%}
       {%- endfor -%}
     </div>
   </section>
 
-  {%- comment -%} ============ FREE SHIPPING BANNER ============ {%- endcomment -%}
-  {%- if section.settings.show_shipping_banner -%}
-    <section class="ee-shipping-banner">
-      <div class="ee-shipping-banner__glow"></div>
-      <p class="ee-shipping-banner__text">🎁 {{ section.settings.shipping_banner_text | default: 'الشحن مجاني لجميع المدن المغربية' }}</p>
-    </section>
-  {%- endif -%}
+  {%- comment -%} ============================= SHOWROOM ============================= {%- endcomment -%}
+  <section class="ee-showroom" id="ee-showroom-{{ pid }}">
+    <div class="ee-section-head">
+      <p class="ee-eyebrow" data-ee-reveal>ESSALAM ELEGANCE</p>
+      <h2 class="ee-title" data-ee-reveal>المجموعة</h2>
+      {%- if collection.description != blank -%}
+        <p class="ee-section-desc" data-ee-reveal>{{ collection.description | strip_html | truncate: 140 }}</p>
+      {%- endif -%}
+      <div class="ee-line"></div>
+    </div>
 
-  {%- comment -%} ============ PRODUCT GRID ============ {%- endcomment -%}
-  <section class="ee-grid-section" id="ee-grid-{{ section.id }}">
-
-    <div class="ee-grid-header">
-      <p class="ee-grid-count">
+    <div class="ee-showroom__bar">
+      <p class="ee-showroom__count">
         {{ collection.products_count }} {% if collection.products_count == 1 %}منتج{% else %}منتجات{% endif %}
       </p>
-
       {%- if collection.products_count > 0 -%}
-        <form class="ee-sort-form" id="ee-sort-form-{{ section.id }}">
-          <label class="ee-sort-label" for="ee-sort-{{ section.id }}">ترتيب حسب:</label>
-          <select id="ee-sort-{{ section.id }}" class="ee-sort-select" name="sort_by" onchange="document.getElementById('ee-sort-form-{{ section.id }}').submit()">
+        <form class="ee-sort-form" id="ee-sort-form-{{ pid }}">
+          <label class="ee-sort-label" for="ee-sort-{{ pid }}">ترتيب:</label>
+          <select id="ee-sort-{{ pid }}" class="ee-sort-select" name="sort_by" onchange="document.getElementById('ee-sort-form-{{ pid }}').submit()">
             {%- for option in collection.sort_options -%}
               <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected="selected"{% endif %}>{{ option.name }}</option>
             {%- endfor -%}
@@ -97,26 +99,39 @@
     </div>
 
     {%- paginate collection.products by section.settings.products_per_page -%}
-      <div class="ee-product-grid">
-        {%- for product in collection.products -%}
-          <div data-ee-reveal>
-            {% render 'card-product',
-              card_product: product,
-              media_aspect_ratio: 'portrait',
-              show_secondary_image: true,
-              show_vendor: false
-            %}
-          </div>
-        {%- else -%}
-          <p class="ee-empty">ما كايناش منتجات فهاد المجموعة حالياً.</p>
-        {%- endfor -%}
+      <div class="ee-showroom__wrap">
+        <button type="button" class="ee-hscroll-arrow ee-hscroll-arrow--prev" aria-label="السابق" onclick="window.eeHScroll && eeHScroll('ee-showroom-track-{{ pid }}', -1)">‹</button>
+        <div class="ee-showroom__track" id="ee-showroom-track-{{ pid }}">
+          {%- for product in collection.products -%}
+            {%- liquid
+              assign size_idx = forloop.index0 | modulo: 3
+              assign size_class = 'ee-showroom-item--lg'
+              if size_idx == 1
+                assign size_class = 'ee-showroom-item--md'
+              elsif size_idx == 2
+                assign size_class = 'ee-showroom-item--sm'
+              endif
+            -%}
+            <div class="ee-showroom-item {{ size_class }}" data-ee-reveal>
+              <div class="ee-showroom-frame">
+                {% render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: 'portrait',
+                  show_secondary_image: true,
+                  show_vendor: false
+                %}
+              </div>
+            </div>
+          {%- else -%}
+            <p class="ee-empty">ما كايناش منتجات فهاد المجموعة حالياً.</p>
+          {%- endfor -%}
+        </div>
+        <button type="button" class="ee-hscroll-arrow ee-hscroll-arrow--next" aria-label="التالي" onclick="window.eeHScroll && eeHScroll('ee-showroom-track-{{ pid }}', 1)">›</button>
       </div>
 
       {%- if paginate.pages > 1 -%}
         <nav class="ee-pagination" role="navigation" aria-label="ترقيم الصفحات">
-          {%- if paginate.previous -%}
-            <a href="{{ paginate.previous.url }}" class="ee-pagination__arrow">‹</a>
-          {%- endif -%}
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="ee-pagination__arrow">‹</a>{%- endif -%}
           {%- for part in paginate.parts -%}
             {%- if part.is_link -%}
               <a href="{{ part.url }}" class="ee-pagination__num">{{ part.title }}</a>
@@ -128,114 +143,132 @@
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
-          {%- if paginate.next -%}
-            <a href="{{ paginate.next.url }}" class="ee-pagination__arrow">›</a>
-          {%- endif -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="ee-pagination__arrow">›</a>{%- endif -%}
         </nav>
       {%- endif -%}
     {%- endpaginate -%}
   </section>
 
-  {%- comment -%} ============ WHY BUY FROM US ============ {%- endcomment -%}
-  <section class="ee-why">
-    <div class="ee-section-head">
-      <p class="ee-section-eyebrow" data-ee-reveal>ثقة عملائنا</p>
-      <h2 class="ee-section-title" data-ee-reveal>❤️ لماذا Essalam Elegance؟</h2>
-      <div class="ee-section-line"></div>
-    </div>
-    <div class="ee-why__grid">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'benefit' -%}
-          <div class="ee-why__card" data-ee-reveal {{ block.shopify_attributes }}>
-            <span class="ee-why__icon">{{ block.settings.icon }}</span>
-            <p class="ee-why__text">{{ block.settings.text }}</p>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  </section>
-
-  {%- comment -%} ============ COUPLE LIFESTYLE ============ {%- endcomment -%}
-  <section class="ee-lifestyle">
-    <div class="ee-lifestyle__bg">
-      {%- if section.settings.lifestyle_image != blank -%}
-        {{ section.settings.lifestyle_image | image_url: width: 2200 | image_tag: loading: 'lazy', class: 'ee-lifestyle__img', alt: '' }}
+  {%- comment -%} ============================= EMOTIONAL ============================= {%- endcomment -%}
+  <section class="ee-emotional">
+    <div class="ee-emotional__bg">
+      {%- if section.settings.emotional_image != blank -%}
+        {{ section.settings.emotional_image | image_url: width: 2400 | image_tag: loading: 'lazy', class: 'ee-emotional__img', alt: '' }}
+      {%- else -%}
+        <div class="ee-scene ee-scene--dark" aria-hidden="true">
+          <div class="ee-bokeh ee-bokeh--1"></div>
+          <div class="ee-bokeh ee-bokeh--3"></div>
+          <div class="ee-rays"></div>
+        </div>
       {%- endif -%}
-      <div class="ee-lifestyle__overlay"></div>
+      <div class="ee-hero__overlay"></div>
     </div>
-    <div class="ee-lifestyle__content">
-      <span class="ee-lifestyle__heart" aria-hidden="true">❤</span>
-      <h2 class="ee-lifestyle__title" data-ee-reveal>{{ section.settings.lifestyle_heading | default: 'الهدية لي غادي تجمع بينكم ❤️' }}</h2>
-      {%- if section.settings.lifestyle_text != blank -%}
-        <p class="ee-lifestyle__text" data-ee-reveal>{{ section.settings.lifestyle_text }}</p>
+    <div class="ee-particles" aria-hidden="true">
+      {%- for i in (1..14) -%}<span class="ee-particle" style="--i:{{ i }};"></span>{%- endfor -%}
+    </div>
+    <div class="ee-emotional__content">
+      <span class="ee-hero__heart" data-ee-reveal aria-hidden="true">❤</span>
+      <h2 class="ee-emotional__title" data-ee-reveal>{{ section.settings.emotional_heading | default: 'اختار هدية غادي تبقى ذكرى' }}</h2>
+      {%- if section.settings.emotional_text != blank -%}
+        <p class="ee-emotional__text" data-ee-reveal>{{ section.settings.emotional_text }}</p>
       {%- endif -%}
     </div>
   </section>
 
-  {%- comment -%} ============ REVIEWS ============ {%- endcomment -%}
+  {%- comment -%} ============================= OFFER ============================= {%- endcomment -%}
+  <section class="ee-offer">
+    <div class="ee-scene ee-scene--dark" aria-hidden="true">
+      <div class="ee-bokeh ee-bokeh--2"></div>
+      <div class="ee-bokeh ee-bokeh--4"></div>
+      <div class="ee-rays"></div>
+    </div>
+    <div class="ee-particles" aria-hidden="true">
+      {%- for i in (1..16) -%}<span class="ee-particle" style="--i:{{ i }};"></span>{%- endfor -%}
+    </div>
+
+    <div class="ee-offer__card" data-ee-reveal>
+      <span class="ee-offer__fire">🔥</span>
+      <p class="ee-offer__label">عرض لفترة محدودة</p>
+      <div class="ee-offer__price">
+        <span class="ee-offer__amount">{{ section.settings.offer_price | default: '299' }}</span>
+        <span class="ee-offer__currency">{{ section.settings.offer_currency | default: 'DH' }}</span>
+      </div>
+      <div class="ee-offer__badges">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'offer_badge' -%}
+            <span class="ee-offer__badge" {{ block.shopify_attributes }}>{{ block.settings.icon }} {{ block.settings.text }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <a href="#ee-showroom-{{ pid }}" class="ee-cta ee-cta--gold ee-offer__cta">
+        <span class="ee-cta__label">{{ section.settings.offer_cta_text | default: 'اطلب دابا' }}</span>
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ============================= REVIEWS ============================= {%- endcomment -%}
   <section class="ee-reviews">
     <div class="ee-section-head">
-      <p class="ee-section-eyebrow" data-ee-reveal>آراء عملائنا</p>
-      <h2 class="ee-section-title" data-ee-reveal>ماذا قال عملاؤنا</h2>
-      <div class="ee-section-line"></div>
+      <p class="ee-eyebrow" data-ee-reveal>آراء عملائنا</p>
+      <h2 class="ee-title" data-ee-reveal>ماذا قال عملاؤنا</h2>
+      <div class="ee-line"></div>
     </div>
 
-    <div class="ee-reviews__wrap">
-      <button type="button" class="ee-reviews__arrow ee-reviews__arrow--prev" aria-label="السابق" onclick="window.eeReviewScroll && eeReviewScroll('{{ section.id }}', -1)">‹</button>
-      <div class="ee-reviews__track" id="ee-reviews-track-{{ section.id }}">
+    <div class="ee-showroom__wrap">
+      <button type="button" class="ee-hscroll-arrow ee-hscroll-arrow--prev" aria-label="السابق" onclick="window.eeHScroll && eeHScroll('ee-reviews-track-{{ pid }}', -1)">‹</button>
+      <div class="ee-reviews__track" id="ee-reviews-track-{{ pid }}">
         {%- for block in section.blocks -%}
           {%- if block.type == 'review' -%}
-            <div class="ee-review-card" {{ block.shopify_attributes }}>
+            <div class="ee-review-card" data-ee-reveal {{ block.shopify_attributes }}>
+              <div class="ee-review-card__top">
+                <div class="ee-review-card__avatar">
+                  {%- if block.settings.avatar != blank -%}
+                    {{ block.settings.avatar | image_url: width: 100 | image_tag: loading: 'lazy', alt: block.settings.name | escape }}
+                  {%- else -%}
+                    <span>{{ block.settings.name | slice: 0 }}</span>
+                  {%- endif -%}
+                </div>
+                <div>
+                  <p class="ee-review-card__name">
+                    {{ block.settings.name }}
+                    {%- if block.settings.verified -%}<span class="ee-review-card__verified" title="مشتري موثّق">✓</span>{%- endif -%}
+                  </p>
+                  {%- if block.settings.location != blank -%}<p class="ee-review-card__loc">{{ block.settings.location }}</p>{%- endif -%}
+                </div>
+              </div>
               <div class="ee-review-card__stars">
                 {%- assign stars = block.settings.rating | default: 5 -%}
                 {%- for i in (1..stars) -%}★{%- endfor -%}
               </div>
               <p class="ee-review-card__text">"{{ block.settings.text }}"</p>
-              <p class="ee-review-card__author">{{ block.settings.name }}{% if block.settings.location != blank %} — {{ block.settings.location }}{% endif %}</p>
             </div>
           {%- endif -%}
         {%- endfor -%}
       </div>
-      <button type="button" class="ee-reviews__arrow ee-reviews__arrow--next" aria-label="التالي" onclick="window.eeReviewScroll && eeReviewScroll('{{ section.id }}', 1)">›</button>
+      <button type="button" class="ee-hscroll-arrow ee-hscroll-arrow--next" aria-label="التالي" onclick="window.eeHScroll && eeHScroll('ee-reviews-track-{{ pid }}', 1)">›</button>
     </div>
   </section>
 
-  {%- comment -%} ============ FINAL CTA ============ {%- endcomment -%}
-  <section class="ee-final">
-    <div class="ee-final__glow"></div>
-    <h2 class="ee-final__title" data-ee-reveal>{{ section.settings.final_cta_heading | default: 'ما تضيعش الفرصة' }}</h2>
-    <p class="ee-final__text" data-ee-reveal>{{ section.settings.final_cta_text | default: 'اختار الساعة المناسبة وطلبها اليوم قبل ما يسالي العرض.' }}</p>
-    <a href="#ee-grid-{{ section.id }}" class="ee-btn ee-btn--gold ee-final__cta" data-ee-reveal onclick="document.getElementById('ee-grid-{{ section.id }}').scrollIntoView({behavior:'smooth'}); return false;">
-      🛍️ {{ section.settings.final_cta_button | default: 'اطلب دابا' }}
-    </a>
-  </section>
-
-  {%- comment -%} ============ WHATSAPP FLOAT ============ {%- endcomment -%}
+  {%- comment -%} ============================= WHATSAPP ============================= {%- endcomment -%}
   {%- if section.settings.whatsapp_number != blank -%}
-    <a
-      class="ee-whatsapp"
-      href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' }}"
-      target="_blank"
-      rel="noopener"
-      aria-label="تواصل معنا عبر واتساب"
-    >
+    <a class="ee-whatsapp" href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' }}" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.32A9.94 9.94 0 0 0 12.02 22C17.54 22 22 17.52 22 12S17.54 2 12.02 2Zm5.86 14.14c-.25.7-1.23 1.28-2.02 1.45-.55.11-1.26.2-3.67-.79-3.08-1.27-5.07-4.4-5.22-4.6-.15-.2-1.25-1.66-1.25-3.17s.78-2.25 1.06-2.56c.28-.31.6-.38.8-.38h.58c.19 0 .44-.07.68.53.25.6.85 2.08.92 2.23.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.32.4-.45.53-.15.15-.31.32-.14.62.18.31.79 1.32 1.71 2.15 1.18 1.06 2.16 1.4 2.47 1.55.31.15.49.13.67-.08.19-.2.79-.9 1-1.2.2-.31.4-.26.68-.16.28.1 1.76.85 2.06 1 .3.15.5.23.57.35.08.13.08.75-.17 1.45Z"/></svg>
     </a>
   {%- endif -%}
 
-  {%- comment -%} ============ QUICK VIEW MODAL ============ {%- endcomment -%}
-  <div class="ee-qv" id="ee-qv-{{ section.id }}" hidden>
-    <div class="ee-qv__backdrop" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ section.id }}')"></div>
+  {%- comment -%} ============================= QUICK VIEW MODAL ============================= {%- endcomment -%}
+  <div class="ee-qv" id="ee-qv-{{ pid }}" hidden>
+    <div class="ee-qv__backdrop" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ pid }}')"></div>
     <div class="ee-qv__panel" role="dialog" aria-modal="true">
-      <button type="button" class="ee-qv__close" aria-label="إغلاق" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ section.id }}')">✕</button>
-      <div class="ee-qv__img-wrap"><img class="ee-qv__img" id="ee-qv-img-{{ section.id }}" alt="" /></div>
+      <button type="button" class="ee-qv__close" aria-label="إغلاق" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ pid }}')">✕</button>
+      <div class="ee-qv__img-wrap"><img class="ee-qv__img" id="ee-qv-img-{{ pid }}" alt="" /></div>
       <div class="ee-qv__body">
-        <h3 class="ee-qv__title" id="ee-qv-title-{{ section.id }}"></h3>
+        <h3 class="ee-qv__title" id="ee-qv-title-{{ pid }}"></h3>
         <div class="ee-qv__price">
-          <span class="ee-qv__price-now" id="ee-qv-price-{{ section.id }}"></span>
-          <span class="ee-qv__price-compare" id="ee-qv-compare-{{ section.id }}"></span>
+          <span class="ee-qv__price-now" id="ee-qv-price-{{ pid }}"></span>
+          <span class="ee-qv__price-compare" id="ee-qv-compare-{{ pid }}"></span>
         </div>
-        <a class="ee-btn ee-btn--gold ee-qv__cta" id="ee-qv-cta-{{ section.id }}" href="#">اطلب الآن</a>
+        <a class="ee-cta ee-cta--gold ee-qv__cta" id="ee-qv-cta-{{ pid }}" href="#">اطلب الآن</a>
       </div>
     </div>
   </div>
@@ -245,143 +278,174 @@
 <style>
   #essalem-collection-lux {
     --ee-white: #FFFFFF;
-    --ee-black: #111111;
+    --ee-black: #0D0D0D;
+    --ee-ink: #111111;
     --ee-gold: #D4AF37;
-    --ee-gold-soft: #E4C767;
+    --ee-gold-soft: #E8C86B;
+    --ee-champagne: #F3E5C3;
     --ee-beige: #F8F5F0;
     --ee-beige-dark: #EFE8DB;
-    --ee-font-heading: 'Cormorant Garamond', Georgia, serif;
-    --ee-font-body: 'Tajawal', Arial, sans-serif;
+    --ee-font-display: 'Tajawal', Arial, sans-serif;
+    --ee-font-accent: 'Cormorant Garamond', Georgia, serif;
     direction: rtl;
     text-align: right;
     background: var(--ee-white);
-    font-family: var(--ee-font-body);
+    font-family: var(--ee-font-display);
     overflow-x: hidden;
+    scroll-behavior: smooth;
   }
   #essalem-collection-lux *{ box-sizing: border-box; }
-  #essalem-collection-lux a { text-decoration: none; }
+  #essalem-collection-lux a { text-decoration: none; color: inherit; }
+  #essalem-collection-lux img { max-width: 100%; display: block; }
 
-  #essalem-collection-lux .ee-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    font-family: var(--ee-font-body); font-weight: 700; font-size: 1rem;
-    padding: 16px 38px; border-radius: 50px; cursor: pointer; border: none;
-    transition: transform .3s ease, box-shadow .3s ease;
-  }
-  #essalem-collection-lux .ee-btn--gold {
-    background: linear-gradient(120deg, var(--ee-gold-soft), var(--ee-gold));
-    color: var(--ee-black);
-    box-shadow: 0 14px 34px -12px rgba(212,175,55,.55);
-  }
-  #essalem-collection-lux .ee-btn--gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 40px -10px rgba(212,175,55,.7); }
+  /* ===== shared atmosphere ===== */
+  #essalem-collection-lux .ee-scene { position: absolute; inset: 0; overflow: hidden; }
+  #essalem-collection-lux .ee-scene--dark { background: radial-gradient(ellipse at 65% 25%, #1c1712 0%, #0d0d0d 55%, #050505 100%); }
+  #essalem-collection-lux .ee-bokeh { position: absolute; border-radius: 50%; filter: blur(38px); opacity: .55; animation: ee-bokeh-drift 12s ease-in-out infinite alternate; }
+  #essalem-collection-lux .ee-bokeh--1 { width: 260px; height: 260px; top: 8%; right: 10%; background: radial-gradient(circle, rgba(232,200,107,.55), transparent 70%); animation-duration: 13s; }
+  #essalem-collection-lux .ee-bokeh--2 { width: 180px; height: 180px; top: 55%; right: 30%; background: radial-gradient(circle, rgba(255,255,255,.28), transparent 70%); animation-duration: 16s; animation-delay: -4s; }
+  #essalem-collection-lux .ee-bokeh--3 { width: 320px; height: 320px; bottom: -6%; left: 6%; background: radial-gradient(circle, rgba(212,175,55,.4), transparent 70%); animation-duration: 18s; animation-delay: -8s; }
+  #essalem-collection-lux .ee-bokeh--4 { width: 200px; height: 200px; top: 20%; left: 18%; background: radial-gradient(circle, rgba(243,229,195,.35), transparent 70%); animation-duration: 14s; animation-delay: -2s; }
+  @keyframes ee-bokeh-drift { from { transform: translate(0,0) scale(1); } to { transform: translate(24px,-18px) scale(1.12); } }
+  #essalem-collection-lux .ee-rays { position: absolute; top: 50%; left: 50%; width: 200vmax; height: 200vmax; margin: -100vmax 0 0 -100vmax; background: conic-gradient(from 0deg, transparent 0deg, rgba(232,200,107,.06) 10deg, transparent 24deg, transparent 160deg, rgba(212,175,55,.05) 172deg, transparent 190deg, transparent 340deg, rgba(232,200,107,.04) 352deg, transparent 360deg); animation: ee-spin 100s linear infinite; mix-blend-mode: screen; }
+  @keyframes ee-spin { to { transform: rotate(360deg); } }
 
-  /* reveal on scroll */
-  #essalem-collection-lux [data-ee-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+  #essalem-collection-lux .ee-particles { position: absolute; inset: 0; z-index: 2; pointer-events: none; transition: transform .5s ease-out; }
+  #essalem-collection-lux .ee-particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ee-gold-soft); opacity: .8; box-shadow: 0 0 7px rgba(232,200,107,.8); left: calc((var(--i) * 4.6%) + 1%); top: 100%; animation: ee-rise calc(9s + (var(--i) * .45s)) linear infinite; animation-delay: calc(var(--i) * -0.55s); }
+  @keyframes ee-rise { 0% { transform: translateY(0) scale(.5); opacity: 0; } 12% { opacity: .95; } 88% { opacity: .25; } 100% { transform: translateY(-105vh) scale(1); opacity: 0; } }
+
+  /* ===== buttons ===== */
+  #essalem-collection-lux .ee-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 18px 46px; border-radius: 60px; font-weight: 800; font-size: 1.02rem; letter-spacing: .01em; cursor: pointer; border: none; overflow: hidden; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+  #essalem-collection-lux .ee-cta:hover { transform: translateY(-3px) scale(1.015); }
+  #essalem-collection-lux .ee-cta--gold { background: linear-gradient(120deg, var(--ee-gold-soft), var(--ee-gold)); color: #16130a; box-shadow: 0 18px 40px -14px rgba(212,175,55,.6); }
+  #essalem-collection-lux .ee-cta--gold::after { content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); animation: ee-btn-shine 3.2s ease-in-out infinite; }
+  @keyframes ee-btn-shine { 0% { left: -60%; } 45%, 100% { left: 130%; } }
+  #essalem-collection-lux .ee-cta--glass { background: rgba(255,255,255,.08); color: var(--ee-white); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 8px 32px rgba(0,0,0,.25); }
+  #essalem-collection-lux .ee-cta--glass:hover { background: rgba(255,255,255,.16); border-color: var(--ee-gold-soft); }
+  #essalem-collection-lux .ee-cta__glow { position: absolute; inset: -40%; background: radial-gradient(circle, rgba(212,175,55,.5), transparent 65%); filter: blur(18px); z-index: -1; opacity: .8; animation: ee-glow-pulse 2.6s ease-in-out infinite; }
+  @keyframes ee-glow-pulse { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: .95; transform: scale(1.12); } }
+  #essalem-collection-lux .ee-cta__label { position: relative; z-index: 1; }
+
+  /* ===== reveal ===== */
+  #essalem-collection-lux [data-ee-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
   #essalem-collection-lux [data-ee-reveal].is-visible { opacity: 1; transform: translateY(0); }
 
-  #essalem-collection-lux .ee-section-head { text-align: center; max-width: 620px; margin: 0 auto 44px; padding: 0 20px; }
-  #essalem-collection-lux .ee-section-eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .18em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 10px; }
-  #essalem-collection-lux .ee-section-title { font-family: var(--ee-font-heading); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--ee-black); margin: 0 0 16px; }
-  #essalem-collection-lux .ee-section-line { width: 56px; height: 3px; background: linear-gradient(90deg, transparent, var(--ee-gold), transparent); margin: 0 auto; }
+  #essalem-collection-lux .ee-section-head { text-align: center; max-width: 640px; margin: 0 auto 46px; padding: 0 20px; }
+  #essalem-collection-lux .ee-eyebrow { font-size: .78rem; font-weight: 800; letter-spacing: .32em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 14px; }
+  #essalem-collection-lux .ee-title { font-family: var(--ee-font-display); font-weight: 900; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--ee-ink); margin: 0 0 14px; letter-spacing: -.01em; }
+  #essalem-collection-lux .ee-section-desc { font-size: .92rem; color: #6b6b6b; line-height: 1.8; margin: 0 0 18px; }
+  #essalem-collection-lux .ee-line { width: 64px; height: 2px; background: linear-gradient(90deg, transparent, var(--ee-gold), transparent); margin: 0 auto; }
 
   /* ===== HERO ===== */
-  #essalem-collection-lux .ee-hero { position: relative; min-height: 92svh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: clamp(90px, 13vh, 150px); background: linear-gradient(160deg, var(--ee-beige) 0%, var(--ee-beige-dark) 55%, #E7DEC9 100%); }
-  #essalem-collection-lux .ee-hero__bg { position: absolute; inset: 0; z-index: 0; }
-  #essalem-collection-lux .ee-hero__img { width: 100%; height: 100%; object-fit: cover; }
-  #essalem-collection-lux .ee-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,17,17,.15), rgba(17,17,17,.55)); }
-  #essalem-collection-lux .ee-hero__art { position: absolute; inset: 0; }
-  #essalem-collection-lux .ee-hero__ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212,175,55,.35); }
-  #essalem-collection-lux .ee-hero__ring--1 { width: 60vmax; height: 60vmax; top: -20vmax; right: -18vmax; animation: ee-spin 70s linear infinite; }
-  #essalem-collection-lux .ee-hero__ring--2 { width: 42vmax; height: 42vmax; bottom: -16vmax; left: -12vmax; animation: ee-spin 90s linear infinite reverse; }
-  @keyframes ee-spin { to { transform: rotate(360deg); } }
-  #essalem-collection-lux .ee-hero__glow { position: absolute; top: 10%; right: 12%; width: 420px; height: 420px; max-width: 60vw; max-height: 60vw; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.28), transparent 70%); filter: blur(10px); }
-  #essalem-collection-lux .ee-hero__silhouette { position: absolute; bottom: -10px; left: 50%; transform: translateX(-42%); width: min(380px, 52vw); opacity: .5; -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 95%); mask-image: linear-gradient(to top, #000 45%, transparent 95%); }
-  #essalem-collection-lux .ee-hero__silhouette svg { width: 100%; height: auto; display: block; }
-  #essalem-collection-lux .ee-hero__particles { position: absolute; inset: 0; pointer-events: none; }
-  #essalem-collection-lux .ee-hero__particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ee-gold); opacity: .8; box-shadow: 0 0 6px rgba(212,175,55,.7); left: calc((var(--i) * 5.4%) + 1%); top: 100%; animation: ee-rise calc(8s + (var(--i) * .5s)) linear infinite; animation-delay: calc(var(--i) * -0.6s); }
-  @keyframes ee-rise { 0% { transform: translateY(0) scale(.6); opacity: 0; } 12% { opacity: .9; } 88% { opacity: .3; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+  #essalem-collection-lux .ee-hero { position: relative; min-height: 100svh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0d0d0d; }
+  #essalem-collection-lux .ee-hero__bg { position: absolute; inset: -24px; z-index: 0; transition: transform .5s cubic-bezier(.2,.7,.2,1); transform: translate3d(var(--px,0),var(--py,0),0); }
+  #essalem-collection-lux .ee-hero__img { width: 100%; height: 100%; object-fit: cover; animation: ee-kenburns 26s ease-in-out infinite alternate; }
+  @keyframes ee-kenburns { from { transform: scale(1); } to { transform: scale(1.09); } }
+  #essalem-collection-lux .ee-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,.35) 0%, rgba(5,5,5,.35) 40%, rgba(5,5,5,.85) 100%), linear-gradient(90deg, rgba(5,5,5,.45), transparent 55%, rgba(5,5,5,.45)); z-index: 1; }
+  #essalem-collection-lux .ee-hero__vignette { position: absolute; inset: 0; z-index: 1; box-shadow: inset 0 0 180px 60px rgba(0,0,0,.55); }
+  #essalem-collection-lux .ee-hero__particles { z-index: 2; }
 
-  #essalem-collection-lux .ee-hero__content { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 0 24px 60px; text-align: center; }
-  #essalem-collection-lux .ee-hero__eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .3em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 18px; text-shadow: 0 1px 10px rgba(248,245,240,.9); }
-  #essalem-collection-lux .ee-hero__title { font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.25; color: var(--ee-black); margin: 0 0 20px; text-shadow: 0 2px 16px rgba(248,245,240,.95), 0 0 40px rgba(248,245,240,.7); }
-  #essalem-collection-lux .ee-hero__subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: #3a3a3a; margin: 0 0 36px; line-height: 1.7; text-shadow: 0 1px 12px rgba(248,245,240,.95), 0 0 30px rgba(248,245,240,.8); }
+  #essalem-collection-lux .ee-hero__content { position: relative; z-index: 3; max-width: 680px; margin: 0 auto; padding: 110px 24px 40px; text-align: center; }
+  #essalem-collection-lux .ee-kicker { font-size: .72rem; font-weight: 700; letter-spacing: .28em; color: var(--ee-champagne); text-transform: uppercase; opacity: .85; margin: 0 0 22px; }
+  #essalem-collection-lux .ee-hero__heart { display: inline-block; font-size: 1.8rem; color: var(--ee-gold-soft); margin-bottom: 16px; filter: drop-shadow(0 0 12px rgba(212,175,55,.6)); animation: ee-heartbeat 1.8s ease-in-out infinite; }
+  @keyframes ee-heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.2); } 40% { transform: scale(1); } 60% { transform: scale(1.12); } }
+  #essalem-collection-lux .ee-hero__title { font-family: var(--ee-font-display); font-weight: 900; font-size: clamp(2.4rem, 7vw, 4.6rem); line-height: 1.2; color: var(--ee-white); margin: 0 0 22px; letter-spacing: -.01em; }
+  #essalem-collection-lux .ee-hero__subtitle { font-size: clamp(1rem, 1.9vw, 1.25rem); color: rgba(255,255,255,.8); margin: 0 0 40px; line-height: 1.85; font-weight: 300; }
 
-  #essalem-collection-lux .ee-hero__scroll { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; width: 30px; height: 46px; border: 2px solid rgba(17,17,17,.4); border-radius: 20px; background: transparent; cursor: pointer; }
-  #essalem-collection-lux .ee-hero__scroll-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--ee-gold); margin: 8px auto 0; animation: ee-scroll-dot 1.8s ease-in-out infinite; }
-  @keyframes ee-scroll-dot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(18px); opacity: 0; } 100% { transform: translateY(18px); opacity: 0; } }
+  #essalem-collection-lux .ee-hero__scroll { position: relative; z-index: 3; margin-top: 30px; width: 30px; height: 48px; border: 2px solid rgba(255,255,255,.4); border-radius: 20px; background: transparent; cursor: pointer; }
+  #essalem-collection-lux .ee-hero__scroll span { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--ee-gold-soft); margin: 8px auto 0; animation: ee-scroll-dot 1.8s ease-in-out infinite; }
+  @keyframes ee-scroll-dot { 0% { transform: translateY(0); opacity: 1; } 70%, 100% { transform: translateY(18px); opacity: 0; } }
 
-  /* ===== TRUST BAR ===== */
-  #essalem-collection-lux .ee-trust { background: var(--ee-black); padding: 18px 0; overflow: hidden; }
-  #essalem-collection-lux .ee-trust__track { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px 40px; }
-  #essalem-collection-lux .ee-trust__item { display: flex; align-items: center; gap: 8px; }
-  #essalem-collection-lux .ee-trust__icon { font-size: 1.15rem; }
-  #essalem-collection-lux .ee-trust__text { color: var(--ee-white); font-size: .85rem; font-weight: 500; white-space: nowrap; }
+  /* ===== STATS ===== */
+  #essalem-collection-lux .ee-stats { background: var(--ee-black); padding: 54px 20px; }
+  #essalem-collection-lux .ee-stats__grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  @media (max-width: 700px) { #essalem-collection-lux .ee-stats__grid { grid-template-columns: repeat(2, 1fr); } }
+  #essalem-collection-lux .ee-stat { background: rgba(255,255,255,.04); border: 1px solid rgba(212,175,55,.18); border-radius: 20px; padding: 26px 14px; text-align: center; backdrop-filter: blur(10px); transition: transform .4s ease, border-color .4s ease; }
+  #essalem-collection-lux .ee-stat:hover { transform: translateY(-4px); border-color: rgba(212,175,55,.5); }
+  #essalem-collection-lux .ee-stat__icon { font-size: 1.6rem; margin-bottom: 10px; letter-spacing: 2px; color: var(--ee-gold); }
+  #essalem-collection-lux .ee-stat__value { font-family: var(--ee-font-display); font-weight: 900; font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--ee-white); margin-bottom: 6px; }
+  #essalem-collection-lux .ee-stat__label { margin: 0; font-size: .8rem; color: rgba(255,255,255,.6); font-weight: 500; }
 
-  /* ===== SHIPPING BANNER ===== */
-  #essalem-collection-lux .ee-shipping-banner { position: relative; background: linear-gradient(120deg, var(--ee-gold), var(--ee-gold-soft), var(--ee-gold)); background-size: 200% 100%; animation: ee-shine 6s linear infinite; text-align: center; padding: 14px 20px; overflow: hidden; }
-  #essalem-collection-lux .ee-shipping-banner__glow { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(255,255,255,.35), transparent 70%); animation: ee-pulse 3s ease-in-out infinite; }
-  @keyframes ee-shine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-  @keyframes ee-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
-  #essalem-collection-lux .ee-shipping-banner__text { position: relative; z-index: 1; margin: 0; font-weight: 800; font-size: 1rem; color: var(--ee-black); letter-spacing: .02em; }
-
-  /* ===== GRID SECTION ===== */
-  #essalem-collection-lux .ee-grid-section { max-width: 1280px; margin: 0 auto; padding: 56px 20px 70px; }
-  #essalem-collection-lux .ee-grid-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid rgba(17,17,17,.08); }
-  #essalem-collection-lux .ee-grid-count { margin: 0; font-size: .88rem; color: #6b6b6b; font-weight: 500; }
+  /* ===== SHOWROOM ===== */
+  #essalem-collection-lux .ee-showroom { max-width: 1400px; margin: 0 auto; padding: 90px 0 80px; }
+  #essalem-collection-lux .ee-showroom__bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto 30px; padding: 0 20px 18px; border-bottom: 1px solid rgba(17,17,17,.08); }
+  #essalem-collection-lux .ee-showroom__count { margin: 0; font-size: .85rem; color: #6b6b6b; font-weight: 500; }
   #essalem-collection-lux .ee-sort-form { display: flex; align-items: center; gap: 10px; }
-  #essalem-collection-lux .ee-sort-label { font-size: .85rem; color: var(--ee-black); font-weight: 600; }
-  #essalem-collection-lux .ee-sort-select { font-family: var(--ee-font-body); font-size: .85rem; padding: 9px 14px; border: 1px solid rgba(17,17,17,.18); border-radius: 8px; background: var(--ee-white); cursor: pointer; }
+  #essalem-collection-lux .ee-sort-label { font-size: .82rem; color: var(--ee-ink); font-weight: 700; }
+  #essalem-collection-lux .ee-sort-select { font-family: var(--ee-font-display); font-size: .82rem; padding: 9px 14px; border: 1px solid rgba(17,17,17,.16); border-radius: 30px; background: var(--ee-white); cursor: pointer; }
   #essalem-collection-lux .ee-sort-select:focus { outline: none; border-color: var(--ee-gold); }
 
-  #essalem-collection-lux .ee-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
-  @media (max-width: 1024px) { #essalem-collection-lux .ee-product-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 768px)  { #essalem-collection-lux .ee-product-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
-  #essalem-collection-lux .ee-empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #8a8a8a; }
+  #essalem-collection-lux .ee-showroom__wrap { position: relative; display: flex; align-items: center; gap: 6px; padding: 0 8px; }
+  #essalem-collection-lux .ee-showroom__track { display: flex; align-items: flex-start; gap: 26px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 30px 4vw 40px; flex: 1; scrollbar-width: none; }
+  #essalem-collection-lux .ee-showroom__track::-webkit-scrollbar { display: none; }
+  #essalem-collection-lux .ee-empty { padding: 60px 20px; color: #8a8a8a; margin: 0 auto; }
 
-  #essalem-collection-lux .ee-pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 44px; flex-wrap: wrap; }
-  #essalem-collection-lux .ee-pagination__num, #essalem-collection-lux .ee-pagination__arrow { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; border-radius: 50%; font-size: .88rem; font-weight: 600; color: var(--ee-black); border: 1px solid rgba(17,17,17,.15); background: var(--ee-white); transition: all .25s ease; }
-  #essalem-collection-lux .ee-pagination__num:hover, #essalem-collection-lux .ee-pagination__arrow:hover { background: var(--ee-black); color: var(--ee-white); border-color: var(--ee-black); }
-  #essalem-collection-lux .ee-pagination__num--active { background: var(--ee-gold); border-color: var(--ee-gold); color: var(--ee-black); }
+  #essalem-collection-lux .ee-showroom-item { flex: 0 0 auto; scroll-snap-align: start; width: min(300px, 62vw); }
+  #essalem-collection-lux .ee-showroom-item--lg { width: min(360px, 74vw); margin-top: 0; }
+  #essalem-collection-lux .ee-showroom-item--md { width: min(300px, 62vw); margin-top: 34px; }
+  #essalem-collection-lux .ee-showroom-item--sm { width: min(250px, 54vw); margin-top: 62px; }
+  @media (max-width: 700px) {
+    #essalem-collection-lux .ee-showroom-item--lg,
+    #essalem-collection-lux .ee-showroom-item--md,
+    #essalem-collection-lux .ee-showroom-item--sm { margin-top: 0; width: 68vw; }
+  }
+
+  #essalem-collection-lux .ee-showroom-frame { position: relative; background: rgba(255,255,255,.6); backdrop-filter: blur(6px); border: 1px solid rgba(212,175,55,.22); border-radius: 26px; padding: 10px; box-shadow: 0 20px 46px -18px rgba(17,17,17,.22); transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease, border-color .5s ease; overflow: hidden; }
+  #essalem-collection-lux .ee-showroom-frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.55) 50%, transparent 60%); background-size: 220% 220%; background-position: -60% -60%; opacity: 0; pointer-events: none; z-index: 3; }
+  #essalem-collection-lux .ee-showroom-item:hover .ee-showroom-frame { transform: translateY(-10px) scale(1.015); box-shadow: 0 34px 70px -20px rgba(212,175,55,.45); border-color: var(--ee-gold); }
+  #essalem-collection-lux .ee-showroom-item:hover .ee-showroom-frame::after { opacity: 1; animation: ee-shine-sweep 1.1s ease forwards; }
+  @keyframes ee-shine-sweep { from { background-position: -60% -60%; } to { background-position: 160% 160%; } }
+
+  #essalem-collection-lux .ee-showroom-frame .lux-card { border-radius: 18px; box-shadow: none; }
+  #essalem-collection-lux .ee-showroom-frame .lux-card:hover { transform: none; box-shadow: none; }
+  #essalem-collection-lux .ee-showroom-frame .lux-card__media { border-radius: 18px; }
+  #essalem-collection-lux .ee-showroom-frame .lux-card__title { font-family: var(--ee-font-accent); font-size: 1.15rem; }
+  #essalem-collection-lux .ee-showroom-frame .lux-card__img--primary { -webkit-box-reflect: below 3px linear-gradient(transparent, transparent 75%, rgba(0,0,0,.12)); }
+
+  #essalem-collection-lux .ee-hscroll-arrow { flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(17,17,17,.14); background: var(--ee-white); font-size: 1.4rem; cursor: pointer; transition: all .3s ease; z-index: 2; box-shadow: 0 8px 20px rgba(17,17,17,.08); }
+  #essalem-collection-lux .ee-hscroll-arrow:hover { background: var(--ee-ink); color: var(--ee-gold); border-color: var(--ee-ink); }
+  @media (max-width: 700px) { #essalem-collection-lux .ee-hscroll-arrow { display: none; } }
+
+  #essalem-collection-lux .ee-pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+  #essalem-collection-lux .ee-pagination__num, #essalem-collection-lux .ee-pagination__arrow { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; border-radius: 50%; font-size: .88rem; font-weight: 700; color: var(--ee-ink); border: 1px solid rgba(17,17,17,.14); background: var(--ee-white); transition: all .25s ease; }
+  #essalem-collection-lux .ee-pagination__num:hover, #essalem-collection-lux .ee-pagination__arrow:hover { background: var(--ee-ink); color: var(--ee-gold); border-color: var(--ee-ink); }
+  #essalem-collection-lux .ee-pagination__num--active { background: linear-gradient(120deg, var(--ee-gold-soft), var(--ee-gold)); border-color: var(--ee-gold); color: #16130a; }
   #essalem-collection-lux .ee-pagination__dots { padding: 0 4px; color: #999; }
 
-  /* ===== WHY US ===== */
-  #essalem-collection-lux .ee-why { background: var(--ee-beige); padding: 70px 20px; }
-  #essalem-collection-lux .ee-why__grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
-  @media (max-width: 900px) { #essalem-collection-lux .ee-why__grid { grid-template-columns: repeat(2, 1fr); } }
-  #essalem-collection-lux .ee-why__card { background: var(--ee-white); border-radius: 14px; padding: 28px 18px; text-align: center; box-shadow: 0 4px 18px rgba(17,17,17,.06); transition: transform .35s ease, box-shadow .35s ease; }
-  #essalem-collection-lux .ee-why__card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(212,175,55,.22); }
-  #essalem-collection-lux .ee-why__icon { display: block; font-size: 1.9rem; margin-bottom: 12px; }
-  #essalem-collection-lux .ee-why__text { margin: 0; font-size: .88rem; font-weight: 600; color: var(--ee-black); }
+  /* ===== EMOTIONAL ===== */
+  #essalem-collection-lux .ee-emotional { position: relative; min-height: 68vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0d0d0d; }
+  #essalem-collection-lux .ee-emotional__bg { position: absolute; inset: 0; }
+  #essalem-collection-lux .ee-emotional__img { width: 100%; height: 100%; object-fit: cover; opacity: .8; }
+  #essalem-collection-lux .ee-emotional__content { position: relative; z-index: 2; text-align: center; max-width: 620px; padding: 90px 24px; }
+  #essalem-collection-lux .ee-emotional__title { font-family: var(--ee-font-display); font-weight: 900; font-size: clamp(1.8rem, 4.6vw, 2.8rem); color: var(--ee-white); margin: 0 0 16px; }
+  #essalem-collection-lux .ee-emotional__text { color: rgba(255,255,255,.78); font-size: 1rem; line-height: 1.85; margin: 0; font-weight: 300; }
 
-  /* ===== LIFESTYLE ===== */
-  #essalem-collection-lux .ee-lifestyle { position: relative; min-height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--ee-black); }
-  #essalem-collection-lux .ee-lifestyle__bg { position: absolute; inset: 0; }
-  #essalem-collection-lux .ee-lifestyle__img { width: 100%; height: 100%; object-fit: cover; opacity: .55; }
-  #essalem-collection-lux .ee-lifestyle__overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(17,17,17,.4), rgba(17,17,17,.88)); }
-  #essalem-collection-lux .ee-lifestyle__content { position: relative; z-index: 1; text-align: center; max-width: 640px; padding: 90px 24px; }
-  #essalem-collection-lux .ee-lifestyle__heart { display: inline-block; font-size: 2.2rem; color: var(--ee-gold); margin-bottom: 18px; animation: ee-heartbeat 1.6s ease-in-out infinite; }
-  @keyframes ee-heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.18); } 40% { transform: scale(1); } 60% { transform: scale(1.12); } }
-  #essalem-collection-lux .ee-lifestyle__title { font-family: var(--ee-font-body); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.5rem); color: var(--ee-white); margin: 0 0 14px; }
-  #essalem-collection-lux .ee-lifestyle__text { color: rgba(255,255,255,.75); font-size: 1rem; line-height: 1.8; margin: 0; }
+  /* ===== OFFER ===== */
+  #essalem-collection-lux .ee-offer { position: relative; overflow: hidden; padding: 100px 24px; display: flex; align-items: center; justify-content: center; background: #0d0d0d; }
+  #essalem-collection-lux .ee-offer__card { position: relative; z-index: 2; text-align: center; max-width: 460px; width: 100%; background: rgba(255,255,255,.05); border: 1px solid rgba(212,175,55,.3); border-radius: 28px; padding: 52px 32px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 80px -20px rgba(212,175,55,.25); }
+  #essalem-collection-lux .ee-offer__fire { display: inline-block; font-size: 2rem; margin-bottom: 10px; animation: ee-heartbeat 1.6s ease-in-out infinite; }
+  #essalem-collection-lux .ee-offer__label { font-size: .78rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--ee-gold-soft); margin: 0 0 18px; }
+  #essalem-collection-lux .ee-offer__price { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 26px; }
+  #essalem-collection-lux .ee-offer__amount { font-family: var(--ee-font-display); font-weight: 900; font-size: clamp(3rem, 8vw, 4.4rem); background: linear-gradient(120deg, var(--ee-champagne), var(--ee-gold-soft), var(--ee-gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+  #essalem-collection-lux .ee-offer__currency { font-size: 1.2rem; color: var(--ee-gold-soft); font-weight: 700; }
+  #essalem-collection-lux .ee-offer__badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; }
+  #essalem-collection-lux .ee-offer__badge { font-size: .78rem; font-weight: 600; color: var(--ee-white); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 30px; padding: 8px 16px; }
+  #essalem-collection-lux .ee-offer__cta { width: 100%; }
 
   /* ===== REVIEWS ===== */
-  #essalem-collection-lux .ee-reviews { padding: 70px 20px; background: var(--ee-white); }
-  #essalem-collection-lux .ee-reviews__wrap { position: relative; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
-  #essalem-collection-lux .ee-reviews__track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 6px 4px 14px; flex: 1; }
-  #essalem-collection-lux .ee-reviews__track::-webkit-scrollbar { height: 5px; }
-  #essalem-collection-lux .ee-reviews__track::-webkit-scrollbar-thumb { background: var(--ee-gold); border-radius: 10px; }
-  #essalem-collection-lux .ee-review-card { scroll-snap-align: start; flex: 0 0 300px; background: var(--ee-beige); border-radius: 16px; padding: 26px 22px; box-shadow: 0 4px 16px rgba(17,17,17,.06); }
-  #essalem-collection-lux .ee-review-card__stars { color: var(--ee-gold); letter-spacing: 3px; margin-bottom: 10px; }
-  #essalem-collection-lux .ee-review-card__text { font-family: var(--ee-font-heading); font-style: italic; font-size: 1.05rem; color: var(--ee-black); line-height: 1.7; margin: 0 0 14px; }
-  #essalem-collection-lux .ee-review-card__author { margin: 0; font-size: .82rem; font-weight: 700; color: #6b6b6b; }
-  #essalem-collection-lux .ee-reviews__arrow { flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(17,17,17,.15); background: var(--ee-white); font-size: 1.3rem; cursor: pointer; transition: all .25s ease; }
-  #essalem-collection-lux .ee-reviews__arrow:hover { background: var(--ee-black); color: var(--ee-white); border-color: var(--ee-black); }
-
-  /* ===== FINAL CTA ===== */
-  #essalem-collection-lux .ee-final { position: relative; text-align: center; padding: 90px 24px; background: radial-gradient(circle at 50% 20%, #1c1c1c 0%, var(--ee-black) 70%); overflow: hidden; }
-  #essalem-collection-lux .ee-final__glow { position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 60vw; height: 60vw; max-width: 700px; max-height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.22), transparent 70%); }
-  #essalem-collection-lux .ee-final__title { position: relative; z-index: 1; font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3rem); color: var(--ee-white); margin: 0 0 16px; }
-  #essalem-collection-lux .ee-final__text { position: relative; z-index: 1; color: rgba(255,255,255,.75); font-size: 1rem; max-width: 500px; margin: 0 auto 34px; line-height: 1.8; }
-  #essalem-collection-lux .ee-final__cta { position: relative; z-index: 1; }
+  #essalem-collection-lux .ee-reviews { padding: 90px 0; background: var(--ee-beige); }
+  #essalem-collection-lux .ee-reviews__track { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 8px 4vw 16px; flex: 1; scrollbar-width: none; }
+  #essalem-collection-lux .ee-reviews__track::-webkit-scrollbar { display: none; }
+  #essalem-collection-lux .ee-review-card { scroll-snap-align: start; flex: 0 0 300px; background: rgba(255,255,255,.7); backdrop-filter: blur(10px); border: 1px solid rgba(212,175,55,.2); border-radius: 20px; padding: 26px 22px; box-shadow: 0 10px 30px -14px rgba(17,17,17,.12); transition: transform .4s ease, box-shadow .4s ease; }
+  #essalem-collection-lux .ee-review-card:hover { transform: translateY(-6px); box-shadow: 0 22px 44px -16px rgba(212,175,55,.28); }
+  #essalem-collection-lux .ee-review-card__top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  #essalem-collection-lux .ee-review-card__avatar { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; background: linear-gradient(120deg, var(--ee-gold-soft), var(--ee-gold)); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #16130a; flex-shrink: 0; }
+  #essalem-collection-lux .ee-review-card__avatar img { width: 100%; height: 100%; object-fit: cover; }
+  #essalem-collection-lux .ee-review-card__name { margin: 0; font-size: .88rem; font-weight: 800; color: var(--ee-ink); display: flex; align-items: center; gap: 6px; }
+  #essalem-collection-lux .ee-review-card__verified { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--ee-gold); color: #16130a; font-size: .62rem; font-weight: 900; }
+  #essalem-collection-lux .ee-review-card__loc { margin: 0; font-size: .74rem; color: #8a8a8a; }
+  #essalem-collection-lux .ee-review-card__stars { color: var(--ee-gold); letter-spacing: 3px; margin-bottom: 10px; font-size: .9rem; }
+  #essalem-collection-lux .ee-review-card__text { font-family: var(--ee-font-accent); font-style: italic; font-size: 1.02rem; color: var(--ee-ink); line-height: 1.7; margin: 0; }
 
   /* ===== WHATSAPP ===== */
   #essalem-collection-lux .ee-whatsapp { position: fixed; bottom: 28px; left: 24px; z-index: 9999; width: 56px; height: 56px; border-radius: 50%; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(37,211,102,.45); animation: ee-wa-pulse 2.4s ease-in-out infinite; }
@@ -390,16 +454,16 @@
   /* ===== QUICK VIEW MODAL ===== */
   #essalem-collection-lux .ee-qv { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
   #essalem-collection-lux .ee-qv[hidden] { display: none; }
-  #essalem-collection-lux .ee-qv__backdrop { position: absolute; inset: 0; background: rgba(17,17,17,.6); backdrop-filter: blur(2px); }
-  #essalem-collection-lux .ee-qv__panel { position: relative; z-index: 1; background: var(--ee-white); border-radius: 18px; max-width: 640px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+  #essalem-collection-lux .ee-qv__backdrop { position: absolute; inset: 0; background: rgba(13,13,13,.65); backdrop-filter: blur(3px); }
+  #essalem-collection-lux .ee-qv__panel { position: relative; z-index: 1; background: var(--ee-white); border-radius: 22px; max-width: 640px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
   @media (max-width: 600px) { #essalem-collection-lux .ee-qv__panel { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; } }
   #essalem-collection-lux .ee-qv__close { position: absolute; top: 12px; left: 12px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,.9); cursor: pointer; font-size: .95rem; }
   #essalem-collection-lux .ee-qv__img-wrap { background: var(--ee-beige); }
-  #essalem-collection-lux .ee-qv__img { width: 100%; height: 100%; min-height: 240px; object-fit: cover; display: block; }
-  #essalem-collection-lux .ee-qv__body { padding: 28px 24px; display: flex; flex-direction: column; justify-content: center; }
-  #essalem-collection-lux .ee-qv__title { font-family: var(--ee-font-heading); font-size: 1.4rem; color: var(--ee-black); margin: 0 0 14px; }
-  #essalem-collection-lux .ee-qv__price { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
-  #essalem-collection-lux .ee-qv__price-now { font-size: 1.2rem; font-weight: 800; color: var(--ee-black); }
+  #essalem-collection-lux .ee-qv__img { width: 100%; height: 100%; min-height: 240px; object-fit: cover; }
+  #essalem-collection-lux .ee-qv__body { padding: 30px 26px; display: flex; flex-direction: column; justify-content: center; }
+  #essalem-collection-lux .ee-qv__title { font-family: var(--ee-font-accent); font-size: 1.5rem; color: var(--ee-ink); margin: 0 0 16px; }
+  #essalem-collection-lux .ee-qv__price { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  #essalem-collection-lux .ee-qv__price-now { font-size: 1.25rem; font-weight: 800; color: var(--ee-ink); }
   #essalem-collection-lux .ee-qv__price-compare { font-size: .95rem; color: #999; text-decoration: line-through; }
   #essalem-collection-lux .ee-qv__cta { width: 100%; }
 
@@ -413,6 +477,9 @@
 (function () {
   var root = document.getElementById('essalem-collection-lux');
   if (!root) return;
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* reveal on scroll */
   if ('IntersectionObserver' in window) {
@@ -429,13 +496,59 @@
     root.querySelectorAll('[data-ee-reveal]').forEach(function (el) { el.classList.add('is-visible'); });
   }
 
-  /* reviews slider */
-  window.eeReviewScroll = function (sectionId, dir) {
-    var track = document.getElementById('ee-reviews-track-' + sectionId);
-    if (!track) return;
-    var card = track.querySelector('.ee-review-card');
-    var amount = card ? (card.offsetWidth + 20) : 300;
-    track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  /* hero mouse parallax */
+  if (canHover && !prefersReducedMotion) {
+    var hero = root.querySelector('.ee-hero');
+    var heroBg = hero ? hero.querySelector('.ee-hero__bg') : null;
+    var heroParticles = hero ? hero.querySelector('.ee-hero__particles') : null;
+    if (hero && heroBg) {
+      hero.addEventListener('pointermove', function (e) {
+        var r = hero.getBoundingClientRect();
+        var nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+        var ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+        heroBg.style.setProperty('--px', (nx * -14) + 'px');
+        heroBg.style.setProperty('--py', (ny * -10) + 'px');
+        if (heroParticles) heroParticles.style.transform = 'translate3d(' + (nx * 18) + 'px,' + (ny * 12) + 'px,0)';
+      });
+      hero.addEventListener('pointerleave', function () {
+        heroBg.style.setProperty('--px', '0px');
+        heroBg.style.setProperty('--py', '0px');
+        if (heroParticles) heroParticles.style.transform = 'translate3d(0,0,0)';
+      });
+    }
+  }
+
+  /* count-up stats */
+  var counters = root.querySelectorAll('.ee-stat__num[data-count]');
+  if (counters.length && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        cio.unobserve(el);
+        if (prefersReducedMotion) { el.textContent = target; return; }
+        var start = null;
+        var duration = 1500;
+        function step(ts) {
+          if (!start) start = ts;
+          var progress = Math.min(1, (ts - start) / duration);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * target);
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = target;
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* generic horizontal scroller (showroom + reviews) */
+  window.eeHScroll = function (trackId, dir) {
+    var t = document.getElementById(trackId);
+    if (!t) return;
+    t.scrollBy({ left: dir * t.clientWidth * 0.82, behavior: 'smooth' });
   };
 
   /* quick view modal (shared across all cards on the page) */
@@ -477,64 +590,58 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "header", "content": "Réglages généraux" },
-    {
-      "type": "range",
-      "id": "products_per_page",
-      "label": "Produits par page",
-      "min": 4,
-      "max": 48,
-      "step": 4,
-      "default": 12
-    },
     { "type": "header", "content": "Hero" },
-    {
-      "type": "image_picker",
-      "id": "hero_image",
-      "label": "Image du hero (couple, optionnelle — sinon fond artistique doré)"
-    },
-    { "type": "text", "id": "hero_heading", "label": "Titre du hero", "default": "❤️ هدية مثالية ليك وللي كتحب" },
-    { "type": "text", "id": "hero_subheading", "label": "Sous-titre du hero", "default": "ساعات أنيقة للأزواج بجودة عالية وثمن مناسب" },
-    { "type": "text", "id": "hero_cta_text", "label": "Texte du bouton du hero", "default": "شوف المجموعة" },
-    { "type": "header", "content": "Bannière livraison gratuite" },
-    { "type": "checkbox", "id": "show_shipping_banner", "label": "Afficher la bannière", "default": true },
-    { "type": "text", "id": "shipping_banner_text", "label": "Texte de la bannière", "default": "الشحن مجاني لجميع المدن المغربية" },
-    { "type": "header", "content": "Section couple / lifestyle" },
-    { "type": "image_picker", "id": "lifestyle_image", "label": "Image lifestyle (optionnelle)" },
-    { "type": "text", "id": "lifestyle_heading", "label": "Titre", "default": "الهدية لي غادي تجمع بينكم ❤️" },
-    { "type": "text", "id": "lifestyle_text", "label": "Texte" },
-    { "type": "header", "content": "CTA final" },
-    { "type": "text", "id": "final_cta_heading", "label": "Titre", "default": "ما تضيعش الفرصة" },
-    { "type": "text", "id": "final_cta_text", "label": "Texte", "default": "اختار الساعة المناسبة وطلبها اليوم قبل ما يسالي العرض." },
-    { "type": "text", "id": "final_cta_button", "label": "Texte du bouton", "default": "اطلب دابا" },
+    { "type": "image_picker", "id": "hero_image", "label": "Photo du hero (mains, alliances/montres, coucher de soleil — optionnelle, sinon décor doré abstrait)" },
+    { "type": "text", "id": "hero_heading", "label": "Titre du hero", "default": "الوقت كيجمع القلوب" },
+    { "type": "textarea", "id": "hero_subheading", "label": "Sous-titre (2 lignes)", "default": "اختار ساعة ليك وساعة للي كتحب...\nوخلي كل لحظة تبقى ذكرى." },
+    { "type": "text", "id": "hero_cta_text", "label": "Texte du bouton", "default": "اطلب دابا" },
+
+    { "type": "header", "content": "Vitrine produits" },
+    { "type": "range", "id": "products_per_page", "label": "Produits par page", "min": 4, "max": 24, "step": 2, "default": 10 },
+
+    { "type": "header", "content": "Section émotionnelle" },
+    { "type": "image_picker", "id": "emotional_image", "label": "Photo (mains tenant des montres, heure dorée — optionnelle)" },
+    { "type": "text", "id": "emotional_heading", "label": "Titre", "default": "اختار هدية غادي تبقى ذكرى" },
+    { "type": "text", "id": "emotional_text", "label": "Texte" },
+
+    { "type": "header", "content": "Offre" },
+    { "type": "text", "id": "offer_price", "label": "Prix", "default": "299" },
+    { "type": "text", "id": "offer_currency", "label": "Devise", "default": "DH" },
+    { "type": "text", "id": "offer_cta_text", "label": "Texte du bouton", "default": "اطلب دابا" },
+
     { "type": "header", "content": "WhatsApp" },
-    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (avec indicatif, ex: 212600000000)" }
+    { "type": "text", "id": "whatsapp_number", "label": "Numéro (avec indicatif, ex: 212600000000)" }
   ],
   "blocks": [
     {
-      "type": "trust_item",
-      "name": "Barre de confiance",
+      "type": "stat",
+      "name": "Statistique",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Emoji", "default": "🚚" },
-        { "type": "text", "id": "text", "label": "Texte", "default": "توصيل سريع لجميع المدن" }
+        { "type": "text", "id": "icon", "label": "Icône / étoiles", "default": "⭐⭐⭐⭐⭐" },
+        { "type": "text", "id": "number", "label": "Nombre (laisser vide si aucun)" },
+        { "type": "text", "id": "number_prefix", "label": "Préfixe", "default": "+" },
+        { "type": "text", "id": "number_suffix", "label": "Suffixe" },
+        { "type": "text", "id": "label", "label": "Texte", "default": "عميل سعيد" }
       ]
     },
     {
-      "type": "benefit",
-      "name": "Avantage",
+      "type": "offer_badge",
+      "name": "Badge de l'offre",
       "settings": [
-        { "type": "text", "id": "icon", "label": "Emoji", "default": "✨" },
-        { "type": "text", "id": "text", "label": "Texte", "default": "جودة ممتازة" }
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "🎁" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "شحن مجاني" }
       ]
     },
     {
       "type": "review",
       "name": "Avis client",
       "settings": [
+        { "type": "image_picker", "id": "avatar", "label": "Photo (optionnelle)" },
         { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Note", "default": 5 },
         { "type": "text", "id": "text", "label": "Texte de l'avis", "default": "الساعة جاات أحسن من الصور ❤️" },
         { "type": "text", "id": "name", "label": "Nom", "default": "خديجة." },
-        { "type": "text", "id": "location", "label": "Ville", "default": "الدار البيضاء" }
+        { "type": "text", "id": "location", "label": "Ville", "default": "الدار البيضاء" },
+        { "type": "checkbox", "id": "verified", "label": "Achat vérifié", "default": true }
       ]
     }
   ],
@@ -542,21 +649,18 @@
     {
       "name": "Collection",
       "blocks": [
-        { "type": "trust_item", "settings": { "icon": "🚚", "text": "توصيل سريع لجميع المدن" } },
-        { "type": "trust_item", "settings": { "icon": "💵", "text": "الدفع عند الاستلام" } },
-        { "type": "trust_item", "settings": { "icon": "🔄", "text": "إمكانية الاستبدال" } },
-        { "type": "trust_item", "settings": { "icon": "⭐", "text": "جودة مضمونة" } },
-        { "type": "trust_item", "settings": { "icon": "🔒", "text": "طلب آمن 100%" } },
+        { "type": "stat", "settings": { "icon": "⭐⭐⭐⭐⭐", "number": "5000", "number_prefix": "+", "label": "عميل سعيد" } },
+        { "type": "stat", "settings": { "icon": "🚚", "number": "24", "number_suffix": "H", "label": "توصيل سريع" } },
+        { "type": "stat", "settings": { "icon": "💰", "label": "الدفع عند الاستلام" } },
+        { "type": "stat", "settings": { "icon": "🎁", "label": "شحن مجاني" } },
 
-        { "type": "benefit", "settings": { "icon": "✨", "text": "جودة ممتازة" } },
-        { "type": "benefit", "settings": { "icon": "🚀", "text": "توصيل سريع" } },
-        { "type": "benefit", "settings": { "icon": "💵", "text": "الدفع عند الاستلام" } },
-        { "type": "benefit", "settings": { "icon": "🎧", "text": "خدمة عملاء ممتازة" } },
-        { "type": "benefit", "settings": { "icon": "🛡️", "text": "ضمان الرضا" } },
+        { "type": "offer_badge", "settings": { "icon": "🎁", "text": "شحن مجاني" } },
+        { "type": "offer_badge", "settings": { "icon": "💰", "text": "الدفع عند الاستلام" } },
+        { "type": "offer_badge", "settings": { "icon": "⏳", "text": "الكمية محدودة" } },
 
-        { "type": "review", "settings": { "rating": 5, "text": "الساعة جاات أحسن من الصور ❤️", "name": "خديجة.", "location": "الدار البيضاء" } },
-        { "type": "review", "settings": { "rating": 5, "text": "وصلاتني بسرعة وجودتها ممتازة.", "name": "يوسف.", "location": "الرباط" } },
-        { "type": "review", "settings": { "rating": 5, "text": "غادي نعاود نطلب مرة أخرى.", "name": "سعاد.", "location": "مراكش" } }
+        { "type": "review", "settings": { "rating": 5, "text": "الساعة جاات أحسن من الصور ❤️", "name": "خديجة.", "location": "الدار البيضاء", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "text": "وصلاتني بسرعة وجودتها ممتازة.", "name": "يوسف.", "location": "الرباط", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "text": "غادي نعاود نطلب مرة أخرى.", "name": "سعاد.", "location": "مراكش", "verified": true } }
       ]
     }
   ]
