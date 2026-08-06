@@ -83,6 +83,36 @@
 .lux-badge--sale { background: var(--lux-black); color: var(--lux-white); }
 .lux-badge--sold-out { background: var(--lux-gray); color: var(--lux-white); }
 .lux-badge--new { background: var(--lux-gold); color: var(--lux-white); }
+.lux-badge--best { background: linear-gradient(120deg, #D4AF37, #E8C86B); color: #16130a; }
+
+.lux-card__quick-view {
+  position: absolute; left: 50%; bottom: 10px; transform: translate(-50%, 6px);
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.94); color: var(--lux-black);
+  border: none; border-radius: 40px; padding: 7px 14px;
+  font-family: var(--lux-font-sans); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em;
+  opacity: 0; cursor: pointer; z-index: 2;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  transition: opacity var(--lux-transition), transform var(--lux-transition), background var(--lux-transition), color var(--lux-transition);
+  white-space: nowrap;
+}
+.lux-card:hover .lux-card__quick-view { opacity: 1; transform: translate(-50%, 0); }
+.lux-card__quick-view:hover { background: var(--lux-black); color: var(--lux-gold); }
+@media (max-width: 768px) {
+  .lux-card__quick-view { opacity: 1; transform: translate(-50%, 0); bottom: 8px; padding: 6px 12px; font-size: 0.65rem; }
+}
+
+.lux-card__order-now {
+  display: block; width: 100%; text-align: center;
+  margin-top: 10px; padding: 11px 16px;
+  background: var(--lux-black); color: var(--lux-white);
+  border: 1.5px solid var(--lux-black); border-radius: 6px;
+  font-family: var(--lux-font-sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+  text-decoration: none; cursor: pointer;
+  transition: background var(--lux-transition), color var(--lux-transition), border-color var(--lux-transition), transform var(--lux-transition);
+}
+.lux-card__order-now:hover { background: var(--lux-gold); border-color: var(--lux-gold); color: var(--lux-black); transform: translateY(-1px); }
+.lux-card__order-now.is-disabled { background: var(--lux-gray); border-color: var(--lux-gray); color: var(--lux-white); cursor: not-allowed; pointer-events: none; opacity: 0.7; }
 
 .lux-card__info { padding: 16px; }
 .lux-card__vendor { font-family: var(--lux-font-sans); font-size: 0.7rem; color: var(--lux-gray); text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 4px; }

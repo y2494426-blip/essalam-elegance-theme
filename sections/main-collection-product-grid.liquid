@@ -2,143 +2,563 @@
 {% render 'essalem-back-button' %}
 {% render 'lux-float-cart' %}
 
-<div class="lux-collection-page">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 
-  <!-- Beige/white luxury banner -->
-  <div class="lux-col-banner">
-    <div class="lux-col-banner__orb lux-col-banner__orb--1"></div>
-    <div class="lux-col-banner__orb lux-col-banner__orb--2"></div>
-    <div class="lux-col-banner__orb lux-col-banner__orb--3"></div>
-    <div class="lux-col-banner__dots"></div>
-    <div class="lux-col-banner__content">
-      <p class="lux-col-banner__eyebrow">Collection Exclusive</p>
-      <h1 class="lux-col-banner__title">{{ collection.title }}</h1>
-      {%- if collection.description != blank -%}
-        <p class="lux-col-banner__desc">{{ collection.description | strip_html | truncate: 120 }}</p>
-      {%- endif -%}
-      <div class="lux-col-banner__line"></div>
-    </div>
-  </div>
+<div id="essalem-collection-lux" dir="rtl">
 
-  <style>
-  .lux-col-banner {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #FDFAF4 0%, #F5F1E8 50%, #EDE8DC 100%);
-    padding: 72px 24px 64px;
-    text-align: center;
-  }
-  .lux-col-banner__dots {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, #C9A86A22 1px, transparent 1px);
-    background-size: 28px 28px;
-    pointer-events: none;
-  }
-  .lux-col-banner__orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    pointer-events: none;
-    animation: lux-orb-drift 8s ease-in-out infinite alternate;
-  }
-  .lux-col-banner__orb--1 {
-    width: 320px; height: 320px;
-    background: radial-gradient(circle, #C9A86A28 0%, transparent 70%);
-    top: -80px; left: -60px;
-    animation-duration: 9s;
-  }
-  .lux-col-banner__orb--2 {
-    width: 260px; height: 260px;
-    background: radial-gradient(circle, #C9A86A1a 0%, transparent 70%);
-    top: 20px; right: -40px;
-    animation-duration: 11s;
-    animation-delay: -3s;
-  }
-  .lux-col-banner__orb--3 {
-    width: 180px; height: 180px;
-    background: radial-gradient(circle, #BFA06022 0%, transparent 70%);
-    bottom: -30px; left: 40%;
-    animation-duration: 7s;
-    animation-delay: -5s;
-  }
-  @keyframes lux-orb-drift {
-    0%   { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(20px, 15px) scale(1.08); }
-  }
-  .lux-col-banner__content { position: relative; z-index: 1; }
-  .lux-col-banner__eyebrow {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    font-size: 15px;
-    letter-spacing: 0.18em;
-    color: #C9A86A;
-    text-transform: uppercase;
-    margin: 0 0 14px;
-  }
-  .lux-col-banner__title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    font-weight: 600;
-    color: #1A1409;
-    margin: 0 0 16px;
-    line-height: 1.15;
-    letter-spacing: 0.02em;
-  }
-  .lux-col-banner__desc {
-    font-size: 15px;
-    color: #5a4e3a;
-    max-width: 520px;
-    margin: 0 auto 20px;
-    line-height: 1.65;
-  }
-  .lux-col-banner__line {
-    width: 60px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #C9A86A, transparent);
-    margin: 0 auto;
-  }
-  </style>
-
-  <!-- Toolbar -->
-  <div class="lux-toolbar">
-    <p class="lux-toolbar__count">
-      {%- if collection.products_count == 1 -%}
-        1 produit
+  {%- comment -%} ============ HERO ============ {%- endcomment -%}
+  <section class="ee-hero" id="ee-hero-{{ section.id }}">
+    <div class="ee-hero__bg">
+      {%- if section.settings.hero_image != blank -%}
+        {{ section.settings.hero_image | image_url: width: 2200 | image_tag: loading: 'eager', class: 'ee-hero__img', alt: '' }}
+        <div class="ee-hero__overlay"></div>
       {%- else -%}
-        {{ collection.products_count }} produits
+        <div class="ee-hero__art" aria-hidden="true">
+          <div class="ee-hero__ring ee-hero__ring--1"></div>
+          <div class="ee-hero__ring ee-hero__ring--2"></div>
+          <div class="ee-hero__glow"></div>
+          <div class="ee-hero__silhouette">
+            <svg viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="190" cy="330" rx="150" ry="26" fill="rgba(17,17,17,0.10)"/>
+              <path d="M150 360 C150 250 160 190 200 150 C220 130 230 108 226 84 C223 63 205 48 182 48 C157 48 138 66 138 90 C138 112 150 128 150 128 C110 145 88 190 88 250 L88 360 Z" fill="rgba(17,17,17,0.85)"/>
+              <circle cx="163" cy="205" r="13" fill="none" stroke="#D4AF37" stroke-width="3"/>
+              <rect x="157" y="188" width="12" height="8" rx="2" fill="#D4AF37"/>
+              <path d="M330 360 C330 240 322 178 292 140 C276 120 270 96 278 74 C286 52 308 40 330 46 C352 52 364 74 358 96 C353 115 338 128 338 128 C378 148 396 195 396 252 L396 360 Z" fill="rgba(17,17,17,0.7)"/>
+              <circle cx="316" cy="196" r="12" fill="none" stroke="#D4AF37" stroke-width="3"/>
+              <rect x="310" y="180" width="12" height="8" rx="2" fill="#D4AF37"/>
+              <path d="M226 84 C232 100 276 102 278 74" stroke="rgba(212,175,55,0.5)" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <div class="ee-hero__particles">
+            {%- for i in (1..18) -%}
+              <span class="ee-hero__particle" style="--i:{{ i }};"></span>
+            {%- endfor -%}
+          </div>
+        </div>
       {%- endif -%}
-    </p>
-  </div>
-
-  <!-- Product grid -->
-  <div class="lux-product-grid">
-    {%- for product in collection.products -%}
-      {% render 'card-product',
-        card_product: product,
-        media_aspect_ratio: 'portrait',
-        show_secondary_image: true,
-        show_vendor: false
-      %}
-    {%- else -%}
-      <p class="lux-empty">Aucun produit dans cette collection.</p>
-    {%- endfor -%}
-  </div>
-
-  <!-- Pagination -->
-  {%- if paginate.pages > 1 -%}
-    <div class="lux-pagination">
-      {{ paginate | default_pagination }}
     </div>
+
+    <div class="ee-hero__content">
+      <p class="ee-hero__eyebrow" data-ee-reveal>ESSALAM ELEGANCE</p>
+      <h1 class="ee-hero__title" data-ee-reveal>{{ section.settings.hero_heading | default: '❤️ هدية مثالية ليك وللي كتحب' }}</h1>
+      <p class="ee-hero__subtitle" data-ee-reveal>{{ section.settings.hero_subheading | default: 'ساعات أنيقة للأزواج بجودة عالية وثمن مناسب' }}</p>
+      <a href="#ee-grid-{{ section.id }}" class="ee-btn ee-btn--gold ee-hero__cta" data-ee-reveal>
+        <span>🛒 {{ section.settings.hero_cta_text | default: 'شوف المجموعة' }}</span>
+      </a>
+    </div>
+
+    <button type="button" class="ee-hero__scroll" aria-label="مرر للأسفل" onclick="document.getElementById('ee-grid-{{ section.id }}').scrollIntoView({behavior:'smooth'})">
+      <span class="ee-hero__scroll-dot"></span>
+    </button>
+  </section>
+
+  {%- comment -%} ============ TRUST BAR ============ {%- endcomment -%}
+  <section class="ee-trust">
+    <div class="ee-trust__track">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust_item' -%}
+          <div class="ee-trust__item" data-ee-reveal {{ block.shopify_attributes }}>
+            <span class="ee-trust__icon">{{ block.settings.icon }}</span>
+            <span class="ee-trust__text">{{ block.settings.text }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ============ FREE SHIPPING BANNER ============ {%- endcomment -%}
+  {%- if section.settings.show_shipping_banner -%}
+    <section class="ee-shipping-banner">
+      <div class="ee-shipping-banner__glow"></div>
+      <p class="ee-shipping-banner__text">🎁 {{ section.settings.shipping_banner_text | default: 'الشحن مجاني لجميع المدن المغربية' }}</p>
+    </section>
   {%- endif -%}
 
+  {%- comment -%} ============ PRODUCT GRID ============ {%- endcomment -%}
+  <section class="ee-grid-section" id="ee-grid-{{ section.id }}">
+
+    <div class="ee-grid-header">
+      <p class="ee-grid-count">
+        {{ collection.products_count }} {% if collection.products_count == 1 %}منتج{% else %}منتجات{% endif %}
+      </p>
+
+      {%- if collection.products_count > 0 -%}
+        <form class="ee-sort-form" id="ee-sort-form-{{ section.id }}">
+          <label class="ee-sort-label" for="ee-sort-{{ section.id }}">ترتيب حسب:</label>
+          <select id="ee-sort-{{ section.id }}" class="ee-sort-select" name="sort_by" onchange="document.getElementById('ee-sort-form-{{ section.id }}').submit()">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected="selected"{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </form>
+      {%- endif -%}
+    </div>
+
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      <div class="ee-product-grid">
+        {%- for product in collection.products -%}
+          <div data-ee-reveal>
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: 'portrait',
+              show_secondary_image: true,
+              show_vendor: false
+            %}
+          </div>
+        {%- else -%}
+          <p class="ee-empty">ما كايناش منتجات فهاد المجموعة حالياً.</p>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="ee-pagination" role="navigation" aria-label="ترقيم الصفحات">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="ee-pagination__arrow">‹</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="ee-pagination__num">{{ part.title }}</a>
+            {%- else -%}
+              {%- if part.title == paginate.current_page -%}
+                <span class="ee-pagination__num ee-pagination__num--active">{{ part.title }}</span>
+              {%- else -%}
+                <span class="ee-pagination__dots">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="ee-pagination__arrow">›</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </section>
+
+  {%- comment -%} ============ WHY BUY FROM US ============ {%- endcomment -%}
+  <section class="ee-why">
+    <div class="ee-section-head">
+      <p class="ee-section-eyebrow" data-ee-reveal>ثقة عملائنا</p>
+      <h2 class="ee-section-title" data-ee-reveal>❤️ لماذا Essalam Elegance؟</h2>
+      <div class="ee-section-line"></div>
+    </div>
+    <div class="ee-why__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'benefit' -%}
+          <div class="ee-why__card" data-ee-reveal {{ block.shopify_attributes }}>
+            <span class="ee-why__icon">{{ block.settings.icon }}</span>
+            <p class="ee-why__text">{{ block.settings.text }}</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ============ COUPLE LIFESTYLE ============ {%- endcomment -%}
+  <section class="ee-lifestyle">
+    <div class="ee-lifestyle__bg">
+      {%- if section.settings.lifestyle_image != blank -%}
+        {{ section.settings.lifestyle_image | image_url: width: 2200 | image_tag: loading: 'lazy', class: 'ee-lifestyle__img', alt: '' }}
+      {%- endif -%}
+      <div class="ee-lifestyle__overlay"></div>
+    </div>
+    <div class="ee-lifestyle__content">
+      <span class="ee-lifestyle__heart" aria-hidden="true">❤</span>
+      <h2 class="ee-lifestyle__title" data-ee-reveal>{{ section.settings.lifestyle_heading | default: 'الهدية لي غادي تجمع بينكم ❤️' }}</h2>
+      {%- if section.settings.lifestyle_text != blank -%}
+        <p class="ee-lifestyle__text" data-ee-reveal>{{ section.settings.lifestyle_text }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ============ REVIEWS ============ {%- endcomment -%}
+  <section class="ee-reviews">
+    <div class="ee-section-head">
+      <p class="ee-section-eyebrow" data-ee-reveal>آراء عملائنا</p>
+      <h2 class="ee-section-title" data-ee-reveal>ماذا قال عملاؤنا</h2>
+      <div class="ee-section-line"></div>
+    </div>
+
+    <div class="ee-reviews__wrap">
+      <button type="button" class="ee-reviews__arrow ee-reviews__arrow--prev" aria-label="السابق" onclick="window.eeReviewScroll && eeReviewScroll('{{ section.id }}', -1)">‹</button>
+      <div class="ee-reviews__track" id="ee-reviews-track-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'review' -%}
+            <div class="ee-review-card" {{ block.shopify_attributes }}>
+              <div class="ee-review-card__stars">
+                {%- assign stars = block.settings.rating | default: 5 -%}
+                {%- for i in (1..stars) -%}★{%- endfor -%}
+              </div>
+              <p class="ee-review-card__text">"{{ block.settings.text }}"</p>
+              <p class="ee-review-card__author">{{ block.settings.name }}{% if block.settings.location != blank %} — {{ block.settings.location }}{% endif %}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <button type="button" class="ee-reviews__arrow ee-reviews__arrow--next" aria-label="التالي" onclick="window.eeReviewScroll && eeReviewScroll('{{ section.id }}', 1)">›</button>
+    </div>
+  </section>
+
+  {%- comment -%} ============ FINAL CTA ============ {%- endcomment -%}
+  <section class="ee-final">
+    <div class="ee-final__glow"></div>
+    <h2 class="ee-final__title" data-ee-reveal>{{ section.settings.final_cta_heading | default: 'ما تضيعش الفرصة' }}</h2>
+    <p class="ee-final__text" data-ee-reveal>{{ section.settings.final_cta_text | default: 'اختار الساعة المناسبة وطلبها اليوم قبل ما يسالي العرض.' }}</p>
+    <a href="#ee-grid-{{ section.id }}" class="ee-btn ee-btn--gold ee-final__cta" data-ee-reveal onclick="document.getElementById('ee-grid-{{ section.id }}').scrollIntoView({behavior:'smooth'}); return false;">
+      🛍️ {{ section.settings.final_cta_button | default: 'اطلب دابا' }}
+    </a>
+  </section>
+
+  {%- comment -%} ============ WHATSAPP FLOAT ============ {%- endcomment -%}
+  {%- if section.settings.whatsapp_number != blank -%}
+    <a
+      class="ee-whatsapp"
+      href="https://wa.me/{{ section.settings.whatsapp_number | remove: '+' | remove: ' ' }}"
+      target="_blank"
+      rel="noopener"
+      aria-label="تواصل معنا عبر واتساب"
+    >
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.32A9.94 9.94 0 0 0 12.02 22C17.54 22 22 17.52 22 12S17.54 2 12.02 2Zm5.86 14.14c-.25.7-1.23 1.28-2.02 1.45-.55.11-1.26.2-3.67-.79-3.08-1.27-5.07-4.4-5.22-4.6-.15-.2-1.25-1.66-1.25-3.17s.78-2.25 1.06-2.56c.28-.31.6-.38.8-.38h.58c.19 0 .44-.07.68.53.25.6.85 2.08.92 2.23.07.15.12.33.02.53-.1.2-.15.33-.3.5-.15.18-.32.4-.45.53-.15.15-.31.32-.14.62.18.31.79 1.32 1.71 2.15 1.18 1.06 2.16 1.4 2.47 1.55.31.15.49.13.67-.08.19-.2.79-.9 1-1.2.2-.31.4-.26.68-.16.28.1 1.76.85 2.06 1 .3.15.5.23.57.35.08.13.08.75-.17 1.45Z"/></svg>
+    </a>
+  {%- endif -%}
+
+  {%- comment -%} ============ QUICK VIEW MODAL ============ {%- endcomment -%}
+  <div class="ee-qv" id="ee-qv-{{ section.id }}" hidden>
+    <div class="ee-qv__backdrop" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ section.id }}')"></div>
+    <div class="ee-qv__panel" role="dialog" aria-modal="true">
+      <button type="button" class="ee-qv__close" aria-label="إغلاق" onclick="window.essalemQuickViewClose && essalemQuickViewClose('{{ section.id }}')">✕</button>
+      <div class="ee-qv__img-wrap"><img class="ee-qv__img" id="ee-qv-img-{{ section.id }}" alt="" /></div>
+      <div class="ee-qv__body">
+        <h3 class="ee-qv__title" id="ee-qv-title-{{ section.id }}"></h3>
+        <div class="ee-qv__price">
+          <span class="ee-qv__price-now" id="ee-qv-price-{{ section.id }}"></span>
+          <span class="ee-qv__price-compare" id="ee-qv-compare-{{ section.id }}"></span>
+        </div>
+        <a class="ee-btn ee-btn--gold ee-qv__cta" id="ee-qv-cta-{{ section.id }}" href="#">اطلب الآن</a>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<style>
+  #essalem-collection-lux {
+    --ee-white: #FFFFFF;
+    --ee-black: #111111;
+    --ee-gold: #D4AF37;
+    --ee-gold-soft: #E4C767;
+    --ee-beige: #F8F5F0;
+    --ee-beige-dark: #EFE8DB;
+    --ee-font-heading: 'Cormorant Garamond', Georgia, serif;
+    --ee-font-body: 'Tajawal', Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    background: var(--ee-white);
+    font-family: var(--ee-font-body);
+    overflow-x: hidden;
+  }
+  #essalem-collection-lux *{ box-sizing: border-box; }
+  #essalem-collection-lux a { text-decoration: none; }
+
+  #essalem-collection-lux .ee-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--ee-font-body); font-weight: 700; font-size: 1rem;
+    padding: 16px 38px; border-radius: 50px; cursor: pointer; border: none;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  #essalem-collection-lux .ee-btn--gold {
+    background: linear-gradient(120deg, var(--ee-gold-soft), var(--ee-gold));
+    color: var(--ee-black);
+    box-shadow: 0 14px 34px -12px rgba(212,175,55,.55);
+  }
+  #essalem-collection-lux .ee-btn--gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 40px -10px rgba(212,175,55,.7); }
+
+  /* reveal on scroll */
+  #essalem-collection-lux [data-ee-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+  #essalem-collection-lux [data-ee-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+  #essalem-collection-lux .ee-section-head { text-align: center; max-width: 620px; margin: 0 auto 44px; padding: 0 20px; }
+  #essalem-collection-lux .ee-section-eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .18em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 10px; }
+  #essalem-collection-lux .ee-section-title { font-family: var(--ee-font-heading); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--ee-black); margin: 0 0 16px; }
+  #essalem-collection-lux .ee-section-line { width: 56px; height: 3px; background: linear-gradient(90deg, transparent, var(--ee-gold), transparent); margin: 0 auto; }
+
+  /* ===== HERO ===== */
+  #essalem-collection-lux .ee-hero { position: relative; min-height: 92svh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--ee-beige) 0%, var(--ee-beige-dark) 55%, #E7DEC9 100%); }
+  #essalem-collection-lux .ee-hero__bg { position: absolute; inset: 0; z-index: 0; }
+  #essalem-collection-lux .ee-hero__img { width: 100%; height: 100%; object-fit: cover; }
+  #essalem-collection-lux .ee-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,17,17,.15), rgba(17,17,17,.55)); }
+  #essalem-collection-lux .ee-hero__art { position: absolute; inset: 0; }
+  #essalem-collection-lux .ee-hero__ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212,175,55,.35); }
+  #essalem-collection-lux .ee-hero__ring--1 { width: 60vmax; height: 60vmax; top: -20vmax; right: -18vmax; animation: ee-spin 70s linear infinite; }
+  #essalem-collection-lux .ee-hero__ring--2 { width: 42vmax; height: 42vmax; bottom: -16vmax; left: -12vmax; animation: ee-spin 90s linear infinite reverse; }
+  @keyframes ee-spin { to { transform: rotate(360deg); } }
+  #essalem-collection-lux .ee-hero__glow { position: absolute; top: 10%; right: 12%; width: 420px; height: 420px; max-width: 60vw; max-height: 60vw; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.28), transparent 70%); filter: blur(10px); }
+  #essalem-collection-lux .ee-hero__silhouette { position: absolute; bottom: 0; left: 50%; transform: translateX(-42%); width: min(560px, 78vw); opacity: .92; }
+  #essalem-collection-lux .ee-hero__silhouette svg { width: 100%; height: auto; display: block; }
+  #essalem-collection-lux .ee-hero__particles { position: absolute; inset: 0; pointer-events: none; }
+  #essalem-collection-lux .ee-hero__particle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ee-gold); opacity: .8; box-shadow: 0 0 6px rgba(212,175,55,.7); left: calc((var(--i) * 5.4%) + 1%); top: 100%; animation: ee-rise calc(8s + (var(--i) * .5s)) linear infinite; animation-delay: calc(var(--i) * -0.6s); }
+  @keyframes ee-rise { 0% { transform: translateY(0) scale(.6); opacity: 0; } 12% { opacity: .9; } 88% { opacity: .3; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+
+  #essalem-collection-lux .ee-hero__content { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; padding: 120px 24px 80px; text-align: center; }
+  #essalem-collection-lux .ee-hero__eyebrow { font-size: .82rem; font-weight: 700; letter-spacing: .3em; color: var(--ee-gold); text-transform: uppercase; margin: 0 0 18px; }
+  #essalem-collection-lux .ee-hero__title { font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.25; color: var(--ee-black); margin: 0 0 20px; }
+  #essalem-collection-lux .ee-hero__subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: #3a3a3a; margin: 0 0 36px; line-height: 1.7; }
+
+  #essalem-collection-lux .ee-hero__scroll { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2; width: 30px; height: 46px; border: 2px solid rgba(17,17,17,.4); border-radius: 20px; background: transparent; cursor: pointer; }
+  #essalem-collection-lux .ee-hero__scroll-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--ee-gold); margin: 8px auto 0; animation: ee-scroll-dot 1.8s ease-in-out infinite; }
+  @keyframes ee-scroll-dot { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(18px); opacity: 0; } 100% { transform: translateY(18px); opacity: 0; } }
+
+  /* ===== TRUST BAR ===== */
+  #essalem-collection-lux .ee-trust { background: var(--ee-black); padding: 18px 0; overflow: hidden; }
+  #essalem-collection-lux .ee-trust__track { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 28px 40px; }
+  #essalem-collection-lux .ee-trust__item { display: flex; align-items: center; gap: 8px; }
+  #essalem-collection-lux .ee-trust__icon { font-size: 1.15rem; }
+  #essalem-collection-lux .ee-trust__text { color: var(--ee-white); font-size: .85rem; font-weight: 500; white-space: nowrap; }
+
+  /* ===== SHIPPING BANNER ===== */
+  #essalem-collection-lux .ee-shipping-banner { position: relative; background: linear-gradient(120deg, var(--ee-gold), var(--ee-gold-soft), var(--ee-gold)); background-size: 200% 100%; animation: ee-shine 6s linear infinite; text-align: center; padding: 14px 20px; overflow: hidden; }
+  #essalem-collection-lux .ee-shipping-banner__glow { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(255,255,255,.35), transparent 70%); animation: ee-pulse 3s ease-in-out infinite; }
+  @keyframes ee-shine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  @keyframes ee-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+  #essalem-collection-lux .ee-shipping-banner__text { position: relative; z-index: 1; margin: 0; font-weight: 800; font-size: 1rem; color: var(--ee-black); letter-spacing: .02em; }
+
+  /* ===== GRID SECTION ===== */
+  #essalem-collection-lux .ee-grid-section { max-width: 1280px; margin: 0 auto; padding: 56px 20px 70px; }
+  #essalem-collection-lux .ee-grid-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid rgba(17,17,17,.08); }
+  #essalem-collection-lux .ee-grid-count { margin: 0; font-size: .88rem; color: #6b6b6b; font-weight: 500; }
+  #essalem-collection-lux .ee-sort-form { display: flex; align-items: center; gap: 10px; }
+  #essalem-collection-lux .ee-sort-label { font-size: .85rem; color: var(--ee-black); font-weight: 600; }
+  #essalem-collection-lux .ee-sort-select { font-family: var(--ee-font-body); font-size: .85rem; padding: 9px 14px; border: 1px solid rgba(17,17,17,.18); border-radius: 8px; background: var(--ee-white); cursor: pointer; }
+  #essalem-collection-lux .ee-sort-select:focus { outline: none; border-color: var(--ee-gold); }
+
+  #essalem-collection-lux .ee-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+  @media (max-width: 1024px) { #essalem-collection-lux .ee-product-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px)  { #essalem-collection-lux .ee-product-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+  #essalem-collection-lux .ee-empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #8a8a8a; }
+
+  #essalem-collection-lux .ee-pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 44px; flex-wrap: wrap; }
+  #essalem-collection-lux .ee-pagination__num, #essalem-collection-lux .ee-pagination__arrow { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; border-radius: 50%; font-size: .88rem; font-weight: 600; color: var(--ee-black); border: 1px solid rgba(17,17,17,.15); background: var(--ee-white); transition: all .25s ease; }
+  #essalem-collection-lux .ee-pagination__num:hover, #essalem-collection-lux .ee-pagination__arrow:hover { background: var(--ee-black); color: var(--ee-white); border-color: var(--ee-black); }
+  #essalem-collection-lux .ee-pagination__num--active { background: var(--ee-gold); border-color: var(--ee-gold); color: var(--ee-black); }
+  #essalem-collection-lux .ee-pagination__dots { padding: 0 4px; color: #999; }
+
+  /* ===== WHY US ===== */
+  #essalem-collection-lux .ee-why { background: var(--ee-beige); padding: 70px 20px; }
+  #essalem-collection-lux .ee-why__grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  @media (max-width: 900px) { #essalem-collection-lux .ee-why__grid { grid-template-columns: repeat(2, 1fr); } }
+  #essalem-collection-lux .ee-why__card { background: var(--ee-white); border-radius: 14px; padding: 28px 18px; text-align: center; box-shadow: 0 4px 18px rgba(17,17,17,.06); transition: transform .35s ease, box-shadow .35s ease; }
+  #essalem-collection-lux .ee-why__card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(212,175,55,.22); }
+  #essalem-collection-lux .ee-why__icon { display: block; font-size: 1.9rem; margin-bottom: 12px; }
+  #essalem-collection-lux .ee-why__text { margin: 0; font-size: .88rem; font-weight: 600; color: var(--ee-black); }
+
+  /* ===== LIFESTYLE ===== */
+  #essalem-collection-lux .ee-lifestyle { position: relative; min-height: 60vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--ee-black); }
+  #essalem-collection-lux .ee-lifestyle__bg { position: absolute; inset: 0; }
+  #essalem-collection-lux .ee-lifestyle__img { width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+  #essalem-collection-lux .ee-lifestyle__overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(17,17,17,.4), rgba(17,17,17,.88)); }
+  #essalem-collection-lux .ee-lifestyle__content { position: relative; z-index: 1; text-align: center; max-width: 640px; padding: 90px 24px; }
+  #essalem-collection-lux .ee-lifestyle__heart { display: inline-block; font-size: 2.2rem; color: var(--ee-gold); margin-bottom: 18px; animation: ee-heartbeat 1.6s ease-in-out infinite; }
+  @keyframes ee-heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.18); } 40% { transform: scale(1); } 60% { transform: scale(1.12); } }
+  #essalem-collection-lux .ee-lifestyle__title { font-family: var(--ee-font-body); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.5rem); color: var(--ee-white); margin: 0 0 14px; }
+  #essalem-collection-lux .ee-lifestyle__text { color: rgba(255,255,255,.75); font-size: 1rem; line-height: 1.8; margin: 0; }
+
+  /* ===== REVIEWS ===== */
+  #essalem-collection-lux .ee-reviews { padding: 70px 20px; background: var(--ee-white); }
+  #essalem-collection-lux .ee-reviews__wrap { position: relative; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  #essalem-collection-lux .ee-reviews__track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 6px 4px 14px; flex: 1; }
+  #essalem-collection-lux .ee-reviews__track::-webkit-scrollbar { height: 5px; }
+  #essalem-collection-lux .ee-reviews__track::-webkit-scrollbar-thumb { background: var(--ee-gold); border-radius: 10px; }
+  #essalem-collection-lux .ee-review-card { scroll-snap-align: start; flex: 0 0 300px; background: var(--ee-beige); border-radius: 16px; padding: 26px 22px; box-shadow: 0 4px 16px rgba(17,17,17,.06); }
+  #essalem-collection-lux .ee-review-card__stars { color: var(--ee-gold); letter-spacing: 3px; margin-bottom: 10px; }
+  #essalem-collection-lux .ee-review-card__text { font-family: var(--ee-font-heading); font-style: italic; font-size: 1.05rem; color: var(--ee-black); line-height: 1.7; margin: 0 0 14px; }
+  #essalem-collection-lux .ee-review-card__author { margin: 0; font-size: .82rem; font-weight: 700; color: #6b6b6b; }
+  #essalem-collection-lux .ee-reviews__arrow { flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(17,17,17,.15); background: var(--ee-white); font-size: 1.3rem; cursor: pointer; transition: all .25s ease; }
+  #essalem-collection-lux .ee-reviews__arrow:hover { background: var(--ee-black); color: var(--ee-white); border-color: var(--ee-black); }
+
+  /* ===== FINAL CTA ===== */
+  #essalem-collection-lux .ee-final { position: relative; text-align: center; padding: 90px 24px; background: radial-gradient(circle at 50% 20%, #1c1c1c 0%, var(--ee-black) 70%); overflow: hidden; }
+  #essalem-collection-lux .ee-final__glow { position: absolute; top: -30%; left: 50%; transform: translateX(-50%); width: 60vw; height: 60vw; max-width: 700px; max-height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,.22), transparent 70%); }
+  #essalem-collection-lux .ee-final__title { position: relative; z-index: 1; font-family: var(--ee-font-body); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3rem); color: var(--ee-white); margin: 0 0 16px; }
+  #essalem-collection-lux .ee-final__text { position: relative; z-index: 1; color: rgba(255,255,255,.75); font-size: 1rem; max-width: 500px; margin: 0 auto 34px; line-height: 1.8; }
+  #essalem-collection-lux .ee-final__cta { position: relative; z-index: 1; }
+
+  /* ===== WHATSAPP ===== */
+  #essalem-collection-lux .ee-whatsapp { position: fixed; bottom: 28px; left: 24px; z-index: 9999; width: 56px; height: 56px; border-radius: 50%; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(37,211,102,.45); animation: ee-wa-pulse 2.4s ease-in-out infinite; }
+  @keyframes ee-wa-pulse { 0%, 100% { box-shadow: 0 6px 20px rgba(37,211,102,.45); } 50% { box-shadow: 0 6px 30px rgba(37,211,102,.75); } }
+
+  /* ===== QUICK VIEW MODAL ===== */
+  #essalem-collection-lux .ee-qv { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  #essalem-collection-lux .ee-qv[hidden] { display: none; }
+  #essalem-collection-lux .ee-qv__backdrop { position: absolute; inset: 0; background: rgba(17,17,17,.6); backdrop-filter: blur(2px); }
+  #essalem-collection-lux .ee-qv__panel { position: relative; z-index: 1; background: var(--ee-white); border-radius: 18px; max-width: 640px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+  @media (max-width: 600px) { #essalem-collection-lux .ee-qv__panel { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; } }
+  #essalem-collection-lux .ee-qv__close { position: absolute; top: 12px; left: 12px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,.9); cursor: pointer; font-size: .95rem; }
+  #essalem-collection-lux .ee-qv__img-wrap { background: var(--ee-beige); }
+  #essalem-collection-lux .ee-qv__img { width: 100%; height: 100%; min-height: 240px; object-fit: cover; display: block; }
+  #essalem-collection-lux .ee-qv__body { padding: 28px 24px; display: flex; flex-direction: column; justify-content: center; }
+  #essalem-collection-lux .ee-qv__title { font-family: var(--ee-font-heading); font-size: 1.4rem; color: var(--ee-black); margin: 0 0 14px; }
+  #essalem-collection-lux .ee-qv__price { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  #essalem-collection-lux .ee-qv__price-now { font-size: 1.2rem; font-weight: 800; color: var(--ee-black); }
+  #essalem-collection-lux .ee-qv__price-compare { font-size: .95rem; color: #999; text-decoration: line-through; }
+  #essalem-collection-lux .ee-qv__cta { width: 100%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #essalem-collection-lux * { animation: none !important; transition: none !important; }
+    #essalem-collection-lux [data-ee-reveal] { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById('essalem-collection-lux');
+  if (!root) return;
+
+  /* reveal on scroll */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    root.querySelectorAll('[data-ee-reveal]').forEach(function (el) { io.observe(el); });
+  } else {
+    root.querySelectorAll('[data-ee-reveal]').forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  /* reviews slider */
+  window.eeReviewScroll = function (sectionId, dir) {
+    var track = document.getElementById('ee-reviews-track-' + sectionId);
+    if (!track) return;
+    var card = track.querySelector('.ee-review-card');
+    var amount = card ? (card.offsetWidth + 20) : 300;
+    track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  };
+
+  /* quick view modal (shared across all cards on the page) */
+  var modal = root.querySelector('.ee-qv');
+  window.essalemQuickView = function (btn) {
+    if (!modal || !btn) { if (btn) window.location.href = btn.dataset.qvUrl; return; }
+    var sid = modal.id.replace('ee-qv-', '');
+    var img = document.getElementById('ee-qv-img-' + sid);
+    var title = document.getElementById('ee-qv-title-' + sid);
+    var price = document.getElementById('ee-qv-price-' + sid);
+    var compare = document.getElementById('ee-qv-compare-' + sid);
+    var cta = document.getElementById('ee-qv-cta-' + sid);
+
+    if (img) { img.src = btn.dataset.qvImage; img.alt = btn.dataset.qvTitle || ''; }
+    if (title) title.textContent = btn.dataset.qvTitle || '';
+    if (price) price.textContent = btn.dataset.qvPrice || '';
+    if (compare) compare.textContent = btn.dataset.qvCompare || '';
+    if (cta) {
+      cta.href = btn.dataset.qvUrl || '#';
+      cta.textContent = (btn.dataset.qvAvailable === 'true') ? 'اطلب الآن' : 'نفذت الكمية';
+    }
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  };
+  window.essalemQuickViewClose = function () {
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal && !modal.hidden) window.essalemQuickViewClose();
+  });
+})();
+</script>
 
 {% schema %}
 {
   "name": "Collection",
   "tag": "section",
   "class": "section",
-  "settings": []
+  "settings": [
+    { "type": "header", "content": "Réglages généraux" },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Produits par page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 12
+    },
+    { "type": "header", "content": "Hero" },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Image du hero (couple, optionnelle — sinon fond artistique doré)"
+    },
+    { "type": "text", "id": "hero_heading", "label": "Titre du hero", "default": "❤️ هدية مثالية ليك وللي كتحب" },
+    { "type": "text", "id": "hero_subheading", "label": "Sous-titre du hero", "default": "ساعات أنيقة للأزواج بجودة عالية وثمن مناسب" },
+    { "type": "text", "id": "hero_cta_text", "label": "Texte du bouton du hero", "default": "شوف المجموعة" },
+    { "type": "header", "content": "Bannière livraison gratuite" },
+    { "type": "checkbox", "id": "show_shipping_banner", "label": "Afficher la bannière", "default": true },
+    { "type": "text", "id": "shipping_banner_text", "label": "Texte de la bannière", "default": "الشحن مجاني لجميع المدن المغربية" },
+    { "type": "header", "content": "Section couple / lifestyle" },
+    { "type": "image_picker", "id": "lifestyle_image", "label": "Image lifestyle (optionnelle)" },
+    { "type": "text", "id": "lifestyle_heading", "label": "Titre", "default": "الهدية لي غادي تجمع بينكم ❤️" },
+    { "type": "text", "id": "lifestyle_text", "label": "Texte", "default": "" },
+    { "type": "header", "content": "CTA final" },
+    { "type": "text", "id": "final_cta_heading", "label": "Titre", "default": "ما تضيعش الفرصة" },
+    { "type": "text", "id": "final_cta_text", "label": "Texte", "default": "اختار الساعة المناسبة وطلبها اليوم قبل ما يسالي العرض." },
+    { "type": "text", "id": "final_cta_button", "label": "Texte du bouton", "default": "اطلب دابا" },
+    { "type": "header", "content": "WhatsApp" },
+    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (avec indicatif, ex: 212600000000)" }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Élément barre de confiance",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "🚚" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "توصيل سريع لجميع المدن" }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Avantage (Pourquoi nous ?)",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Emoji", "default": "✨" },
+        { "type": "text", "id": "text", "label": "Texte", "default": "جودة ممتازة" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Note", "default": 5 },
+        { "type": "text", "id": "text", "label": "Texte de l'avis", "default": "الساعة جاات أحسن من الصور ❤️" },
+        { "type": "text", "id": "name", "label": "Nom", "default": "خديجة." },
+        { "type": "text", "id": "location", "label": "Ville", "default": "الدار البيضاء" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection",
+      "blocks": [
+        { "type": "trust_item", "settings": { "icon": "🚚", "text": "توصيل سريع لجميع المدن" } },
+        { "type": "trust_item", "settings": { "icon": "💵", "text": "الدفع عند الاستلام" } },
+        { "type": "trust_item", "settings": { "icon": "🔄", "text": "إمكانية الاستبدال" } },
+        { "type": "trust_item", "settings": { "icon": "⭐", "text": "جودة مضمونة" } },
+        { "type": "trust_item", "settings": { "icon": "🔒", "text": "طلب آمن 100%" } },
+
+        { "type": "benefit", "settings": { "icon": "✨", "text": "جودة ممتازة" } },
+        { "type": "benefit", "settings": { "icon": "🚀", "text": "توصيل سريع" } },
+        { "type": "benefit", "settings": { "icon": "💵", "text": "الدفع عند الاستلام" } },
+        { "type": "benefit", "settings": { "icon": "🎧", "text": "خدمة عملاء ممتازة" } },
+        { "type": "benefit", "settings": { "icon": "🛡️", "text": "ضمان الرضا" } },
+
+        { "type": "review", "settings": { "rating": 5, "text": "الساعة جاات أحسن من الصور ❤️", "name": "خديجة.", "location": "الدار البيضاء" } },
+        { "type": "review", "settings": { "rating": 5, "text": "وصلاتني بسرعة وجودتها ممتازة.", "name": "يوسف.", "location": "الرباط" } },
+        { "type": "review", "settings": { "rating": 5, "text": "غادي نعاود نطلب مرة أخرى.", "name": "سعاد.", "location": "مراكش" } }
+      ]
+    }
+  ]
 }
 {% endschema %}

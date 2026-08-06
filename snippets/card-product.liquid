@@ -15,6 +15,19 @@
   if card_product.created_at and card_product.created_at > thirty_days_ago
     assign is_new = true
   endif
+  assign is_bestseller = false
+  for t in card_product.tags
+    assign t_down = t | downcase
+    if t_down == 'bestseller' or t_down == 'best-seller' or t_down == 'الأكثر مبيعاً'
+      assign is_bestseller = true
+    endif
+  endfor
+  assign qv_image = card_product.featured_media | image_url: width: 800
+  assign qv_price = card_product.price | money
+  assign qv_compare = ''
+  if card_product.compare_at_price > card_product.price
+    assign qv_compare = card_product.compare_at_price | money
+  endif
 -%}
 
 <div class="lux-card">
@@ -32,14 +45,32 @@
       </div>
       <div class="lux-card__badges">
         {%- if card_product.available == false -%}
-          <span class="lux-badge lux-badge--sold-out">Épuisé</span>
+          <span class="lux-badge lux-badge--sold-out">نفذت الكمية</span>
         {%- elsif card_product.compare_at_price > card_product.price -%}
           {%- assign savings = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
-          <span class="lux-badge lux-badge--sale">-{{ savings }}%</span>
+          <span class="lux-badge lux-badge--sale">خصم {{ savings }}%-</span>
         {%- elsif is_new -%}
-          <span class="lux-badge lux-badge--new">Nouveau</span>
+          <span class="lux-badge lux-badge--new">جديد</span>
+        {%- endif -%}
+        {%- if is_bestseller -%}
+          <span class="lux-badge lux-badge--best">الأكثر مبيعاً</span>
         {%- endif -%}
       </div>
+      <button
+        type="button"
+        class="lux-card__quick-view"
+        aria-label="معاينة سريعة"
+        data-qv-image="{{ qv_image }}"
+        data-qv-title="{{ card_product.title | escape }}"
+        data-qv-price="{{ qv_price | escape }}"
+        data-qv-compare="{{ qv_compare | escape }}"
+        data-qv-url="{{ card_product.url }}"
+        data-qv-available="{{ card_product.available }}"
+        onclick="event.preventDefault(); (window.essalemQuickView ? window.essalemQuickView(this) : (window.location.href = this.dataset.qvUrl));"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+        معاينة سريعة
+      </button>
     </div>
   </a>
   <div class="lux-card__info">
@@ -57,13 +88,12 @@
         <span class="lux-price">{{ card_product.price | money }}</span>
       {%- endif -%}
     </div>
-    <button
-      class="lux-card__quick-add"
-      data-variant-id="{{ card_product.variants.first.id }}"
-      onclick="window.luxQuickAdd && window.luxQuickAdd(this)"
-      {%- if card_product.available == false %} disabled{%- endif -%}
+    <a
+      href="{{ card_product.url }}"
+      class="lux-card__order-now{% if card_product.available == false %} is-disabled{% endif %}"
+      {%- if card_product.available == false %} aria-disabled="true" tabindex="-1"{%- endif -%}
     >
-      {%- if card_product.available -%}+ Ajouter au panier{%- else -%}Épuisé{%- endif -%}
-    </button>
+      {%- if card_product.available -%}اطلب الآن{%- else -%}نفذت الكمية{%- endif -%}
+    </a>
   </div>
 </div>
