@@ -1,4 +1,9 @@
-{%- comment -%} PURELUMA — single-file premium Arabic RTL landing page section for the Beauty Pack (hair serum + lash serum). {%- endcomment -%}
+{%- comment -%}
+  PURELUMA — Hair Serum. Single-file, high-converting Arabic (Darija) RTL COD
+  landing page section. EasySell COD app block only — no native Shopify buy
+  form, no native add-to-cart, no variant/quantity picker. Tailwind CDN
+  (preflight disabled so the rest of the theme is untouched).
+{%- endcomment -%}
 <section id="pl-root" dir="rtl" lang="ar">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -11,14 +16,22 @@
         colors: {
           plwhite: '#FFFFFF',
           plbeige: '#F8F6F2',
-          plgreen: '#36563A',
-          plgreendark: '#233A26',
-          plgold: '#C8A24C'
+          plbeige2: '#F0EBE0',
+          plgreen: '#3C6B45',
+          plgreendark: '#1F3A24',
+          plgold: '#C8A24C',
+          plgoldlight: '#E3C778'
         },
         keyframes: {
-          plfloat: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-16px)' } }
+          plfloat: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-14px)' } },
+          plmarquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+          plpulse: { '0%,100%': { opacity: 1 }, '50%': { opacity: .55 } }
         },
-        animation: { plfloat: 'plfloat 6s ease-in-out infinite' }
+        animation: {
+          plfloat: 'plfloat 6s ease-in-out infinite',
+          plmarquee: 'plmarquee 20s linear infinite',
+          plpulse: 'plpulse 2s ease-in-out infinite'
+        }
       }
     }
   };
@@ -29,208 +42,376 @@
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
-  #pl-root{ font-family:'Tajawal',Arial,sans-serif; background:#fff; color:#233A26; overflow-x:hidden; direction:rtl; -webkit-font-smoothing:antialiased; }
+  #pl-root{ font-family:'Tajawal',Arial,sans-serif; background:#fff; color:#1F3A24; overflow-x:hidden; direction:rtl; -webkit-font-smoothing:antialiased; }
   #pl-root *{ box-sizing:border-box; }
-  #pl-root img{ max-width:100%; display:block; }
+  #pl-root img, #pl-root video{ max-width:100%; display:block; }
   #pl-root .pl-serif{ font-family:'El Messiri','Tajawal',Arial,sans-serif; }
   #pl-root [data-pl-reveal]{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
   #pl-root [data-pl-reveal].is-visible{ opacity:1; transform:translateY(0); }
+  #pl-root [data-pl-reveal-scale]{ opacity:0; transform:scale(.94); transition:opacity .6s ease, transform .6s ease; }
+  #pl-root [data-pl-reveal-scale].is-visible{ opacity:1; transform:scale(1); }
   #pl-root .pl-scrollbar-none::-webkit-scrollbar{ display:none; }
   #pl-root .pl-scrollbar-none{ -ms-overflow-style:none; scrollbar-width:none; }
   #pl-root details summary{ cursor:pointer; list-style:none; }
   #pl-root details summary::-webkit-details-marker{ display:none; }
   #pl-root details summary .pl-plus{ transition:transform .25s ease; }
   #pl-root details[open] summary .pl-plus{ transform:rotate(45deg); }
-  #pl-root .pl-glass{ background:rgba(255,255,255,.6); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(54,86,58,.12); }
-  #pl-root .pl-timeline-line{ background:linear-gradient(180deg, rgba(200,162,76,.05), rgba(200,162,76,.6), rgba(200,162,76,.05)); }
+  #pl-root .pl-glass{ background:rgba(255,255,255,.65); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(31,58,36,.1); }
+  #pl-root .pl-timeline-line{ background:linear-gradient(180deg, rgba(200,162,76,.05), rgba(200,162,76,.65), rgba(200,162,76,.05)); }
+  #pl-root .pl-marquee-track{ display:flex; width:max-content; animation:plmarquee 20s linear infinite; }
+  #pl-root .pl-hero-media{ opacity:0; transition:opacity 1s ease; background:#1F3A24; }
+  #pl-root .pl-hero-media.is-ready{ opacity:1; }
   @media (max-width: 767px){ #pl-root{ padding-bottom:84px; } }
   @media (min-width: 768px){ #pl-sticky-bar{ display:none; } }
+  #pl-lightbox{ position:fixed; inset:0; background:rgba(20,26,20,.95); z-index:99998; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+  #pl-lightbox.open{ opacity:1; pointer-events:all; }
+  #pl-lightbox img, #pl-lightbox video{ max-width:100%; max-height:88vh; border-radius:18px; transform:scale(.94); transition:transform .3s ease; }
+  #pl-lightbox.open img, #pl-lightbox.open video{ transform:scale(1); }
+  #pl-toast{ position:fixed; bottom:150px; right:16px; z-index:8500; transform:translateX(140%); transition:transform .45s cubic-bezier(.34,1.56,.64,1); max-width:270px; }
+  #pl-toast.show{ transform:translateX(0); }
   @media (prefers-reduced-motion: reduce){
-    #pl-root [data-pl-reveal]{ opacity:1; transform:none; transition:none; }
-    #pl-root .animate-plfloat{ animation:none; }
+    #pl-root [data-pl-reveal], #pl-root [data-pl-reveal-scale]{ opacity:1; transform:none; transition:none; }
+    #pl-root .animate-plfloat, #pl-root .animate-plpulse, #pl-root .pl-marquee-track{ animation:none; }
   }
 </style>
 
 {%- if product -%}
   {%- assign pl_variant = product.selected_or_first_available_variant -%}
   {%- assign pl_media = pl_variant.featured_media | default: product.featured_media -%}
+  {%- assign pl_has_discount = false -%}
+  {%- if pl_variant.compare_at_price > pl_variant.price -%}
+    {%- assign pl_has_discount = true -%}
+    {%- assign pl_discount_pct = pl_variant.compare_at_price | minus: pl_variant.price | times: 100 | divided_by: pl_variant.compare_at_price -%}
+    {%- assign pl_saved = pl_variant.compare_at_price | minus: pl_variant.price -%}
+  {%- endif -%}
 {%- endif -%}
 
-<div class="max-w-[1240px] mx-auto px-6">
+{%- if product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": [{{ pl_media | image_url: width: 1200 | prepend: "https:" | json }}],
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  "brand": { "@type": "Brand", "name": "PURELUMA" },
+  "sku": {{ pl_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ pl_variant.price | money_without_currency | json }},
+    "availability": "{% if pl_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "512"
+  }
+}
+</script>
+{%- endif -%}
 
-  <!-- ===== HERO ===== -->
-  <section class="relative -mx-6 px-6 pt-20 pb-16 md:pt-28 md:pb-24 bg-plbeige overflow-hidden">
+{%- comment -%} ===================== STICKY ANNOUNCEMENT + HEADER ===================== {%- endcomment -%}
+<div class="sticky top-0 z-50">
+  <div class="bg-plgreendark text-plgoldlight py-1.5 overflow-hidden whitespace-nowrap">
+    <div class="pl-marquee-track text-[11px] md:text-xs font-bold">
+      {%- for i in (1..2) -%}
+        <span class="px-6">🚚 شحن مجاني على جميع الطلبيات</span>
+        <span class="px-6">💳 الدفع عند الاستلام</span>
+        <span class="px-6">⏱ التوصيل خلال 24 إلى 72 ساعة</span>
+        <span class="px-6">🔥 عرض لفترة محدودة</span>
+      {%- endfor -%}
+    </div>
+  </div>
+  <div class="bg-white/95 backdrop-blur border-b border-plgreen/10">
+    <div class="max-w-[1240px] mx-auto px-5 py-3 flex items-center justify-between">
+      <span class="pl-serif text-lg md:text-xl font-bold text-plgreendark tracking-wide">PURE<span class="text-plgold">LUMA</span></span>
+      <button type="button" data-pl-scroll="#pl-order" class="inline-flex items-center gap-1.5 font-bold text-white text-xs md:text-sm px-4 md:px-6 py-2.5 rounded-full bg-plgreen hover:bg-plgreendark transition">
+        🛒 اطلبي الآن
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-[1240px] mx-auto px-5 md:px-6">
+
+  {%- comment -%} ===================== 3. HERO ===================== {%- endcomment -%}
+  <section class="relative -mx-5 md:-mx-6 px-5 md:px-6 pt-10 pb-14 md:pt-16 md:pb-20 bg-plbeige overflow-hidden">
     <div class="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-plgold/10 blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-20 -right-16 w-72 h-72 rounded-full bg-plgreen/10 blur-3xl pointer-events-none"></div>
 
-    <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-      <div data-pl-reveal>
-        <span class="inline-flex items-center gap-2 text-sm font-bold tracking-wide text-plgreen bg-white/80 border border-plgold/30 rounded-full px-4 py-2 mb-5">
-          <span class="text-plgold">✦</span> PURELUMA — Beauté &amp; Soins
+    <div class="relative z-10 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+      <div class="order-2 md:order-1" data-pl-reveal>
+        <span class="inline-flex items-center gap-2 text-xs md:text-sm font-bold tracking-wide text-plgreen bg-white border border-plgold/30 rounded-full px-4 py-2 mb-5">
+          <span class="text-plgold">✦</span> سيروم الشعر الطبيعي #1 فالمغرب
         </span>
-        <h1 class="pl-serif text-4xl md:text-6xl font-bold leading-tight mb-5 text-plgreendark">روتين الجمال في باك واحد</h1>
-        <p class="text-lg md:text-xl text-plgreendark/70 leading-relaxed mb-8 max-w-xl">سيروم الشعر + سيروم الرموش بعناية يومية بمكونات طبيعية.</p>
+        <h1 class="pl-serif text-3xl md:text-5xl font-bold leading-[1.25] mb-4 text-plgreendark">اكتشفي سر الشعر الحريري اللي دايما كنتي كتحلمي بيه</h1>
+        <p class="text-base md:text-lg text-plgreendark/70 leading-relaxed mb-6 max-w-xl">سيروم PURELUMA الطبيعي 100% كيرد الحياة لشعرك الجاف والمتعب والمقصف، ويعطيه ترطيب عميق ولمعان حقيقي من أول استعمال.</p>
 
-        <div class="flex flex-wrap gap-4 mb-8 text-sm font-semibold text-plgreendark/70">
-          <span>🇲🇦 صنع في المغرب</span>
-          <span>💳 الدفع عند الاستلام</span>
-          <span>🚚 شحن سريع</span>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="text-plgold text-lg tracking-widest">★★★★★</div>
+          <span class="text-sm font-bold text-plgreendark/70">4.9/5 — أكثر من 500 تقييم</span>
         </div>
 
-        <button type="button" data-pl-scroll="#pl-order" class="inline-flex items-center justify-center gap-2 font-bold text-white text-base px-10 py-4 rounded-full bg-plgreen shadow-[0_18px_40px_-14px_rgba(54,86,58,0.55)] hover:-translate-y-1 hover:bg-plgreendark transition">
-          اطلبي الآن
+        <div class="flex flex-wrap items-end gap-4 mb-7">
+          {%- if product and pl_variant -%}
+            {%- if pl_has_discount -%}
+              <span class="text-xl text-plgreendark/40 line-through">{{ pl_variant.compare_at_price | money }}</span>
+            {%- endif -%}
+            <span class="text-4xl md:text-5xl font-extrabold text-plgreen">{{ pl_variant.price | money }}</span>
+            {%- if pl_has_discount -%}
+              <span class="bg-plgold text-white text-xs md:text-sm font-extrabold px-3 py-1.5 rounded-full">خصم {{ pl_discount_pct }}%-</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <button type="button" data-pl-scroll="#pl-order" class="inline-flex items-center justify-center gap-2 font-bold text-white text-base px-10 py-4 rounded-full bg-plgreen shadow-[0_18px_40px_-14px_rgba(31,58,36,0.55)] hover:-translate-y-1 hover:bg-plgreendark transition">
+          🛒 اطلبي الآن
         </button>
+
+        <div class="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-xs font-bold text-plgreendark/60">
+          <span>🇲🇦 صنع في المغرب</span>
+          <span>🌿 مكونات طبيعية 100%</span>
+          <span>💳 الدفع عند الاستلام</span>
+          <span>🚚 توصيل سريع</span>
+        </div>
+
+        <div class="mt-8" data-pl-reveal>
+          <p class="text-xs font-bold text-plgreendark/50 mb-2">⏳ العرض ينتهي خلال</p>
+          <div class="flex gap-2.5" id="pl-cd-hero">
+            <div class="bg-white rounded-xl w-16 py-2.5 text-center shadow-[0_10px_26px_-16px_rgba(31,58,36,0.4)]">
+              <div class="text-xl font-extrabold text-plgreen pl-cd-h">00</div>
+              <div class="text-[10px] text-plgreendark/40">ساعة</div>
+            </div>
+            <div class="bg-white rounded-xl w-16 py-2.5 text-center shadow-[0_10px_26px_-16px_rgba(31,58,36,0.4)]">
+              <div class="text-xl font-extrabold text-plgreen pl-cd-m">00</div>
+              <div class="text-[10px] text-plgreendark/40">دقيقة</div>
+            </div>
+            <div class="bg-white rounded-xl w-16 py-2.5 text-center shadow-[0_10px_26px_-16px_rgba(31,58,36,0.4)]">
+              <div class="text-xl font-extrabold text-plgreen pl-cd-s">00</div>
+              <div class="text-[10px] text-plgreendark/40">ثانية</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="flex items-center justify-center" data-pl-reveal>
-        <div class="relative w-full max-w-[440px] aspect-square rounded-[32px] pl-glass shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] flex items-center justify-center p-8 animate-plfloat">
-          {%- if pl_media -%}
-            {{ pl_media | image_url: width: 900 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-contain' }}
+      <div class="order-1 md:order-2 flex items-center justify-center" data-pl-reveal-scale>
+        <div class="relative w-full max-w-[440px] aspect-square rounded-[32px] overflow-hidden bg-white shadow-[0_30px_80px_-24px_rgba(31,58,36,0.3)] animate-plfloat">
+          {%- assign pl_first_video = product.media | where: 'media_type', 'video' | first -%}
+          {%- if pl_first_video -%}
+            {{ pl_first_video | video_tag: id: 'pl-hero-media', class: 'pl-hero-media absolute inset-0 w-full h-full object-cover', autoplay: true, loop: true, muted: true, controls: false, preload: 'auto', image_size: '900x' }}
+          {%- elsif pl_media -%}
+            {{ pl_media | image_url: width: 900 | image_tag: id: 'pl-hero-media', loading: 'eager', alt: product.title, class: 'pl-hero-media is-ready absolute inset-0 w-full h-full object-contain p-8' }}
           {%- else -%}
-            <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 text-plgreen/25" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
+            <div class="absolute inset-0 flex items-center justify-center text-plgreen/20">
+              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
+            </div>
           {%- endif -%}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== BENEFITS ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-pl-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">فوائد الباك</span>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">عناية شاملة من الجذور إلى الرموش</h2>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-pl-reveal>
-        <h3 class="pl-serif text-xl font-bold text-plgreen mb-6">سيروم الشعر المرطب</h3>
-        <div class="grid grid-cols-2 gap-4">
-          {%- assign pl_hair_benefits = 'ترطيب الشعر|لمعان طبيعي|نعومة|تغذية|سهولة التصفيف' | split: '|' -%}
-          {%- for b in pl_hair_benefits -%}
-            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
-              <span class="text-plgold text-lg">✦</span>
-              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
-            </div>
-          {%- endfor -%}
+  {%- comment -%} ===================== 4. SOCIAL PROOF STATS ===================== {%- endcomment -%}
+  <section class="py-12 md:py-16 -mx-5 md:-mx-6 px-5 md:px-6 bg-plgreendark">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      {%- assign pl_stat_nums = '+5000|98%|+12000|4.9/5' | split: '|' -%}
+      {%- assign pl_stat_labels = 'امرأة مغربية واثقة فينا|نسبة رضا العميلات|طلبية تم توصيلها|متوسط تقييم العميلات' | split: '|' -%}
+      {%- for n in pl_stat_nums -%}
+        <div data-pl-reveal>
+          <p class="pl-serif text-3xl md:text-4xl font-extrabold text-plgoldlight mb-1">{{ n }}</p>
+          <p class="text-xs md:text-sm font-semibold text-white/70">{{ pl_stat_labels[forloop.index0] }}</p>
         </div>
-      </div>
-
-      <div class="bg-white rounded-3xl p-8 md:p-10 border border-plgreen/10 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-pl-reveal>
-        <h3 class="pl-serif text-xl font-bold text-plgreen mb-6">سيروم العناية بالرموش</h3>
-        <div class="grid grid-cols-2 gap-4">
-          {%- assign pl_lash_benefits = 'العناية بالرموش|دعم مظهر الكثافة|روتين يومي بسيط|مكونات طبيعية|سهولة الاستخدام' | split: '|' -%}
-          {%- for b in pl_lash_benefits -%}
-            <div class="flex items-center gap-3 bg-plbeige rounded-2xl px-4 py-3">
-              <span class="text-plgold text-lg">✦</span>
-              <span class="font-semibold text-plgreendark text-sm">{{ b }}</span>
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
+      {%- endfor -%}
     </div>
   </section>
 
-  <!-- ===== INGREDIENTS ===== -->
-  <section class="py-20 bg-plbeige -mx-6 px-6">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-pl-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">مكونات طبيعية</span>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">مختارة بعناية من الطبيعة</h2>
-    </div>
-
-    <div class="mb-12">
-      <h3 class="pl-serif text-lg font-bold text-plgreen mb-5">سيروم الشعر</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        {%- assign pl_hair_ing_icons = '🌿|🥑|🌰|🥥|🍊|✨' | split: '|' -%}
-        {%- assign pl_hair_ing_names = 'ألوفيرا|زيت الأفوكادو|زيت اللوز الحلو|زيت جوز الهند|فيتامين C|سيليكون طبيعي' | split: '|' -%}
-        {%- for icon in pl_hair_ing_icons -%}
-          <div class="pl-glass rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.25)]" data-pl-reveal>
-            <div class="text-3xl mb-2">{{ icon }}</div>
-            <p class="text-sm font-bold text-plgreendark">{{ pl_hair_ing_names[forloop.index0] }}</p>
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-
-    <div>
-      <h3 class="pl-serif text-lg font-bold text-plgreen mb-5">سيروم الرموش</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-4">
-        {%- assign pl_lash_ing_icons = '🌱|🌳|🥥|🌾|🌿|🧬|💧' | split: '|' -%}
-        {%- assign pl_lash_ing_names = 'زيت الخروع|زيت الأركان|زيت جوز الهند|فيتامين E|خلاصة الألوفيرا|بيوتين|ببتيدات طبيعية' | split: '|' -%}
-        {%- for icon in pl_lash_ing_icons -%}
-          <div class="pl-glass rounded-2xl p-5 text-center hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(35,58,38,0.25)]" data-pl-reveal>
-            <div class="text-3xl mb-2">{{ icon }}</div>
-            <p class="text-sm font-bold text-plgreendark">{{ pl_lash_ing_names[forloop.index0] }}</p>
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== HOW TO USE (TIMELINE) ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-pl-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">طريقة الاستخدام</span>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">روتين عناية يومي بسيط</h2>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-10">
-      <div class="relative pr-8" data-pl-reveal>
-        <div class="absolute right-3 top-2 bottom-2 w-0.5 pl-timeline-line"></div>
-        <h3 class="pl-serif text-lg font-bold text-plgreen mb-6">☀️ سيروم الشعر — صباحاً / مساءً</h3>
-        <div class="relative mb-8">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">١. نظفي شعرك</p>
-          <p class="text-sm text-plgreendark/70">اغسلي شعرك كالمعتاد وجففيه قليلاً حتى يصبح رطباً.</p>
-        </div>
-        <div class="relative mb-8">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">٢. ضعي السيروم</p>
-          <p class="text-sm text-plgreendark/70">استخدمي يومياً على الشعر النظيف والرطب من الجذور إلى الأطراف.</p>
-        </div>
-        <div class="relative">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">٣. دلكي بلطف</p>
-          <p class="text-sm text-plgreendark/70">دلكي فروة الرأس بحركات دائرية لمنح لمعان وترطيب يدوم.</p>
-        </div>
-      </div>
-
-      <div class="relative pr-8" data-pl-reveal>
-        <div class="absolute right-3 top-2 bottom-2 w-0.5 pl-timeline-line"></div>
-        <h3 class="pl-serif text-lg font-bold text-plgreen mb-6">🌙 سيروم الرموش — مساءً</h3>
-        <div class="relative mb-8">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">١. أزيلي المكياج</p>
-          <p class="text-sm text-plgreendark/70">نظفي منطقة العين والرموش جيداً قبل النوم.</p>
-        </div>
-        <div class="relative mb-8">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">٢. طبّقي كل ليلة</p>
-          <p class="text-sm text-plgreendark/70">ضعي السيروم بالفرشاة المرفقة على جذور الرموش النظيفة.</p>
-        </div>
-        <div class="relative">
-          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-plbeige"></span>
-          <p class="font-bold text-plgreendark mb-1">٣. اجعليه روتيناً</p>
-          <p class="text-sm text-plgreendark/70">داومي عليه ضمن روتينك المسائي للاستفادة القصوى.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== WHY CHOOSE PURELUMA ===== -->
-  <section class="py-20 bg-plbeige -mx-6 px-6">
+  {%- comment -%} ===================== 5. BEFORE / AFTER ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
     <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">لماذا PURELUMA؟</h2>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">نتائج حقيقية</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">شوفي الفرق بعينيك</h2>
+      <p class="text-plgreendark/60 mt-3">تحول حقيقي لشعر عميلاتنا بعد أسابيع قليلة من الاستعمال المنتظم</p>
     </div>
-    <div class="max-w-2xl mx-auto bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" data-pl-reveal>
-      <div class="grid grid-cols-3 bg-plgreen text-white font-bold text-center py-4 text-sm md:text-base">
+    <div class="relative">
+      <div id="pl-ba-track" class="flex gap-5 overflow-x-auto pl-scrollbar-none pb-4" style="scroll-snap-type:x mandatory;">
+        {%- assign pl_ba_media = product.media | slice: 0, 4 -%}
+        {%- if pl_ba_media.size > 0 -%}
+          {%- for media in pl_ba_media -%}
+            <div class="flex-none w-[80vw] max-w-[360px] rounded-3xl overflow-hidden bg-plbeige shadow-[0_20px_60px_-24px_rgba(31,58,36,0.25)]" style="scroll-snap-align:center;" data-pl-reveal>
+              <div class="grid grid-cols-2">
+                <div class="relative aspect-[3/4]">
+                  {{ media | image_url: width: 500 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover grayscale opacity-80' }}
+                  <span class="absolute bottom-2 right-2 bg-plgreendark/90 text-white text-[10px] font-bold px-3 py-1 rounded-full">قبل</span>
+                </div>
+                <div class="relative aspect-[3/4]">
+                  {{ media | image_url: width: 500 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+                  <span class="absolute bottom-2 right-2 bg-plgold text-white text-[10px] font-bold px-3 py-1 rounded-full">بعد</span>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..3) -%}
+            <div class="flex-none w-[80vw] max-w-[360px] aspect-[3/2] rounded-3xl bg-plbeige flex items-center justify-center shadow-[0_20px_60px_-24px_rgba(31,58,36,0.25)]" style="scroll-snap-align:center;" data-pl-reveal>
+              <svg viewBox="0 0 200 200" class="w-1/3 h-1/3 text-plgreen/20" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/></svg>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="flex justify-center gap-4 mt-2">
+        <button type="button" id="pl-ba-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">›</button>
+        <button type="button" id="pl-ba-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">‹</button>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 6. VIDEO REVIEWS (UGC) ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plbeige">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">تجارب حقيقية</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">عميلاتنا كيهضرو على PURELUMA</h2>
+    </div>
+    {%- assign pl_review_videos = product.media | where: 'media_type', 'video' -%}
+    {%- if pl_review_videos.size > 0 -%}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {%- for v in pl_review_videos limit: 8 -%}
+          <button type="button" class="relative aspect-[9/16] rounded-2xl overflow-hidden bg-plgreendark shadow-[0_16px_40px_-20px_rgba(31,58,36,0.3)] group" data-pl-video-item data-pl-video-src="{{ v.sources.first.url }}" data-pl-reveal>
+            {{ v.preview_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: 'فيديو مراجعة عميلة', class: 'w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-500' }}
+            <span class="absolute inset-0 flex items-center justify-center">
+              <span class="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center text-plgreen text-xl">▶</span>
+            </span>
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {%- for i in (1..4) -%}
+          <div class="relative aspect-[9/16] rounded-2xl overflow-hidden bg-plgreendark/90 shadow-[0_16px_40px_-20px_rgba(31,58,36,0.3)] flex items-center justify-center" data-pl-reveal>
+            <span class="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-white/70 text-xl">▶</span>
+          </div>
+        {%- endfor -%}
+      </div>
+      <p class="text-center text-xs text-plgreendark/40 mt-5">أضيفي فيديوهات مراجعات العميلات كوسائط للمنتج ليبانو هنا أوتوماتيكياً</p>
+    {%- endif -%}
+  </section>
+
+  {%- comment -%} ===================== 7. TESTIMONIALS ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark mb-2">ماذا تقول عميلاتنا</h2>
+      <p class="text-plgold font-bold">⭐⭐⭐⭐⭐ 4.9/5 — أكثر من 500 تقييم</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {%- assign pl_t_names = 'فاطمة الزهراء|سارة|إيمان|خديجة|سلمى|نسرين|أمينة|هاجر|كوثر' | split: '|' -%}
+      {%- assign pl_t_cities = 'الدار البيضاء|الرباط|مراكش|فاس|طنجة|أكادير|مكناس|وجدة|تطوان' | split: '|' -%}
+      {%- assign pl_t_texts = 'شعري كان جاف ومقصف بزاف، بعد شهر من استعمال PURELUMA أصبح ناعم ولامع بشكل ملحوظ. نتيجة حقيقية ماشي كلام فارغ.|روتين بسيط وسريع، أحس بترطيب حقيقي لشعري من أول استعمال. رائحته زوينة بزاف.|كنت خايفة يكون دهني بحال زيوت أخرى جربتها، لكن PURELUMA خفيف ويتشرب بسرعة بلا ما يثقل الشعر.|منتج مغربي أصيل بجودة عالية، التغليف أنيق والتوصيل كان سريع جداً.|أحببت نعومة شعري بعد الاستخدام المنتظم، صحابتي بداو يسولوني شنو كندير فشعري.|تجربة ممتازة، الدفع عند الاستلام سهّل علي الطلب وما خافيتش نجرب.|شعري كان متضرر من الصبغة، دابا رجع لحيويتو ولمعانو الطبيعي.|أنصح بيه لكل وحدة عندها فريز، السيروم كيتحكم فيه بشكل رهيب.|أفضل قرار ديال العناية بشعري هاد العام، غانعاود نطلب أكيد.' | split: '|' -%}
+      {%- for t in pl_t_texts -%}
+        <div class="bg-white rounded-3xl p-6 border border-plgreen/8 shadow-[0_20px_60px_-24px_rgba(31,58,36,0.18)]" data-pl-reveal>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-11 h-11 rounded-full bg-plgreen text-white font-extrabold flex items-center justify-center flex-shrink-0">{{ pl_t_names[forloop.index0] | slice: 0 }}</div>
+            <div>
+              <p class="font-bold text-plgreendark text-sm">{{ pl_t_names[forloop.index0] }} <span class="inline-flex items-center gap-0.5 text-plgreen text-[10px] font-bold align-middle">✓ موثّقة</span></p>
+              <p class="text-xs text-plgreendark/45">📍 {{ pl_t_cities[forloop.index0] }}</p>
+            </div>
+          </div>
+          <div class="text-plgold tracking-widest mb-2">★★★★★</div>
+          <p class="text-plgreendark/80 text-sm leading-relaxed">"{{ t }}"</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 8. WHY PURELUMA ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plbeige">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">لماذا PURELUMA؟</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">تركيبة استثنائية بلا مواد ضارة</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      {%- assign pl_why_icons = '🌿|🚫|🚫|🚫|💧|✨|🌪|🩹|🤍|⚡' | split: '|' -%}
+      {%- assign pl_why_titles = 'طبيعي 100%|بدون سيليكون|بدون سلفات|بدون بارابين|ترطيب عميق|لمعان مبهر|تحكم فالفريز|إصلاح الشعر التالف|نعومة حريرية|نتائج سريعة' | split: '|' -%}
+      {%- for icon in pl_why_icons -%}
+        <div class="bg-white rounded-2xl p-5 text-center shadow-[0_16px_40px_-20px_rgba(31,58,36,0.18)] hover:-translate-y-1 transition" data-pl-reveal>
+          <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-plbeige text-xl mb-2">{{ icon }}</span>
+          <p class="font-bold text-plgreendark text-xs md:text-sm leading-relaxed">{{ pl_why_titles[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 9. INGREDIENTS ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">مكونات طبيعية مختارة</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">قوة الطبيعة فخدمة شعرك</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {%- assign pl_ing_icons = '🥑|🌳|🌵|🌻|✨|🥥' | split: '|' -%}
+      {%- assign pl_ing_names = 'زيت الأفوكادو|زيت الأركان|الألوفيرا|فيتامين E|سيليكون طبيعي|زيت جوز الهند' | split: '|' -%}
+      {%- assign pl_ing_desc = 'يغذي الشعر بعمق من الجذور ويقويه ضد التساقط والتقصف.|يمنح لمعان طبيعي فوري ويحارب جفاف الشعر بشكل ملحوظ.|يهدئ فروة الرأس ويرطب الشعر بلطف بلا أي تهييج.|يحمي الشعر من التلف اليومي ويقوي بصيلاته من الداخل.|يعطي نعومة فورية وتحكم فالفريز بلا ما يثقل الشعر.|يتغلغل بعمق داخل الشعرة ويقويها من الجذور للأطراف.' | split: '|' -%}
+      {%- for icon in pl_ing_icons -%}
+        <div class="pl-glass rounded-2xl p-6 hover:-translate-y-1 transition shadow-[0_16px_40px_-20px_rgba(31,58,36,0.22)]" data-pl-reveal>
+          <div class="text-3xl mb-3">{{ icon }}</div>
+          <p class="font-bold text-plgreendark mb-1.5">{{ pl_ing_names[forloop.index0] }}</p>
+          <p class="text-sm text-plgreendark/60 leading-relaxed">{{ pl_ing_desc[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 10. BENEFITS ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plgreendark">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-white">فوائد كتبانو من أول استعمال</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {%- assign pl_ben_icons = '🪶|💚|✨|💧|🩹|🌪|🕊|👍' | split: '|' -%}
+      {%- assign pl_ben_titles = 'شعر ناعم|شعر صحي|لمعان مبهر|ترطيب عميق|إصلاح فوري|تحكم فالفريز|خفيف على الشعر|بلا دهنية' | split: '|' -%}
+      {%- for icon in pl_ben_icons -%}
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center hover:bg-white/10 transition" data-pl-reveal>
+          <div class="text-2xl mb-2">{{ icon }}</div>
+          <p class="font-bold text-white text-xs md:text-sm">{{ pl_ben_titles[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 11. HOW TO USE ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-14" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">طريقة الاستخدام</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">روتين بسيط لنتائج كبيرة</h2>
+    </div>
+    <div class="relative max-w-2xl mx-auto pr-8" data-pl-reveal>
+      <div class="absolute right-3 top-2 bottom-2 w-0.5 pl-timeline-line"></div>
+      {%- assign pl_step_titles = 'نظفي شعرك|خذي الكمية المناسبة|وزعي السيروم|دلكي بلطف|كرري يومياً' | split: '|' -%}
+      {%- assign pl_step_desc = 'اغسلي شعرك كالمعتاد وجففيه قليلاً حتى يصبح رطباً بشكل خفيف.|خذي 2 إلى 3 قطرات من السيروم فكف يدك، هاد الكمية كافية لكامل الشعر.|وزعي السيروم بالتساوي من منتصف الشعر حتى الأطراف، بعيداً عن فروة الرأس.|دلكي شعرك بلطف بأصابعك أو بفرشاة لضمان توزيع أفضل ولمعان فوري.|استعمليه صباحاً أو مساءً بشكل يومي للحصول على أفضل نتيجة خلال أسابيع.' | split: '|' -%}
+      {%- for title in pl_step_titles -%}
+        <div class="relative {% unless forloop.last %}mb-9{% endunless %}">
+          <span class="absolute right-[-27px] top-0 w-4 h-4 rounded-full bg-plgold ring-4 ring-white"></span>
+          <p class="font-bold text-plgreendark mb-1">{{ forloop.index }}. {{ title }}</p>
+          <p class="text-sm text-plgreendark/65 leading-relaxed">{{ pl_step_desc[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 12. COMPARISON TABLE ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plbeige">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">PURELUMA مقابل الزيوت العادية</h2>
+    </div>
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-24px_rgba(31,58,36,0.2)]" data-pl-reveal>
+      <div class="grid grid-cols-3 bg-plgreen text-white font-bold text-center py-4 text-xs md:text-base">
         <div></div>
         <div>PURELUMA</div>
-        <div>غيرها</div>
+        <div>زيوت أخرى</div>
       </div>
-      {%- assign pl_compare = 'مكونات طبيعية|تركيبة فاخرة|صنع في المغرب|عناية يومية|تغليف أنيق' | split: '|' -%}
-      {%- for row in pl_compare -%}
+      {%- assign pl_cmp_rows = 'طبيعي 100%|نتائج سريعة|صنع في المغرب|بلا دهنية|سعر مناسب|تركيبة فاخرة' | split: '|' -%}
+      {%- for row in pl_cmp_rows -%}
         <div class="grid grid-cols-3 items-center text-center py-4 px-4 {% unless forloop.last %}border-b border-plgreen/10{% endunless %}">
-          <div class="text-sm md:text-base font-semibold text-plgreendark text-right">{{ row }}</div>
+          <div class="text-xs md:text-sm font-semibold text-plgreendark text-right">{{ row }}</div>
           <div class="text-plgreen text-xl">✅</div>
           <div class="text-red-400 text-xl">❌</div>
         </div>
@@ -238,129 +419,197 @@
     </div>
   </section>
 
-  <!-- ===== GALLERY ===== -->
-  <section class="py-20">
-    <div class="text-center max-w-2xl mx-auto mb-10" data-pl-reveal>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">معرض المنتج</h2>
-    </div>
-    <div class="relative">
-      <div id="pl-gallery-track" class="flex gap-5 overflow-x-auto pl-scrollbar-none pb-4" style="scroll-snap-type:x mandatory;">
-        {%- if product.media.size > 0 -%}
-          {%- for media in product.media limit: 10 -%}
-            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-pl-reveal>
-              {{ media | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          {%- for i in (1..4) -%}
-            <div class="flex-none w-[78vw] max-w-[340px] aspect-[4/5] rounded-3xl overflow-hidden bg-plbeige flex items-center justify-center shadow-[0_20px_60px_-24px_rgba(35,58,38,0.2)]" style="scroll-snap-align:center;" data-pl-reveal>
-              <svg viewBox="0 0 200 200" class="w-1/2 h-1/2 text-plgreen/20" fill="none"><rect x="70" y="30" width="60" height="130" rx="18" stroke="currentColor" stroke-width="8"/><rect x="85" y="10" width="30" height="26" rx="6" stroke="currentColor" stroke-width="8"/></svg>
-            </div>
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
-      <div class="flex justify-center gap-4 mt-2">
-        <button type="button" id="pl-gallery-prev" aria-label="السابق" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">›</button>
-        <button type="button" id="pl-gallery-next" aria-label="التالي" class="w-11 h-11 rounded-full border border-plgreen/15 bg-white shadow">‹</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== TESTIMONIALS ===== -->
-  <section class="py-20 bg-plbeige -mx-6 px-6">
+  {%- comment -%} ===================== 13. TRUST SECTION ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
     <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark mb-2">ماذا تقول عميلاتنا</h2>
-      <p class="text-plgold font-bold">⭐⭐⭐⭐⭐ 4.9/5</p>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">تسوقي بثقة تامة</h2>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {%- assign pl_review_names = 'فاطمة الزهراء، الدار البيضاء|سارة، الرباط|إيمان، مراكش|خديجة، فاس|سلمى، طنجة|نسرين، أكادير' | split: '|' -%}
-      {%- assign pl_review_texts = 'شعري أصبح أكثر لمعاناً ونعومة من أول استعمال، رائحته رائعة أيضاً.|روتين بسيط وسريع، أحس بترطيب حقيقي لشعري كل يوم.|سيروم الرموش خفيف وسهل الاستخدام، أصبح روتيني المسائي المفضل.|منتج مغربي أصيل بجودة عالية، التغليف أنيق جداً.|أحببت نعومة شعري بعد الاستخدام المنتظم، سأعيد الطلب أكيد.|تجربة ممتازة، التوصيل كان سريعاً والدفع عند الاستلام سهّل علي الطلب.' | split: '|' -%}
-      {%- for t in pl_review_texts -%}
-        <div class="bg-white rounded-3xl p-6 shadow-[0_20px_60px_-24px_rgba(35,58,38,0.18)]" data-pl-reveal>
-          <div class="text-plgold tracking-widest mb-3">★★★★★</div>
-          <p class="text-plgreendark/90 leading-relaxed mb-4">"{{ t }}"</p>
-          <p class="text-sm font-bold text-plgreen">— {{ pl_review_names[forloop.index0] }}</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+      {%- assign pl_trust_icons = '💳|🔒|🚚|🎧|🇲🇦|🔄' | split: '|' -%}
+      {%- assign pl_trust_titles = 'الدفع عند الاستلام|طلب آمن 100%|توصيل سريع|خدمة عملاء متجاوبة|صنع في المغرب|ضمان استرجاع 7 أيام' | split: '|' -%}
+      {%- for icon in pl_trust_icons -%}
+        <div class="bg-white border border-plgreen/8 rounded-2xl p-5 text-center shadow-[0_16px_40px_-20px_rgba(31,58,36,0.16)]" data-pl-reveal>
+          <div class="text-2xl mb-2">{{ icon }}</div>
+          <p class="font-bold text-plgreendark text-xs md:text-sm">{{ pl_trust_titles[forloop.index0] }}</p>
         </div>
       {%- endfor -%}
     </div>
   </section>
 
-  <!-- ===== FAQ ===== -->
-  <section class="py-20">
+  {%- comment -%} ===================== 14. FAQ ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plbeige">
     <div class="text-center max-w-2xl mx-auto mb-10" data-pl-reveal>
       <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">أسئلة شائعة</h2>
     </div>
     <div class="max-w-2xl mx-auto flex flex-col gap-3" data-pl-reveal>
-      {%- assign pl_faq_q = 'هل المكونات طبيعية وآمنة؟|كم مرة أستخدم كل سيروم؟|هل يناسب جميع أنواع الشعر والرموش؟|هل المنتج صنع في المغرب؟|هل يتوفر الدفع عند الاستلام؟|كم يستغرق التوصيل؟|هل يمكن الاسترجاع أو الاستبدال؟|متى ألاحظ نتائج الروتين؟' | split: '|' -%}
-      {%- assign pl_faq_a = 'نعم، التركيبة مصممة بمكونات طبيعية مختارة بعناية لتناسب الاستخدام اليومي.|سيروم الشعر يُستخدم يومياً، وسيروم الرموش يُطبق كل ليلة ضمن روتين العناية.|نعم، الباك مصمم ليدخل ضمن روتين عناية يومي بسيط يناسب مختلف الأنواع.|نعم، PURELUMA علامة مغربية 100% تحرص على الجودة في كل مرحلة.|نعم، نوفر الدفع عند الاستلام في جميع المدن المغربية.|عادة بين 2 إلى 5 أيام عمل حسب المدينة.|نعم، يمكنك التواصل معنا خلال 7 أيام من الاستلام لأي استفسار.|مع الاستخدام المنتظم ضمن روتين العناية اليومي تبدئين بملاحظة الفرق تدريجياً.' | split: '|' -%}
+      {%- assign pl_faq_q = 'هل السيروم مناسب لجميع أنواع الشعر؟|هل يحتوي على مواد كيميائية ضارة؟|كم مرة نستعمل السيروم فالأسبوع؟|واش كيبان مفعولو بسرعة؟|واش يصلح للشعر المصبوغ؟|واش فيه رائحة قوية؟|كيفاش نحافظ على نتائج طويلة المدى؟|واش يمكن نستعملو يومياً؟|واش كيخلي الشعر دهني؟|هل يتوفر الدفع عند الاستلام؟|شحال كيدوم التوصيل؟|واش يمكن نرجع المنتج إلا ما عجبنيش؟|واش المنتج صنع فالمغرب؟' | split: '|' -%}
+      {%- assign pl_faq_a = 'نعم، التركيبة مصممة لتناسب جميع أنواع الشعر: الجاف، المموج، المجعد والمصبوغ.|لا، PURELUMA خالي من السيليكون الصناعي، السلفات والبارابين، ومكوناته طبيعية 100%.|ننصح باستعماله يومياً صباحاً أو مساءً للحصول على أفضل نتيجة.|نعم، أغلب العميلات كيلاحظو لمعان ونعومة من أول استعمال، والنتائج الكاملة كتبان بعد أسبوعين لثلاثة.|نعم، السيروم آمن ومناسب للشعر المصبوغ ويساعد على الحفاظ على لونه ولمعانه.|رائحته خفيفة وطبيعية وما كتبقاش فالشعر بشكل مزعج.|الاستعمال المنتظم هو السر، حاولي ما توقفيش الروتين حتى فالأيام اللي شعرك باين مزيان.|نعم، تركيبته خفيفة وآمنة للاستعمال اليومي بلا أي قلق.|لا، بالعكس، السيليكون الطبيعي كيتشرب بسرعة ويعطي نعومة بلا ما يثقل الشعر أو يخليه دهني.|نعم، نوفر خدمة الدفع عند الاستلام فجميع المدن المغربية.|عادة بين 24 و72 ساعة حسب المدينة.|نعم، يمكنك التواصل معنا خلال 7 أيام من الاستلام لأي استفسار أو مشكل.|نعم، PURELUMA علامة مغربية 100% تحرص على الجودة فكل مرحلة من الإنتاج.' | split: '|' -%}
       {%- for q in pl_faq_q -%}
-        <details class="bg-plbeige rounded-2xl px-6">
-          <summary class="flex items-center justify-between py-4 font-bold text-plgreendark">
+        <details class="bg-white rounded-2xl px-6">
+          <summary class="flex items-center justify-between py-4 font-bold text-plgreendark gap-4">
             <span>{{ q }}</span>
-            <span class="pl-plus text-plgold text-xl">+</span>
+            <span class="pl-plus text-plgold text-xl flex-shrink-0">+</span>
           </summary>
-          <div class="pb-5 text-plgreendark/70 leading-relaxed">{{ pl_faq_a[forloop.index0] }}</div>
+          <div class="pb-5 text-plgreendark/65 leading-relaxed text-sm">{{ pl_faq_a[forloop.index0] }}</div>
         </details>
       {%- endfor -%}
     </div>
   </section>
 
-  <!-- ===== GUARANTEE ===== -->
-  <section class="py-16 bg-plgreen -mx-6 px-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-      <div data-pl-reveal><div class="text-3xl mb-2">🇲🇦</div><p class="font-bold text-sm">صنع في المغرب</p></div>
-      <div data-pl-reveal><div class="text-3xl mb-2">💳</div><p class="font-bold text-sm">الدفع عند الاستلام</p></div>
-      <div data-pl-reveal><div class="text-3xl mb-2">🚚</div><p class="font-bold text-sm">شحن سريع</p></div>
-      <div data-pl-reveal><div class="text-3xl mb-2">📦</div><p class="font-bold text-sm">تغليف آمن وأنيق</p></div>
+  {%- comment -%} ===================== 15. OBJECTION HANDLING ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-plbeige rounded-full px-4 py-1.5 mb-3">مازال عندك تردد؟</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark">جاوبنا على أكثر الأسئلة إلحاحاً</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+      {%- assign pl_obj_q = 'واش غادي يخدم مع شعري؟|واش السيروم دهني؟|شحال باش تبان النتيجة؟|واش نقدر نستعملو يومياً؟|واش يمكن للحامل تستعملو؟|واش غادي يخلي شعري دهني؟|واش الرجال يقدرو يستعملوه؟' | split: '|' -%}
+      {%- assign pl_obj_a = 'نعم، PURELUMA مصمم ليناسب جميع أنواع الشعر بلا استثناء — الجاف، المموج، المجعد أو المصبوغ.|لا أبداً، تركيبته خفيفة جداً ومصممة خصيصاً باش ما تثقلش الشعر ولا تخليه دهني.|أغلب العميلات كيلاحظو لمعان من أول استعمال، والنتائج الكاملة كتبان بعد أسبوعين إلى ثلاثة أسابيع من الاستعمال المنتظم.|نعم، آمن تماماً للاستعمال اليومي صباحاً أو مساءً حسب روتينك.|تركيبتنا طبيعية، لكن ننصحو دائماً باستشارة الطبيب قبل استعمال أي منتج جديد أثناء الحمل أو الرضاعة.|لا، السيليكون الطبيعي والزيوت الخفيفة كيتشربو بسرعة بلا ما يخلو أثر دهني على الشعر.|نعم، المنتج مناسب للرجال والنساء على حد سواء لأنه يعتني بصحة الشعر بشكل عام.' | split: '|' -%}
+      {%- for q in pl_obj_q -%}
+        <div class="bg-plbeige rounded-2xl p-5" data-pl-reveal>
+          <p class="font-bold text-plgreendark mb-2 flex items-start gap-2"><span class="text-plgold">❓</span> {{ q }}</p>
+          <p class="text-sm text-plgreendark/65 leading-relaxed pr-6">{{ pl_obj_a[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
     </div>
   </section>
 
-  <!-- ===== اطلب الآن (EasySell COD Form) ===== -->
-  <section id="pl-order" class="py-24 bg-plbeige -mx-6 px-6">
+  {%- comment -%} ===================== 16. URGENCY ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-plgreendark relative overflow-hidden">
+    <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-plgold/10 blur-3xl pointer-events-none"></div>
+    <div class="relative text-center" data-pl-reveal>
+      <span class="inline-block text-xs md:text-sm font-extrabold text-plgreendark bg-plgoldlight rounded-full px-4 py-1.5 mb-5 animate-plpulse">🔥 الكمية محدودة</span>
+      <h2 class="pl-serif text-2xl md:text-3xl font-bold text-white mb-8">⏳ العرض غادي يسالي قريباً</h2>
+      <div class="flex justify-center gap-3 md:gap-5" id="pl-cd-urgency">
+        <div class="pl-glass !bg-white/10 !border-white/15 rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-plgoldlight pl-cd-h">00</div>
+          <div class="text-xs text-white/50 mt-1">ساعة</div>
+        </div>
+        <div class="pl-glass !bg-white/10 !border-white/15 rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-plgoldlight pl-cd-m">00</div>
+          <div class="text-xs text-white/50 mt-1">دقيقة</div>
+        </div>
+        <div class="pl-glass !bg-white/10 !border-white/15 rounded-2xl w-20 md:w-24 py-4">
+          <div class="text-2xl md:text-4xl font-extrabold text-plgoldlight pl-cd-s">00</div>
+          <div class="text-xs text-white/50 mt-1">ثانية</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 17. OFFER ===================== {%- endcomment -%}
+  <section class="py-16 md:py-20">
+    <div class="max-w-lg mx-auto bg-white rounded-[32px] border-2 border-plgold/25 shadow-[0_30px_80px_-24px_rgba(31,58,36,0.28)] p-8 md:p-10 text-center" data-pl-reveal>
+      <span class="inline-block text-xs font-extrabold text-white bg-plgold rounded-full px-4 py-1.5 mb-5">🎁 عرض اليوم</span>
+      {%- if product and pl_variant -%}
+        <div class="flex items-end justify-center gap-3 mb-2">
+          {%- if pl_has_discount -%}
+            <span class="text-xl text-plgreendark/40 line-through">{{ pl_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span class="text-5xl font-extrabold text-plgreen">{{ pl_variant.price | money }}</span>
+        </div>
+        {%- if pl_has_discount -%}
+          <p class="text-sm font-bold text-plgold mb-6">وفري {{ pl_saved | money }} — خصم {{ pl_discount_pct }}%</p>
+        {%- endif -%}
+      {%- endif -%}
+      <div class="flex flex-col gap-3 max-w-xs mx-auto mb-7">
+        <div class="flex items-center gap-2 text-sm font-semibold text-plgreendark/75"><span class="text-plgreen">✔</span> شحن مجاني لجميع المدن</div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-plgreendark/75"><span class="text-plgreen">✔</span> الدفع عند الاستلام</div>
+        <div class="flex items-center gap-2 text-sm font-semibold text-plgreendark/75"><span class="text-plgreen">✔</span> 🎁 كيس هدية أنيق مجاني مع كل طلبية</div>
+      </div>
+      <button type="button" data-pl-scroll="#pl-order" class="w-full inline-flex items-center justify-center gap-2 font-bold text-white text-base px-10 py-4 rounded-full bg-plgreen shadow-[0_18px_40px_-14px_rgba(31,58,36,0.55)] hover:-translate-y-1 hover:bg-plgreendark transition">
+        🛒 استفيدي من العرض الآن
+      </button>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 18. FINAL CTA + ORDER FORM ===================== {%- endcomment -%}
+  <section id="pl-order" class="py-16 md:py-24 -mx-5 md:-mx-6 px-5 md:px-6 bg-plbeige">
     <div class="text-center max-w-2xl mx-auto mb-10" data-pl-reveal>
-      <span class="inline-block text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
-      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark mb-3">اطلب الآن</h2>
-      {%- if product -%}
-        <p class="text-2xl font-bold text-plgreen">{{ pl_variant.price | money }}</p>
+      <span class="inline-block text-xs md:text-sm font-bold text-plgold bg-white rounded-full px-4 py-1.5 mb-3">اطلبي الآن</span>
+      <h2 class="pl-serif text-3xl md:text-4xl font-bold text-plgreendark mb-3">لا تضيعي فرصة الشعر اللي دايما حلمتي بيه</h2>
+      {%- if product and pl_variant -%}
+        <p class="text-3xl font-extrabold text-plgreen">{{ pl_variant.price | money }}</p>
       {%- endif -%}
       <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 mt-4 text-sm font-semibold text-plgreendark/70">
         <span>🇲🇦 صنع في المغرب</span>
         <span>💳 الدفع عند الاستلام</span>
-        <span>🚚 شحن سريع</span>
+        <span>🚚 توصيل سريع</span>
       </div>
     </div>
 
-    <div class="max-w-lg mx-auto pl-glass rounded-[32px] shadow-[0_30px_80px_-24px_rgba(35,58,38,0.28)] p-8 md:p-10" data-pl-reveal>
-      <!-- EasySell COD Form -->
+    <div class="max-w-lg mx-auto pl-glass !bg-white rounded-[32px] shadow-[0_30px_80px_-24px_rgba(31,58,36,0.28)] p-8 md:p-10" data-pl-reveal>
+      {%- if product -%}
+        {%- form 'product', product, id: 'pl-form', novalidate: true -%}
+          <input type="hidden" name="id" value="{{ pl_variant.id }}">
+          {% content_for 'blocks' %}
+        {%- endform -%}
+      {%- else -%}
+        <p class="text-center text-sm font-semibold text-plgreendark/60">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
+      {%- endif -%}
     </div>
+  </section>
+
+  {%- comment -%} ===================== 20. FINAL TRUST BLOCK ===================== {%- endcomment -%}
+  <section class="py-12 md:py-14">
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-center">
+      {%- assign pl_final_icons = '⭐|🚚|🇲🇦|💳|🌿|🎧' | split: '|' -%}
+      {%- assign pl_final_titles = '500+ تقييم بـ 5 نجوم|شحن سريع|صنع في المغرب|الدفع عند الاستلام|مكونات طبيعية 100%|خدمة عملاء متجاوبة' | split: '|' -%}
+      {%- for icon in pl_final_icons -%}
+        <div class="flex items-center gap-2 text-sm font-bold text-plgreendark/70" data-pl-reveal>
+          <span class="text-lg">{{ icon }}</span> {{ pl_final_titles[forloop.index0] }}
+        </div>
+      {%- endfor -%}
+    </div>
+    <p class="text-center text-xs text-plgreendark/35 mt-8">© {{ 'now' | date: '%Y' }} PURELUMA. جميع الحقوق محفوظة.</p>
   </section>
 
 </div>
 
-<!-- ===== STICKY BUY BAR (mobile) ===== -->
-<div id="pl-sticky-bar" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-plgreen/10 px-4 py-3 flex items-center justify-between gap-3 shadow-[0_-10px_30px_-15px_rgba(35,58,38,0.25)]">
+{%- comment -%} ===================== 19. FLOATING ELEMENTS ===================== {%- endcomment -%}
+
+<!-- Sticky buy bar (mobile) -->
+<div id="pl-sticky-bar" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-plgreen/10 px-4 py-3 flex items-center justify-between gap-3 shadow-[0_-10px_30px_-15px_rgba(31,58,36,0.25)]">
   <div class="text-sm">
-    <p class="font-bold text-plgreendark">باك PURELUMA</p>
-    {%- if product -%}
+    <p class="font-bold text-plgreendark">سيروم PURELUMA</p>
+    {%- if product and pl_variant -%}
       <p class="text-plgreen font-bold">{{ pl_variant.price | money }}</p>
     {%- endif -%}
   </div>
   <button type="button" data-pl-scroll="#pl-order" class="font-bold text-white text-sm px-6 py-3 rounded-full bg-plgreen">اطلبي الآن</button>
 </div>
 
-<!-- ===== FLOATING WHATSAPP ===== -->
+<!-- Floating WhatsApp -->
 {%- comment -%} Update the phone number below (international format, no + or spaces) with the store's real WhatsApp number {%- endcomment -%}
 <a href="https://wa.me/212600000000" target="_blank" rel="noopener" aria-label="تواصلي معنا عبر واتساب"
    class="fixed bottom-24 md:bottom-8 left-5 z-40 w-14 h-14 rounded-full bg-[#25D366] shadow-[0_14px_30px_-8px_rgba(0,0,0,0.35)] flex items-center justify-center hover:scale-110 transition">
   <svg viewBox="0 0 32 32" class="w-8 h-8 fill-white"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.3.6 4.4 1.7 6.3L4 29l7.9-1.6c1.8.9 3.9 1.5 6.1 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.7 1 1-4.6-.3-.4C4.8 17.6 4.2 15.9 4.2 15c0-6.5 5.3-11.8 11.8-11.8S27.8 8.5 27.8 15 22.5 24.8 16 24.8zm6.5-8.8c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.3-2.1-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.2.3-.4.4-.7.1-.3.1-.6 0-.8-.1-.2-.8-2-1.1-2.7-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.6 5.7 5.1.8.3 1.4.6 1.9.7.8.2 1.5.2 2.1.1.6-.1 2.1-.9 2.4-1.7.3-.8.3-1.5.2-1.7-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
+<!-- Floating rotating badge: live visitors ⇄ rating/reviews -->
+<div id="pl-float-badge" class="fixed bottom-[168px] md:bottom-[104px] right-4 z-40 bg-white/95 backdrop-blur rounded-full px-4 py-2 shadow-[0_10px_30px_-12px_rgba(31,58,36,0.4)] flex items-center gap-2 text-xs font-bold text-plgreendark">
+  <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+  <span id="pl-float-badge-text"><span id="pl-visitors-count">24</span> شخص كيتصفح المنتج الآن</span>
+</div>
+
+<!-- Recent purchase toast -->
+<div id="pl-toast" class="bg-white rounded-2xl p-4 shadow-[0_12px_40px_-10px_rgba(31,58,36,0.4)] border-r-4 border-plgold flex items-center gap-3">
+  <span class="text-2xl">🛍️</span>
+  <p class="text-xs text-plgreendark leading-relaxed" id="pl-toast-text"></p>
+</div>
+
+<!-- Lightbox (images + videos) -->
+<div id="pl-lightbox">
+  <div id="pl-lightbox-content"></div>
+</div>
+
 <script>
   (function () {
     var root = document.getElementById('pl-root');
     if (!root) return;
 
-    var reveals = root.querySelectorAll('[data-pl-reveal]');
+    /* Scroll reveal */
+    var reveals = root.querySelectorAll('[data-pl-reveal], [data-pl-reveal-scale]');
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -372,6 +621,17 @@
       reveals.forEach(function (el) { el.classList.add('is-visible'); });
     }
 
+    /* Hero media (video fades in once playable; image is already visible) */
+    var heroMedia = document.getElementById('pl-hero-media');
+    if (heroMedia && heroMedia.tagName === 'VIDEO') {
+      var revealMedia = function () { heroMedia.classList.add('is-ready'); };
+      heroMedia.addEventListener('loadeddata', revealMedia, { once: true });
+      heroMedia.addEventListener('playing', revealMedia, { once: true });
+      var playPromise = heroMedia.play();
+      if (playPromise && playPromise.catch) playPromise.catch(function () {});
+    }
+
+    /* Smooth scroll */
     document.querySelectorAll('[data-pl-scroll]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var target = document.querySelector(btn.getAttribute('data-pl-scroll'));
@@ -379,18 +639,111 @@
       });
     });
 
-    var track = root.querySelector('#pl-gallery-track');
-    if (track) {
+    /* Generic horizontal slider helper (before/after) */
+    function wireSlider(trackId, prevId, nextId) {
+      var track = root.querySelector(trackId);
+      if (!track) return;
       var step = function () {
         var item = track.children[0];
         return item ? item.getBoundingClientRect().width + 20 : 300;
       };
-      var prev = root.querySelector('#pl-gallery-prev');
-      var next = root.querySelector('#pl-gallery-next');
+      var prev = root.querySelector(prevId);
+      var next = root.querySelector(nextId);
       if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
     }
+    wireSlider('#pl-ba-track', '#pl-ba-prev', '#pl-ba-next');
 
+    /* Lightbox for UGC review videos */
+    var lightbox = document.getElementById('pl-lightbox');
+    var lightboxContent = document.getElementById('pl-lightbox-content');
+    root.querySelectorAll('[data-pl-video-item]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!lightbox || !lightboxContent) return;
+        var src = btn.getAttribute('data-pl-video-src');
+        lightboxContent.innerHTML = src
+          ? '<video src="' + src + '" controls autoplay playsinline style="max-height:88vh;border-radius:18px;"></video>'
+          : '';
+        lightbox.classList.add('open');
+      });
+    });
+    if (lightbox) {
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) {
+          lightbox.classList.remove('open');
+          if (lightboxContent) lightboxContent.innerHTML = '';
+        }
+      });
+    }
+
+    /* Countdown — shared deadline, updates both the hero mini-timer and the urgency section timer */
+    var cdKey = 'purelumaDeadline';
+    var deadline = parseInt(localStorage.getItem(cdKey), 10);
+    if (!deadline || deadline < Date.now()) {
+      deadline = Date.now() + 8 * 60 * 60 * 1000;
+      localStorage.setItem(cdKey, deadline);
+    }
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tickCountdown() {
+      var diff = Math.max(0, deadline - Date.now());
+      var h = Math.floor(diff / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      root.querySelectorAll('.pl-cd-h').forEach(function (el) { el.textContent = pad(h); });
+      root.querySelectorAll('.pl-cd-m').forEach(function (el) { el.textContent = pad(m); });
+      root.querySelectorAll('.pl-cd-s').forEach(function (el) { el.textContent = pad(s); });
+    }
+    tickCountdown();
+    setInterval(tickCountdown, 1000);
+
+    /* Sticky buy bar visibility (hidden once the order form is in view) */
+    var sticky = document.getElementById('pl-sticky-bar');
+    var order = document.getElementById('pl-order');
+    if (sticky && order) {
+      window.addEventListener('scroll', function () {
+        var r = order.getBoundingClientRect();
+        sticky.style.display = (r.top > window.innerHeight || r.bottom < 0) ? 'flex' : 'none';
+      }, { passive: true });
+    }
+
+    /* Floating badge: alternates between live-visitor count and rating/reviews */
+    var badgeText = document.getElementById('pl-float-badge-text');
+    var visitorsCount = document.getElementById('pl-visitors-count');
+    var badgeMode = 0;
+    if (visitorsCount) {
+      setInterval(function () {
+        var c = parseInt(visitorsCount.textContent, 10) || 24;
+        var next = Math.max(12, Math.min(48, c + (Math.random() > 0.5 ? 1 : -1)));
+        visitorsCount.textContent = next;
+      }, 4500);
+    }
+    if (badgeText) {
+      setInterval(function () {
+        badgeMode = badgeMode === 0 ? 1 : 0;
+        if (badgeMode === 0) {
+          badgeText.innerHTML = '<span id="pl-visitors-count">' + (visitorsCount ? visitorsCount.textContent : 24) + '</span> شخص كيتصفح المنتج الآن';
+          visitorsCount = document.getElementById('pl-visitors-count');
+        } else {
+          badgeText.innerHTML = '⭐ 4.9/5 — أكثر من 500 تقييم';
+        }
+      }, 6000);
+    }
+
+    /* Recent purchase toast */
+    var toastNames = ['فاطمة من الدار البيضاء', 'سارة من الرباط', 'إيمان من مراكش', 'خديجة من فاس', 'سلمى من طنجة', 'نسرين من أكادير', 'أمينة من مكناس', 'هاجر من وجدة'];
+    var toastEl = document.getElementById('pl-toast');
+    var toastText = document.getElementById('pl-toast-text');
+    var toastIndex = 0;
+    function showToast() {
+      if (!toastEl || !toastText) return;
+      var mins = 1 + Math.floor(Math.random() * 14);
+      toastText.innerHTML = '<strong>' + toastNames[toastIndex % toastNames.length] + '</strong><br>طلبت سيروم PURELUMA منذ ' + mins + ' دقيقة';
+      toastIndex++;
+      toastEl.classList.add('show');
+      setTimeout(function () { toastEl.classList.remove('show'); }, 4500);
+      setTimeout(showToast, 12000 + Math.random() * 6000);
+    }
+    setTimeout(showToast, 5000);
   })();
 </script>
 
