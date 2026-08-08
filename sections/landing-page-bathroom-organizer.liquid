@@ -1,0 +1,543 @@
+{%- comment -%}
+  حامل فرشاة الأسنان الذكي — Kuwait COD landing page. Single-file section.
+  EasySell COD app block only (form + content_for 'blocks'), no native
+  Shopify buy button/variant picker. All copy sourced strictly from the
+  merchant's brief + the confirmed, visible features in the product photos
+  — no invented specs. Countdown only renders if the merchant sets a real
+  end date in the section settings (no fake countdown).
+{%- endcomment -%}
+<section id="kw-root" dir="rtl" lang="ar">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind = window.tailwind || {};
+  tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          kwwhite: '#FFFFFF',
+          kwoff: '#FAF9F6',
+          kwgray: '#F1F0EC',
+          kwborder: '#E6E3DC',
+          kwblack: '#161513',
+          kwgold: '#B99A63'
+        }
+      }
+    }
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  #kw-root{ font-family:'Tajawal',Arial,sans-serif; background:#fff; color:#161513; overflow-x:hidden; direction:rtl; -webkit-font-smoothing:antialiased; }
+  #kw-root *{ box-sizing:border-box; }
+  #kw-root img{ max-width:100%; display:block; }
+  #kw-root [data-kw-reveal]{ opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+  #kw-root [data-kw-reveal].is-visible{ opacity:1; transform:translateY(0); }
+  #kw-root .kw-scrollbar-none::-webkit-scrollbar{ display:none; }
+  #kw-root .kw-scrollbar-none{ -ms-overflow-style:none; scrollbar-width:none; }
+  #kw-root details summary{ cursor:pointer; list-style:none; }
+  #kw-root details summary::-webkit-details-marker{ display:none; }
+  #kw-root details summary .kw-plus{ transition:transform .25s ease; }
+  #kw-root details[open] summary .kw-plus{ transform:rotate(45deg); }
+  @media (max-width: 767px){ #kw-root{ padding-bottom:78px; } }
+  @media (min-width: 768px){ #kw-sticky-bar{ display:none; } }
+  #kw-lightbox{ position:fixed; inset:0; background:rgba(22,21,19,.94); z-index:99998; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+  #kw-lightbox.open{ opacity:1; pointer-events:all; }
+  #kw-lightbox img{ max-width:100%; max-height:88vh; border-radius:14px; transform:scale(.95); transition:transform .3s ease; }
+  #kw-lightbox.open img{ transform:scale(1); }
+  @media (prefers-reduced-motion: reduce){
+    #kw-root [data-kw-reveal]{ opacity:1; transform:none; transition:none; }
+  }
+</style>
+
+{%- if product -%}
+  {%- assign kw_variant = product.selected_or_first_available_variant -%}
+  {%- assign kw_media = kw_variant.featured_media | default: product.featured_media -%}
+  {%- assign kw_has_discount = false -%}
+  {%- if kw_variant.compare_at_price > kw_variant.price -%}
+    {%- assign kw_has_discount = true -%}
+    {%- assign kw_discount_pct = kw_variant.compare_at_price | minus: kw_variant.price | times: 100 | divided_by: kw_variant.compare_at_price -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": [{{ kw_media | image_url: width: 1200 | prepend: "https:" | json }}],
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  "sku": {{ kw_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ kw_variant.price | money_without_currency | json }},
+    "availability": "{% if kw_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  }
+}
+</script>
+{%- endif -%}
+
+<div class="max-w-[1200px] mx-auto px-5 md:px-6">
+
+  {%- comment -%} ===================== 1. HERO ===================== {%- endcomment -%}
+  <section class="pt-10 pb-12 md:pt-16 md:pb-16">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+      <div class="order-2 md:order-1" data-kw-reveal>
+        <span class="inline-block text-xs md:text-sm font-bold text-kwblack bg-kwgray border border-kwborder rounded-full px-4 py-2 mb-5">
+          {{ section.settings.badge_text | default: 'اختيار عملي لحمام مرتب' }}
+        </span>
+        <h1 class="text-3xl md:text-[2.6rem] font-black leading-[1.35] mb-4 text-kwblack">{{ section.settings.hero_heading | default: 'خلّ حمامك مرتب وأنيق دائمًا' }}</h1>
+        <p class="text-base md:text-lg text-kwblack/65 leading-relaxed mb-7 max-w-lg">{{ section.settings.hero_subheading | default: 'حامل فرشاة الأسنان الذكي يساعدك تتخلصين من فوضى مستلزمات الحمام، ويوفر لك مساحة على المغسلة، ويخلي كل غرض في مكانه المناسب.' }}</p>
+
+        <div class="flex flex-wrap items-end gap-4 mb-6">
+          {%- if product and kw_variant -%}
+            {%- if kw_has_discount -%}
+              <span class="text-lg text-kwblack/35 line-through">{{ kw_variant.compare_at_price | money }}</span>
+            {%- endif -%}
+            <span class="text-4xl font-black text-kwblack">{{ kw_variant.price | money }}</span>
+            {%- if kw_has_discount -%}
+              <span class="bg-kwblack text-white text-xs font-bold px-3 py-1.5 rounded-full">خصم {{ kw_discount_pct }}%</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <p class="text-sm font-bold text-kwblack/70 mb-6">الدفع عند الاستلام متوفر 🇰🇼</p>
+
+        <button type="button" data-kw-scroll="#kw-order" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-bold text-white text-base px-9 py-4 rounded-full bg-kwblack hover:opacity-90 transition">
+          اطلبه الآن – الدفع عند الاستلام
+        </button>
+
+        <div class="mt-6 flex flex-wrap gap-x-3 gap-y-2 text-xs text-kwblack/50 font-semibold">
+          <span>الأبعاد: 40 سم عرض × 13 سم ارتفاع</span>
+        </div>
+      </div>
+
+      <div class="order-1 md:order-2" data-kw-reveal>
+        <div class="rounded-[24px] overflow-hidden bg-kwgray border border-kwborder">
+          {%- if kw_media -%}
+            {{ kw_media | image_url: width: 1000 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- else -%}
+            <div class="aspect-square flex items-center justify-center text-kwblack/20">
+              <svg viewBox="0 0 100 100" class="w-1/3 h-1/3" fill="none" stroke="currentColor" stroke-width="3"><rect x="15" y="25" width="70" height="45" rx="8"/><rect x="30" y="70" width="10" height="14" rx="3"/><rect x="60" y="70" width="10" height="14" rx="3"/></svg>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 2. PROBLEM ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-kwgray">
+    <div class="text-center max-w-xl mx-auto mb-12" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">هل حمامك دائمًا مليان وفوضوي؟</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+      {%- assign kw_problems = 'فرش الأسنان موزعة في أماكن مختلفة|معجون الأسنان ومستحضرات العناية مبعثرة|استغلال سيئ لمساحة المغسلة|صعوبة الحفاظ على الحمام مرتبًا' | split: '|' -%}
+      {%- for p in kw_problems -%}
+        <div class="bg-white rounded-2xl p-5 border border-kwborder text-center" data-kw-reveal>
+          <svg viewBox="0 0 40 40" class="w-8 h-8 mx-auto mb-3 text-kwblack/70" fill="none" stroke="currentColor" stroke-width="2">
+            {%- case forloop.index0 -%}
+              {%- when 0 -%}<path d="M14 8v14a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V8"/><path d="M11 8h18"/><path d="M20 26v6"/>
+              {%- when 1 -%}<circle cx="14" cy="14" r="5"/><circle cx="27" cy="18" r="4"/><circle cx="18" cy="29" r="4"/>
+              {%- when 2 -%}<path d="M8 26h24"/><path d="M12 26V16a8 8 0 0 1 16 0v10"/><path d="M16 30h8"/>
+              {%- when 3 -%}<path d="M10 30 30 10"/><path d="M10 10l20 20"/>
+            {%- endcase -%}
+          </svg>
+          <p class="font-bold text-kwblack/80 text-xs md:text-sm leading-relaxed">{{ p }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    <p class="text-center text-sm font-bold text-kwblack/50 mt-10">الحل أبسط مما تتوقع...</p>
+  </section>
+
+  {%- comment -%} ===================== 3. PRODUCT SOLUTION ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+      <div class="order-2 md:order-1" data-kw-reveal>
+        <h2 class="text-2xl md:text-3xl font-black text-kwblack mb-6">كل شيء في مكان واحد</h2>
+        <div class="flex flex-col gap-3.5">
+          {%- assign kw_solution = 'يساعد على تنظيم مستلزمات الحمام|يوفر مساحة على المغسلة|يحتوي على أماكن متعددة للتخزين|يحتوي على درج للأغراض الصغيرة|تصميم أنيق ومناسب للحمامات العصرية|يجعل الوصول إلى المستلزمات أسهل|يساعد على إبقاء الحمام أكثر ترتيبًا' | split: '|' -%}
+          {%- for s in kw_solution -%}
+            <div class="flex items-start gap-3">
+              <span class="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-kwblack text-white flex items-center justify-center text-[10px]">✓</span>
+              <span class="text-sm md:text-base text-kwblack/75 font-medium">{{ s }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="order-1 md:order-2" data-kw-reveal>
+        <div class="rounded-[24px] overflow-hidden bg-kwgray border border-kwborder">
+          {%- if product.media[1] -%}
+            {{ product.media[1] | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- elsif kw_media -%}
+            {{ kw_media | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 4. BENEFITS ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-kwblack">
+    <div class="text-center max-w-xl mx-auto mb-12" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-white">ليش راح تحبه؟ 🤍</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+      {%- assign kw_ben_icons = '🧼|✨|📦|🪥|🗄️|🏠' | split: '|' -%}
+      {%- assign kw_ben_titles = 'تنظيم أفضل|حمام أكثر أناقة|استغلال المساحة|ترتيب الفرش|مساحة إضافية|مناسب للحمام العصري' | split: '|' -%}
+      {%- assign kw_ben_texts = 'كل مستلزماتك الأساسية في مكان واحد.|تخلص من الفوضى والمظهر المزدحم.|استفد من مساحة الجدار بدل تكديس الأشياء على المغسلة.|أماكن مخصصة تساعدك على إبقاء فرش الأسنان مرتبة.|درج عملي للأغراض الصغيرة.|تصميم بسيط وأنيق ينسجم مع ديكور الحمام.' | split: '|' -%}
+      {%- for icon in kw_ben_icons -%}
+        <div class="bg-white/[.04] border border-white/10 rounded-2xl p-5" data-kw-reveal>
+          <span class="text-2xl">{{ icon }}</span>
+          <p class="font-bold text-white text-sm mt-3 mb-1">{{ kw_ben_titles[forloop.index0] }}</p>
+          <p class="text-xs text-white/55 leading-relaxed">{{ kw_ben_texts[forloop.index0] }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="text-center mt-10" data-kw-reveal>
+      <button type="button" data-kw-scroll="#kw-order" class="inline-flex items-center justify-center gap-2 font-bold text-kwblack text-sm px-8 py-3.5 rounded-full bg-white hover:bg-white/90 transition">
+        اطلبه الآن – الدفع عند الاستلام
+      </button>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 5. VISUAL SHOWCASE ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20">
+    <div class="text-center max-w-xl mx-auto mb-12" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">شوف تفاصيل المنتج عن قرب</h2>
+    </div>
+    {%- if product.media.size > 0 -%}
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="kw-gallery">
+        {%- for media in product.media limit: 9 -%}
+          <div class="rounded-2xl overflow-hidden bg-kwgray border border-kwborder cursor-zoom-in {% if forloop.index0 == 0 %}col-span-2 row-span-2{% endif %}" data-kw-lightbox-item data-kw-reveal>
+            {{ media | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover aspect-square' }}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </section>
+
+  {%- comment -%} ===================== 6. BEFORE / AFTER (illustrative concept) ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-kwgray">
+    <div class="text-center max-w-xl mx-auto mb-12" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">قبل 😩 ← بعد 😍</h2>
+      <p class="text-xs text-kwblack/40 mt-2">تصور مبسّط لفكرة الترتيب — وليست صورة حقيقية لعميل</p>
+    </div>
+    <div class="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+      <div class="bg-white rounded-2xl border border-kwborder p-6 text-center" data-kw-reveal>
+        <p class="text-xs font-bold text-kwblack/40 mb-4">قبل</p>
+        <div class="flex flex-wrap justify-center gap-2 mb-3 opacity-60">
+          {%- for i in (1..6) -%}
+            <span class="w-6 h-6 md:w-7 md:h-7 rounded-md bg-kwblack/15" style="transform: rotate({{ i | times: 13 | modulo: 25 | minus: 12 }}deg);"></span>
+          {%- endfor -%}
+        </div>
+        <p class="text-xs text-kwblack/50 font-semibold">مستلزمات مبعثرة وفوضى على المغسلة</p>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-kwborder" data-kw-reveal>
+        {%- if kw_media -%}
+          {{ kw_media | image_url: width: 500 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+        {%- endif -%}
+        <p class="text-xs font-bold text-kwblack/40 text-center py-3">بعد — كل شيء منظم</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 7. HOW IT HELPS ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20">
+    <div class="text-center max-w-xl mx-auto mb-14" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">رتّب حمامك بطريقة أذكى</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+      {%- assign kw_step_titles = 'ثبّت الحامل|رتّب مستلزماتك|استمتع بحمام مرتب' | split: '|' -%}
+      {%- for title in kw_step_titles -%}
+        <div class="text-center" data-kw-reveal>
+          <span class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-kwblack text-white font-black text-lg mb-4">{{ '0' | append: forloop.index }}</span>
+          <p class="font-bold text-kwblack text-base">{{ title }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 8. OFFER ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-kwblack">
+    <div class="max-w-lg mx-auto bg-white rounded-[28px] p-8 md:p-10 text-center" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack mb-6">جاهز ترتّب حمامك؟ 🔥</h2>
+
+      {%- if product and kw_variant -%}
+        <div class="flex items-end justify-center gap-3 mb-2">
+          {%- if kw_has_discount -%}
+            <span class="text-lg text-kwblack/35 line-through">{{ kw_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span class="text-5xl font-black text-kwblack">{{ kw_variant.price | money }}</span>
+        </div>
+        {%- if kw_has_discount -%}
+          <p class="text-sm font-bold text-kwgold mb-5">خصم {{ kw_discount_pct }}%</p>
+        {%- endif -%}
+      {%- endif -%}
+
+      <div class="flex flex-col gap-2.5 max-w-xs mx-auto mb-7 text-sm font-semibold text-kwblack/70">
+        {%- if section.settings.show_free_shipping -%}
+          <div class="flex items-center justify-center gap-2"><span>✓</span> {{ section.settings.free_shipping_text | default: 'شحن مجاني داخل الكويت' }}</div>
+        {%- endif -%}
+        <div class="flex items-center justify-center gap-2"><span>✓</span> الدفع عند الاستلام 🇰🇼</div>
+      </div>
+
+      {%- if section.settings.countdown_end != blank -%}
+        <div class="mb-7" data-kw-countdown data-kw-end="{{ section.settings.countdown_end }}">
+          <p class="text-xs font-bold text-kwblack/40 mb-2">العرض ينتهي خلال</p>
+          <div class="flex justify-center gap-2.5">
+            <div class="bg-kwgray rounded-xl w-14 py-2 text-center"><div class="text-lg font-black text-kwblack kw-cd-h">00</div><div class="text-[10px] text-kwblack/40">ساعة</div></div>
+            <div class="bg-kwgray rounded-xl w-14 py-2 text-center"><div class="text-lg font-black text-kwblack kw-cd-m">00</div><div class="text-[10px] text-kwblack/40">دقيقة</div></div>
+            <div class="bg-kwgray rounded-xl w-14 py-2 text-center"><div class="text-lg font-black text-kwblack kw-cd-s">00</div><div class="text-[10px] text-kwblack/40">ثانية</div></div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <button type="button" data-kw-scroll="#kw-order" class="w-full inline-flex items-center justify-center gap-2 font-bold text-white text-base px-9 py-4 rounded-full bg-kwblack hover:opacity-90 transition">
+        اطلب الآن والدفع عند الاستلام
+      </button>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 9. SOCIAL PROOF ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20">
+    <div class="text-center max-w-xl mx-auto mb-12" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">تجربة بسيطة... وفرق كبير في ترتيب الحمام 🤍</h2>
+      <p class="text-kwgold font-bold mt-2 text-sm">★★★★★ منتج عملي للبيت</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          <div class="bg-kwgray rounded-2xl p-6 border border-kwborder" {{ block.shopify_attributes }} data-kw-reveal>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-full bg-kwblack text-white font-bold flex items-center justify-center flex-shrink-0 text-sm">{{ block.settings.name | slice: 0 }}</div>
+              <p class="font-bold text-kwblack text-sm">{{ block.settings.name | default: 'اسم العميل' }}</p>
+            </div>
+            <div class="text-kwgold text-sm tracking-widest mb-2">
+              {%- assign kw_stars = block.settings.rating | default: 5 -%}
+              {%- for i in (1..kw_stars) -%}★{%- endfor -%}
+            </div>
+            <p class="text-kwblack/70 text-sm leading-relaxed">"{{ block.settings.text | default: 'اكتب هنا نص تجربة العميل — هذا نص تجريبي قابل للتعديل.' }}"</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 10. FAQ ===================== {%- endcomment -%}
+  <section class="py-14 md:py-20 -mx-5 md:-mx-6 px-5 md:px-6 bg-kwgray">
+    <div class="text-center max-w-xl mx-auto mb-10" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack">الأسئلة الشائعة</h2>
+    </div>
+    <div class="max-w-2xl mx-auto flex flex-col gap-3" data-kw-reveal>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>هل الدفع عند الاستلام متوفر في الكويت؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">نعم، الدفع عند الاستلام متوفر لجميع الطلبات داخل الكويت.</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>هل المنتج مناسب للحمامات الصغيرة؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">المنتج يُثبت على الحائط بمقاس 40 سم عرض و13 سم ارتفاع، وهو مصمم ليستغل مساحة الجدار بدل المغسلة، فيناسب أغلب الحمامات.</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>ماذا يمكنني وضع داخل الحامل؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">الرف العلوي يتسع لمعجون الأسنان ومستحضرات العناية الشخصية، وفيه أماكن مخصصة للفرش وأكواب معلقة وأدوات الحمام الصغيرة.</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>هل يساعد على توفير مساحة على المغسلة؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">نعم، بما أنه يُثبت على الحائط فهو يحرر مساحة المغسلة بدل تكديس الأغراض عليها.</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>هل يحتوي على درج؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">نعم، يحتوي على درج سحب أمامي مخصص للأغراض الصغيرة.</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>كم يستغرق التوصيل؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">{{ section.settings.faq_delivery_answer | default: 'أضيفي هنا مدة التوصيل الفعلية داخل الكويت.' }}</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>هل يوجد شحن داخل الكويت؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">{%- if section.settings.show_free_shipping -%}نعم، {{ section.settings.free_shipping_text | default: 'الشحن مجاني داخل الكويت' }}.{%- else -%}نعم، نوصل لجميع مناطق الكويت.{%- endif -%}</div>
+      </details>
+      <details class="bg-white rounded-2xl px-6 border border-kwborder">
+        <summary class="flex items-center justify-between py-4 font-bold text-kwblack gap-4"><span>كيف أطلب المنتج؟</span><span class="kw-plus text-kwgold text-xl flex-shrink-0">+</span></summary>
+        <div class="pb-5 text-kwblack/60 leading-relaxed text-sm">عبّي بياناتك في نموذج الطلب بالأسفل، وراح نتواصل معك لتأكيد الطلب قبل التوصيل.</div>
+      </details>
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 11. ORDER FORM ===================== {%- endcomment -%}
+  <section id="kw-order" class="py-14 md:py-20">
+    <div class="text-center max-w-lg mx-auto mb-8" data-kw-reveal>
+      <h2 class="text-2xl md:text-3xl font-black text-kwblack mb-2">اطلبه الآن 🇰🇼</h2>
+      <p class="text-sm text-kwblack/55">املأ بياناتك وسنتواصل معك لتأكيد الطلب</p>
+      {%- if product and kw_variant -%}
+        <p class="text-2xl font-black text-kwblack mt-4">{{ kw_variant.price | money }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="max-w-lg mx-auto bg-kwgray rounded-[28px] border border-kwborder p-6 md:p-9" data-kw-reveal>
+      {%- if product -%}
+        {%- form 'product', product, id: 'kw-form', novalidate: true -%}
+          <input type="hidden" name="id" value="{{ kw_variant.id }}">
+          {% content_for 'blocks' %}
+        {%- endform -%}
+      {%- else -%}
+        <p class="text-center text-sm font-semibold text-kwblack/50">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ===================== 12. TRUST SECTION ===================== {%- endcomment -%}
+  <section class="py-12 md:py-14">
+    <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-center">
+      {%- assign kw_trust = 'الدفع عند الاستلام|توصيل داخل الكويت|طلب سهل وسريع|دعم العملاء' | split: '|' -%}
+      {%- for t in kw_trust -%}
+        <div class="flex items-center gap-2 text-sm font-bold text-kwblack/65" data-kw-reveal>
+          <span class="text-kwgold">✓</span> {{ t }}
+        </div>
+      {%- endfor -%}
+    </div>
+  </section>
+
+</div>
+
+{%- comment -%} ===================== 13. STICKY MOBILE CTA ===================== {%- endcomment -%}
+<div id="kw-sticky-bar" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-kwborder px-4 py-3 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.25)]">
+  <button type="button" data-kw-scroll="#kw-order" class="w-full font-bold text-white text-sm py-3.5 rounded-full bg-kwblack">
+    اطلب الآن – الدفع عند الاستلام 🇰🇼
+  </button>
+</div>
+
+<!-- Lightbox -->
+<div id="kw-lightbox">
+  <img id="kw-lightbox-img" src="" alt="">
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('kw-root');
+    if (!root) return;
+
+    /* Scroll reveal */
+    var reveals = root.querySelectorAll('[data-kw-reveal]');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('is-visible'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      reveals.forEach(function (el) { io.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    /* Smooth scroll */
+    document.querySelectorAll('[data-kw-scroll]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = document.querySelector(btn.getAttribute('data-kw-scroll'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /* Lightbox */
+    var lightbox = document.getElementById('kw-lightbox');
+    var lightboxImg = document.getElementById('kw-lightbox-img');
+    root.querySelectorAll('[data-kw-lightbox-item] img').forEach(function (img) {
+      img.addEventListener('click', function () {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = img.currentSrc || img.src;
+        lightbox.classList.add('open');
+      });
+    });
+    if (lightbox) {
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) lightbox.classList.remove('open');
+      });
+    }
+
+    /* Real countdown — only if the merchant set a real end date; hides itself once expired */
+    var cdBlock = root.querySelector('[data-kw-countdown]');
+    if (cdBlock) {
+      var endStr = cdBlock.getAttribute('data-kw-end');
+      var end = new Date(endStr.replace(' ', 'T')).getTime();
+      if (isNaN(end) || end <= Date.now()) {
+        cdBlock.style.display = 'none';
+      } else {
+        var h = cdBlock.querySelector('.kw-cd-h');
+        var m = cdBlock.querySelector('.kw-cd-m');
+        var s = cdBlock.querySelector('.kw-cd-s');
+        function pad(n) { return String(n).padStart(2, '0'); }
+        var timer = setInterval(function () {
+          var diff = end - Date.now();
+          if (diff <= 0) { cdBlock.style.display = 'none'; clearInterval(timer); return; }
+          var hh = Math.floor(diff / 3600000);
+          var mm = Math.floor((diff % 3600000) / 60000);
+          var ss = Math.floor((diff % 60000) / 1000);
+          if (h) h.textContent = pad(hh);
+          if (m) m.textContent = pad(mm);
+          if (s) s.textContent = pad(ss);
+        }, 1000);
+      }
+    }
+
+    /* Sticky bar visibility (hidden once the order form is in view) */
+    var sticky = document.getElementById('kw-sticky-bar');
+    var order = document.getElementById('kw-order');
+    if (sticky && order) {
+      window.addEventListener('scroll', function () {
+        var r = order.getBoundingClientRect();
+        sticky.style.display = (r.top > window.innerHeight || r.bottom < 0) ? 'block' : 'none';
+      }, { passive: true });
+    }
+  })();
+</script>
+
+</section>
+
+{% schema %}
+{
+  "name": "Kuwait Landing (COD)",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "badge_text", "label": "Texte du badge", "default": "اختيار عملي لحمام مرتب" },
+    { "type": "text", "id": "hero_heading", "label": "Titre", "default": "خلّ حمامك مرتب وأنيق دائمًا" },
+    { "type": "textarea", "id": "hero_subheading", "label": "Sous-titre", "default": "حامل فرشاة الأسنان الذكي يساعدك تتخلصين من فوضى مستلزمات الحمام، ويوفر لك مساحة على المغسلة، ويخلي كل غرض في مكانه المناسب." },
+    { "type": "header", "content": "Offre" },
+    { "type": "checkbox", "id": "show_free_shipping", "label": "Afficher le shipping gratuit", "default": false },
+    { "type": "text", "id": "free_shipping_text", "label": "Texte du shipping gratuit", "default": "شحن مجاني داخل الكويت" },
+    { "type": "text", "id": "countdown_end", "label": "Fin de l'offre (ex: 2026-08-20T23:59) — vide = pas de compte à rebours" },
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_delivery_answer", "label": "Réponse — durée de livraison réelle" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis (placeholder)",
+      "settings": [
+        { "type": "text", "id": "name", "label": "اسم العميل (تجريبي)", "default": "اسم العميل" },
+        { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "التقييم", "default": 5 },
+        { "type": "textarea", "id": "text", "label": "نص التجربة (تجريبي)", "default": "اكتب هنا نص تجربة العميل — هذا نص تجريبي قابل للتعديل." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kuwait Landing (COD)",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}
