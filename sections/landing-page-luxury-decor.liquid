@@ -1,0 +1,397 @@
+{%- comment -%}
+  Luxury GCC home-decor landing page — Kuwait. Single-file Shopify section.
+  Product-agnostic: every image, title and price comes from the real
+  Shopify `product` object (product.media / product.title / product.price /
+  compare_at_price) — nothing hardcoded, nothing invented. EasySell COD
+  form only (form + content_for 'blocks'), no custom checkout, no
+  WhatsApp substitute. No fake countdown, no fake stock count, no fake
+  named reviews.
+{%- endcomment -%}
+<section id="ld-root" dir="rtl" lang="ar">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  window.tailwind = window.tailwind || {};
+  tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: {
+      extend: {
+        colors: {
+          ivory: '#FBF8F3',
+          cream: '#F3EBDD',
+          sand: '#E8DCC4',
+          gold: '#AD8B5D',
+          brown: '#2B241D'
+        }
+      }
+    }
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  #ld-root{ font-family:'Tajawal',Arial,sans-serif; background:#FBF8F3; color:#2B241D; overflow-x:hidden; direction:rtl; -webkit-font-smoothing:antialiased; }
+  #ld-root *{ box-sizing:border-box; }
+  #ld-root img{ max-width:100%; display:block; }
+  #ld-root .ld-serif{ font-family:'El Messiri','Tajawal',Arial,sans-serif; }
+  #ld-root [data-ld-reveal]{ opacity:0; transform:translateY(22px); transition:opacity .8s ease, transform .8s ease; }
+  #ld-root [data-ld-reveal].is-visible{ opacity:1; transform:translateY(0); }
+  #ld-root [data-ld-reveal-fade]{ opacity:0; transition:opacity 1s ease; }
+  #ld-root [data-ld-reveal-fade].is-visible{ opacity:1; }
+  #ld-root .ld-img-frame{ background:#F3EBDD; overflow:hidden; }
+  #ld-root .ld-img-frame img{ transition:transform 1.2s ease; }
+  #ld-root .ld-img-frame:hover img{ transform:scale(1.03); }
+  #ld-root .ld-placeholder{ display:flex; align-items:center; justify-content:center; color:#AD8B5D; }
+  @media (max-width:767px){ #ld-root{ padding-bottom:80px; } }
+  @media (min-width:768px){ #ld-sticky{ display:none; } }
+  body.ld-form-in-view #ld-sticky{ display:none !important; }
+  @media (prefers-reduced-motion: reduce){
+    #ld-root [data-ld-reveal], #ld-root [data-ld-reveal-fade]{ opacity:1; transform:none; transition:none; }
+    #ld-root .ld-img-frame img{ transition:none; }
+  }
+</style>
+
+{%- if product -%}
+  {%- assign ld_variant = product.selected_or_first_available_variant -%}
+  {%- assign ld_media_1 = product.media[0] -%}
+  {%- assign ld_media_2 = product.media[1] -%}
+  {%- assign ld_media_3 = product.media[2] -%}
+  {%- assign ld_media_4 = product.media[3] -%}
+  {%- assign ld_has_discount = false -%}
+  {%- if ld_variant.compare_at_price > ld_variant.price -%}
+    {%- assign ld_has_discount = true -%}
+    {%- assign ld_discount_pct = ld_variant.compare_at_price | minus: ld_variant.price | times: 100 | divided_by: ld_variant.compare_at_price -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": [{{ ld_media_1 | image_url: width: 1200 | prepend: "https:" | json }}],
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  "sku": {{ ld_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ ld_variant.price | money_without_currency | json }},
+    "availability": "{% if ld_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  }
+}
+</script>
+{%- endif -%}
+
+<!-- ============ HEADER (minimal, sticky) ============ -->
+<header class="sticky top-0 z-50 bg-ivory/95 backdrop-blur border-b border-sand">
+  <div class="max-w-[1200px] mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
+    <span class="ld-serif text-lg md:text-xl font-semibold text-brown">{{ section.settings.logo_text | default: shop.name }}</span>
+    <button type="button" data-ld-scroll="#ld-order" class="text-sm font-semibold text-brown border border-brown/25 rounded-full px-5 py-2.5 hover:bg-brown hover:text-ivory hover:border-brown transition-colors">
+      اطلب الآن
+    </button>
+  </div>
+</header>
+
+<div class="max-w-[1200px] mx-auto px-5 md:px-8">
+
+  <!-- ============ HERO ============ -->
+  <section class="py-10 md:py-16">
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-8 md:gap-16 items-center">
+      <div data-ld-reveal-fade>
+        <div class="ld-img-frame rounded-[28px] aspect-[4/5] md:aspect-[3/4]">
+          {%- if ld_media_1 -%}
+            {{ ld_media_1 | image_url: width: 1200 | image_tag: loading: 'eager', alt: product.title, class: 'w-full h-full object-cover' }}
+          {%- else -%}
+            <div class="ld-placeholder w-full h-full text-sm font-semibold">صورة المنتج</div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div data-ld-reveal>
+        <h1 class="ld-serif text-3xl md:text-[2.6rem] font-semibold leading-[1.4] text-brown mb-4">{{ section.settings.hero_heading | default: 'لمسة واحدة تغيّر أناقة المكان' }}</h1>
+        <p class="text-base md:text-lg text-brown/65 leading-relaxed mb-6 max-w-sm">{{ section.settings.hero_subheading | default: 'تصميم أنيق يضيف لمسة فاخرة وهادئة إلى ديكور منزلك.' }}</p>
+
+        {%- if product and ld_variant -%}
+          <div class="flex items-end gap-3 mb-2">
+            {%- if ld_has_discount -%}
+              <span class="text-base text-brown/35 line-through">{{ ld_variant.compare_at_price | money }}</span>
+            {%- endif -%}
+            <span class="text-2xl md:text-3xl font-semibold text-brown">{{ ld_variant.price | money }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.free_shipping -%}
+          <p class="text-sm font-medium text-gold mb-7">التوصيل مجاني داخل الكويت</p>
+        {%- endif -%}
+
+        <button type="button" data-ld-scroll="#ld-order" class="inline-flex items-center justify-center font-semibold text-ivory text-base px-9 py-4 rounded-full bg-brown hover:opacity-90 transition">
+          اطلب الآن
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCT PRESENTATION A — full-bleed lifestyle ============ -->
+  {%- if ld_media_2 -%}
+    <section class="py-10 md:py-16" data-ld-reveal-fade>
+      <div class="ld-img-frame rounded-[28px] aspect-[16/10] md:aspect-[21/9]">
+        {{ ld_media_2 | image_url: width: 1800 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ============ EMOTIONAL VALUE ============ -->
+  <section class="py-14 md:py-20 text-center max-w-lg mx-auto">
+    <p class="ld-serif text-2xl md:text-3xl font-semibold text-brown mb-4" data-ld-reveal>لأن التفاصيل الصغيرة تصنع الفرق.</p>
+    <p class="text-base text-brown/60 leading-relaxed" data-ld-reveal>اختيار قطعة ديكور مناسبة لا يضيف مجرد شكل جميل، بل يمنح المكان شخصية وإحساساً مختلفاً.</p>
+  </section>
+
+  <!-- ============ PRODUCT PRESENTATION B — detail, two-col ============ -->
+  {%- if ld_media_3 -%}
+    <section class="py-10 md:py-16">
+      <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
+        <div data-ld-reveal>
+          <div class="ld-img-frame rounded-[24px] aspect-square">
+            {{ ld_media_3 | image_url: width: 1000 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          </div>
+        </div>
+        <div class="order-first md:order-last" data-ld-reveal>
+          <p class="ld-serif text-xl md:text-2xl font-semibold text-brown mb-2">تفاصيل تستحق النظرة الثانية</p>
+          <p class="text-base text-brown/60 leading-relaxed max-w-sm">خامات وتشطيبات مختارة بعناية، تمنح القطعة حضوراً هادئاً وأنيقاً في أي زاوية من المنزل.</p>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ============ BENEFITS ============ -->
+  <section class="py-14 md:py-20">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+      <div class="bg-white rounded-[20px] p-6 text-center" data-ld-reveal>
+        <svg viewBox="0 0 32 32" class="w-6 h-6 mx-auto mb-3 text-gold" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M16 4l2.2 7.8L26 14l-7.8 2.2L16 24l-2.2-7.8L6 14l7.8-2.2L16 4Z"/></svg>
+        <p class="font-semibold text-brown text-sm mb-1.5">تصميم أنيق</p>
+        <p class="text-xs text-brown/55 leading-relaxed">ينسجم بسهولة مع مختلف أنماط الديكور</p>
+      </div>
+      <div class="bg-white rounded-[20px] p-6 text-center" data-ld-reveal>
+        <svg viewBox="0 0 32 32" class="w-6 h-6 mx-auto mb-3 text-gold" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 15 16 6l10 9"/><path d="M9 13v13h14V13"/></svg>
+        <p class="font-semibold text-brown text-sm mb-1.5">يضيف لمسة فاخرة</p>
+        <p class="text-xs text-brown/55 leading-relaxed">تفصيل بسيط يصنع فرقاً واضحاً في المكان</p>
+      </div>
+      <div class="bg-white rounded-[20px] p-6 text-center" data-ld-reveal>
+        <svg viewBox="0 0 32 32" class="w-6 h-6 mx-auto mb-3 text-gold" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="6"/><circle cx="20" cy="20" r="6"/></svg>
+        <p class="font-semibold text-brown text-sm mb-1.5">سهل التنسيق</p>
+        <p class="text-xs text-brown/55 leading-relaxed">يتماشى مع الألوان الهادئة والمفروشات العصرية</p>
+      </div>
+      <div class="bg-white rounded-[20px] p-6 text-center" data-ld-reveal>
+        <svg viewBox="0 0 32 32" class="w-6 h-6 mx-auto mb-3 text-gold" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="12" width="14" height="10" rx="1.5"/><path d="M18 15h5l4 4v3h-9z"/><circle cx="10" cy="24" r="2"/><circle cx="23" cy="24" r="2"/></svg>
+        <p class="font-semibold text-brown text-sm mb-1.5">توصيل مجاني</p>
+        <p class="text-xs text-brown/55 leading-relaxed">التوصيل مجاني داخل الكويت</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCT PRESENTATION C — different angle, alternating ============ -->
+  {%- if ld_media_4 -%}
+    <section class="py-10 md:py-16">
+      <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
+        <div data-ld-reveal>
+          <p class="ld-serif text-xl md:text-2xl font-semibold text-brown mb-2">زاوية أخرى، نفس الأناقة</p>
+          <p class="text-base text-brown/60 leading-relaxed max-w-sm">لتكوني على يقين من الشكل والتناسق قبل ما تدخل بيتك.</p>
+        </div>
+        <div data-ld-reveal>
+          <div class="ld-img-frame rounded-[24px] aspect-square">
+            {{ ld_media_4 | image_url: width: 1000 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ============ SEE IT IN YOUR HOME ============ -->
+  <section class="py-10 md:py-16">
+    <div class="relative ld-img-frame rounded-[28px] aspect-[4/5] md:aspect-[16/9]" data-ld-reveal-fade>
+      {%- if ld_media_1 -%}
+        {{ ld_media_1 | image_url: width: 1800 | image_tag: loading: 'lazy', alt: product.title, class: 'w-full h-full object-cover' }}
+      {%- endif -%}
+      <div class="absolute inset-0 bg-gradient-to-t from-brown/55 via-brown/10 to-transparent"></div>
+      <div class="absolute inset-x-0 bottom-0 p-8 md:p-12 text-center">
+        <p class="ld-serif text-2xl md:text-3xl font-semibold text-ivory mb-5">تخيّل هذه اللمسة في منزلك</p>
+        <button type="button" data-ld-scroll="#ld-order" class="inline-flex items-center justify-center text-sm font-semibold text-ivory border border-ivory/70 rounded-full px-7 py-3 hover:bg-ivory hover:text-brown transition-colors">
+          أريدها في منزلي
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL PROOF ============ -->
+  <section class="py-14 md:py-20">
+    <div class="text-center max-w-lg mx-auto mb-10" data-ld-reveal>
+      <p class="ld-serif text-2xl md:text-3xl font-semibold text-brown">آراء لمسات وصلت لبيوت عملائنا</p>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-5">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          <div class="bg-white rounded-[20px] p-6" {{ block.shopify_attributes }} data-ld-reveal>
+            {%- assign ld_stars = block.settings.rating | default: 5 -%}
+            <div class="text-gold text-sm tracking-widest mb-3">{%- for i in (1..ld_stars) -%}★{%- endfor -%}</div>
+            <p class="text-brown/75 text-sm leading-relaxed mb-3">"{{ block.settings.text }}"</p>
+            {%- if block.settings.name != blank -%}
+              <p class="text-xs font-semibold text-brown/45">{{ block.settings.name }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  <!-- ============ OFFER ============ -->
+  <section class="py-14 md:py-20">
+    <div class="max-w-md mx-auto text-center border border-sand rounded-[28px] p-8 md:p-10" data-ld-reveal>
+      {%- if product -%}<p class="text-sm font-medium text-brown/50 mb-3">{{ product.title }}</p>{%- endif -%}
+      {%- if product and ld_variant -%}
+        <div class="flex items-end justify-center gap-3 mb-2">
+          {%- if ld_has_discount -%}
+            <span class="text-base text-brown/35 line-through">{{ ld_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span class="text-3xl md:text-4xl font-semibold text-brown">{{ ld_variant.price | money }}</span>
+        </div>
+        {%- if ld_has_discount -%}
+          <p class="text-sm text-gold font-medium mb-4">خصم {{ ld_discount_pct }}%</p>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if section.settings.free_shipping -%}
+        <p class="text-sm text-brown/60 mb-7">التوصيل مجاني داخل الكويت</p>
+      {%- endif -%}
+      <button type="button" data-ld-scroll="#ld-order" class="w-full inline-flex items-center justify-center font-semibold text-ivory text-base px-9 py-4 rounded-full bg-brown hover:opacity-90 transition">
+        اطلب الآن
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ EASYSELL ORDER FORM ============ -->
+  <section id="ld-order" class="py-14 md:py-20">
+    <div class="max-w-lg mx-auto" data-ld-reveal>
+      <div class="text-center mb-8">
+        <p class="ld-serif text-2xl md:text-3xl font-semibold text-brown mb-2">أكمل طلبك الآن</p>
+        <p class="text-sm text-brown/55">أدخل معلوماتك وسنتواصل معك لتأكيد الطلب.</p>
+      </div>
+
+      <div class="bg-white rounded-[28px] border border-sand p-6 md:p-9">
+        {%- if product -%}
+          {%- form 'product', product, id: 'ld-form', novalidate: true -%}
+            <input type="hidden" name="id" value="{{ ld_variant.id }}">
+            {% content_for 'blocks' %}
+          {%- endform -%}
+        {%- else -%}
+          <p class="text-center text-sm font-medium text-brown/50">أضيفي هذا القسم لصفحة منتج لتفعيل نموذج الطلب.</p>
+        {%- endif -%}
+
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-7 text-xs font-medium text-brown/50">
+          <span>الدفع عند الاستلام</span>
+          {%- if section.settings.free_shipping -%}<span>التوصيل مجاني داخل الكويت</span>{%- endif -%}
+          <span>طلب سهل وسريع</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="py-16 md:py-24 text-center">
+    <p class="ld-serif text-2xl md:text-3xl font-semibold text-brown mb-3" data-ld-reveal>جاهز تضيف لمسة مختلفة إلى منزلك؟</p>
+    <p class="text-base text-brown/60 mb-8" data-ld-reveal>اطلبها الآن واستمتع بتوصيل مجاني داخل الكويت.</p>
+    <button type="button" data-ld-scroll="#ld-order" class="inline-flex items-center justify-center font-semibold text-ivory text-base px-10 py-4 rounded-full bg-brown hover:opacity-90 transition" data-ld-reveal>
+      اطلب الآن
+    </button>
+  </section>
+
+  <footer class="py-10 text-center border-t border-sand">
+    <p class="text-xs text-brown/35">© {{ 'now' | date: '%Y' }} {{ shop.name }}.</p>
+  </footer>
+
+</div>
+
+<!-- ============ STICKY MOBILE CTA ============ -->
+<div id="ld-sticky" class="fixed bottom-0 inset-x-0 z-40 bg-ivory/95 backdrop-blur border-t border-sand px-4 py-3">
+  <button type="button" data-ld-scroll="#ld-order" class="w-full font-semibold text-ivory text-sm py-3.5 rounded-full bg-brown">
+    اطلب الآن
+  </button>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('ld-root');
+    if (!root) return;
+
+    /* Reveal on scroll */
+    var reveals = root.querySelectorAll('[data-ld-reveal], [data-ld-reveal-fade]');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('is-visible'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      reveals.forEach(function (el) { io.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    /* Smooth scroll */
+    document.querySelectorAll('[data-ld-scroll]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = document.querySelector(btn.getAttribute('data-ld-scroll'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /* Hide the sticky CTA once the EasySell order section is in view */
+    var orderSection = document.getElementById('ld-order');
+    if (orderSection && 'IntersectionObserver' in window) {
+      var formObserver = new IntersectionObserver(function (entries) {
+        document.body.classList.toggle('ld-form-in-view', entries[0].isIntersecting);
+      }, { threshold: 0.1 });
+      formObserver.observe(orderSection);
+    }
+  })();
+</script>
+
+</section>
+
+{% schema %}
+{
+  "name": "Luxury Decor Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Nom affiché dans l'en-tête (vide = nom de la boutique)" },
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_heading", "label": "Titre", "default": "لمسة واحدة تغيّر أناقة المكان" },
+    { "type": "textarea", "id": "hero_subheading", "label": "Sous-titre", "default": "تصميم أنيق يضيف لمسة فاخرة وهادئة إلى ديكور منزلك." },
+    { "type": "header", "content": "Livraison" },
+    { "type": "checkbox", "id": "free_shipping", "label": "Livraison gratuite au Koweït", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        { "type": "range", "id": "rating", "min": 1, "max": 5, "step": 1, "label": "Note", "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Texte de l'avis", "default": "القطعة أجمل من الصور، أعطت المكان لمسة راقية جداً." },
+        { "type": "text", "id": "name", "label": "Nom (optionnel)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Decor Landing",
+      "blocks": [
+        { "type": "review", "settings": { "rating": 5, "text": "القطعة أجمل من الصور، أعطت المكان لمسة راقية جداً." } },
+        { "type": "review", "settings": { "rating": 5, "text": "التنسيق والخامة ممتازين، وصلتني بشكل مرتب." } },
+        { "type": "review", "settings": { "rating": 5, "text": "حبيتها مع ديكور الصالة، شكلها فخم." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
