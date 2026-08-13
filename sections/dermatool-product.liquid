@@ -1,0 +1,708 @@
+{%- comment -%}
+  DERMATOOL® — Product Template Section.
+  Réutilisable pour tous les futurs produits DERMATOOL : dupliquez
+  templates/product.dermatool.json, assignez-le au nouveau produit,
+  puis changez uniquement les réglages (vidéos, avant/après, avis, FAQ)
+  depuis le Theme Editor. Aucune donnée produit n'est écrite en dur ici :
+  tout vient de l'objet `product` de la page.
+{%- endcomment -%}
+
+{{ 'dermatool-product.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Cette section est un Product Template : elle est assignée depuis
+  Shopify Admin à un produit (Product > Theme template), donc l'objet
+  global `product` correspond TOUJOURS au produit réellement affiché
+  sur la page. Aucune autre source de produit n'est utilisée — pas de
+  sélecteur "Default Product", pas de produit codé en dur. Si le même
+  template est assigné au produit B, `product` devient automatiquement
+  le produit B et toute la page (prix, images, description, variantes,
+  stock, Product ID, Variant ID, EasySell) suit.
+{%- endcomment -%}
+{%- assign dt_product = product -%}
+
+{%- if dt_product -%}
+  {%- assign dt_variant = dt_product.selected_or_first_available_variant -%}
+  {%- assign dt_media = dt_variant.featured_media | default: dt_product.featured_media -%}
+  {%- assign dt_has_discount = false -%}
+  {%- if dt_variant.compare_at_price > dt_variant.price -%}
+    {%- assign dt_has_discount = true -%}
+    {%- assign dt_discount_pct = dt_variant.compare_at_price | minus: dt_variant.price | times: 100 | divided_by: dt_variant.compare_at_price -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if request.design_mode and dt_product == blank -%}
+  <div class="dt-editor-warning">
+    ⚠️ Cette section doit être assignée à un produit : Shopify Admin → Produits → votre produit → Theme template → sélectionnez le template qui utilise cette section (ex. "dermatool"). Une fois assignée, toute la page (prix, images, description, variantes, stock, EasySell) se remplit automatiquement avec le produit affiché.
+  </div>
+{%- endif -%}
+
+{%- if dt_product -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ dt_product.title | json }},
+  "image": [{{ dt_media | image_url: width: 1200 | prepend: "https:" | json }}],
+  "description": {{ dt_product.description | strip_html | truncate: 300 | json }},
+  "sku": {{ dt_variant.sku | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ dt_variant.price | money_without_currency | json }},
+    "availability": "{% if dt_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  }
+}
+</script>
+{%- endif -%}
+
+<div class="dt-page" id="dt-page-{{ section.id }}">
+
+  {%- if dt_product -%}
+
+  <!-- ===== BANDEAU ANNONCE ===== -->
+  {%- if section.settings.announcement_text != blank -%}
+    <div class="dt-announcement">{{ section.settings.announcement_text }}</div>
+  {%- endif -%}
+
+  <!-- ===== HERO + PRODUIT + PRIX + CTA ===== -->
+  {%- comment -%}
+    Regroupés dans un seul bloc au-dessus de la ligne de flottaison,
+    comme sur une vraie fiche produit Shopify : galerie à gauche,
+    badge / titre / prix / variantes / CTA à droite.
+  {%- endcomment -%}
+  <section class="dt-hero">
+    <div class="dt-hero__gallery">
+      {%- if dt_media -%}
+        <div class="dt-hero__main-img" id="dt-main-img-{{ section.id }}">
+          {{ dt_media | image_url: width: 1000 | image_tag: loading: 'eager', alt: dt_product.title, class: 'dt-hero__img', id: 'dt-featured-img-' | append: section.id }}
+        </div>
+      {%- endif -%}
+      {%- if dt_product.media.size > 1 -%}
+        <div class="dt-hero__thumbs">
+          {%- for media in dt_product.media limit: 6 -%}
+            <button
+              type="button"
+              class="dt-thumb {% if media == dt_media %}dt-thumb--active{% endif %}"
+              data-dt-thumb
+              data-dt-thumb-src="{{ media | image_url: width: 1000 }}"
+              aria-label="Image {{ forloop.index }}"
+            >
+              {{ media | image_url: width: 160 | image_tag: loading: 'lazy', alt: dt_product.title, class: 'dt-thumb__img' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="dt-hero__info">
+      <span class="dt-badge">{{ section.settings.hero_badge | default: 'DERMATOOL® — SOIN DES ONGLES' }}</span>
+      <h1 class="dt-hero__title">{{ section.settings.hero_title | default: 'RETROUVEZ DES ONGLES SAINS, PROPRES & SOIGNÉS' }}</h1>
+      <p class="dt-hero__subtitle">{{ section.settings.hero_subtitle | default: 'Une routine simple et pratique pour prendre soin de vos ongles au quotidien.' }}</p>
+
+      <div class="dt-rating">
+        <span class="dt-stars">★★★★★</span>
+        <span class="dt-rating-count">({{ product.metafields.reviews.rating_count | default: section.settings.rating_count | default: '500' }} avis)</span>
+      </div>
+
+      <div class="dt-price" data-dt-price-block>
+        {%- if dt_has_discount -%}
+          <span class="dt-price__compare" data-dt-compare-price>{{ dt_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="dt-price__current" data-dt-price>{{ dt_variant.price | money }}</span>
+        {%- if dt_has_discount -%}
+          <span class="dt-price__badge" data-dt-discount-badge>-{{ dt_discount_pct }}%</span>
+        {%- endif -%}
+      </div>
+
+      <div class="dt-availability" data-dt-availability {% if dt_variant.available %}hidden{% endif %}>
+        RUPTURE DE STOCK
+      </div>
+
+      {%- form 'product', dt_product, id: 'dt-product-form-' | append: section.id, class: 'dt-form', data-dt-form: '' -%}
+        <input type="hidden" name="id" value="{{ dt_variant.id }}" data-dt-variant-id>
+
+        {%- unless dt_product.has_only_default_variant -%}
+          {%- for option in dt_product.options_with_values -%}
+            <div class="dt-option-group">
+              <label class="dt-option-label">{{ option.name }}</label>
+              <div class="dt-option-pills">
+                {%- for value in option.values -%}
+                  <label class="dt-option-pill">
+                    <input
+                      type="radio"
+                      name="{{ option.name }}"
+                      value="{{ value | escape }}"
+                      data-dt-option="{{ forloop.parentloop.index0 }}"
+                      {% if option.selected_value == value %}checked{% endif %}
+                    >
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="dt-qty-group">
+          <label class="dt-option-label" for="dt-qty-{{ section.id }}">Quantité</label>
+          <div class="dt-qty-selector">
+            <button type="button" class="dt-qty-btn" data-dt-qty-minus aria-label="Diminuer la quantité">−</button>
+            <input type="number" id="dt-qty-{{ section.id }}" name="quantity" value="1" min="1" class="dt-qty-input" readonly>
+            <button type="button" class="dt-qty-btn" data-dt-qty-plus aria-label="Augmenter la quantité">+</button>
+          </div>
+        </div>
+
+        <div class="dt-cta-wrapper">
+          {%- comment -%} EasySell (App Embed) s'accroche automatiquement à ce formulaire produit et affiche son propre formulaire COD (Nom, Téléphone, Ville, Adresse) quand il est activé dans Theme Editor → App embeds. {%- endcomment -%}
+          {% content_for 'blocks' %}
+          <button
+            type="button"
+            class="dt-cta-btn"
+            data-dt-add-to-cart
+            {% if dt_variant.available == false %}disabled{% endif %}
+          >
+            <span data-dt-add-to-cart-label>
+              {%- if dt_variant.available -%}
+                {{ section.settings.hero_cta | default: 'COMMANDER MAINTENANT' }}
+              {%- else -%}
+                RUPTURE DE STOCK
+              {%- endif -%}
+            </span>
+          </button>
+        </div>
+      {%- endform -%}
+
+      <p class="dt-hero__shipping">🚚 Livraison à domicile partout au Maroc</p>
+    </div>
+  </section>
+
+  <!-- ===== VIDÉO DÉMONSTRATION ===== -->
+  {%- if section.settings.video_main -%}
+    <section class="dt-section dt-video-section">
+      <h2 class="dt-section__title">{{ section.settings.video_main_title | default: 'DÉCOUVREZ DERMATOOL® EN ACTION' }}</h2>
+      <div class="dt-video-frame">
+        {{ section.settings.video_main | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: true, class: 'dt-video-frame__el' }}
+      </div>
+      {%- if section.settings.video_main_caption != blank -%}
+        <p class="dt-video-caption">{{ section.settings.video_main_caption }}</p>
+      {%- endif -%}
+    </section>
+  {%- endif -%}
+
+  <!-- ===== PROBLÈME ===== -->
+  <section class="dt-section dt-problem">
+    <h2 class="dt-section__title">{{ section.settings.problem_title | default: 'VOS ONGLES NE SONT PLUS AUSSI NETS QU\'AVANT ?' }}</h2>
+    <p class="dt-problem__text">{{ section.settings.problem_text | default: "Les ongles peuvent changer d'apparence et devenir fragilisés au fil du temps. Une routine régulière permet d'en prendre soin au quotidien." }}</p>
+  </section>
+
+  <!-- ===== AVANT / APRÈS ===== -->
+  {%- if section.settings.before_image and section.settings.after_image -%}
+    <section class="dt-section dt-before-after">
+      <h2 class="dt-section__title">{{ section.settings.before_after_title | default: 'RÉSULTATS VISIBLES' }}</h2>
+      <p class="dt-section__subtitle">{{ section.settings.before_after_subtitle | default: 'Une routine régulière pour retrouver une apparence plus propre et soignée.' }}</p>
+
+      <div class="dt-ba-slider" data-dt-ba-slider>
+        <div class="dt-ba-slider__after">
+          {{ section.settings.after_image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: section.settings.after_label | default: 'Après', class: 'dt-ba-slider__img' }}
+          <span class="dt-ba-slider__tag dt-ba-slider__tag--after">{{ section.settings.after_label | default: 'APRÈS' }}</span>
+        </div>
+        <div class="dt-ba-slider__before" data-dt-ba-before>
+          {{ section.settings.before_image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: section.settings.before_label | default: 'Avant', class: 'dt-ba-slider__img' }}
+          <span class="dt-ba-slider__tag dt-ba-slider__tag--before">{{ section.settings.before_label | default: 'AVANT' }}</span>
+        </div>
+        <input type="range" min="0" max="100" value="50" class="dt-ba-slider__range" data-dt-ba-range aria-label="Faites glisser pour comparer avant et après">
+        <div class="dt-ba-slider__handle" data-dt-ba-handle aria-hidden="true">↔</div>
+      </div>
+
+      <p class="dt-disclaimer">{{ section.settings.before_after_disclaimer | default: "Les résultats peuvent varier selon chaque personne et la régularité d'utilisation." }}</p>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== VIDÉO UTILISATION ===== -->
+  {%- if section.settings.video_usage -%}
+    <section class="dt-section dt-video-section dt-video-section--alt">
+      <h2 class="dt-section__title">{{ section.settings.video_usage_title | default: 'VOYEZ COMMENT UTILISER DERMATOOL®' }}</h2>
+      <div class="dt-video-frame">
+        {{ section.settings.video_usage | video_tag: image_size: '1100x', controls: true, class: 'dt-video-frame__el' }}
+      </div>
+      <button type="button" class="dt-cta-btn dt-cta-btn--outline" data-dt-scroll="#dt-order-{{ section.id }}">
+        {{ section.settings.video_usage_cta | default: 'JE VEUX ESSAYER DERMATOOL®' }}
+      </button>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== BÉNÉFICES ===== -->
+  {%- assign dt_benefits = section.blocks | where: 'type', 'benefit' -%}
+  {%- if dt_benefits.size > 0 -%}
+    <section class="dt-section dt-benefits">
+      <h2 class="dt-section__title">{{ section.settings.benefits_title | default: 'POURQUOI CHOISIR DERMATOOL® ?' }}</h2>
+      <div class="dt-benefits__grid">
+        {%- for block in dt_benefits -%}
+          <div class="dt-benefit-card" {{ block.shopify_attributes }}>
+            <span class="dt-benefit-card__icon">{{ block.settings.icon | default: '✔' }}</span>
+            <h3 class="dt-benefit-card__title">{{ block.settings.title }}</h3>
+            <p class="dt-benefit-card__text">{{ block.settings.text }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== DESCRIPTION PRODUIT ===== -->
+  {%- if dt_product.description != blank -%}
+    <section class="dt-section dt-description">
+      <h2 class="dt-section__title">Description</h2>
+      <div class="dt-description__content">{{ dt_product.description }}</div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== POUR FEMME / POUR HOMME ===== -->
+  <section class="dt-section dt-audience">
+    <div class="dt-audience__card">
+      {%- if section.settings.woman_image -%}
+        {{ section.settings.woman_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: section.settings.woman_title | default: 'Pour femme', class: 'dt-audience__img' }}
+      {%- endif -%}
+      <h3 class="dt-audience__title">{{ section.settings.woman_title | default: 'POUR FEMME' }}</h3>
+      <p class="dt-audience__text">{{ section.settings.woman_text | default: 'Des ongles propres et soignés au quotidien.' }}</p>
+    </div>
+    <div class="dt-audience__card">
+      {%- if section.settings.man_image -%}
+        {{ section.settings.man_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: section.settings.man_title | default: 'Pour homme', class: 'dt-audience__img' }}
+      {%- endif -%}
+      <h3 class="dt-audience__title">{{ section.settings.man_title | default: 'POUR HOMME' }}</h3>
+      <p class="dt-audience__text">{{ section.settings.man_text | default: 'Une routine simple, rapide et discrète.' }}</p>
+    </div>
+  </section>
+
+  <!-- ===== COMMENT UTILISER ===== -->
+  {%- assign dt_steps = section.blocks | where: 'type', 'step' -%}
+  {%- if dt_steps.size > 0 -%}
+    <section class="dt-section dt-steps">
+      <h2 class="dt-section__title">{{ section.settings.steps_title | default: 'UNE ROUTINE SIMPLE EN 3 ÉTAPES' }}</h2>
+      <div class="dt-steps__grid">
+        {%- for block in dt_steps -%}
+          <div class="dt-step-card" {{ block.shopify_attributes }}>
+            <span class="dt-step-card__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <h3 class="dt-step-card__title">{{ block.settings.title }}</h3>
+            <p class="dt-step-card__text">{{ block.settings.text }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== AVIS CLIENTS ===== -->
+  {%- assign dt_reviews = section.blocks | where: 'type', 'review' -%}
+  {%- if dt_reviews.size > 0 -%}
+    <section class="dt-section dt-reviews">
+      <h2 class="dt-section__title">{{ section.settings.reviews_title | default: 'ILS ONT CHOISI DERMATOOL®' }}</h2>
+      <div class="dt-reviews__grid">
+        {%- for block in dt_reviews -%}
+          <div class="dt-review-card" {{ block.shopify_attributes }}>
+            <div class="dt-review-card__stars">{%- for i in (1..5) -%}{% if i <= block.settings.rating %}★{% else %}☆{% endif %}{%- endfor -%}</div>
+            <p class="dt-review-card__text">"{{ block.settings.text }}"</p>
+            <div class="dt-review-card__footer">
+              {%- if block.settings.photo -%}
+                {{ block.settings.photo | image_url: width: 80 | image_tag: loading: 'lazy', alt: block.settings.name, class: 'dt-review-card__photo' }}
+              {%- endif -%}
+              <div>
+                <p class="dt-review-card__name">{{ block.settings.name }}</p>
+                {%- if block.settings.date != blank -%}<p class="dt-review-card__date">{{ block.settings.date }}</p>{%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- elsif request.design_mode -%}
+    <section class="dt-section dt-reviews">
+      <div class="dt-editor-warning">
+        ⚠️ Aucun avis client. Ajoutez des blocs "Avis client" dans les réglages de cette section — cette section reste masquée sur le site public tant qu'aucun avis n'est ajouté.
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== FAQ ===== -->
+  {%- assign dt_faqs = section.blocks | where: 'type', 'faq_item' -%}
+  {%- if dt_faqs.size > 0 -%}
+    <section class="dt-section dt-faq">
+      <h2 class="dt-section__title">{{ section.settings.faq_title | default: 'QUESTIONS FRÉQUENTES SUR DERMATOOL®' }}</h2>
+      <div class="dt-faq__list">
+        {%- for block in dt_faqs -%}
+          <details class="dt-faq-item" {{ block.shopify_attributes }}>
+            <summary class="dt-faq-item__q">
+              <span>{{ block.settings.question }}</span>
+              <span class="dt-faq-item__plus">+</span>
+            </summary>
+            <div class="dt-faq-item__a">{{ block.settings.answer }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== CONFIANCE ===== -->
+  {%- assign dt_trust = section.blocks | where: 'type', 'trust_badge' -%}
+  {%- if dt_trust.size > 0 -%}
+    <section class="dt-section dt-trust">
+      <div class="dt-trust__grid">
+        {%- for block in dt_trust -%}
+          <div class="dt-trust-item" {{ block.shopify_attributes }}>
+            <span class="dt-trust-item__icon">{{ block.settings.icon }}</span>
+            <span class="dt-trust-item__text">{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <!-- ===== COMMANDE — FORMULAIRE EASYSELL COD ===== -->
+  <section class="dt-section dt-order" id="dt-order-{{ section.id }}">
+    <h2 class="dt-section__title dt-section__title--light">Finalisez votre commande</h2>
+    <div class="dt-order__price">
+      {%- if dt_has_discount -%}
+        <span class="dt-price__compare" data-dt-compare-price>{{ dt_variant.compare_at_price | money }}</span>
+      {%- endif -%}
+      <span class="dt-price__current" data-dt-price>{{ dt_variant.price | money }}</span>
+    </div>
+
+    <div class="dt-order__form-wrapper">
+      {%- if dt_variant.available -%}
+        {%- form 'product', dt_product, id: 'dt-order-form-' | append: section.id, class: 'dt-form' -%}
+          <input type="hidden" name="id" value="{{ dt_variant.id }}" data-dt-variant-id-order>
+          {%- comment -%} EasySell (App Embed) injecte ici automatiquement les champs Nom complet / Téléphone / Ville / Adresse et le bouton "Confirmer ma commande". {%- endcomment -%}
+          {% content_for 'blocks' %}
+          <button type="button" class="dt-cta-btn" data-dt-add-to-cart {% if dt_variant.available == false %}disabled{% endif %}>
+            <span data-dt-add-to-cart-label>CONFIRMER MA COMMANDE</span>
+          </button>
+        {%- endform -%}
+      {%- else -%}
+        <p class="dt-order__soldout">RUPTURE DE STOCK — ce produit n'est pas disponible pour le moment.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="dt-trust__grid dt-trust__grid--order">
+      <div class="dt-trust-item"><span class="dt-trust-item__icon">🔒</span><span class="dt-trust-item__text">Commande 100% sécurisée</span></div>
+      <div class="dt-trust-item"><span class="dt-trust-item__icon">🚚</span><span class="dt-trust-item__text">Livraison rapide partout au Maroc</span></div>
+      <div class="dt-trust-item"><span class="dt-trust-item__icon">💳</span><span class="dt-trust-item__text">Paiement à la livraison</span></div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="dt-section dt-final-cta">
+    <h2 class="dt-final-cta__title">{{ section.settings.final_cta_title | default: 'NE LAISSEZ PAS VOS ONGLES ATTENDRE' }}</h2>
+    <p class="dt-final-cta__price" data-dt-price>{{ dt_variant.price | money }}</p>
+    <button type="button" class="dt-cta-btn" data-dt-scroll="#dt-order-{{ section.id }}">
+      {{ section.settings.final_cta_button | default: 'COMMANDER DERMATOOL® MAINTENANT' }}
+    </button>
+  </section>
+
+  <!-- ===== BARRE STICKY MOBILE ===== -->
+  <div class="dt-sticky-bar" data-dt-sticky-bar>
+    <span class="dt-sticky-bar__price" data-dt-sticky-price>{{ dt_variant.price | money }}</span>
+    <button type="button" class="dt-cta-btn dt-cta-btn--sticky" data-dt-scroll="#dt-order-{{ section.id }}">
+      {{ section.settings.sticky_cta | default: 'COMMANDER DERMATOOL®' }}
+    </button>
+  </div>
+
+  <script type="application/json" data-dt-variants>{{ dt_product.variants | json }}</script>
+  <script>window.dtMoneyFormat = window.dtMoneyFormat || {{ shop.money_format | json }};</script>
+
+  {%- else -%}
+    {%- comment -%} Aucun produit : rien à afficher sur le site public (uniquement le message d'avertissement plus haut, visible en Theme Editor). {%- endcomment -%}
+  {%- endif -%}
+
+</div>
+
+<script src="{{ 'dermatool-product.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "DERMATOOL — Product Template",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Bandeau annonce"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Texte du bandeau",
+      "default": "🚚 Livraison à domicile partout au Maroc"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_badge",
+      "label": "Badge",
+      "default": "DERMATOOL® — SOIN DES ONGLES"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Titre principal (H1)",
+      "default": "RETROUVEZ DES ONGLES SAINS, PROPRES & SOIGNÉS"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Sous-titre",
+      "default": "Une routine simple et pratique pour prendre soin de vos ongles au quotidien."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta",
+      "label": "Texte du bouton principal",
+      "default": "COMMANDER MAINTENANT"
+    },
+    {
+      "type": "text",
+      "id": "rating_count",
+      "label": "Nombre d'avis affiché dans le badge",
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Vidéo démonstration"
+    },
+    {
+      "type": "video",
+      "id": "video_main",
+      "label": "Vidéo principale"
+    },
+    {
+      "type": "text",
+      "id": "video_main_title",
+      "default": "DÉCOUVREZ DERMATOOL® EN ACTION"
+    },
+    {
+      "type": "text",
+      "id": "video_main_caption",
+      "default": "Découvrez comment utiliser DERMATOOL® en quelques secondes."
+    },
+    {
+      "type": "header",
+      "content": "Problème"
+    },
+    {
+      "type": "text",
+      "id": "problem_title",
+      "default": "VOS ONGLES NE SONT PLUS AUSSI NETS QU'AVANT ?"
+    },
+    {
+      "type": "textarea",
+      "id": "problem_text",
+      "default": "Les ongles peuvent changer d'apparence et devenir fragilisés au fil du temps. Une routine régulière permet d'en prendre soin au quotidien."
+    },
+    {
+      "type": "header",
+      "content": "Avant / Après"
+    },
+    {
+      "type": "text",
+      "id": "before_after_title",
+      "default": "RÉSULTATS VISIBLES"
+    },
+    {
+      "type": "textarea",
+      "id": "before_after_subtitle",
+      "default": "Une routine régulière pour retrouver une apparence plus propre et soignée."
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Image Avant"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "Image Après"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "default": "AVANT"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "default": "APRÈS"
+    },
+    {
+      "type": "text",
+      "id": "before_after_disclaimer",
+      "default": "Les résultats peuvent varier selon chaque personne et la régularité d'utilisation."
+    },
+    {
+      "type": "header",
+      "content": "Vidéo utilisation"
+    },
+    {
+      "type": "video",
+      "id": "video_usage",
+      "label": "Vidéo utilisation"
+    },
+    {
+      "type": "text",
+      "id": "video_usage_title",
+      "default": "VOYEZ COMMENT UTILISER DERMATOOL®"
+    },
+    {
+      "type": "text",
+      "id": "video_usage_cta",
+      "default": "JE VEUX ESSAYER DERMATOOL®"
+    },
+    {
+      "type": "header",
+      "content": "Bénéfices"
+    },
+    {
+      "type": "text",
+      "id": "benefits_title",
+      "default": "POURQUOI CHOISIR DERMATOOL® ?"
+    },
+    {
+      "type": "header",
+      "content": "Pour Elle / Pour Lui"
+    },
+    {
+      "type": "text",
+      "id": "woman_title",
+      "default": "POUR FEMME"
+    },
+    {
+      "type": "textarea",
+      "id": "woman_text",
+      "default": "Des ongles propres et soignés au quotidien."
+    },
+    {
+      "type": "image_picker",
+      "id": "woman_image",
+      "label": "Image Pour Femme"
+    },
+    {
+      "type": "text",
+      "id": "man_title",
+      "default": "POUR HOMME"
+    },
+    {
+      "type": "textarea",
+      "id": "man_text",
+      "default": "Une routine simple, rapide et discrète."
+    },
+    {
+      "type": "image_picker",
+      "id": "man_image",
+      "label": "Image Pour Homme"
+    },
+    {
+      "type": "header",
+      "content": "Comment utiliser"
+    },
+    {
+      "type": "text",
+      "id": "steps_title",
+      "default": "UNE ROUTINE SIMPLE EN 3 ÉTAPES"
+    },
+    {
+      "type": "header",
+      "content": "Avis clients"
+    },
+    {
+      "type": "text",
+      "id": "reviews_title",
+      "default": "ILS ONT CHOISI DERMATOOL®"
+    },
+    {
+      "type": "header",
+      "content": "FAQ"
+    },
+    {
+      "type": "text",
+      "id": "faq_title",
+      "default": "QUESTIONS FRÉQUENTES SUR DERMATOOL®"
+    },
+    {
+      "type": "header",
+      "content": "CTA final"
+    },
+    {
+      "type": "text",
+      "id": "final_cta_title",
+      "default": "NE LAISSEZ PAS VOS ONGLES ATTENDRE"
+    },
+    {
+      "type": "text",
+      "id": "final_cta_button",
+      "default": "COMMANDER DERMATOOL® MAINTENANT"
+    },
+    {
+      "type": "header",
+      "content": "Barre sticky mobile"
+    },
+    {
+      "type": "text",
+      "id": "sticky_cta",
+      "default": "COMMANDER DERMATOOL®"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "benefit",
+      "name": "Bénéfice",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icône (emoji)", "default": "✔" },
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "textarea", "id": "text", "label": "Description" }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "Étape d'utilisation",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre de l'étape" },
+        { "type": "textarea", "id": "text", "label": "Description" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nom du client" },
+        { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Commentaire" },
+        { "type": "text", "id": "date", "label": "Date (texte libre)" },
+        { "type": "image_picker", "id": "photo", "label": "Photo (facultatif)" }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "Question FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "textarea", "id": "answer", "label": "Réponse" }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Badge de confiance",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icône (emoji)", "default": "✅" },
+        { "type": "text", "id": "text", "label": "Texte" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DERMATOOL — Product Template"
+    }
+  ]
+}
+{% endschema %}
