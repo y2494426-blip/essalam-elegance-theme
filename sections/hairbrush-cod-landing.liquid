@@ -1,0 +1,1052 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign img0 = product.featured_image
+  assign img1 = product.images[1]
+  assign img2 = product.images[2]
+  assign img3 = product.images[3]
+  if section.settings.before_image
+    assign ba_before = section.settings.before_image
+  endif
+  if section.settings.after_image
+    assign ba_after = section.settings.after_image
+  endif
+-%}
+{{ 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&family=El+Messiri:wght@500;600;700&display=swap' | stylesheet_tag }}
+<script type="application/json" id="hb-variants-json">{{ product.variants | json }}</script>
+
+<div class="hb-page" dir="rtl" lang="ar">
+<style>
+/* ============================================================
+   HAIRBRUSH COD LANDING — Luxury Arabic RTL
+   Saudi Arabia | Shopify OS 2.0
+   ============================================================ */
+.hb-page{
+  --white:#FFFFFF;
+  --offwhite:#F8FAF7;
+  --soft-green:#DCEFE3;
+  --elegant-green:#6FA982;
+  --dark-green:#214C35;
+  --light-green:#F1F8F3;
+  --gold:#C9A876;
+  --gold-soft:#E9DCC0;
+  --ink:#1B3327;
+  --font-display:'Amiri',serif;
+  --font-body:'Tajawal',sans-serif;
+  --font-accent:'El Messiri',sans-serif;
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-soft:0 20px 60px -25px rgba(33,76,53,0.25);
+  --shadow-tiny:0 8px 24px -12px rgba(33,76,53,0.18);
+}
+.hb-page *{box-sizing:border-box;margin:0;padding:0;}
+.hb-page img{max-width:100%;display:block;}
+.hb-page .container{max-width:1180px;margin:0 auto;padding:0 24px;}
+.hb-page h1,.hb-page h2,.hb-page h3{
+  font-family:var(--font-display);color:var(--dark-green);font-weight:700;line-height:1.25;
+}
+.hb-page .eyebrow{
+  font-family:var(--font-accent);color:var(--elegant-green);
+  font-size:13px;letter-spacing:1.5px;font-weight:600;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.hb-page .eyebrow::before{content:"";width:22px;height:1px;background:var(--elegant-green);}
+.hb-page section{position:relative;padding:100px 0;}
+@media(max-width:768px){.hb-page section{padding:64px 0;}}
+
+/* Buttons */
+.hb-page .btn-primary{
+  display:inline-flex;align-items:center;gap:10px;justify-content:center;
+  background:linear-gradient(135deg,var(--dark-green),#2c6144);
+  color:var(--white);font-family:var(--font-accent);font-weight:600;font-size:16px;
+  padding:18px 44px;border-radius:999px;text-decoration:none;border:none;cursor:pointer;
+  box-shadow:0 16px 40px -14px rgba(33,76,53,0.55);
+  position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease;
+  font-family:var(--font-accent);
+}
+.hb-page .btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 22px 46px -14px rgba(33,76,53,0.6);}
+.hb-page .btn-primary::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);
+  transform:translateX(-120%);transition:transform .8s ease;
+}
+.hb-page .btn-primary:hover::after{transform:translateX(120%);}
+.hb-page .sub-note{
+  margin-top:14px;font-size:14px;color:var(--elegant-green);font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+
+/* Animations */
+.hb-page .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease;}
+.hb-page .reveal.in{opacity:1;transform:translateY(0);}
+.hb-page .floating{animation:hbFloat 5s ease-in-out infinite;}
+@keyframes hbFloat{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-16px) rotate(-1deg);}}
+@keyframes hbPulseIn{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes hbOrbit{
+  0%{transform:rotate(0deg) translateX(90px) rotate(0deg);opacity:0;}
+  10%{opacity:1;}90%{opacity:1;}
+  100%{transform:rotate(360deg) translateX(90px) rotate(-360deg);opacity:0;}
+}
+@keyframes hbCharge{0%{width:20%;}100%{width:96%;}}
+@keyframes hbRipple{0%{transform:scale(0);opacity:.6;}100%{transform:scale(2.5);opacity:0;}}
+
+/* Header */
+.hb-page .hb-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(33,76,53,0.08);
+}
+.hb-page .nav-wrap{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;max-width:1180px;margin:0 auto;
+}
+.hb-page .logo{font-family:var(--font-display);font-size:22px;color:var(--dark-green);font-weight:700;}
+.hb-page .logo span{color:var(--elegant-green);}
+.hb-page .nav-cta{
+  background:var(--dark-green);color:var(--white);font-family:var(--font-accent);
+  padding:10px 22px;border-radius:999px;font-size:14px;font-weight:600;
+  text-decoration:none;box-shadow:var(--shadow-tiny);transition:transform .25s ease;border:none;cursor:pointer;
+}
+.hb-page .nav-cta:hover{transform:translateY(-2px);}
+
+/* Hero */
+.hb-page .hero{
+  padding-top:70px;padding-bottom:60px;
+  background:radial-gradient(circle at 80% 10%,var(--soft-green) 0%,var(--white) 55%);
+}
+.hb-page .hero-grid{
+  display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;position:relative;
+}
+@media(max-width:900px){.hb-page .hero-grid{grid-template-columns:1fr;text-align:center;}}
+.hb-page .hero-bg-text{
+  position:absolute;top:-10px;right:-4%;
+  font-family:var(--font-display);font-size:min(14vw,190px);
+  color:var(--soft-green);opacity:.6;z-index:0;white-space:nowrap;user-select:none;pointer-events:none;
+}
+.hb-page .hero-copy{position:relative;z-index:2;}
+.hb-page .hero-copy h1{font-size:clamp(34px,5vw,58px);margin-bottom:20px;}
+.hb-page .hero-copy .sub{
+  font-size:19px;color:#3d5c4b;max-width:480px;margin-bottom:30px;font-weight:400;
+}
+@media(max-width:900px){.hb-page .hero-copy .sub{margin-left:auto;margin-right:auto;}}
+.hb-page .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;z-index:2;}
+.hb-page .hero-product-plate{
+  position:relative;width:100%;max-width:420px;aspect-ratio:1/1;
+  background:radial-gradient(circle at 50% 40%,var(--white) 0%,var(--soft-green) 75%);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-soft);
+}
+.hb-page .badge{
+  position:absolute;background:rgba(255,255,255,0.9);backdrop-filter:blur(6px);
+  border:1px solid rgba(33,76,53,0.1);border-radius:999px;padding:9px 16px;
+  font-size:12.5px;font-weight:600;color:var(--dark-green);box-shadow:var(--shadow-tiny);
+  font-family:var(--font-accent);display:flex;align-items:center;gap:6px;
+  animation:hbPulseIn 4.5s ease-in-out infinite;
+}
+.hb-page .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--elegant-green);}
+.hb-page .b1{top:6%;right:0;}
+.hb-page .b2{bottom:10%;right:4%;animation-delay:.6s;}
+.hb-page .b3{top:44%;left:-4%;animation-delay:1.2s;}
+.hb-page .b4{bottom:2%;left:12%;animation-delay:1.8s;}
+@media(max-width:520px){.hb-page .badge{font-size:11px;padding:7px 12px;}.hb-page .b1,.hb-page .b2,.hb-page .b3,.hb-page .b4{display:none;}}
+
+/* Showcase plate */
+.hb-page .showcase-plate{
+  position:relative;background:linear-gradient(180deg,var(--light-green),var(--white));
+  border-radius:var(--radius-lg);padding:70px 20px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.hb-page .callout{
+  position:absolute;font-family:var(--font-accent);font-size:13px;font-weight:600;
+  color:var(--dark-green);background:var(--white);border:1px solid var(--soft-green);
+  padding:8px 14px;border-radius:999px;box-shadow:var(--shadow-tiny);
+}
+
+/* Split */
+.hb-page .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+@media(max-width:900px){.hb-page .split{grid-template-columns:1fr;gap:36px;}}
+.hb-page .split.reverse{direction:ltr;}
+.hb-page .split.reverse>*{direction:rtl;}
+
+/* Compare */
+.hb-page .compare-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px;}
+@media(max-width:700px){.hb-page .compare-row{grid-template-columns:1fr;}}
+.hb-page .compare-card{border-radius:var(--radius-md);padding:32px;position:relative;overflow:hidden;}
+.hb-page .compare-card.before{background:var(--offwhite);border:1px solid #ece5d8;}
+.hb-page .compare-card.after{background:var(--light-green);border:1px solid var(--soft-green);}
+.hb-page .compare-card h3{font-size:20px;margin-bottom:18px;}
+.hb-page .compare-card ul{list-style:none;}
+.hb-page .compare-card li{font-size:15px;padding:8px 0;padding-right:22px;position:relative;color:#3d5c4b;}
+.hb-page .compare-card.before li::before{content:"—";position:absolute;right:0;color:#b7a98d;}
+.hb-page .compare-card.after li::before{content:"✓";position:absolute;right:0;color:var(--elegant-green);font-weight:700;}
+.hb-page .hairband{height:120px;border-radius:var(--radius-md);margin-bottom:18px;position:relative;overflow:hidden;background-size:cover;background-position:center;background-color:var(--soft-green);}
+
+/* Ion */
+.hb-page .ion-stage{
+  position:relative;height:340px;border-radius:var(--radius-lg);
+  background:radial-gradient(circle at 50% 50%,var(--soft-green),var(--light-green) 70%);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.hb-page .ion-strand{width:6px;height:220px;background:linear-gradient(180deg,#4c3324,#2d1d13);border-radius:6px;position:relative;z-index:2;}
+.hb-page .ion-particle{
+  position:absolute;width:8px;height:8px;border-radius:50%;background:var(--elegant-green);
+  box-shadow:0 0 12px 2px rgba(111,169,130,0.7);animation:hbOrbit 6s linear infinite;
+}
+
+/* Big number */
+.hb-page .big-number{
+  font-family:var(--font-display);font-size:clamp(80px,14vw,180px);
+  color:var(--dark-green);line-height:1;text-align:center;
+}
+
+/* Temperature */
+.hb-page .temp-row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:40px;}
+.hb-page .temp-pill{
+  cursor:pointer;background:var(--white);border:2px solid var(--soft-green);border-radius:20px;
+  padding:26px 34px;text-align:center;transition:all .3s ease;min-width:140px;
+}
+.hb-page .temp-pill h4{font-family:var(--font-accent);font-size:28px;color:var(--dark-green);}
+.hb-page .temp-pill p{font-size:13px;color:#5b7a68;margin-top:6px;}
+.hb-page .temp-pill.active{
+  border-color:var(--elegant-green);background:var(--light-green);
+  transform:translateY(-6px);box-shadow:var(--shadow-tiny);
+}
+.hb-page .temp-desc{text-align:center;margin-top:24px;font-size:15px;color:var(--dark-green);min-height:24px;font-weight:500;}
+
+/* LCD */
+.hb-page .lcd-mock{
+  width:220px;height:150px;margin:0 auto;border-radius:22px;
+  background:#1c2b23;padding:14px;box-shadow:0 20px 40px -18px rgba(0,0,0,0.4);
+}
+.hb-page .lcd-screen{
+  width:100%;height:100%;border-radius:12px;
+  background:linear-gradient(160deg,#dff5e6,#c6ebd2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font-family:var(--font-accent);color:#20553a;
+}
+.hb-page .lcd-screen .temp{font-size:34px;font-weight:700;}
+.hb-page .lcd-screen .lbl{font-size:11px;letter-spacing:2px;}
+
+/* Battery */
+.hb-page .battery-shell{
+  width:170px;height:70px;border:3px solid var(--dark-green);border-radius:10px;
+  position:relative;margin:0 auto 8px;
+}
+.hb-page .battery-shell::after{
+  content:"";position:absolute;right:-9px;top:22px;width:8px;height:26px;
+  background:var(--dark-green);border-radius:0 4px 4px 0;
+}
+.hb-page .battery-fill{
+  position:absolute;inset:4px;border-radius:6px;
+  background:linear-gradient(90deg,var(--elegant-green),var(--soft-green));
+  animation:hbCharge 3s ease-in-out infinite alternate;transform-origin:right;
+}
+
+/* Stats */
+.hb-page .stat-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:center;margin-top:36px;}
+@media(max-width:640px){.hb-page .stat-trio{grid-template-columns:1fr;}}
+.hb-page .stat-box{background:var(--light-green);border-radius:var(--radius-md);padding:28px 14px;}
+.hb-page .stat-box .num{font-family:var(--font-display);font-size:30px;color:var(--dark-green);}
+.hb-page .stat-box .lbl{font-size:13px;color:#3d5c4b;margin-top:6px;}
+
+/* Dims */
+.hb-page .dims-row{display:flex;gap:30px;margin-top:24px;flex-wrap:wrap;}
+.hb-page .dims-row div{
+  background:var(--white);border:1px solid var(--soft-green);border-radius:14px;
+  padding:16px 22px;font-family:var(--font-accent);font-weight:600;color:var(--dark-green);font-size:14px;
+}
+
+/* Steps */
+.hb-page .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:44px;}
+@media(max-width:900px){.hb-page .steps{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.hb-page .steps{grid-template-columns:1fr;}}
+.hb-page .step-card{
+  background:var(--white);border:1px solid var(--soft-green);border-radius:var(--radius-md);
+  padding:26px 20px;text-align:center;transition:transform .3s ease,box-shadow .3s ease;
+}
+.hb-page .step-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-tiny);}
+.hb-page .step-num{font-family:var(--font-display);font-size:34px;color:var(--elegant-green);margin-bottom:10px;}
+.hb-page .step-card p{font-size:14.5px;color:#3d5c4b;font-weight:500;}
+
+/* Before/After Slider */
+.hb-page .ba-wrap{
+  position:relative;width:100%;max-width:760px;margin:44px auto 0;
+  aspect-ratio:16/9;border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:var(--shadow-soft);user-select:none;
+}
+.hb-page .ba-layer{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-accent);font-size:15px;font-weight:700;letter-spacing:1px;
+  background-size:cover;background-position:center;
+}
+.hb-page .ba-before{background-color:var(--soft-green);color:#4a3620;}
+.hb-page .ba-after{background-color:var(--elegant-green);color:#f6ead8;clip-path:inset(0 0 0 50%);}
+.hb-page .ba-handle{
+  position:absolute;top:0;bottom:0;right:50%;width:3px;
+  background:var(--white);box-shadow:0 0 0 3px rgba(255,255,255,0.5);
+  transform:translateX(50%);cursor:ew-resize;
+}
+.hb-page .ba-handle::after{
+  content:"⇔";position:absolute;top:50%;right:50%;transform:translate(50%,-50%);
+  width:44px;height:44px;background:var(--white);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--dark-green);font-size:18px;box-shadow:var(--shadow-tiny);
+}
+.hb-page .ba-tag{
+  position:absolute;top:16px;font-family:var(--font-accent);font-size:12px;
+  background:rgba(255,255,255,0.85);color:var(--dark-green);
+  padding:6px 14px;border-radius:999px;font-weight:700;
+}
+.hb-page .ba-tag.right{right:16px;}.hb-page .ba-tag.left{left:16px;}
+.hb-page input[type=range].ba-range{
+  position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;
+}
+
+/* Specs */
+.hb-page .spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;}
+@media(max-width:800px){.hb-page .spec-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.hb-page .spec-grid{grid-template-columns:1fr;}}
+.hb-page .spec-card{background:var(--offwhite);border:1px solid #ece5d8;border-radius:var(--radius-md);padding:22px;}
+.hb-page .spec-card h5{font-family:var(--font-accent);font-size:13px;color:var(--elegant-green);margin-bottom:6px;font-weight:600;}
+.hb-page .spec-card p{font-size:15.5px;color:var(--dark-green);font-weight:600;}
+
+/* Why */
+.hb-page .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;}
+@media(max-width:900px){.hb-page .why-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.hb-page .why-grid{grid-template-columns:1fr;}}
+.hb-page .why-card{
+  background:var(--white);border:1px solid var(--soft-green);border-radius:var(--radius-md);
+  padding:26px 20px;text-align:center;transition:transform .3s ease;
+}
+.hb-page .why-card:hover{transform:translateY(-6px);}
+.hb-page .why-icon{font-size:28px;margin-bottom:10px;}
+.hb-page .why-card p{font-family:var(--font-accent);font-size:14px;color:var(--dark-green);font-weight:600;}
+
+/* Premium stage */
+.hb-page .premium-stage{
+  position:relative;min-height:480px;border-radius:var(--radius-lg);
+  background:linear-gradient(180deg,var(--white),var(--soft-green) 120%);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.hb-page .premium-word{
+  position:absolute;font-family:var(--font-display);
+  font-size:min(16vw,150px);color:var(--dark-green);opacity:.08;
+  white-space:nowrap;font-weight:700;
+}
+.hb-page .pw1{top:6%;}.hb-page .pw2{top:42%;}.hb-page .pw3{bottom:4%;}
+.hb-page .float-card{
+  position:absolute;background:var(--white);border:1px solid var(--soft-green);
+  border-radius:16px;padding:12px 18px;font-family:var(--font-accent);
+  font-size:13px;font-weight:700;color:var(--dark-green);box-shadow:var(--shadow-tiny);
+}
+
+/* Reviews */
+.hb-page .review-track{
+  display:flex;gap:20px;overflow-x:auto;padding:10px 4px 24px;scroll-snap-type:x mandatory;
+}
+.hb-page .review-track::-webkit-scrollbar{height:6px;}
+.hb-page .review-track::-webkit-scrollbar-thumb{background:var(--soft-green);border-radius:6px;}
+.hb-page .review-card{
+  scroll-snap-align:start;min-width:280px;background:var(--offwhite);
+  border-radius:var(--radius-md);padding:26px;border:1px solid #ece5d8;
+}
+.hb-page .stars{color:var(--gold);letter-spacing:2px;margin-bottom:10px;}
+.hb-page .review-card p.quote{font-size:15px;color:var(--dark-green);margin-bottom:14px;}
+.hb-page .review-card .author{font-size:13px;color:#5b7a68;font-weight:600;}
+
+/* FAQ */
+.hb-page .faq-item{border-bottom:1px solid var(--soft-green);}
+.hb-page .faq-q{
+  width:100%;text-align:right;background:none;border:none;
+  padding:22px 4px;font-family:var(--font-body);font-size:16.5px;font-weight:700;
+  color:var(--dark-green);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.hb-page .faq-q .icon{transition:transform .3s ease;color:var(--elegant-green);font-size:20px;}
+.hb-page .faq-item.open .faq-q .icon{transform:rotate(45deg);}
+.hb-page .faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.hb-page .faq-a p{padding:0 4px 22px;font-size:14.5px;color:#3d5c4b;}
+
+/* Final CTA */
+.hb-page .final-cta{
+  background:linear-gradient(180deg,var(--light-green),var(--soft-green));
+  text-align:center;border-radius:var(--radius-lg);
+  margin:0 24px;padding:80px 24px;
+}
+@media(min-width:1180px){.hb-page .final-cta{margin:0 auto;max-width:1180px;}}
+.hb-page .final-cta h2{font-size:clamp(28px,4vw,44px);margin-bottom:16px;}
+.hb-page .final-cta p{max-width:520px;margin:0 auto 30px;color:#3d5c4b;font-size:16px;}
+
+/* Order / EasySell form */
+.hb-page .form-card{
+  max-width:560px;margin:44px auto 0;background:var(--white);
+  border:1px solid var(--soft-green);border-radius:var(--radius-lg);
+  padding:38px 30px;box-shadow:var(--shadow-soft);
+}
+.hb-page .form-total{
+  background:var(--light-green);border-radius:12px;padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:20px;font-family:var(--font-accent);font-weight:700;
+  color:var(--dark-green);font-size:15px;
+}
+/* Variant pills */
+.hb-page .hb-var-sec{margin-bottom:16px;}
+.hb-page .hb-var-lbl{font-size:13px;font-weight:700;color:#5b7a68;margin-bottom:8px;display:block;font-family:var(--font-accent);}
+.hb-page .hb-var-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.hb-page .hb-var-pill input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+.hb-page .hb-var-pill span{
+  display:block;border:1.5px solid #d0e6d8;border-radius:10px;
+  padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;
+  color:#5b7a68;background:#f8faf7;transition:all .2s;font-family:var(--font-body);
+}
+.hb-page .hb-var-pill input:checked+span{
+  border-color:var(--elegant-green);color:var(--dark-green);background:var(--light-green);
+}
+/* Qty */
+.hb-page .hb-qty-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.hb-page .hb-qty-lbl{font-size:13px;font-weight:700;color:#5b7a68;font-family:var(--font-accent);}
+.hb-page .hb-qty-box{display:flex;align-items:center;border:1.5px solid #d0e6d8;border-radius:10px;overflow:hidden;}
+.hb-page .hb-qty-btn{
+  width:40px;height:40px;background:var(--light-green);border:none;
+  font-size:22px;font-weight:700;cursor:pointer;color:var(--dark-green);
+  font-family:var(--font-body);display:flex;align-items:center;justify-content:center;
+}
+.hb-page .hb-qty-btn:hover{background:var(--soft-green);}
+.hb-page .hb-qty-inp{
+  width:52px;height:40px;border:none;
+  border-right:1.5px solid #d0e6d8;border-left:1.5px solid #d0e6d8;
+  text-align:center;font-size:16px;font-weight:700;
+  font-family:var(--font-body);background:#fff;
+}
+/* Submit */
+.hb-page .hb-submit{width:100%;margin-top:8px;font-family:var(--font-accent);}
+.hb-page .hb-secure{
+  text-align:center;font-size:13px;color:#5b7a68;
+  margin-top:14px;display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.hb-page .hb-ripple{
+  position:absolute;border-radius:50%;background:rgba(255,255,255,.22);
+  pointer-events:none;animation:hbRipple .6s ease-out forwards;
+}
+
+/* Footer */
+.hb-page .hb-footer{background:var(--dark-green);color:var(--offwhite);padding:50px 0 26px;text-align:center;}
+.hb-page .hb-footer .logo{color:var(--white);margin-bottom:10px;}
+.hb-page .hb-footer p{font-size:13px;color:#a9c9b7;margin-top:14px;}
+
+/* Sticky CTA */
+.hb-page .sticky-cta{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--white);
+  border-top:1px solid var(--soft-green);padding:12px 16px;
+  display:none;box-shadow:0 -10px 30px -12px rgba(33,76,53,0.25);
+}
+.hb-page .sticky-cta button{
+  display:block;width:100%;text-align:center;background:var(--dark-green);color:var(--white);
+  font-family:var(--font-accent);font-weight:700;padding:14px;border-radius:999px;
+  border:none;cursor:pointer;font-size:15px;
+}
+@media(max-width:820px){.hb-page .sticky-cta{display:block;} .hb-page{padding-bottom:78px;}}
+@media(prefers-reduced-motion:reduce){
+  .hb-page *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
+</style>
+
+<!-- ==================== HEADER ==================== -->
+<div class="hb-header">
+  <div class="nav-wrap">
+    <div class="logo">لُمعة<span>.</span></div>
+    <button type="button" class="nav-cta" onclick="document.getElementById('hb-order').scrollIntoView({behavior:'smooth'});">اطلبيها الآن</button>
+  </div>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-bg-text">نعومة</div>
+    <div class="hero-copy">
+      <div class="eyebrow">تقنية الأيونات السالبة</div>
+      <h1>شعر ناعم ومستقيم<br>في دقائق ✨</h1>
+      <p class="sub">فرشاة فرد الشعر الكهربائية بتقنية الأيونات السالبة — صففي شعرك بسهولة أينما كنتِ.</p>
+      <div style="margin-bottom:20px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
+        {% if product.price %}
+          <span style="font-family:var(--font-display);font-size:38px;color:var(--dark-green);font-weight:700;">{{ product.price | money }}</span>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span style="font-size:20px;color:#9bb5a7;text-decoration:line-through;">{{ current_variant.compare_at_price | money }}</span>
+          {% endif %}
+        {% endif %}
+      </div>
+      <button type="button" class="btn-primary" onclick="document.getElementById('hb-order').scrollIntoView({behavior:'smooth'});">اطلبيها الآن ←</button>
+      <div class="sub-note">🇸🇦 الدفع عند الاستلام</div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-product-plate floating" style="position:relative;">
+        {% if img0 %}
+          <img src="{{ img0 | image_url: width: 900 }}" loading="eager" fetchpriority="high"
+               alt="{{ img0.alt | default: product.title }}"
+               style="width:78%;object-fit:contain;filter:drop-shadow(0 22px 30px rgba(33,76,53,0.28));">
+        {% else %}
+          <div style="width:78%;height:320px;display:flex;align-items:center;justify-content:center;font-size:80px;">💇</div>
+        {% endif %}
+      </div>
+      <div class="badge b1"><span class="dot"></span>تسخين خلال 20 ثانية</div>
+      <div class="badge b2"><span class="dot"></span>3 درجات حرارة</div>
+      <div class="badge b3"><span class="dot"></span>لاسلكية وشحن USB-C</div>
+      <div class="badge b4"><span class="dot"></span>تقنية الأيونات السالبة</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRODUCT VISUAL ==================== -->
+<section>
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:flex;">تصميم مدروس بعناية</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,38px);">تفاصيل تصنع الفرق</h2>
+    <div class="showcase-plate" style="margin-top:40px;min-height:420px;">
+      <div class="hero-product-plate floating" style="max-width:320px;position:relative;">
+        {% if img1 %}
+          <img src="{{ img1 | image_url: width: 700 }}" loading="lazy"
+               alt="{{ img1.alt | default: product.title }}"
+               style="width:82%;object-fit:contain;filter:drop-shadow(0 22px 30px rgba(33,76,53,0.28));">
+        {% elsif img0 %}
+          <img src="{{ img0 | image_url: width: 700 }}" loading="lazy"
+               alt="{{ img0.alt | default: product.title }}"
+               style="width:82%;object-fit:contain;filter:drop-shadow(0 22px 30px rgba(33,76,53,0.28));">
+        {% else %}
+          <div style="font-size:60px;">💇</div>
+        {% endif %}
+      </div>
+      <div class="callout" style="top:14%;right:8%;">تصميم محمول</div>
+      <div class="callout" style="top:10%;left:8%;">شحن USB-C</div>
+      <div class="callout" style="bottom:30%;left:4%;">شاشة LCD</div>
+      <div class="callout" style="bottom:12%;right:6%;">3 مستويات حرارة</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROBLEM / SOLUTION ==================== -->
+<section style="background:var(--offwhite);">
+  <div class="container">
+    <div class="eyebrow">قبل أن تبدئي</div>
+    <h2 style="font-size:clamp(26px,3.4vw,38px);max-width:600px;">تعبتِ من الشعر المجعد وغير المرتب؟</h2>
+    <div class="compare-row">
+      <div class="compare-card before reveal">
+        <div class="hairband" style="{% if ba_before %}background-image:url('{{ ba_before | image_url: width: 700 }}');{% endif %}"></div>
+        <h3>قبل</h3>
+        <ul><li>شعر مجعد</li><li>هيشان وكهرباء ساكنة</li><li>صعوبة في التصفيف</li></ul>
+      </div>
+      <div class="compare-card after reveal">
+        <div class="hairband" style="{% if ba_after %}background-image:url('{{ ba_after | image_url: width: 700 }}');{% endif %}"></div>
+        <h3>بعد</h3>
+        <ul><li>شعر أنعم</li><li>مظهر أكثر لمعانًا</li><li>تصفيف أسرع وأسهل</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ION TECH ==================== -->
+<section>
+  <div class="container split">
+    <div class="reveal">
+      <div class="eyebrow">الميزة الأساسية</div>
+      <h2 style="font-size:clamp(26px,3.4vw,36px);">تقنية الأيونات السالبة لشعر أكثر نعومة ولمعانًا</h2>
+      <p style="margin-top:18px;color:#3d5c4b;font-size:16px;max-width:460px;">
+        تساعد تقنية الأيونات السالبة على تقليل التجعد والكهرباء الساكنة، لتمنح الشعر مظهرًا أكثر نعومة ولمعانًا أثناء التصفيف.
+      </p>
+    </div>
+    <div class="ion-stage reveal">
+      <div class="ion-strand"></div>
+      <div class="ion-particle" style="animation-delay:0s;"></div>
+      <div class="ion-particle" style="animation-delay:1.2s;"></div>
+      <div class="ion-particle" style="animation-delay:2.4s;"></div>
+      <div class="ion-particle" style="animation-delay:3.6s;"></div>
+      <div class="ion-particle" style="animation-delay:4.8s;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 20s HEATING ==================== -->
+<section style="background:var(--light-green);">
+  <div class="container" style="text-align:center;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">سرعة لا تنتظرين فيها</div>
+    <div class="big-number reveal">20s</div>
+    <h2 style="font-size:clamp(24px,3vw,32px);margin-top:6px;">جاهزة للتصفيف خلال 20 ثانية</h2>
+    <p style="max-width:480px;margin:16px auto 0;color:#3d5c4b;">تسخن الفرشاة بسرعة لتساعدك على تجهيز شعرك دون انتظار طويل، سواء كنتِ في المنزل أو قبل الخروج.</p>
+  </div>
+</section>
+
+<!-- ==================== TEMPERATURE ==================== -->
+<section>
+  <div class="container" style="text-align:center;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">تحكم كامل</div>
+    <h2 style="font-size:clamp(26px,3.4vw,36px);">3 درجات حرارة لتناسب احتياجات شعرك</h2>
+    <p style="max-width:460px;margin:14px auto 0;color:#3d5c4b;">اختاري درجة الحرارة المناسبة لطريقة تصفيفك ونوع شعرك.</p>
+    <div class="temp-row">
+      <div class="temp-pill" data-desc="مثالية للشعر الرقيق والحساس." onclick="hbSelectTemp(this)"><h4>160°C</h4><p>شعر خفيف</p></div>
+      <div class="temp-pill active" data-desc="الخيار الأمثل للاستخدام اليومي." onclick="hbSelectTemp(this)"><h4>180°C</h4><p>الاستخدام اليومي</p></div>
+      <div class="temp-pill" data-desc="مناسبة للشعر الكثيف والمموج." onclick="hbSelectTemp(this)"><h4>200°C</h4><p>شعر كثيف</p></div>
+    </div>
+    <div class="temp-desc" id="hbTempDesc">الخيار الأمثل للاستخدام اليومي.</div>
+  </div>
+</section>
+
+<!-- ==================== LCD ==================== -->
+<section style="background:var(--offwhite);">
+  <div class="container split reverse">
+    <div class="lcd-mock reveal">
+      <div class="lcd-screen">
+        <div class="temp">180°</div>
+        <div class="lbl">ACTIVE</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="eyebrow">وضوح دائم</div>
+      <h2 style="font-size:clamp(24px,3vw,32px);">درجة الحرارة أمامك دائمًا</h2>
+      <p style="margin-top:16px;color:#3d5c4b;max-width:420px;">شاشة LCD مدمجة تعرض درجة الحرارة بوضوح أثناء الاستخدام، لتمنحك تحكمًا أفضل في التصفيف.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BATTERY ==================== -->
+<section>
+  <div class="container split">
+    <div class="reveal">
+      <div class="eyebrow">حرية بلا أسلاك</div>
+      <h2 style="font-size:clamp(24px,3.4vw,36px);">حرية التصفيف بدون أسلاك</h2>
+      <p style="margin-top:16px;color:#3d5c4b;max-width:440px;">بطارية مدمجة بسعة 2000mAh تمنحك حتى 60 دقيقة من الاستخدام لكل شحنة، مع شحن USB-C لمرونة أكبر في المنزل وأثناء السفر.</p>
+    </div>
+    <div class="reveal">
+      <div class="battery-shell"><div class="battery-fill"></div></div>
+      <div class="stat-trio">
+        <div class="stat-box"><div class="num">2000</div><div class="lbl">mAh</div></div>
+        <div class="stat-box"><div class="num">60</div><div class="lbl">دقيقة استخدام</div></div>
+        <div class="stat-box"><div class="num">USB-C</div><div class="lbl">شحن سريع</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TRAVEL ==================== -->
+<section style="background:var(--light-green);">
+  <div class="container split reverse">
+    <div class="showcase-plate reveal" style="min-height:280px;">
+      <div class="hero-product-plate" style="max-width:220px;position:relative;">
+        {% if img2 %}
+          <img src="{{ img2 | image_url: width: 600 }}" loading="lazy" alt="{{ img2.alt | default: product.title }}" style="width:85%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(33,76,53,0.25));">
+        {% elsif img0 %}
+          <img src="{{ img0 | image_url: width: 600 }}" loading="lazy" alt="{{ img0.alt | default: product.title }}" style="width:85%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(33,76,53,0.25));">
+        {% endif %}
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="eyebrow">أينما كنتِ</div>
+      <h2 style="font-size:clamp(24px,3vw,32px);">رفيقتك المثالية في السفر</h2>
+      <p style="margin-top:16px;color:#3d5c4b;max-width:420px;">بتصميم مدمج وخفيف الوزن، يمكنك حملها بسهولة في حقيبتك واستخدامها أينما كنتِ.</p>
+      <div class="dims-row">
+        <div>3.2 × 1.4 × 3.5 بوصة</div>
+        <div>0.3 رطل فقط</div>
+        <div>مع حقيبة حماية</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW TO USE ==================== -->
+<section>
+  <div class="container" style="text-align:center;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">دليل سريع</div>
+    <h2 style="font-size:clamp(26px,3.4vw,36px);">طريقة الاستخدام</h2>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">01</div><p>شغّلي الفرشاة</p></div>
+      <div class="step-card"><div class="step-num">02</div><p>اختاري درجة الحرارة المناسبة</p></div>
+      <div class="step-card"><div class="step-num">03</div><p>انتظري حوالي 20 ثانية حتى تسخن</p></div>
+      <div class="step-card"><div class="step-num">04</div><p>مرري الفرشاة بلطف على خصلات الشعر</p></div>
+      <div class="step-card"><div class="step-num">05</div><p>استمتعي بمظهر أكثر نعومة وترتيبًا</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GALLERY ==================== -->
+{% if product.images.size > 1 %}
+<section style="background:var(--offwhite);">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:flex;">معرض الصور</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,36px);">شاهديها من كل زاوية</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:36px;">
+      {% for image in product.images limit: 8 %}
+        <div style="border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-tiny);cursor:zoom-in;transition:transform .3s,box-shadow .3s;"
+             data-hb-lb="{{ image | image_url: width: 1200 }}"
+             onmouseover="this.style.transform='scale(1.04)';this.style.boxShadow='var(--shadow-soft)'"
+             onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow-tiny)'">
+          <img src="{{ image | image_url: width: 500 }}" loading="lazy"
+               alt="{{ image.alt | default: product.title }}"
+               style="width:100%;aspect-ratio:1;object-fit:cover;display:block;">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Lightbox -->
+<div id="hb-lightbox" style="position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:30px;">
+  <button onclick="document.getElementById('hb-lightbox').style.display='none';document.body.style.overflow='';"
+          style="position:absolute;top:24px;right:24px;color:#fff;font-size:28px;background:rgba(255,255,255,.12);border:none;cursor:pointer;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;">✕</button>
+  <img id="hb-lb-img" src="" alt="" style="max-width:90vw;max-height:85vh;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.6);">
+</div>
+
+<!-- ==================== BEFORE/AFTER SLIDER ==================== -->
+<section style="background:var(--light-green);">
+  <div class="container" style="text-align:center;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">شاهدي الفرق</div>
+    <h2 style="font-size:clamp(26px,3.4vw,36px);">قبل / بعد</h2>
+    <div class="ba-wrap" id="hbBaWrap">
+      <div class="ba-layer ba-before"
+           {% if ba_before %}style="background-image:url('{{ ba_before | image_url: width: 1200 }}');"{% endif %}>
+        {% unless ba_before %}قبل{% endunless %}
+      </div>
+      <div class="ba-layer ba-after" id="hbBaAfter"
+           {% if ba_after %}style="background-image:url('{{ ba_after | image_url: width: 1200 }}');"{% endif %}>
+        {% unless ba_after %}بعد{% endunless %}
+      </div>
+      <div class="ba-tag left">قبل</div>
+      <div class="ba-tag right">بعد</div>
+      <div class="ba-handle" id="hbBaHandle"></div>
+      <input type="range" min="0" max="100" value="50" class="ba-range" id="hbBaRange">
+    </div>
+    <p style="font-size:12px;color:#5b7a68;margin-top:16px;">اسحبي المقبض لرؤية الفرق قبل وبعد التصفيف</p>
+  </div>
+</section>
+
+<!-- ==================== SPECS ==================== -->
+<section>
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:flex;">المواصفات</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,36px);">مواصفات المنتج</h2>
+    <div class="spec-grid">
+      <div class="spec-card"><h5>نوع المنتج</h5><p>فرشاة فرد شعر كهربائية محمولة</p></div>
+      <div class="spec-card"><h5>التقنية</h5><p>Negative Ion Technology</p></div>
+      <div class="spec-card"><h5>درجات الحرارة</h5><p>160°C / 180°C / 200°C</p></div>
+      <div class="spec-card"><h5>وقت التسخين</h5><p>20 ثانية تقريبًا</p></div>
+      <div class="spec-card"><h5>البطارية</h5><p>2000mAh</p></div>
+      <div class="spec-card"><h5>الاستخدام</h5><p>حتى 60 دقيقة لاسلكيًا لكل شحنة</p></div>
+      <div class="spec-card"><h5>الشحن</h5><p>USB-C</p></div>
+      <div class="spec-card"><h5>الشاشة</h5><p>LCD</p></div>
+      <div class="spec-card"><h5>الوزن</h5><p>0.3 رطل</p></div>
+      <div class="spec-card"><h5>الأبعاد</h5><p>3.2 × 1.4 × 3.5 بوصة</p></div>
+      <div class="spec-card"><h5>الإضافات</h5><p>حقيبة حماية</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY CHOOSE ==================== -->
+<section style="background:var(--offwhite);">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:flex;">لماذا هذه الفرشاة</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,36px);max-width:640px;margin:0 auto;">لماذا ستصبح جزءًا من روتينك اليومي؟</h2>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">⚡</div><p>تسخين سريع</p></div>
+      <div class="why-card"><div class="why-icon">💚</div><p>تقنية الأيونات السالبة</p></div>
+      <div class="why-card"><div class="why-icon">🔋</div><p>حتى 60 دقيقة لاسلكيًا</p></div>
+      <div class="why-card"><div class="why-icon">🌡️</div><p>3 درجات حرارة</p></div>
+      <div class="why-card"><div class="why-icon">📱</div><p>شاشة LCD</p></div>
+      <div class="why-card"><div class="why-icon">✈️</div><p>تصميم مناسب للسفر</p></div>
+      <div class="why-card"><div class="why-icon">🔌</div><p>USB-C</p></div>
+      <div class="why-card"><div class="why-icon">✨</div><p>تصميم مدمج وأنيق</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PREMIUM SHOWCASE ==================== -->
+<section>
+  <div class="container">
+    <div class="premium-stage">
+      <div class="premium-word pw1">SMOOTH</div>
+      <div class="premium-word pw2" style="opacity:.05;">SHINE</div>
+      <div class="premium-word pw3">STYLE</div>
+      <div class="hero-product-plate floating" style="max-width:260px;z-index:2;position:relative;">
+        {% if img3 %}
+          <img src="{{ img3 | image_url: width: 600 }}" loading="lazy" alt="{{ img3.alt | default: product.title }}" style="width:80%;object-fit:contain;filter:drop-shadow(0 24px 32px rgba(33,76,53,0.3));">
+        {% elsif img0 %}
+          <img src="{{ img0 | image_url: width: 600 }}" loading="lazy" alt="{{ img0.alt | default: product.title }}" style="width:80%;object-fit:contain;filter:drop-shadow(0 24px 32px rgba(33,76,53,0.3));">
+        {% endif %}
+      </div>
+      <div class="float-card" style="top:14%;right:10%;">20s Fast Heat</div>
+      <div class="float-card" style="bottom:20%;right:8%;">2000mAh</div>
+      <div class="float-card" style="top:20%;left:8%;">60 Min</div>
+      <div class="float-card" style="bottom:14%;left:10%;">3 Temps</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== REVIEWS ==================== -->
+<section style="background:var(--light-green);">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:flex;">آراء العميلات</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,36px);">تجارب حقيقية</h2>
+    <div class="review-track" style="margin-top:36px;">
+      <div class="review-card"><div class="stars">★★★★★</div><p class="quote">"أكثر شيء عجبني أنها خفيفة وسهلة الحمل، والنتيجة سريعة."</p><div class="author">عميلة موثقة — الرياض</div></div>
+      <div class="review-card"><div class="stars">★★★★★</div><p class="quote">"تسخن بسرعة فعلاً، أصبحت جزءًا من روتيني الصباحي."</p><div class="author">عميلة موثقة — جدة</div></div>
+      <div class="review-card"><div class="stars">★★★★☆</div><p class="quote">"عملية جدًا للسفر، والبطارية تدوم طويلاً."</p><div class="author">عميلة موثقة — الدمام</div></div>
+      <div class="review-card"><div class="stars">★★★★★</div><p class="quote">"شاشة الحرارة مريحة جدًا، أتحكم بالدرجة بسهولة."</p><div class="author">عميلة موثقة — مكة المكرمة</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section>
+  <div class="container" style="max-width:760px;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">أسئلة شائعة</div>
+    <h2 style="text-align:center;font-size:clamp(26px,3.4vw,36px);margin-bottom:20px;">الأسئلة المتكررة</h2>
+    {%- assign faqs = "هل تعمل بدون سلك؟|نعم، تحتوي على بطارية مدمجة 2000mAh وتوفر حتى 60 دقيقة من الاستخدام لكل شحنة.
+كم تحتاج من الوقت للتسخين؟|حوالي 20 ثانية.
+هل يمكنني اختيار درجة الحرارة؟|نعم، تحتوي على 3 درجات حرارة: 160°C و180°C و200°C.
+كيف يتم شحنها؟|عن طريق USB-C.
+هل يمكن أخذها في السفر؟|نعم، تصميمها مدمج وخفيف وتأتي مع حقيبة حماية.
+كيف يتم التوصيل والدفع؟|نوصل لجميع مناطق المملكة العربية السعودية، والدفع عند الاستلام فقط بدون أي دفع مسبق." | split: "
+" -%}
+    <div>
+      {%- for faq in faqs -%}
+        {%- assign fp = faq | split: "|" -%}
+        <div class="faq-item">
+          <button class="faq-q" data-hb-faq>
+            <span>{{ fp[0] }}</span>
+            <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><p>{{ fp[1] }}</p></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FINAL CTA ==================== -->
+<section>
+  <div class="final-cta">
+    <h2>شعر مرتب وناعم أينما كنتِ ✨</h2>
+    <p>اختصري وقت التصفيف واستمتعي بتجربة أكثر سهولة مع فرشاة فرد الشعر الكهربائية المحمولة.</p>
+    <button type="button" class="btn-primary" onclick="document.getElementById('hb-order').scrollIntoView({behavior:'smooth'});">اطلبيها الآن ←</button>
+    <div class="sub-note">🇸🇦 الدفع عند الاستلام داخل السعودية</div>
+  </div>
+</section>
+
+<!-- ==================== EASYSELL COD FORM ==================== -->
+<section id="hb-order">
+  <div class="container" style="max-width:640px;text-align:center;">
+    <div class="eyebrow" style="justify-content:center;display:flex;">أكملي طلبك</div>
+    <h2 style="font-size:clamp(26px,3.4vw,36px);">إتمام الطلب</h2>
+    <p style="color:#3d5c4b;margin-top:10px;">الدفع عند الاستلام — بدون أي دفع مسبق</p>
+
+    <div class="form-card">
+      <div class="form-total">
+        <span>السعر الإجمالي</span>
+        <span>
+          {% if product.price %}
+            {{ current_variant.price | money }}
+          {% else %}
+            — ريال
+          {% endif %}
+        </span>
+      </div>
+
+      {%- form 'product', product, id: 'hb-product-form', novalidate: true -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" id="hb-variant-id">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="hb-var-sec">
+              <span class="hb-var-lbl">{{ option.name }}</span>
+              <div class="hb-var-pills">
+                {%- for value in option.values -%}
+                  <label class="hb-var-pill">
+                    <input type="radio" name="{{ option.name }}" value="{{ value | escape }}"
+                      {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="hb-qty-row">
+          <span class="hb-qty-lbl">الكمية:</span>
+          <div class="hb-qty-box">
+            <button type="button" class="hb-qty-btn" onclick="var q=document.getElementById('hb-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+            <input type="number" id="hb-qty" name="quantity" value="1" min="1" class="hb-qty-inp" readonly>
+            <button type="button" class="hb-qty-btn" onclick="var q=document.getElementById('hb-qty');q.value=+q.value+1;">+</button>
+          </div>
+        </div>
+
+        {% content_for 'blocks' %}
+
+        {% if current_variant.available %}
+          <button type="submit" name="add" class="btn-primary hb-submit" id="hb-submit">
+            🛒 أكملي طلبك الآن — الدفع عند الاستلام ←
+          </button>
+        {% else %}
+          <button type="button" disabled class="btn-primary hb-submit" style="opacity:.5;cursor:not-allowed;">
+            نفذت الكمية — تواصلي معنا
+          </button>
+        {% endif %}
+
+      {%- endform -%}
+
+      <p class="hb-secure">🔒 طلبك آمن 100% — لا دفع مسبق</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:14px;">
+        <span style="font-size:13px;font-weight:600;color:#5b7a68;">✅ دفع عند الاستلام</span>
+        <span style="font-size:13px;font-weight:600;color:#5b7a68;">🚚 توصيل سريع</span>
+        <span style="font-size:13px;font-weight:600;color:#5b7a68;">🛡️ ضمان الجودة</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="hb-footer">
+  <div class="container">
+    <div class="logo">لُمعة<span>.</span></div>
+    <p>© {{ 'now' | date: '%Y' }} جميع الحقوق محفوظة — فرشاة فرد الشعر الكهربائية المحمولة</p>
+  </div>
+</footer>
+
+<!-- ==================== STICKY CTA ==================== -->
+<div class="sticky-cta">
+  <button type="button" onclick="document.getElementById('hb-order').scrollIntoView({behavior:'smooth'});">
+    اطلبيها الآن — الدفع عند الاستلام
+    {% if product.price %} | {{ current_variant.price | money }}{% endif %}
+  </button>
+</div>
+
+</div><!-- end .hb-page -->
+
+<script>
+(function(){
+  var doc = document;
+
+  /* Scroll reveal */
+  var revealEls = doc.querySelectorAll('.hb-page .reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else { revealEls.forEach(function(el){ el.classList.add('in'); }); }
+
+  /* Temperature selector */
+  window.hbSelectTemp = function(el){
+    doc.querySelectorAll('.hb-page .temp-pill').forEach(function(p){ p.classList.remove('active'); });
+    el.classList.add('active');
+    var d = doc.getElementById('hbTempDesc');
+    if(d) d.textContent = el.getAttribute('data-desc');
+  };
+
+  /* Before/After slider */
+  var baRange = doc.getElementById('hbBaRange');
+  var baAfter = doc.getElementById('hbBaAfter');
+  var baHandle = doc.getElementById('hbBaHandle');
+  function hbUpdateBA(v){
+    if(baAfter) baAfter.style.clipPath = 'inset(0 0 0 '+v+'%)';
+    if(baHandle) baHandle.style.right = v+'%';
+  }
+  if(baRange){
+    baRange.addEventListener('input', function(e){ hbUpdateBA(e.target.value); });
+    hbUpdateBA(50);
+  }
+
+  /* FAQ accordion */
+  doc.querySelectorAll('[data-hb-faq]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.parentElement;
+      var wasOpen = item.classList.contains('open');
+      doc.querySelectorAll('.hb-page .faq-item').forEach(function(i){
+        i.classList.remove('open');
+        var a = i.querySelector('.faq-a');
+        if(a) a.style.maxHeight = null;
+      });
+      if(!wasOpen){
+        item.classList.add('open');
+        var a = item.querySelector('.faq-a');
+        if(a) a.style.maxHeight = a.scrollHeight+'px';
+      }
+    });
+  });
+
+  /* Gallery lightbox */
+  var lb = doc.getElementById('hb-lightbox');
+  var lbImg = doc.getElementById('hb-lb-img');
+  doc.querySelectorAll('[data-hb-lb]').forEach(function(el){
+    el.addEventListener('click', function(){
+      if(!lb||!lbImg) return;
+      lbImg.src = el.dataset.hbLb;
+      lb.style.display = 'flex';
+      doc.body.style.overflow = 'hidden';
+    });
+  });
+  if(lb) lb.addEventListener('click', function(e){ if(e.target===lb){ lb.style.display='none'; doc.body.style.overflow=''; } });
+
+  /* Submit ripple */
+  var submitBtn = doc.getElementById('hb-submit');
+  if(submitBtn){
+    submitBtn.addEventListener('click', function(e){
+      var rect = submitBtn.getBoundingClientRect();
+      var r = doc.createElement('span');
+      r.className = 'hb-ripple';
+      var sz = Math.max(submitBtn.offsetWidth, submitBtn.offsetHeight);
+      r.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+(e.clientY-rect.top-sz/2)+'px;left:'+(e.clientX-rect.left-sz/2)+'px;position:absolute;';
+      submitBtn.appendChild(r);
+      setTimeout(function(){ r.remove(); }, 700);
+    });
+  }
+
+  /* Variant sync */
+  var variantsEl = doc.getElementById('hb-variants-json');
+  if(variantsEl && variantsEl.textContent.trim() !== 'null'){
+    try{
+      var variantData = JSON.parse(variantsEl.textContent);
+      var form = doc.getElementById('hb-product-form');
+      if(form && variantData){
+        form.querySelectorAll('.hb-var-pill input').forEach(function(r){
+          r.addEventListener('change', function(){
+            var opts = {};
+            form.querySelectorAll('.hb-var-pill input:checked').forEach(function(c){ opts[c.name] = c.value; });
+            var match = variantData.find(function(v){
+              return Object.keys(opts).every(function(k,i){ return v['option'+(i+1)] === opts[k]; });
+            });
+            if(match){
+              var vid = doc.getElementById('hb-variant-id');
+              if(vid) vid.value = match.id;
+              /* Update displayed price if possible */
+              var priceEls = doc.querySelectorAll('.hb-page [data-hb-price]');
+              priceEls.forEach(function(pe){ pe.textContent = match.price; });
+            }
+          });
+        });
+      }
+    } catch(e){}
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Hairbrush COD Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "صورة قبل (Before/After Slider)"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "صورة بعد (Before/After Slider)"
+    }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Hairbrush COD Landing" }]
+}
+{% endschema %}
