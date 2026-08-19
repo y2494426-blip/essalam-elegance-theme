@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "olevs-watch-lp": {
+      "type": "olevs-9925-watch-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["olevs-watch-lp"]
+}

@@ -1,0 +1,213 @@
+{
+  "sections": {
+    "essalem-hero": {
+      "type": "essalem-hero",
+      "settings": {
+        "eyebrow": "Collection Premium 2024",
+        "title": "<p><em>Élégance</em> qui rassemble</p>",
+        "subtitle": "Montres, Lunettes, Sacs et Mode — pour Homme, Femme et Couples",
+        "cta_primary_label": "Acheter Maintenant",
+        "cta_primary_url": "/collections/all",
+        "cta_secondary_label": "Voir les Collections",
+        "cta_secondary_url": "/collections",
+        "overlay_opacity": 65
+      }
+    },
+    "essalem-collections-grid": {
+      "type": "essalem-collections-grid",
+      "settings": {
+        "eyebrow": "Nos Catégories",
+        "title": "Explorez Nos Collections"
+      },
+      "blocks": {
+        "montres": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Montres",
+            "icon": "⌚",
+            "url": "/collections/montres"
+          }
+        },
+        "lunettes": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Lunettes",
+            "icon": "🕶️",
+            "url": "/collections/lunettes"
+          }
+        },
+        "sacs": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Sacs",
+            "icon": "👜",
+            "url": "/collections/sacs"
+          }
+        },
+        "chaussures": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Chaussures",
+            "icon": "👟",
+            "url": "/collections/chaussures"
+          }
+        },
+        "t-shirts": {
+          "type": "collection_card",
+          "settings": {
+            "name": "T-Shirts",
+            "icon": "👕",
+            "url": "/collections/t-shirts"
+          }
+        },
+        "casquettes": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Casquettes",
+            "icon": "🧢",
+            "url": "/collections/casquettes"
+          }
+        },
+        "accessoires": {
+          "type": "collection_card",
+          "settings": {
+            "name": "Accessoires",
+            "icon": "💎",
+            "url": "/collections/accessoires"
+          }
+        }
+      },
+      "block_order": ["montres", "lunettes", "sacs", "chaussures", "t-shirts", "casquettes", "accessoires"]
+    },
+    "essalem-why-us": {
+      "type": "essalem-why-us",
+      "settings": {
+        "eyebrow": "Nos Avantages",
+        "title": "Pourquoi Choisir ESSALEM ?"
+      },
+      "blocks": {
+        "livraison": {
+          "type": "feature",
+          "settings": {
+            "icon": "🚚",
+            "title": "Livraison Gratuite",
+            "text": "Livraison gratuite partout au Maroc. Recevez votre commande en 24-72h."
+          }
+        },
+        "cod": {
+          "type": "feature",
+          "settings": {
+            "icon": "💳",
+            "title": "Paiement à la Livraison",
+            "text": "Payez en espèces à la réception. Aucun risque, aucune carte bancaire requise."
+          }
+        },
+        "qualite": {
+          "type": "feature",
+          "settings": {
+            "icon": "⭐",
+            "title": "Qualité Supérieure",
+            "text": "Chaque produit est sélectionné avec soin pour vous garantir la meilleure qualité."
+          }
+        },
+        "securite": {
+          "type": "feature",
+          "settings": {
+            "icon": "🔒",
+            "title": "Commande Sécurisée",
+            "text": "Votre satisfaction est garantie. Retour facile sous 7 jours si vous n'êtes pas satisfait."
+          }
+        }
+      },
+      "block_order": ["livraison", "cod", "qualite", "securite"]
+    },
+    "best-sellers": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Meilleures Ventes",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-2",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "enable_quick_add": true,
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "essalem-testimonials": {
+      "type": "essalem-testimonials",
+      "settings": {
+        "eyebrow": "Avis Clients",
+        "title": "Ce Que Disent Nos Clients"
+      },
+      "blocks": {
+        "t1": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "text": "J'ai commandé une montre pour mon mari, elle est magnifique ! Livraison en 2 jours à Casablanca. Je recommande vivement ESSALEM ELEGANCE !",
+            "name": "Fatima Z.",
+            "location": "Casablanca",
+            "verified": true
+          }
+        },
+        "t2": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "text": "Les lunettes sont superbes et la qualité est au rendez-vous. Le paiement à la livraison m'a rassurée. Très bonne expérience d'achat.",
+            "name": "Mohamed A.",
+            "location": "Rabat",
+            "verified": true
+          }
+        },
+        "t3": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "text": "Sac reçu en parfait état, exactement comme sur les photos. Service client très réactif sur WhatsApp. J'achèterai encore !",
+            "name": "Khadija M.",
+            "location": "Marrakech",
+            "verified": true
+          }
+        }
+      },
+      "block_order": ["t1", "t2", "t3"]
+    },
+    "essalem-contact": {
+      "type": "essalem-contact",
+      "settings": {
+        "eyebrow": "Contactez-Nous",
+        "title": "Nous Sommes Là Pour Vous",
+        "info_title": "Nos Coordonnées",
+        "whatsapp": "+212 6XX XXX XXX",
+        "phone": "+212 6XX XXX XXX",
+        "email": "contact@essalamelegance.store",
+        "hours": "Lun–Sam, 9h–21h",
+        "form_title": "Envoyez-Nous un Message"
+      }
+    }
+  },
+  "order": [
+    "essalem-hero",
+    "essalem-collections-grid",
+    "essalem-why-us",
+    "best-sellers",
+    "essalem-testimonials",
+    "essalem-contact"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col-collections": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Collections",
+            "menu": "main-menu"
+          }
+        },
+        "col-aide": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Aide",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": ["col-collections", "col-aide"],
+      "settings": {
+        "brand_tagline": "Mode de luxe pour la femme marocaine moderne"
+      }
+    }
+  },
+  "order": ["footer"]
+}

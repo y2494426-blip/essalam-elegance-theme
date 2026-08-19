@@ -1,0 +1,11 @@
+{
+  "general": {
+    "continue_shopping": "Continuer mes achats",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "loading": "Chargement",
+    "breadcrumbs": {
+      "home": "Accueil"
+    }
+  }
+}

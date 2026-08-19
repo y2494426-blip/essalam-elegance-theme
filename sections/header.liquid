@@ -1,0 +1,124 @@
+<header class="header header--top-center{% if section.settings.sticky_header_type != 'none' %} shopify-section-header-sticky{% endif %}" id="shopify-section-{{ section.id }}">
+  <div class="header__wrapper">
+    <!-- Top bar -->
+    <div class="header__top page-width">
+      <!-- Social left -->
+      <div class="header__social">
+        {%- if settings.social_instagram_link != blank -%}
+          <a href="{{ settings.social_instagram_link }}" class="header__social-link" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg class="icon icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}
+          <a href="{{ settings.social_facebook_link }}" class="header__social-link" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg class="icon icon-facebook" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- Logo center -->
+      <div class="header__logo">
+        {%- if section.settings.logo != blank -%}
+          <a href="{{ routes.root_url }}" class="header__heading-link">
+            <img
+              src="{{ section.settings.logo | image_url: width: 300 }}"
+              alt="{{ shop.name }}"
+              width="{{ section.settings.logo_width }}"
+              height="auto"
+              loading="eager"
+            >
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="header__heading-link">
+            <span class="header__heading-text">{{ shop.name }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- Actions right -->
+      <div class="header__icons">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account" aria-label="Compte">
+            <svg class="icon icon-account" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        {%- endif -%}
+
+        <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart" aria-label="Panier ({{ cart.item_count }})">
+          <svg class="icon icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          {%- if cart.item_count > 0 -%}
+            <span class="cart-count-bubble">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="header__nav" role="navigation" aria-label="Navigation principale">
+      <ul class="header__menu list-unstyled" role="list">
+        {%- for link in section.settings.menu.links -%}
+          <li class="header__menu-item{% if link.links.size > 0 %} header__menu-item--has-submenu{% endif %}">
+            <a href="{{ link.url }}" class="header__menu-link{% if link.active %} header__menu-link--active{% endif %}">
+              {{ link.title | upcase }}
+            </a>
+            {%- if link.links.size > 0 -%}
+              <ul class="header__submenu list-unstyled" role="list">
+                {%- for child_link in link.links -%}
+                  <li><a href="{{ child_link.url }}" class="header__submenu-link">{{ child_link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 200,
+      "unit": "px",
+      "label": "Largeur du logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu principal"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        { "value": "none", "label": "Non" },
+        { "value": "on-scroll-up", "label": "Au défilement vers le haut" },
+        { "value": "always", "label": "Toujours" }
+      ],
+      "default": "on-scroll-up",
+      "label": "En-tête collant"
+    }
+  ],
+  "presets": [
+    {
+      "name": "En-tête"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,354 @@
+{{ 'luxury-theme.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign total_count = collection.products_count
+-%}
+
+{% render 'essalem-back-button' %}
+
+<div class="lux-coll-page">
+
+  {{- '<!-- ESSALEM ELEGANCE — Collection Page -->' -}}
+
+  <!-- ═══ BANNER LUXE BEIGE ═══ -->
+  <div class="lux-coll-banner">
+
+    <!-- Décor orbes dorés -->
+    <div class="lux-coll-banner__orb lux-coll-banner__orb--1" aria-hidden="true"></div>
+    <div class="lux-coll-banner__orb lux-coll-banner__orb--2" aria-hidden="true"></div>
+    <div class="lux-coll-banner__dots" aria-hidden="true"></div>
+
+    {%- if collection.image -%}
+      <div class="lux-coll-banner__img-wrap">
+        {{ collection.image | image_url: width: 1600 | image_tag:
+          loading: 'eager',
+          class: 'lux-coll-banner__img',
+          alt: collection.title | escape
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="lux-coll-banner__inner">
+      <!-- Breadcrumb -->
+      <nav class="lux-coll-breadcrumb" aria-label="Fil d'Ariane">
+        <a href="{{ routes.root_url }}">Accueil</a>
+        <span class="lux-coll-breadcrumb__sep">&#x2015;</span>
+        <a href="{{ routes.collections_url }}">Collections</a>
+        <span class="lux-coll-breadcrumb__sep">&#x2015;</span>
+        <span>{{ collection.title }}</span>
+      </nav>
+
+      <!-- Ligne or décorative -->
+      <div class="lux-coll-banner__ornament" aria-hidden="true">
+        <span></span><span class="lux-coll-banner__diamond">&#x25C6;</span><span></span>
+      </div>
+
+      <!-- Titre -->
+      <h1 class="lux-coll-banner__title">{{ collection.title }}</h1>
+
+      {%- if collection.description != blank -%}
+        <p class="lux-coll-banner__desc">{{ collection.description }}</p>
+      {%- endif -%}
+
+      <!-- Nombre de produits -->
+      <p class="lux-coll-banner__count">{{ total_count }} pièce{% if total_count != 1 %}s{% endif %} dans cette collection</p>
+    </div>
+  </div>
+
+  <!-- ═══ TOOLBAR ═══ -->
+  <div class="lux-coll-toolbar">
+    <div class="lux-coll-toolbar__inner">
+      <span class="lux-coll-toolbar__label">Trier par</span>
+      <form method="get" class="lux-coll-toolbar__form">
+        <select name="sort_by" class="lux-coll-sort" onchange="this.form.submit()" aria-label="Tri">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+              {{ option.name }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ GRILLE PRODUITS ═══ -->
+  <div class="lux-coll-grid-wrap">
+    {%- paginate collection.products by products_per_page -%}
+
+      {%- if collection.products.size > 0 -%}
+        <ul class="lux-product-grid" role="list">
+          {%- for product in collection.products -%}
+            <li
+              class="lux-product-grid__item lux-fade-up"
+              style="animation-delay:{{ forloop.index0 | times: 55 }}ms"
+            >
+              {%- render 'card-product',
+                card_product: product,
+                media_aspect_ratio: 'portrait',
+                show_secondary_image: true,
+                show_vendor: false
+              -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="lux-pagination" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="lux-pagination__btn">&larr; Précédent</a>
+            {%- endif -%}
+            <span class="lux-pagination__info">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="lux-pagination__btn">Suivant &rarr;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="lux-empty-state">
+          <p>Aucun produit dans cette collection pour le moment.</p>
+          <a href="{{ routes.collections_url }}" class="lux-btn">Voir toutes les collections</a>
+        </div>
+      {%- endif -%}
+
+    {%- endpaginate -%}
+  </div>
+
+</div>
+
+<style>
+/* ═══════════════════════════════════════
+   COLLECTION PAGE — LUXE BEIGE & OR
+   ═══════════════════════════════════════ */
+
+.lux-coll-page {
+  background: #FAFAF7;
+  min-height: 60vh;
+}
+
+/* ── Banner ────────────────────────────── */
+.lux-coll-banner {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 15% 60%, rgba(201,168,106,0.13) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 10%, rgba(201,168,106,0.10) 0%, transparent 50%),
+    linear-gradient(155deg, #FFFFFF 0%, #F5F1E8 45%, #EDE8DC 100%);
+  border-bottom: 1px solid rgba(201,168,106,0.25);
+  padding: 64px 24px 52px;
+}
+
+/* Orbes décoratifs */
+.lux-coll-banner__orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: lux-orb-drift 10s ease-in-out infinite;
+}
+.lux-coll-banner__orb--1 {
+  width: 380px; height: 380px;
+  top: -140px; right: -80px;
+  background: radial-gradient(circle, rgba(201,168,106,0.18) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+.lux-coll-banner__orb--2 {
+  width: 260px; height: 260px;
+  bottom: -100px; left: 8%;
+  background: radial-gradient(circle, rgba(201,168,106,0.12) 0%, transparent 70%);
+  animation-delay: 3s;
+}
+@keyframes lux-orb-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%      { transform: translate(10px,-14px) scale(1.05); }
+}
+
+/* Dot pattern subtle */
+.lux-coll-banner__dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(201,168,106,0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+  opacity: 0.7;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 75%);
+}
+
+/* Image de la collection (optionnelle) */
+.lux-coll-banner__img-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.lux-coll-banner__img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.08;
+  filter: sepia(30%);
+}
+
+.lux-coll-banner__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Breadcrumb */
+.lux-coll-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(10,10,10,0.42);
+}
+.lux-coll-breadcrumb a {
+  color: rgba(10,10,10,0.42);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.lux-coll-breadcrumb a:hover { color: #C9A86A; }
+.lux-coll-breadcrumb__sep {
+  color: rgba(201,168,106,0.55);
+  font-size: 0.7rem;
+}
+
+/* Ornement or centré */
+.lux-coll-banner__ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.lux-coll-banner__ornament span:first-child,
+.lux-coll-banner__ornament span:last-child {
+  display: block;
+  width: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C9A86A, transparent);
+}
+.lux-coll-banner__diamond {
+  color: #C9A86A;
+  font-size: 0.55rem;
+  line-height: 1;
+}
+
+/* Titre principal */
+.lux-coll-banner__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #0A0A0A;
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+
+/* Description */
+.lux-coll-banner__desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: rgba(10,10,10,0.55);
+  max-width: 520px;
+  margin: 0 auto 14px;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+/* Nombre produits */
+.lux-coll-banner__count {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(201,168,106,0.85);
+  margin: 0;
+}
+
+/* ── Toolbar ────────────────────────────── */
+.lux-coll-toolbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid rgba(201,168,106,0.18);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.lux-coll-toolbar__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.lux-coll-toolbar__label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(10,10,10,0.45);
+}
+.lux-coll-sort {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #0A0A0A;
+  border: 1px solid rgba(201,168,106,0.45);
+  background: #FAFAF7;
+  padding: 7px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.25s;
+}
+.lux-coll-sort:focus { border-color: #C9A86A; }
+
+/* ── Grid wrap ─────────────────────────── */
+.lux-coll-grid-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lux-coll-banner { padding: 44px 20px 36px; }
+  .lux-coll-banner__orb--1 { width: 220px; height: 220px; }
+  .lux-coll-toolbar { position: relative; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 16,
+      "label": "Produits par page"
+    }
+  ]
+}
+{% endschema %}

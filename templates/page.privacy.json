@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "essalem-page-privacy",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

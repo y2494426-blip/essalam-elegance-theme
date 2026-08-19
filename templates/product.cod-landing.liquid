@@ -1,0 +1,422 @@
+<!--
+  =============================================================
+  templates/product.cod-landing.liquid
+  -------------------------------------------------------------
+  قالب منتج ديناميكي بالكامل (Shopify Liquid) — نفس تصميم الصفحة
+  الأصلية 100% (CSS/Layout/Animations لم تُغيّر إطلاقاً).
+
+  كيف يعمل:
+  - اربطي أي منتج بهذا القالب من: Product → Theme template → cod-landing
+  - كل البيانات (العنوان، السعر، الوصف، الصور) تُسحب تلقائياً
+    من كائن product، فلا حاجة لتعديل أي سطر عند تغيير المنتج.
+
+  المواصفات الإضافية (المادة، الأبعاد... إلخ) تُقرأ من metafields
+  اختيارية بنفس الـ namespace "custom" — إن لم تكن موجودة يظهر "—".
+
+  نموذج الطلب (COD):
+  الفورم موضوع مباشرة داخل الهيرو (بجانب صورة المنتج) بدلاً من
+  القسم المنفصل في الأسفل — الزوار يرون الفورم فور فتح الصفحة.
+  طريقة التفعيل:
+    1) ثبّتي تطبيق EasySell من Shopify App Store.
+    2) من Theme Customizer افتحي هذا القالب → داخل قسم الهيرو
+       اضغطي "Add block" → اختاري "EasySell COD Form".
+    3) بديلاً: استبدلي content_for 'blocks' بالـ snippet المخصص
+       من EasySell مثل: {% render 'easysell-cod-form' %}
+  =============================================================
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ shop.name }} | {{ product.title }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0B0B0D;
+    --dark:#141416;
+    --dark2:#1D1D20;
+    --orange:#E85D2C;
+    --orange-lt:#FF8F5E;
+    --orange-dk:#B8431A;
+    --white:#FFFFFF;
+    --gray:#A8A8AF;
+    --gray-dk:#6E6E76;
+    --line: rgba(255,255,255,0.09);
+    --cream:#F5F4F1;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.8;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.disp{ font-family:'Rajdhani','Tajawal',sans-serif; font-weight:700; }
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  .topbar{ background:var(--orange); color:var(--black); text-align:center; font-size:13px; font-weight:800; padding:9px 12px; letter-spacing:.3px; }
+
+  header.nav{ padding:20px 24px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--line); }
+  .brand{ font-family:'Rajdhani',sans-serif; font-size:28px; font-weight:700; letter-spacing:1px; color:var(--white); }
+  .brand span{ color:var(--orange); }
+
+  /* ---------- hero ---------- */
+  .hero{ position:relative; padding:50px 0 30px; overflow:hidden; }
+  .hero-blob{ position:absolute; top:-160px; right:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(232,93,44,0.25) 0%, transparent 70%); pointer-events:none; }
+  .hero-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1.05fr; gap:44px; align-items:start; }
+  .hero-eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; letter-spacing:1.5px; color:var(--orange-lt); background:rgba(232,93,44,0.12); border:1px solid rgba(232,93,44,0.4); padding:6px 14px; border-radius:30px; margin-bottom:18px; }
+  .hero h1{ font-size:42px; line-height:1.15; color:var(--white); margin-bottom:14px; }
+  .hero p.lead{ font-size:16px; color:var(--gray); max-width:460px; margin-bottom:22px; }
+  .price-row{ display:flex; align-items:baseline; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
+  .price-now{ font-family:'Rajdhani',sans-serif; font-size:42px; font-weight:700; color:var(--white); }
+  .price-old{ font-size:19px; color:var(--gray-dk); text-decoration:line-through; }
+  .price-tag{ font-size:13px; background:var(--orange); color:var(--black); font-weight:800; padding:5px 12px; border-radius:20px; }
+  .hero-note{ font-size:13px; color:var(--gray-dk); margin-bottom:24px; }
+
+  /* ---------- COD form (in hero) ---------- */
+  .hero-form{
+    background:var(--dark);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 26px;
+    margin-top:4px;
+  }
+  .hero-form .form-lead{
+    font-size:15px; font-weight:800; color:var(--white);
+    text-align:center; margin-bottom:6px;
+  }
+  .hero-form .form-sub{
+    font-size:12px; color:var(--gray-dk); text-align:center; margin-bottom:22px;
+  }
+  .hero-media{ position:relative; }
+  .hero-media img{ border-radius:18px; border:1px solid var(--line); width:100%; height:auto; }
+
+  /* ---------- strip ---------- */
+  .strip{ background:var(--dark2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:13px 0; overflow:hidden; white-space:nowrap; }
+  .strip-track{ display:inline-block; animation:scroll 20s linear infinite; font-size:14px; letter-spacing:1px; color:var(--gray); }
+  .strip-track span{ margin:0 26px; color:var(--orange-lt); font-weight:700; }
+  @keyframes scroll{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+  section{ padding:66px 0; }
+  .section-head{ text-align:center; max-width:620px; margin:0 auto 42px; }
+  .section-head .kicker{ font-size:13px; letter-spacing:2px; color:var(--orange); display:block; margin-bottom:10px; font-weight:700; }
+  .section-head h2{ font-size:36px; color:var(--white); }
+  .section-head p{ color:var(--gray); margin-top:12px; font-size:15px; }
+
+  /* ---------- benefits ---------- */
+  .benefits{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .b-card{ background:var(--dark); border:1px solid var(--line); border-radius:16px; padding:26px 20px; text-align:center; transition:border-color .2s ease, transform .2s ease; }
+  .b-card:hover{ border-color:var(--orange); transform:translateY(-4px); }
+  .b-icon{ font-size:30px; margin-bottom:14px; }
+  .b-card h3{ font-size:16px; color:var(--white); margin-bottom:8px; }
+  .b-card p{ font-size:13px; color:var(--gray); }
+
+  /* ---------- feature split ---------- */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:46px; align-items:center; }
+  .split.reverse .split-media{ order:2; }
+  .split-media img{ border-radius:16px; border:1px solid var(--line); width:100%; height:auto; }
+  .split h2{ font-size:30px; color:var(--white); margin-bottom:16px; }
+  .split p{ color:var(--gray); font-size:15px; margin-bottom:14px; }
+  .split ul{ list-style:none; }
+  .split ul li{ display:flex; gap:10px; align-items:flex-start; font-size:14.5px; color:var(--gray); margin-bottom:10px; }
+  .split ul li::before{ content:"◆"; color:var(--orange); font-size:10px; margin-top:5px; }
+
+  /* ---------- specs ---------- */
+  .specs-table{ width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden; border:1px solid var(--line); }
+  .specs-table tr:nth-child(even) td{ background:var(--dark2); }
+  .specs-table tr:nth-child(odd) td{ background:var(--dark); }
+  .specs-table td{ padding:14px 18px; font-size:14.5px; border-bottom:1px solid var(--line); }
+  .specs-table td:first-child{ font-weight:800; color:var(--gray); width:40%; }
+  .specs-table td:last-child{ color:var(--white); font-weight:600; }
+
+  /* ---------- badges ---------- */
+  .badges{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .badge{ text-align:center; background:var(--dark); border-radius:12px; padding:20px 10px; border:1px solid var(--line); }
+  .badge .ic{ font-size:24px; margin-bottom:8px; }
+  .badge span{ font-size:12.5px; color:var(--gray); display:block; }
+
+  /* ---------- variant pills ---------- */
+  .cl-variant-section{ margin-bottom:16px; }
+  .cl-variant-label{ display:block; font-size:13px; font-weight:700; color:var(--gray); margin-bottom:8px; }
+  .cl-variant-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+  .cl-variant-pill input[type="radio"]{ position:absolute; opacity:0; width:0; height:0; }
+  .cl-variant-pill span{
+    display:block; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px;
+    padding:7px 15px; font-size:13.5px; font-weight:600; cursor:pointer;
+    color:var(--gray); background:rgba(255,255,255,0.04); transition:all .2s;
+    font-family:'Tajawal',sans-serif;
+  }
+  .cl-variant-pill input:checked + span{ border-color:var(--orange); color:var(--orange-lt); background:rgba(232,93,44,0.12); }
+
+  /* ---------- qty ---------- */
+  .cl-qty-row{ display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+  .cl-qty-label{ font-size:13px; font-weight:700; color:var(--gray); }
+  .cl-qty-box{ display:flex; align-items:center; border:1.5px solid rgba(255,255,255,0.15); border-radius:8px; overflow:hidden; }
+  .cl-qty-btn{ width:36px; height:36px; background:rgba(255,255,255,0.05); border:none; font-size:19px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--white); font-family:'Tajawal',sans-serif; }
+  .cl-qty-btn:hover{ background:rgba(232,93,44,0.15); color:var(--orange-lt); }
+  .cl-qty-input{ width:44px; height:36px; border:none; border-right:1.5px solid rgba(255,255,255,0.15); border-left:1.5px solid rgba(255,255,255,0.15); text-align:center; font-size:15px; font-weight:700; font-family:'Tajawal',sans-serif; background:transparent; color:var(--white); }
+
+  /* ---------- submit ---------- */
+  .cl-submit{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; background:linear-gradient(135deg, var(--orange), #ff6b3d, var(--orange));
+    color:var(--black); border:none; border-radius:10px;
+    padding:17px 24px; font-size:17px; font-weight:900; cursor:pointer;
+    font-family:'Tajawal',sans-serif;
+    box-shadow:0 6px 22px rgba(232,93,44,0.35);
+    transition:opacity .2s, transform .1s;
+  }
+  .cl-submit:hover{ opacity:.9; transform:translateY(-1px); }
+  .cl-submit:active{ transform:translateY(0); }
+  .cl-secure{ text-align:center; font-size:12px; color:var(--gray-dk); margin-top:10px; }
+
+  footer{ text-align:center; padding:34px 0 44px; color:var(--gray-dk); font-size:13px; border-top:1px solid var(--line); }
+  footer .brand{ font-size:20px; margin-bottom:8px; }
+
+  @media(max-width:860px){
+    .hero-inner{ grid-template-columns:1fr; text-align:center; }
+    .hero p.lead{ margin-inline:auto; }
+    .price-row{ justify-content:center; }
+    .hero-media{ order:-1; }
+    .hero h1{ font-size:32px; }
+    .benefits{ grid-template-columns:repeat(2,1fr); }
+    .split, .split.reverse .split-media{ grid-template-columns:1fr; order:0; }
+    .split{ grid-template-columns:1fr; }
+    .badges{ grid-template-columns:repeat(2,1fr); }
+    .hero-form{ padding:20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+{% assign variant = product.selected_or_first_available_variant %}
+{% assign compare_price = variant.compare_at_price | default: product.compare_at_price %}
+{% assign has_discount = false %}
+{% if compare_price and compare_price > variant.price %}
+  {% assign has_discount = true %}
+  {% assign saved = compare_price | minus: variant.price %}
+{% endif %}
+
+{% assign media_1 = product.media[0] %}
+{% assign media_2 = product.media[1] | default: product.media[0] %}
+{% assign media_3 = product.media[2] | default: product.media[0] %}
+
+  <div class="topbar">🚚 التوصيل خلال <b>٢-٤ أيام</b> {% if shop.address.country %}لجميع مدن {{ shop.address.country }}{% endif %} &nbsp;|&nbsp; 💵 الدفع <b>عند الاستلام</b></div>
+
+  <header class="nav">
+    <div class="brand">{{ shop.name }}</div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-blob"></div>
+    <div class="wrap hero-inner">
+
+      <!-- عمود الصورة -->
+      <div class="hero-media">
+        {% if media_1 %}
+          {{ media_1 | image_url: width: 1200 | image_tag: loading: 'lazy', alt: product.title }}
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {% endif %}
+      </div>
+
+      <!-- عمود النصوص + الفورم -->
+      <div>
+        <span class="hero-eyebrow">⟳ {{ product.type | default: 'منتج مميز' }}</span>
+        <h1>{{ product.title }}</h1>
+        <p class="lead">
+          {% if product.description != blank %}
+            {{ product.description | strip_html | truncatewords: 30 }}
+          {% else %}
+            اكتشف تفاصيل هذا المنتج المصمم بعناية ليقدّم لك أفضل تجربة استخدام.
+          {% endif %}
+        </p>
+
+        <div class="price-row">
+          <span class="price-now">{{ variant.price | money }}</span>
+          {% if has_discount %}
+            <span class="price-old">{{ compare_price | money }}</span>
+            <span class="price-tag">وفّر {{ saved | money }}</span>
+          {% endif %}
+        </div>
+        <div class="hero-note">✔ منتج أصلي 100% &nbsp; ✔ {% if shop.address.country %}يُرسل من داخل {{ shop.address.country }}{% endif %} &nbsp; ✔ ضمان الجودة</div>
+
+        <!-- ===== COD FORM داخل الهيرو ===== -->
+        <div class="hero-form" id="order">
+          <p class="form-lead">🛒 اطلب الآن — الدفع عند الاستلام</p>
+          <p class="form-sub">أدخل طلبك وسيتصل بك فريقنا لتأكيد الشحن</p>
+
+          {%- form 'product', product, id: 'cl-product-form', novalidate: true -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" id="cl-variant-id">
+
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <div class="cl-variant-section">
+                  <span class="cl-variant-label">{{ option.name }}</span>
+                  <div class="cl-variant-pills">
+                    {%- for value in option.values -%}
+                      <label class="cl-variant-pill">
+                        <input
+                          type="radio"
+                          name="{{ option.name }}"
+                          value="{{ value | escape }}"
+                          {% if option.selected_value == value %}checked{% endif %}
+                        >
+                        <span>{{ value }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endunless -%}
+
+            <div class="cl-qty-row">
+              <span class="cl-qty-label">الكمية:</span>
+              <div class="cl-qty-box">
+                <button type="button" class="cl-qty-btn" onclick="var q=document.getElementById('cl-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+                <input type="number" id="cl-qty" name="quantity" value="1" min="1" class="cl-qty-input" readonly>
+                <button type="button" class="cl-qty-btn" onclick="var q=document.getElementById('cl-qty');q.value=+q.value+1;">+</button>
+              </div>
+            </div>
+
+            {% content_for 'blocks' %}
+
+            <button type="submit" name="add" class="cl-submit">
+              🛒 اطلب الآن — الدفع عند الاستلام
+            </button>
+          {%- endform -%}
+
+          <p class="cl-secure">🔒 طلبك آمن 100% — لا حاجة لبطاقة بنكية</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="strip-track">
+      {% if product.tags.size > 0 %}
+        {% for tag in product.tags limit: 6 %}<span>{{ tag }}</span>•{% endfor %}
+        {% for tag in product.tags limit: 6 %}<span>{{ tag }}</span>•{% endfor %}
+      {% else %}
+        <span>جودة عالية</span>•<span>تصميم عملي</span>•<span>شحن سريع</span>•<span>ضمان الجودة</span>•
+        <span>جودة عالية</span>•<span>تصميم عملي</span>•<span>شحن سريع</span>•<span>ضمان الجودة</span>•
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ===== BENEFITS ===== -->
+  <section class="wrap">
+    <div class="section-head">
+      <span class="kicker">لماذا هذا المنتج</span>
+      <h2>٤ أسباب تخليك تختار {{ product.title }}</h2>
+    </div>
+    <div class="benefits">
+      <div class="b-card"><div class="b-icon">⭐</div><h3>{{ product.metafields.custom.benefit_1_title | default: 'جودة تصنيع عالية' }}</h3><p>{{ product.metafields.custom.benefit_1_text | default: 'مصنوع من خامات متينة تدوم لفترة طويلة مع الاستخدام اليومي.' }}</p></div>
+      <div class="b-card"><div class="b-icon">📐</div><h3>{{ product.metafields.custom.benefit_2_title | default: 'تصميم عملي' }}</h3><p>{{ product.metafields.custom.benefit_2_text | default: 'مصمم بعناية ليناسب احتياجاتك اليومية بأفضل شكل ممكن.' }}</p></div>
+      <div class="b-card"><div class="b-icon">🧊</div><h3>{{ product.metafields.custom.benefit_3_title | default: 'أداء موثوق' }}</h3><p>{{ product.metafields.custom.benefit_3_text | default: 'أداء ثابت وموثوق في كل مرة تستخدمه.' }}</p></div>
+      <div class="b-card"><div class="b-icon">📱</div><h3>{{ product.metafields.custom.benefit_4_title | default: 'سهل الاستخدام' }}</h3><p>{{ product.metafields.custom.benefit_4_text | default: 'تجربة استخدام سلسة من أول لحظة.' }}</p></div>
+    </div>
+  </section>
+
+  <!-- ===== SPLIT 1 ===== -->
+  <section class="wrap">
+    <div class="split">
+      <div class="split-media">
+        {% if media_2 %}
+          {{ media_2 | image_url: width: 1000 | image_tag: loading: 'lazy', alt: product.title | append: ' - صورة إضافية' }}
+        {% endif %}
+      </div>
+      <div>
+        <h2>{{ product.metafields.custom.feature_1_title | default: 'مميزات تستحق الذكر' }}</h2>
+        <p>{{ product.metafields.custom.feature_1_text | default: 'تفاصيل مدروسة بعناية تجعل هذا المنتج خياراً موثوقاً لاستخدامك اليومي.' }}</p>
+        <ul>
+          {% for i in (1..3) %}
+            {% assign point_key = 'feature_1_point_' | append: i %}
+            {% assign point = product.metafields.custom[point_key] %}
+            {% if point != blank %}
+              <li>{{ point }}</li>
+            {% endif %}
+          {% endfor %}
+          {% if product.metafields.custom.feature_1_point_1 == blank %}
+            <li>جودة تصنيع موثوقة</li>
+            <li>يحافظ على الأداء لفترة أطول</li>
+            <li>مناسب للاستخدام اليومي</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPLIT 2 (reverse) ===== -->
+  <section class="wrap">
+    <div class="split reverse">
+      <div class="split-media">
+        {% if media_3 %}
+          {{ media_3 | image_url: width: 1000 | image_tag: loading: 'lazy', alt: product.title | append: ' - تفاصيل' }}
+        {% endif %}
+      </div>
+      <div>
+        <h2>{{ product.metafields.custom.feature_2_title | default: 'جودة تصنيع تلاحظها من أول لمسة' }}</h2>
+        <p>{{ product.metafields.custom.feature_2_text | default: 'خامات مختارة بعناية ولمسة نهائية أنيقة تعكس جودة المنتج.' }}</p>
+        <ul>
+          {% for i in (1..3) %}
+            {% assign point_key2 = 'feature_2_point_' | append: i %}
+            {% assign point2 = product.metafields.custom[point_key2] %}
+            {% if point2 != blank %}
+              <li>{{ point2 }}</li>
+            {% endif %}
+          {% endfor %}
+          {% if product.metafields.custom.feature_2_point_1 == blank %}
+            <li>خامات عالية الجودة</li>
+            <li>لمسة نهائية أنيقة ومقاومة للخدوش</li>
+            <li>تصميم متكامل ومدروس</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPECS ===== -->
+  <section class="wrap">
+    <div class="section-head">
+      <span class="kicker">المواصفات التقنية</span>
+      <h2>تفاصيل <span style="color:var(--orange)">المنتج</span></h2>
+    </div>
+    <table class="specs-table">
+      <tr><td>الطول</td><td>{{ product.metafields.custom.length | default: '—' }}</td></tr>
+      <tr><td>العرض</td><td>{{ product.metafields.custom.width | default: '—' }}</td></tr>
+      <tr><td>السماكة</td><td>{{ product.metafields.custom.thickness | default: '—' }}</td></tr>
+      <tr><td>المادة</td><td>{{ product.metafields.custom.material | default: '—' }}</td></tr>
+      {% for option in product.options_with_values %}
+      <tr><td>{{ option.name }}</td><td>{{ option.values | join: '، ' }}</td></tr>
+      {% endfor %}
+      <tr><td>السعر</td><td style="color:var(--orange-lt);font-weight:900;">{{ variant.price | money }}</td></tr>
+      <tr><td>التوفر</td><td>{% if variant.available %}✅ متوفر{% else %}❌ غير متوفر حالياً{% endif %}</td></tr>
+      <tr><td>الشحن</td><td>{% if shop.address.country %}مجاني لجميع مناطق {{ shop.address.country }}{% else %}متوفر{% endif %}</td></tr>
+    </table>
+  </section>
+
+  <!-- ===== BADGES ===== -->
+  <section class="wrap">
+    <div class="badges">
+      <div class="badge"><div class="ic">🚚</div><span>توصيل سريع</span></div>
+      <div class="badge"><div class="ic">💵</div><span>دفع عند الاستلام</span></div>
+      <div class="badge"><div class="ic">🛡️</div><span>ضمان الجودة</span></div>
+      <div class="badge"><div class="ic">↩</div><span>إرجاع خلال ٧ أيام</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand disp">{{ shop.name }}</div>
+    <p style="margin-top:10px;">© {{ 'now' | date: '%Y' }} {{ shop.name }} — جميع الحقوق محفوظة</p>
+  </footer>
+
+</body>
+</html>

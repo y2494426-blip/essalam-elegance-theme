@@ -1,0 +1,107 @@
+{% comment %}
+  ESSALEM ELEGANCE — Luxury Product Card
+  IMPORTANT: .card__inner MUST always have class `ratio` to avoid height collapse.
+  (bug fix: position:absolute children collapse when parent has no height)
+{% endcomment %}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign product_url = card_product.url | default: '#'
+  assign placeholder_index = placeholder_index | default: 1
+  assign has_image = false
+  if card_product != blank and card_product.featured_media
+    assign has_image = true
+  endif
+  if card_product != blank and card_product.compare_at_price > card_product.price
+    assign savings_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price
+  endif
+-%}
+
+<div class="lux-card">
+
+  {%- comment -%} MEDIA {%- endcomment -%}
+  <div class="lux-card__media">
+    {%- if has_image -%}
+      <a href="{{ product_url }}" class="lux-card__img-wrap" aria-label="{{ card_product.title | escape }}" tabindex="-1">
+        <img
+          class="lux-card__img"
+          src="{{ card_product.featured_media | image_url: width: 600 }}"
+          srcset="
+            {{ card_product.featured_media | image_url: width: 300 }} 300w,
+            {{ card_product.featured_media | image_url: width: 600 }} 600w,
+            {{ card_product.featured_media | image_url: width: 900 }} 900w
+          "
+          sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+          alt="{{ card_product.featured_media.alt | escape }}"
+          loading="lazy"
+          width="600"
+          height="750"
+        >
+        {%- if card_product.media[1] != blank -%}
+          <img
+            class="lux-card__img-alt"
+            src="{{ card_product.media[1] | image_url: width: 600 }}"
+            alt="{{ card_product.media[1].alt | escape }}"
+            loading="lazy"
+            width="600"
+            height="750"
+          >
+        {%- endif -%}
+      </a>
+    {%- else -%}
+      <a href="{{ product_url }}" class="lux-card__img-wrap" tabindex="-1">
+        {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} BADGES {%- endcomment -%}
+    <div class="lux-card__badges">
+      {%- if card_product != blank -%}
+        {%- if card_product.available == false -%}
+          <span class="lux-badge lux-badge--sold-out">Épuisé</span>
+        {%- elsif savings_pct > 0 -%}
+          <span class="lux-badge lux-badge--sale">-{{ savings_pct }}%</span>
+        {%- endif -%}
+        {%- if card_product.tags contains 'nouveau' or card_product.tags contains 'new' -%}
+          <span class="lux-badge lux-badge--new">Nouveau</span>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} QUICK VIEW LINK {%- endcomment -%}
+    <a href="{{ product_url }}" class="lux-card__quick-view">Voir le produit</a>
+  </div>
+
+  {%- comment -%} CARD INFO {%- endcomment -%}
+  <div class="lux-card__info">
+    {%- if card_product != blank -%}
+      {%- if show_vendor and card_product.vendor != blank -%}
+        <span class="lux-card__vendor">{{ card_product.vendor }}</span>
+      {%- endif -%}
+    {%- endif -%}
+
+    <h3 class="lux-card__title">
+      <a href="{{ product_url }}">{{ card_product.title | default: 'Titre du produit' | escape }}</a>
+    </h3>
+
+    <div class="lux-card__price-row">
+      {%- if card_product != blank -%}
+        {%- if savings_pct > 0 -%}
+          <span class="lux-card__price lux-card__price--sale">{{ card_product.price | money }}</span>
+          <span class="lux-card__price--compare">{{ card_product.compare_at_price | money }}</span>
+        {%- else -%}
+          <span class="lux-card__price">{{ card_product.price | money }}</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="lux-card__price">{{ 29900 | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+</div>
+
+{%- comment -%}
+  NOTE: We intentionally do NOT use Dawn's .card__inner/.card__media structure here.
+  We use .lux-card__media with padding-bottom aspect ratio trick (no position:absolute
+  dependency chain) to avoid the height-collapse bug from component-card.css.
+{%- endcomment -%}

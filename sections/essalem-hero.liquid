@@ -1,0 +1,119 @@
+{% comment %} ESSALEM ELEGANCE - Hero Section {% endcomment %}
+<section class="essalem-hero" style="{% if section.settings.background_image != blank %}background-image: url({{ section.settings.background_image | image_url: width: 2000 }});background-size:cover;background-position:center;{% endif %}">
+  {% if section.settings.background_image != blank %}
+    <div class="essalem-hero__image-overlay" style="position:absolute;inset:0;background:rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }});z-index:1;"></div>
+  {% endif %}
+
+  <div class="essalem-hero__content">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-hero__eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+
+    <h1 class="essalem-hero__title">
+      {{ section.settings.title }}
+    </h1>
+
+    {% if section.settings.subtitle != blank %}
+      <p class="essalem-hero__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    <div class="essalem-hero__cta-group">
+      {% if section.settings.cta_primary_label != blank %}
+        <a href="{{ section.settings.cta_primary_url }}" class="essalem-hero__cta-primary">
+          {{ section.settings.cta_primary_label }}
+        </a>
+      {% endif %}
+      {% if section.settings.cta_secondary_label != blank %}
+        <a href="{{ section.settings.cta_secondary_url }}" class="essalem-hero__cta-secondary">
+          {{ section.settings.cta_secondary_label }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="essalem-hero__trust">
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon">🚚</span>
+        Livraison gratuite
+      </span>
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon">💳</span>
+        Paiement à la livraison
+      </span>
+      <span class="essalem-hero__trust-item">
+        <span class="essalem-hero__trust-icon">⭐</span>
+        Qualité premium
+      </span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero ESSALEM",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Image de fond"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacité du calque",
+      "default": 60
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus du titre",
+      "default": "Collection Premium 2024"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Titre principal",
+      "default": "<p><em>Élégance</em> qui rassemble</p>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Montres, Lunettes, Sacs et Mode — pour Homme, Femme et Couples"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Bouton principal — texte",
+      "default": "Acheter Maintenant"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_url",
+      "label": "Bouton principal — lien",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Bouton secondaire — texte",
+      "default": "Voir les Collections"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "Bouton secondaire — lien",
+      "default": "/collections"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero ESSALEM"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "pureluma-retinol-lp": {
+      "type": "pureluma-retinol-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["pureluma-retinol-lp"]
+}

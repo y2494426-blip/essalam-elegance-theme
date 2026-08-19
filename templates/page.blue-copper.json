@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "blue-copper-landing": {
+      "type": "blue-copper-landing",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["blue-copper-landing"]
+}

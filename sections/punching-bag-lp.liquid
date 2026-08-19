@@ -1,0 +1,873 @@
+{% comment %} Punching Bag Landing Page — Saudi Arabic RTL — prefix: pb- {% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pb-black:#111111;
+  --pb-dark:#1a1a1a;
+  --pb-red:#E53935;
+  --pb-red2:#c62828;
+  --pb-white:#ffffff;
+  --pb-gray:#f4f4f4;
+  --pb-gray2:#e8e8e8;
+  --pb-text:#222222;
+  --pb-muted:#666666;
+  --pb-radius:16px;
+  --pb-shadow:0 4px 24px rgba(0,0,0,0.10);
+  --pb-shadow-lg:0 8px 40px rgba(0,0,0,0.16);
+}
+body{font-family:'Tajawal',sans-serif;direction:rtl;background:#fff;color:var(--pb-text);overflow-x:hidden}
+
+/* ── LOADER ── */
+#pb-loader{position:fixed;inset:0;background:var(--pb-black);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .5s}
+#pb-loader.hide{opacity:0;pointer-events:none}
+.pb-loader-logo{font-size:2.4rem;font-weight:900;color:#fff;letter-spacing:1px}
+.pb-loader-logo span{color:var(--pb-red)}
+.pb-loader-bar{width:200px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;overflow:hidden}
+.pb-loader-fill{height:100%;width:0;background:var(--pb-red);border-radius:4px;animation:pb-load 1.4s ease forwards}
+@keyframes pb-load{to{width:100%}}
+
+/* ── PROGRESS BAR ── */
+#pb-progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--pb-red);z-index:9998;width:0%;transition:width .2s}
+
+/* ── TOAST ── */
+#pb-toast{position:fixed;bottom:24px;right:24px;background:var(--pb-black);color:#fff;padding:12px 18px;border-radius:12px;font-size:.85rem;z-index:9000;opacity:0;transform:translateY(16px);transition:all .4s;max-width:260px;box-shadow:0 4px 20px rgba(0,0,0,.35)}
+#pb-toast.show{opacity:1;transform:translateY(0)}
+#pb-toast .pb-t-name{font-weight:700;color:var(--pb-red)}
+
+/* ── LIGHTBOX ── */
+#pb-lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9500;display:none;align-items:center;justify-content:center}
+#pb-lb.open{display:flex}
+#pb-lb img{max-width:92vw;max-height:88vh;border-radius:12px;object-fit:contain}
+.pb-lb-close{position:absolute;top:20px;right:20px;color:#fff;font-size:2rem;cursor:pointer;line-height:1;background:rgba(255,255,255,.15);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+
+/* ── TOP BAR ── */
+.pb-topbar{background:var(--pb-black);color:#fff;text-align:center;padding:10px 16px;font-size:.9rem;font-weight:700;position:sticky;top:0;z-index:800}
+.pb-topbar .pb-countdown{color:var(--pb-red);font-weight:900}
+
+/* ── NAV ── */
+.pb-nav{background:#fff;border-bottom:2px solid var(--pb-gray2);padding:14px 20px;display:flex;align-items:center;justify-content:center;position:sticky;top:44px;z-index:700;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.pb-nav-logo{font-size:1.4rem;font-weight:900;color:var(--pb-black)}
+.pb-nav-logo span{color:var(--pb-red)}
+
+/* ── HERO ── */
+.pb-hero{background:linear-gradient(135deg,#111 0%,#1e1e1e 50%,#2a2a2a 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 40px;position:relative;overflow:hidden}
+.pb-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(229,57,53,.12) 0%,transparent 60%);pointer-events:none}
+.pb-hero-badge{background:var(--pb-red);color:#fff;padding:6px 18px;border-radius:50px;font-size:.85rem;font-weight:700;margin-bottom:20px;display:inline-block;animation:pb-pulse 2s infinite}
+@keyframes pb-pulse{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.4)}50%{box-shadow:0 0 0 10px rgba(229,57,53,0)}}
+.pb-hero-title{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;color:#fff;text-align:center;line-height:1.25;margin-bottom:16px;max-width:700px}
+.pb-hero-title span{color:var(--pb-red)}
+.pb-hero-sub{font-size:1.1rem;color:rgba(255,255,255,.75);text-align:center;margin-bottom:30px;max-width:500px}
+.pb-hero-img-wrap{position:relative;margin:0 auto 30px;max-width:380px;width:100%}
+.pb-hero-img-wrap img{width:100%;border-radius:20px;display:block;animation:pb-float 3.5s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(229,57,53,.3))}
+@keyframes pb-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.pb-hero-stars{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;color:rgba(255,255,255,.7);font-size:.9rem}
+.pb-hero-stars .stars{color:#FFD700;font-size:1.1rem}
+.pb-hero-trust{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.pb-trust-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 16px;border-radius:50px;font-size:.85rem;display:flex;align-items:center;gap:6px;backdrop-filter:blur(6px)}
+.pb-trust-pill .pi{color:var(--pb-red)}
+
+/* ── VIEWERS ── */
+.pb-viewers{background:rgba(229,57,53,.08);border:1px solid rgba(229,57,53,.2);border-radius:12px;padding:10px 18px;font-size:.9rem;color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:8px;margin-bottom:16px}
+.pb-viewers .pb-dot{width:8px;height:8px;background:var(--pb-red);border-radius:50%;animation:pb-blink 1.2s infinite}
+@keyframes pb-blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── CTA BUTTON ── */
+.pb-cta-btn{background:linear-gradient(135deg,var(--pb-red),var(--pb-red2));color:#fff;font-family:'Tajawal',sans-serif;font-size:1.2rem;font-weight:800;padding:18px 48px;border:none;border-radius:50px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(229,57,53,.45);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;text-decoration:none}
+.pb-cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(229,57,53,.55)}
+.pb-cta-btn .pb-ripple{position:absolute;border-radius:50%;transform:scale(0);animation:pb-rip .6s linear;background:rgba(255,255,255,.3);pointer-events:none}
+@keyframes pb-rip{to{transform:scale(4);opacity:0}}
+
+/* ── SOCIAL PROOF BAR ── */
+.pb-proof-bar{background:var(--pb-gray);padding:16px 0;overflow:hidden;border-bottom:2px solid var(--pb-gray2)}
+.pb-proof-track{display:flex;gap:40px;animation:pb-scroll-r 28s linear infinite;width:max-content;white-space:nowrap}
+.pb-proof-item{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--pb-text);font-weight:600}
+.pb-proof-item .pi{color:var(--pb-red)}
+@keyframes pb-scroll-r{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION TITLES ── */
+.pb-section{padding:70px 20px}
+.pb-container{max-width:1100px;margin:0 auto}
+.pb-sec-label{font-size:.8rem;font-weight:700;color:var(--pb-red);letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:10px}
+.pb-sec-title{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;text-align:center;color:var(--pb-black);margin-bottom:14px;line-height:1.25}
+.pb-sec-sub{font-size:1rem;color:var(--pb-muted);text-align:center;max-width:560px;margin:0 auto 50px}
+
+/* ── BENEFITS TABS ── */
+.pb-tabs{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.pb-tab-btn{padding:10px 24px;border-radius:50px;border:2px solid var(--pb-gray2);background:#fff;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--pb-muted)}
+.pb-tab-btn.active{background:var(--pb-red);color:#fff;border-color:var(--pb-red)}
+.pb-tab-panel{display:none;animation:pb-fade .4s}
+.pb-tab-panel.active{display:block}
+@keyframes pb-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pb-benefit-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pb-bcard{background:#fff;border-radius:var(--pb-radius);padding:24px 20px;box-shadow:var(--pb-shadow);display:flex;gap:14px;align-items:flex-start;transition:transform .2s,box-shadow .2s}
+.pb-bcard:hover{transform:translateY(-4px);box-shadow:var(--pb-shadow-lg)}
+.pb-bcard-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--pb-red),var(--pb-red2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;color:#fff}
+.pb-bcard-text h4{font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--pb-black)}
+.pb-bcard-text p{font-size:.9rem;color:var(--pb-muted);line-height:1.6}
+.pb-tab-img{width:100%;max-width:500px;border-radius:20px;margin:0 auto 30px;display:block;object-fit:cover;box-shadow:var(--pb-shadow-lg)}
+
+/* ── WHY CHOOSE ── */
+.pb-why-bg{background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 100%)}
+.pb-why-bg .pb-sec-title,.pb-why-bg .pb-sec-label,.pb-why-bg .pb-sec-sub{color:#fff}
+.pb-why-bg .pb-sec-sub{color:rgba(255,255,255,.6)}
+.pb-why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pb-why-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--pb-radius);padding:28px 20px;text-align:center;transition:all .3s;backdrop-filter:blur(8px)}
+.pb-why-card:hover{background:rgba(229,57,53,.12);border-color:rgba(229,57,53,.4);transform:translateY(-6px)}
+.pb-why-icon{font-size:2.4rem;margin-bottom:14px}
+.pb-why-card h4{font-size:1rem;font-weight:700;color:#fff;margin-bottom:8px}
+.pb-why-card p{font-size:.875rem;color:rgba(255,255,255,.55);line-height:1.6}
+
+/* ── LIFESTYLE ── */
+.pb-lifestyle-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pb-lf-item{border-radius:var(--pb-radius);overflow:hidden;position:relative;cursor:pointer}
+.pb-lf-item img{width:100%;height:260px;object-fit:cover;display:block;transition:transform .4s}
+.pb-lf-item:hover img{transform:scale(1.05)}
+.pb-lf-label{position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,.65);color:#fff;padding:6px 14px;border-radius:50px;font-size:.85rem;font-weight:700;backdrop-filter:blur(6px)}
+.pb-lf-item.large{grid-column:span 2}
+.pb-lf-item.large img{height:360px}
+
+/* ── CALORIES ── */
+.pb-cal-bg{background:var(--pb-gray)}
+.pb-cal-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.pb-cal-card{background:#fff;border-radius:var(--pb-radius);padding:32px 20px;text-align:center;box-shadow:var(--pb-shadow);position:relative;overflow:hidden}
+.pb-cal-card.highlight{background:linear-gradient(135deg,var(--pb-black),#2a2a2a);color:#fff}
+.pb-cal-card.highlight .pb-cal-label,.pb-cal-card.highlight .pb-cal-val{color:#fff}
+.pb-cal-card.highlight .pb-cal-sub{color:rgba(255,255,255,.6)}
+.pb-cal-card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:var(--pb-red);opacity:.1;border-radius:0 0 0 100%}
+.pb-cal-icon{font-size:2.8rem;margin-bottom:12px}
+.pb-cal-label{font-size:.85rem;font-weight:700;color:var(--pb-muted);margin-bottom:8px}
+.pb-cal-val{font-size:2rem;font-weight:900;color:var(--pb-black);margin-bottom:4px}
+.pb-cal-sub{font-size:.85rem;color:var(--pb-muted)}
+.pb-cal-badge{position:absolute;top:14px;left:14px;background:var(--pb-red);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:50px}
+
+/* ── FEATURES GRID ── */
+.pb-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pb-feat-card{background:#fff;border-radius:var(--pb-radius);padding:28px 20px;text-align:center;box-shadow:var(--pb-shadow);border:2px solid transparent;transition:all .25s}
+.pb-feat-card:hover{border-color:var(--pb-red);transform:translateY(-4px)}
+.pb-feat-icon{font-size:2.2rem;margin-bottom:12px}
+.pb-feat-card h4{font-size:.95rem;font-weight:700;color:var(--pb-black)}
+
+/* ── WHAT'S INCLUDED ── */
+.pb-inc-bg{background:var(--pb-black)}
+.pb-inc-bg .pb-sec-title,.pb-inc-bg .pb-sec-label{color:#fff}
+.pb-inc-bg .pb-sec-sub{color:rgba(255,255,255,.55)}
+.pb-inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pb-inc-card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:20px;padding:32px 28px;position:relative;transition:all .3s}
+.pb-inc-card.best{border-color:var(--pb-red);background:rgba(229,57,53,.08)}
+.pb-inc-card.best::before{content:'🔥 الأكثر توفيراً';position:absolute;top:-14px;right:24px;background:var(--pb-red);color:#fff;font-size:.8rem;font-weight:700;padding:4px 14px;border-radius:50px}
+.pb-inc-price{font-size:2rem;font-weight:900;color:#fff;margin-bottom:8px}
+.pb-inc-price span{font-size:1rem;font-weight:400;color:rgba(255,255,255,.5)}
+.pb-inc-old{font-size:.9rem;color:rgba(255,255,255,.4);text-decoration:line-through;margin-bottom:16px}
+.pb-inc-items li{list-style:none;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.95rem;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:8px}
+.pb-inc-items li::before{content:'✓';color:var(--pb-red);font-weight:900}
+.pb-inc-save{font-size:.85rem;color:var(--pb-red);font-weight:700;margin-top:12px}
+
+/* ── OFFER / ORDER ── */
+.pb-offer-bg{background:linear-gradient(135deg,#111,#1e1e1e)}
+.pb-offer-bg .pb-sec-title,.pb-offer-bg .pb-sec-label{color:#fff}
+.pb-offer-bg .pb-sec-sub{color:rgba(255,255,255,.6)}
+.pb-offer-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.pb-ocard{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:var(--pb-radius);padding:24px 20px;cursor:pointer;transition:all .25s;text-align:center;position:relative}
+.pb-ocard.active{background:rgba(229,57,53,.12);border-color:var(--pb-red)}
+.pb-ocard-badge{position:absolute;top:-12px;right:50%;transform:translateX(50%);background:var(--pb-red);color:#fff;font-size:.75rem;font-weight:700;padding:4px 14px;border-radius:50px;white-space:nowrap}
+.pb-ocard-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px}
+.pb-ocard-price{font-size:1.8rem;font-weight:900;color:var(--pb-red);margin-bottom:4px}
+.pb-ocard-old{font-size:.85rem;color:rgba(255,255,255,.4);text-decoration:line-through}
+.pb-ocard-save{font-size:.8rem;color:#4CAF50;font-weight:700;margin-top:4px}
+.pb-order-info{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px}
+.pb-oi-pill{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.7);font-size:.85rem}
+.pb-oi-pill .pi{color:var(--pb-red)}
+
+/* ── REVIEWS ── */
+.pb-rev-bg{background:var(--pb-gray)}
+.pb-rev-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.pb-rev-card{background:#fff;border-radius:var(--pb-radius);padding:24px 20px;box-shadow:var(--pb-shadow);border-top:4px solid var(--pb-red)}
+.pb-rev-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.pb-rev-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--pb-red),var(--pb-red2));display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff;flex-shrink:0}
+.pb-rev-info h5{font-size:.95rem;font-weight:700;color:var(--pb-black)}
+.pb-rev-info span{font-size:.8rem;color:var(--pb-muted)}
+.pb-rev-stars{color:#FFD700;font-size:.95rem;margin-bottom:8px}
+.pb-rev-text{font-size:.9rem;color:var(--pb-muted);line-height:1.65}
+.pb-rev-badge{font-size:.75rem;color:var(--pb-red);font-weight:700;margin-top:8px;display:flex;align-items:center;gap:4px}
+
+/* ── FAQ ── */
+.pb-faq-list{max-width:760px;margin:0 auto}
+.pb-faq-item{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:var(--pb-shadow);overflow:hidden;border:2px solid transparent;transition:border .2s}
+.pb-faq-item.open{border-color:var(--pb-red)}
+.pb-faq-q{padding:20px 22px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--pb-black);gap:12px}
+.pb-faq-arrow{font-size:1.2rem;transition:transform .3s;flex-shrink:0}
+.pb-faq-item.open .pb-faq-arrow{transform:rotate(180deg)}
+.pb-faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
+.pb-faq-item.open .pb-faq-a{max-height:200px;padding:0 22px 18px}
+.pb-faq-a p{font-size:.9rem;color:var(--pb-muted);line-height:1.7}
+
+/* ── TRUST BADGES ── */
+.pb-trust-section{background:var(--pb-black)}
+.pb-trust-section .pb-sec-title{color:#fff}
+.pb-trust-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.pb-trust-card{text-align:center;padding:24px 12px}
+.pb-trust-card .pb-ti{font-size:2.2rem;margin-bottom:10px}
+.pb-trust-card h4{font-size:.9rem;font-weight:700;color:#fff}
+
+/* ── FINAL CTA ── */
+.pb-final-bg{background:linear-gradient(135deg,var(--pb-red),var(--pb-red2));padding:70px 20px;text-align:center}
+.pb-final-title{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;color:#fff;margin-bottom:12px;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+.pb-final-sub{color:rgba(255,255,255,.85);font-size:1.05rem;margin-bottom:32px}
+.pb-final-btn{background:#fff;color:var(--pb-red);font-family:'Tajawal',sans-serif;font-size:1.2rem;font-weight:900;padding:18px 52px;border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.25);transition:transform .2s,box-shadow .2s}
+.pb-final-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+
+/* ── FOOTER ── */
+.pb-footer{background:var(--pb-black);color:rgba(255,255,255,.45);text-align:center;padding:28px 16px;font-size:.85rem}
+.pb-footer strong{color:var(--pb-red)}
+
+/* ── STICKY MOBILE CTA ── */
+#pb-sticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;background:#fff;border-top:3px solid var(--pb-red);padding:12px 16px;gap:10px;align-items:center;justify-content:space-between;box-shadow:0 -4px 20px rgba(0,0,0,.15)}
+#pb-sticky .pb-st-price{font-size:1.2rem;font-weight:900;color:var(--pb-black)}
+#pb-sticky .pb-st-price small{font-size:.8rem;color:var(--pb-muted);display:block;font-weight:400}
+#pb-sticky .pb-cta-btn{font-size:1rem;padding:12px 28px}
+
+/* ── ANIM ── */
+.pb-anim{opacity:0;transform:translateY(28px);transition:opacity .6s,transform .6s}
+.pb-anim.visible{opacity:1;transform:translateY(0)}
+
+/* ── EASYSELL FORM ── */
+.pb-form-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--pb-radius);padding:28px 20px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #pb-sticky{display:flex}
+  .pb-benefit-grid{grid-template-columns:1fr}
+  .pb-why-grid{grid-template-columns:1fr 1fr}
+  .pb-cal-cards{grid-template-columns:1fr}
+  .pb-feat-grid{grid-template-columns:repeat(2,1fr)}
+  .pb-inc-grid{grid-template-columns:1fr}
+  .pb-offer-cards{grid-template-columns:1fr}
+  .pb-rev-grid{grid-template-columns:1fr}
+  .pb-trust-grid{grid-template-columns:repeat(3,1fr)}
+  .pb-lifestyle-grid{grid-template-columns:1fr}
+  .pb-lf-item.large{grid-column:span 1}
+  .pb-lf-item img,.pb-lf-item.large img{height:200px}
+}
+@media(max-width:480px){
+  .pb-why-grid{grid-template-columns:1fr}
+  .pb-feat-grid{grid-template-columns:1fr 1fr}
+  .pb-trust-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── DIVIDER ── */
+.pb-divider{width:60px;height:4px;background:var(--pb-red);border-radius:4px;margin:0 auto 50px}
+</style>
+
+<!-- LOADER -->
+<div id="pb-loader">
+  <div class="pb-loader-logo">BOXING<span>PRO</span></div>
+  <div class="pb-loader-bar"><div class="pb-loader-fill"></div></div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div id="pb-progress"></div>
+
+<!-- TOAST -->
+<div id="pb-toast">
+  <div class="pb-t-name"></div>
+  <div class="pb-t-msg"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="pb-lb">
+  <div class="pb-lb-close" onclick="document.getElementById('pb-lb').classList.remove('open')">✕</div>
+  <img id="pb-lb-img" src="" alt="">
+</div>
+
+<!-- STICKY MOBILE CTA -->
+<div id="pb-sticky">
+  <div class="pb-st-price">
+    <small>السعر</small>
+    <span id="pb-sticky-price">175 ريال</span>
+  </div>
+  <button class="pb-cta-btn" onclick="document.getElementById('pb-order').scrollIntoView({behavior:'smooth'})">🥊 اطلب الآن</button>
+</div>
+
+<!-- TOP BAR -->
+<div class="pb-topbar">
+  ⚡ عرض محدود — ينتهي خلال: <span class="pb-countdown" id="pb-ctd">00:00:00</span> — الشحن مجاني لجميع مناطق المملكة
+</div>
+
+<!-- NAV -->
+<div class="pb-nav">
+  <div class="pb-nav-logo">BOXING<span>PRO</span></div>
+</div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="pb-hero">
+  <div class="pb-hero-badge">🥊 المنتج الأكثر مبيعاً في 2025</div>
+  <div class="pb-viewers" id="pb-viewers-hero">
+    <span class="pb-dot"></span>
+    <span id="pb-vcount">47</span> شخص يشاهد هذا المنتج الآن
+  </div>
+  <div class="pb-hero-img-wrap">
+    {% if product.media.size > 0 %}
+      <img src="{{ product.media[0] | image_url: width: 700 }}" alt="{{ product.title }}" loading="eager" onclick="pbOpenLb(this.src)">
+    {% else %}
+      <div style="width:100%;height:420px;background:linear-gradient(135deg,#2a2a2a,#1a1a1a);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:5rem">🥊</div>
+    {% endif %}
+  </div>
+  <h1 class="pb-hero-title">حوّل منزلك إلى <span>مساحة تدريب</span> متكاملة</h1>
+  <p class="pb-hero-sub">تدرب في أي وقت دون الحاجة للذهاب إلى النادي. مناسب للأطفال والنساء والرجال.</p>
+  <div class="pb-hero-stars">
+    <span class="stars">★★★★★</span>
+    <span>4.9/5 — +1,200 عميل راضٍ في السعودية</span>
+  </div>
+  <button class="pb-cta-btn" onclick="document.getElementById('pb-order').scrollIntoView({behavior:'smooth'});pbRipple(this,event)">
+    🥊 اطلب الآن
+  </button>
+  <div class="pb-hero-trust">
+    <span class="pb-trust-pill"><span class="pi">✅</span> شحن مجاني</span>
+    <span class="pb-trust-pill"><span class="pi">✅</span> الدفع عند الاستلام</span>
+    <span class="pb-trust-pill"><span class="pi">✅</span> توصيل سريع داخل السعودية</span>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF BAR -->
+<div class="pb-proof-bar">
+  <div class="pb-proof-track">
+    <span class="pb-proof-item"><span class="pi">🛡️</span> ضمان الجودة</span>
+    <span class="pb-proof-item"><span class="pi">🚚</span> شحن مجاني</span>
+    <span class="pb-proof-item"><span class="pi">💳</span> الدفع عند الاستلام</span>
+    <span class="pb-proof-item"><span class="pi">🔄</span> يرتد تلقائياً</span>
+    <span class="pb-proof-item"><span class="pi">👨‍👩‍👧</span> مناسب للعائلة</span>
+    <span class="pb-proof-item"><span class="pi">⚡</span> سهل النفخ</span>
+    <span class="pb-proof-item"><span class="pi">🏆</span> خامات عالية الجودة</span>
+    <span class="pb-proof-item"><span class="pi">📦</span> تغليف آمن</span>
+    <span class="pb-proof-item"><span class="pi">🛡️</span> ضمان الجودة</span>
+    <span class="pb-proof-item"><span class="pi">🚚</span> شحن مجاني</span>
+    <span class="pb-proof-item"><span class="pi">💳</span> الدفع عند الاستلام</span>
+    <span class="pb-proof-item"><span class="pi">🔄</span> يرتد تلقائياً</span>
+    <span class="pb-proof-item"><span class="pi">👨‍👩‍👧</span> مناسب للعائلة</span>
+    <span class="pb-proof-item"><span class="pi">⚡</span> سهل النفخ</span>
+    <span class="pb-proof-item"><span class="pi">🏆</span> خامات عالية الجودة</span>
+    <span class="pb-proof-item"><span class="pi">📦</span> تغليف آمن</span>
+  </div>
+</div>
+
+<!-- ══════════════ BENEFITS TABS ══════════════ -->
+<section class="pb-section pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">الفوائد</p>
+    <h2 class="pb-sec-title">مناسب للجميع</h2>
+    <div class="pb-divider"></div>
+    <div class="pb-tabs">
+      <button class="pb-tab-btn active" onclick="pbTab(this,'kids')">👶 للأطفال</button>
+      <button class="pb-tab-btn" onclick="pbTab(this,'women')">👩 للنساء</button>
+      <button class="pb-tab-btn" onclick="pbTab(this,'men')">💪 للرجال</button>
+    </div>
+
+    <!-- KIDS -->
+    <div class="pb-tab-panel active" id="pb-panel-kids">
+      {% if product.media.size > 1 %}
+        <img src="{{ product.media[1] | image_url: width: 600 }}" alt="طفل يتدرب" class="pb-tab-img" loading="lazy">
+      {% else %}
+        <div style="width:100%;max-width:500px;height:260px;background:linear-gradient(135deg,#f5f5f5,#e0e0e0);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin:0 auto 30px">👶🥊</div>
+      {% endif %}
+      <div class="pb-benefit-grid">
+        <div class="pb-bcard"><div class="pb-bcard-icon">🛡️</div><div class="pb-bcard-text"><h4>تعلّم الدفاع عن النفس</h4><p>يساعد الطفل على تعلم أساسيات الدفاع عن النفس بطريقة ممتعة وآمنة.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">⚡</div><div class="pb-bcard-text"><h4>سرعة رد الفعل</h4><p>يطور سرعة رد الفعل والتنسيق الحركي لدى الطفل بشكل طبيعي.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">🎯</div><div class="pb-bcard-text"><h4>تركيز وثقة بالنفس</h4><p>يزيد مستوى التركيز والثقة بالنفس من خلال التمرين المنتظم.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">📵</div><div class="pb-bcard-text"><h4>أبعد عن الشاشات</h4><p>يبعد الأطفال عن كثرة استخدام الأجهزة الإلكترونية بطريقة ممتعة.</p></div></div>
+      </div>
+    </div>
+
+    <!-- WOMEN -->
+    <div class="pb-tab-panel" id="pb-panel-women">
+      {% if product.media.size > 2 %}
+        <img src="{{ product.media[2] | image_url: width: 600 }}" alt="امرأة تتدرب" class="pb-tab-img" loading="lazy">
+      {% else %}
+        <div style="width:100%;max-width:500px;height:260px;background:linear-gradient(135deg,#fce4ec,#f8bbd0);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin:0 auto 30px">👩🥊</div>
+      {% endif %}
+      <div class="pb-benefit-grid">
+        <div class="pb-bcard"><div class="pb-bcard-icon">🔥</div><div class="pb-bcard-text"><h4>حرق السعرات في المنزل</h4><p>تمرين كارديو ممتع يساعد على حرق السعرات الحرارية دون الحاجة للخروج.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">😌</div><div class="pb-bcard-text"><h4>تخفيف التوتر</h4><p>وسيلة رائعة لتخفيف التوتر والإجهاد بعد يوم طويل ومرهق.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">💃</div><div class="pb-bcard-text"><h4>كارديو بطريقة ممتعة</h4><p>تمرين كارديو ممتع ومحفز دون الحاجة إلى الذهاب للنادي الرياضي.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">🌟</div><div class="pb-bcard-text"><h4>لجميع مستويات اللياقة</h4><p>مناسب للمبتدئات والمتمرنات على حد سواء بأي مستوى لياقة.</p></div></div>
+      </div>
+    </div>
+
+    <!-- MEN -->
+    <div class="pb-tab-panel" id="pb-panel-men">
+      {% if product.media.size > 3 %}
+        <img src="{{ product.media[3] | image_url: width: 600 }}" alt="رجل يتدرب" class="pb-tab-img" loading="lazy">
+      {% else %}
+        <div style="width:100%;max-width:500px;height:260px;background:linear-gradient(135deg,#e8e8e8,#cfcfcf);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin:0 auto 30px">💪🥊</div>
+      {% endif %}
+      <div class="pb-benefit-grid">
+        <div class="pb-bcard"><div class="pb-bcard-icon">🏋️</div><div class="pb-bcard-text"><h4>تحسين اللياقة البدنية</h4><p>تمرين شامل يحسّن اللياقة البدنية العامة ويقوي الجسم بشكل متكامل.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">🥋</div><div class="pb-bcard-text"><h4>ملاكمة وكيك بوكسينغ</h4><p>مثالي للتدرب على تقنيات الملاكمة والكيك بوكسينغ في المنزل.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">⚡</div><div class="pb-bcard-text"><h4>سرعة اللكم وردة الفعل</h4><p>تقوية سرعة اللكم وتطوير ردود الفعل السريعة مع الممارسة المنتظمة.</p></div></div>
+        <div class="pb-bcard"><div class="pb-bcard-icon">😤</div><div class="pb-bcard-text"><h4>تفريغ الطاقة</h4><p>طريقة ممتعة وصحية لتفريغ الطاقة والحصول على راحة نفسية حقيقية.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ WHY CHOOSE ══════════════ -->
+<section class="pb-section pb-why-bg pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">لماذا نختارنا</p>
+    <h2 class="pb-sec-title">لماذا كيس الملاكمة الخاص بنا؟</h2>
+    <p class="pb-sec-sub">مصنوع بأعلى معايير الجودة ليمنحك تجربة تدريب حقيقية في المنزل</p>
+    <div class="pb-why-grid">
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">⚓</div>
+        <h4>قاعدة مستقرة</h4>
+        <p>تُملأ بالماء أو الرمل لضمان الثبات الكامل أثناء التدريب المكثف.</p>
+      </div>
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">🔄</div>
+        <h4>يعود تلقائياً</h4>
+        <p>يرتد لوضعه الأصلي مباشرة بعد كل لكمة أو ركلة قوية.</p>
+      </div>
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">🏗️</div>
+        <h4>PVC سميك وعالي الجودة</h4>
+        <p>خامات PVC متينة ومقاومة للصدمات والتمزق تضمن لك عمراً طويلاً.</p>
+      </div>
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">💪</div>
+        <h4>مقاوم للتمزق</h4>
+        <p>مصمم لتحمّل أقوى اللكمات والركلات يومياً دون أي ضرر.</p>
+      </div>
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">👨‍👩‍👧</div>
+        <h4>مناسب للجميع</h4>
+        <p>مثالي للأطفال والنساء والرجال بمختلف مستويات اللياقة البدنية.</p>
+      </div>
+      <div class="pb-why-card pb-anim">
+        <div class="pb-why-icon">⚡</div>
+        <h4>سهل النفخ</h4>
+        <p>يُنفخ ويُجهّز خلال دقائق معدودة دون أدوات معقدة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ LIFESTYLE GALLERY ══════════════ -->
+<section class="pb-section pb-anim" style="padding-bottom:40px">
+  <div class="pb-container">
+    <p class="pb-sec-label">شاهد المنتج في العمل</p>
+    <h2 class="pb-sec-title">تجربة حقيقية في المنزل</h2>
+    <div class="pb-divider"></div>
+    <div class="pb-lifestyle-grid">
+      {% if product.media.size > 4 %}
+        <div class="pb-lf-item large">
+          <img src="{{ product.media[4] | image_url: width: 900 }}" alt="تدريب في المنزل" loading="lazy" onclick="pbOpenLb(this.src)">
+          <span class="pb-lf-label">🏠 تدريب في المنزل</span>
+        </div>
+      {% else %}
+        <div class="pb-lf-item large" style="background:linear-gradient(135deg,#1a1a1a,#2a2a2a);height:300px;display:flex;align-items:center;justify-content:center;font-size:5rem">🏠🥊</div>
+      {% endif %}
+      {% if product.media.size > 5 %}
+        <div class="pb-lf-item">
+          <img src="{{ product.media[5] | image_url: width: 600 }}" alt="طفل يتدرب" loading="lazy" onclick="pbOpenLb(this.src)">
+          <span class="pb-lf-label">👶 تدريب الأطفال</span>
+        </div>
+      {% else %}
+        <div class="pb-lf-item" style="background:linear-gradient(135deg,#e0e0e0,#c8c8c8);height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;border-radius:var(--pb-radius)">👶</div>
+      {% endif %}
+      {% if product.media.size > 6 %}
+        <div class="pb-lf-item">
+          <img src="{{ product.media[6] | image_url: width: 600 }}" alt="امرأة تتدرب" loading="lazy" onclick="pbOpenLb(this.src)">
+          <span class="pb-lf-label">👩 اللياقة النسائية</span>
+        </div>
+      {% else %}
+        <div class="pb-lf-item" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;border-radius:var(--pb-radius)">👩</div>
+      {% endif %}
+      {% if product.media.size > 7 %}
+        <div class="pb-lf-item">
+          <img src="{{ product.media[7] | image_url: width: 600 }}" alt="العائلة" loading="lazy" onclick="pbOpenLb(this.src)">
+          <span class="pb-lf-label">👨‍👩‍👧 متعة العائلة</span>
+        </div>
+      {% else %}
+        <div class="pb-lf-item" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;border-radius:var(--pb-radius)">👨‍👩‍👧</div>
+      {% endif %}
+      {% if product.media.size > 8 %}
+        <div class="pb-lf-item">
+          <img src="{{ product.media[8] | image_url: width: 600 }}" alt="رجل يتدرب" loading="lazy" onclick="pbOpenLb(this.src)">
+          <span class="pb-lf-label">💪 تدريب قوي</span>
+        </div>
+      {% else %}
+        <div class="pb-lf-item" style="background:linear-gradient(135deg,#1a1a1a,#3a3a3a);height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;border-radius:var(--pb-radius)">💪</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CALORIES ══════════════ -->
+<section class="pb-section pb-cal-bg pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">نشاط أكبر</p>
+    <h2 class="pb-sec-title">احرق المزيد دون مغادرة المنزل</h2>
+    <p class="pb-sec-sub">مقارنة بين أنشطة كارديو شائعة — ابدأ من مستواك وارتقِ تدريجياً</p>
+    <div class="pb-cal-cards">
+      <div class="pb-cal-card highlight">
+        <div class="pb-cal-badge">🔥 الأعلى</div>
+        <div class="pb-cal-icon">🥊</div>
+        <div class="pb-cal-label">ملاكمة منزلية — 30 دقيقة</div>
+        <div class="pb-cal-val">كارديو مكثف</div>
+        <div class="pb-cal-sub">تمرين كامل للجسم مع نشاط عالي</div>
+      </div>
+      <div class="pb-cal-card">
+        <div class="pb-cal-icon">🚶</div>
+        <div class="pb-cal-label">مشي — 30 دقيقة</div>
+        <div class="pb-cal-val">كارديو خفيف</div>
+        <div class="pb-cal-sub">نشاط أقل كثافة وأبطأ</div>
+      </div>
+      <div class="pb-cal-card">
+        <div class="pb-cal-icon">🏃</div>
+        <div class="pb-cal-label">جري — 30 دقيقة</div>
+        <div class="pb-cal-val">كارديو متوسط</div>
+        <div class="pb-cal-sub">يتطلب مساحة خارجية أو جهاز</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--pb-muted);font-size:.8rem;margin-top:20px">* النتائج تختلف حسب الوزن وشدة التمرين وعوامل فردية أخرى</p>
+  </div>
+</section>
+
+<!-- ══════════════ FEATURES GRID ══════════════ -->
+<section class="pb-section pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">المميزات</p>
+    <h2 class="pb-sec-title">كل ما تحتاجه في منتج واحد</h2>
+    <div class="pb-divider"></div>
+    <div class="pb-feat-grid">
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">💥</div><h4>مقاوم للصدمات</h4></div>
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">🔄</div><h4>يرتد تلقائياً</h4></div>
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">🏗️</div><h4>خامات قوية</h4></div>
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">👨‍👩‍👧</div><h4>لجميع الأعمار</h4></div>
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">📦</div><h4>سهل التخزين</h4></div>
+      <div class="pb-feat-card pb-anim"><div class="pb-feat-icon">💨</div><h4>سهل النفخ</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ WHAT'S INCLUDED ══════════════ -->
+<section class="pb-section pb-inc-bg pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">محتويات الطلب</p>
+    <h2 class="pb-sec-title">اختر عرضك المناسب</h2>
+    <p class="pb-sec-sub">خيارات مرنة تناسب احتياجك وميزانيتك</p>
+    <div class="pb-inc-grid">
+      <div class="pb-inc-card">
+        <div class="pb-inc-price">175 <span>ريال سعودي</span></div>
+        <div class="pb-inc-old">سعر السوق: 220 ريال</div>
+        <ul class="pb-inc-items">
+          <li>🥊 كيس ملاكمة نفخ واحد</li>
+          <li>💨 تعليمات النفخ</li>
+          <li>📋 دليل التمارين</li>
+          <li>🚚 شحن مجاني</li>
+          <li>💳 الدفع عند الاستلام</li>
+        </ul>
+      </div>
+      <div class="pb-inc-card best">
+        <div class="pb-inc-price">319 <span>ريال سعودي</span></div>
+        <div class="pb-inc-old">سعر السوق: 440 ريال</div>
+        <ul class="pb-inc-items">
+          <li>🥊🥊 كيسان للملاكمة</li>
+          <li>💨 تعليمات النفخ</li>
+          <li>📋 دليل التمارين</li>
+          <li>🎁 تغليف هدية مجاني</li>
+          <li>🚚 شحن مجاني وأولوية</li>
+          <li>💳 الدفع عند الاستلام</li>
+        </ul>
+        <div class="pb-inc-save">💰 وفّرت 121 ريال مقارنة بشراء قطعتين منفصلتين!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ORDER / EASYSELL ══════════════ -->
+<section class="pb-section pb-offer-bg pb-anim" id="pb-order">
+  <div class="pb-container">
+    <p class="pb-sec-label">اطلب الآن</p>
+    <h2 class="pb-sec-title">اختر عرضك وأتمّ طلبك</h2>
+    <p class="pb-sec-sub">الدفع عند الاستلام — شحن مجاني لجميع مناطق المملكة</p>
+
+    <div class="pb-offer-cards">
+      {% assign v0 = product.variants[0] %}
+      {% assign v1 = product.variants[1] %}
+      <div class="pb-ocard active" onclick="pbOffer(this)" data-vid="{{ v0.id }}" data-price="{{ v0.price | money_without_trailing_zeros }}" data-title="{{ v0.title }}">
+        <div class="pb-ocard-title">🥊 قطعة واحدة</div>
+        <div class="pb-ocard-price">{{ v0.price | money_without_trailing_zeros }}</div>
+        <div class="pb-ocard-old">سعر السوق: 220 ريال</div>
+      </div>
+      <div class="pb-ocard" onclick="pbOffer(this)" data-vid="{{ v1.id }}" data-price="{{ v1.price | money_without_trailing_zeros }}" data-title="{{ v1.title }}" style="position:relative">
+        <div class="pb-ocard-badge">🔥 الأكثر طلباً</div>
+        <div class="pb-ocard-title">🥊🥊 قطعتان</div>
+        <div class="pb-ocard-price">{{ v1.price | money_without_trailing_zeros }}</div>
+        <div class="pb-ocard-old">سعر السوق: 440 ريال</div>
+        <div class="pb-ocard-save">💰 وفّر 121 ريال!</div>
+      </div>
+    </div>
+
+    <div class="pb-form-wrap">
+      {%- form 'product', product, id: 'pb-form', novalidate: true -%}
+        <input type="hidden" name="id" id="pb-vid" value="{{ product.variants[0].id }}">
+        {% content_for 'blocks' %}
+      {%- endform -%}
+    </div>
+
+    <div class="pb-order-info">
+      <span class="pb-oi-pill"><span class="pi">✅</span> الدفع عند الاستلام</span>
+      <span class="pb-oi-pill"><span class="pi">🚚</span> شحن مجاني</span>
+      <span class="pb-oi-pill"><span class="pi">⚡</span> توصيل خلال 2-4 أيام</span>
+      <span class="pb-oi-pill"><span class="pi">🔒</span> طلب آمن 100%</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ REVIEWS ══════════════ -->
+<section class="pb-section pb-rev-bg pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">آراء العملاء</p>
+    <h2 class="pb-sec-title">ماذا يقول عملاؤنا؟</h2>
+    <p class="pb-sec-sub">+1,200 عميل راضٍ في المملكة العربية السعودية</p>
+    <div class="pb-rev-grid">
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">خ</div><div class="pb-rev-info"><h5>خالد العتيبي</h5><span>الرياض</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">اشتريته لأولادي وصراحة فاق توقعاتي. الجودة ممتازة والقاعدة ثابتة جداً بعد تعبئتها بالماء. الأطفال لا يتركونه!</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">ن</div><div class="pb-rev-info"><h5>نورة الشمري</h5><span>جدة</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">أشتريه للكارديو البيتي وهو رائع جداً! ساعدني على ممارسة الرياضة كل يوم وأحس بفرق واضح في مستوى طاقتي.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">م</div><div class="pb-rev-info"><h5>محمد القحطاني</h5><span>الدمام</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">منتج ممتاز للتدريب في المنزل. النفخ سريع وسهل، والمادة قوية. اشتريت قطعتين واحدة لي وواحدة لأخي.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">س</div><div class="pb-rev-info"><h5>سارة الزهراني</h5><span>مكة المكرمة</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">هدية مثالية لأطفالي. يساعدهم على الحركة وتفريغ الطاقة بدل الجلوس أمام الشاشات. شكراً جزيلاً!</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">ع</div><div class="pb-rev-info"><h5>عبدالله الدوسري</h5><span>المدينة المنورة</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">جربت منتجات مشابهة وهذا أفضلها على الإطلاق من ناحية الجودة والثبات. يستحق السعر وأكثر بكثير.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">ر</div><div class="pb-rev-info"><h5>ريم المطيري</h5><span>الرياض</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">استخدمه للاسترخاء وتخفيف التوتر بعد الدوام. أفضل شيء اشتريته هذا العام! التوصيل كان سريعاً وأسرع مما توقعت.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">ف</div><div class="pb-rev-info"><h5>فيصل العنزي</h5><span>الطائف</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">أنصح به بشدة لكل أب يريد شيئاً ممتعاً لأطفاله. ابني عمره 8 سنوات ويعشقه ويطلب التمرين عليه يومياً!</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">ه</div><div class="pb-rev-info"><h5>هند الحربي</h5><span>جدة</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">الشحن وصل بسرعة والتغليف كان ممتازاً. المنتج بالضبط كما في الصور. راضية جداً عن تجربة الشراء كاملة.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">أ</div><div class="pb-rev-info"><h5>أحمد السبيعي</h5><span>القصيم</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">استخدمته للكيك بوكسينغ وهو قوي جداً. لم يتضرر رغم التمرين اليومي لمدة شهر. خامات عالية الجودة فعلاً.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+      <div class="pb-rev-card pb-anim">
+        <div class="pb-rev-header"><div class="pb-rev-avatar">د</div><div class="pb-rev-info"><h5>دلال العسيري</h5><span>أبها</span></div></div>
+        <div class="pb-rev-stars">★★★★★</div>
+        <p class="pb-rev-text">هدية عيد الميلاد لابنتي وكانت سعيدة جداً! تلعب عليه كل يوم وأصبح جزءاً من روتينها الصحي اليومي.</p>
+        <div class="pb-rev-badge">✅ عميل موثق</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FAQ ══════════════ -->
+<section class="pb-section pb-anim">
+  <div class="pb-container">
+    <p class="pb-sec-label">الأسئلة الشائعة</p>
+    <h2 class="pb-sec-title">كل ما تريد معرفته</h2>
+    <div class="pb-divider"></div>
+    <div class="pb-faq-list">
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يحتاج إلى تركيب؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>لا يحتاج إلى أي تركيب أو أدوات. فقط انفخه وعبّئ القاعدة بالماء أو الرمل وهو جاهز للاستخدام خلال دقائق.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يناسب الأطفال الصغار؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>نعم، مناسب للأطفال من عمر 3 سنوات فما فوق. المادة المرنة آمنة ولا تسبب إصابات، ويُنصح بإشراف الوالدين للأطفال الصغار.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يناسب النساء؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>بالتأكيد! مثالي للنساء اللواتي يرغبن في ممارسة الكارديو في المنزل وتخفيف التوتر بطريقة ممتعة وآمنة.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يمكن استخدامه يومياً؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>نعم، مصمم للاستخدام اليومي المكثف. مادة PVC السميكة تضمن متانة عالية مع الاستخدام المستمر والمنتظم.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يأتي مع مضخة هواء؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>يأتي مع صمام نفخ قياسي يتوافق مع معظم مضخات الهواء المنزلية. نوصي باستخدام مضخة كهربائية لتوفير الوقت.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">كيف يتم تثبيت القاعدة؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>القاعدة دائرية وتُملأ بالماء أو الرمل من الصمام العلوي. كلما زاد الملء زاد ثبات الكيس. يُنصح بملء 70-80% للحصول على أفضل توازن.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">ما المقاس الكامل للمنتج؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>الارتفاع الكلي حوالي 160 سم وقطر القاعدة 45 سم تقريباً. مثالي للغرف والصالات الداخلية مع مساحة معقولة للحركة.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل أحتاج لقفازات ملاكمة؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>المادة ناعمة نسبياً لكن يُنصح باستخدام قفازات للتدريب المكثف وحماية اليدين، خاصة للبالغين أثناء التدريب القوي.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">هل يمكن استخدامه في الخارج؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>يُفضل الاستخدام داخل المنزل، لكن يمكن استخدامه في الخارج في الأماكن المستوية. يُنصح بتجنيب التعرض المطوّل لأشعة الشمس المباشرة.</p></div></div>
+      <div class="pb-faq-item"><div class="pb-faq-q">ما سياسة الإرجاع؟<span class="pb-faq-arrow">▼</span></div><div class="pb-faq-a"><p>نضمن رضاك التام. في حالة وجود أي عيب في المنتج، تواصل معنا خلال 7 أيام من الاستلام وسنتعامل مع الأمر فوراً.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TRUST BADGES ══════════════ -->
+<section class="pb-section pb-trust-section pb-anim" style="padding:50px 20px">
+  <div class="pb-container">
+    <h2 class="pb-sec-title" style="color:#fff;margin-bottom:36px">تسوّق بثقة تامة</h2>
+    <div class="pb-trust-grid">
+      <div class="pb-trust-card"><div class="pb-ti">💳</div><h4>الدفع عند الاستلام</h4></div>
+      <div class="pb-trust-card"><div class="pb-ti">🚚</div><h4>شحن مجاني</h4></div>
+      <div class="pb-trust-card"><div class="pb-ti">🏆</div><h4>ضمان الجودة</h4></div>
+      <div class="pb-trust-card"><div class="pb-ti">🎧</div><h4>خدمة العملاء</h4></div>
+      <div class="pb-trust-card"><div class="pb-ti">⚡</div><h4>توصيل سريع</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FINAL CTA ══════════════ -->
+<section class="pb-final-bg pb-anim">
+  <div class="pb-container">
+    <h2 class="pb-final-title">وفّر أكثر عند شراء قطعتين 🥊🥊</h2>
+    <p class="pb-final-sub">انضم لأكثر من 1,200 عائلة سعودية تستمتع بالتدريب المنزلي</p>
+    <button class="pb-final-btn" onclick="document.getElementById('pb-order').scrollIntoView({behavior:'smooth'})">🥊 اطلب الآن — الدفع عند الاستلام</button>
+    <div style="margin-top:20px;color:rgba(255,255,255,.8);font-size:.9rem">✅ شحن مجاني &nbsp;|&nbsp; ✅ ضمان الجودة &nbsp;|&nbsp; ✅ توصيل 2-4 أيام</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="pb-footer">
+  <p>جميع الحقوق محفوظة &copy; {{ 'now' | date: '%Y' }} — <strong>BOXING PRO</strong></p>
+  <p style="margin-top:6px;font-size:.78rem">هذا المنتج أداة تدريبية ترفيهية. النتائج تختلف من شخص لآخر حسب الاستخدام والجهد المبذول.</p>
+</div>
+
+<script>
+(function(){
+  // LOADER
+  window.addEventListener('load',function(){
+    setTimeout(function(){document.getElementById('pb-loader').classList.add('hide');},1400);
+  });
+
+  // PROGRESS
+  window.addEventListener('scroll',function(){
+    var s=window.scrollY,h=document.body.scrollHeight-window.innerHeight;
+    document.getElementById('pb-progress').style.width=(s/h*100)+'%';
+  },{passive:true});
+
+  // COUNTDOWN — 12 hour reset
+  function pbCountdown(){
+    var key='pb_cd_end',now=Date.now(),end=parseInt(localStorage.getItem(key)||'0');
+    if(!end||end<now){end=now+12*3600*1000;localStorage.setItem(key,end);}
+    function tick(){
+      var left=Math.max(0,end-Date.now()),h=Math.floor(left/3600000),m=Math.floor(left%3600000/60000),s=Math.floor(left%60000/1000);
+      document.getElementById('pb-ctd').textContent=(h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      if(left>0)setTimeout(tick,1000);
+    }
+    tick();
+  }
+  pbCountdown();
+
+  // VIEWERS COUNTER
+  var vc=Math.floor(Math.random()*20)+38;
+  document.getElementById('pb-vcount').textContent=vc;
+  setInterval(function(){
+    vc+=Math.random()>.5?1:-1;vc=Math.max(30,Math.min(80,vc));
+    document.getElementById('pb-vcount').textContent=vc;
+  },4000);
+
+  // TOAST
+  var toasts=[
+    {n:'خالد',c:'الرياض',m:'طلب للتو قطعتين 🥊🥊'},
+    {n:'نورة',c:'جدة',m:'طلبت للتو قطعة واحدة 🥊'},
+    {n:'محمد',c:'الدمام',m:'أضاف للسلة قطعتين 🔥'},
+    {n:'سارة',c:'مكة',m:'طلبت للتو — عرض الاثنتين 🥊'},
+    {n:'عبدالله',c:'المدينة',m:'طلب قطعتين بعد مشاهدة التقييمات'},
+    {n:'ريم',c:'الطائف',m:'أكملت الطلب للتو ✅'},
+    {n:'فيصل',c:'القصيم',m:'طلب قطعتين هدية 🎁'},
+    {n:'هند',c:'أبها',m:'طلبت قطعة واحدة 🥊'},
+  ];
+  var ti=0;
+  function showToast(){
+    var t=toasts[ti%toasts.length];ti++;
+    var el=document.getElementById('pb-toast');
+    el.querySelector('.pb-t-name').textContent=t.n+' — '+t.c;
+    el.querySelector('.pb-t-msg').textContent=t.m;
+    el.classList.add('show');
+    setTimeout(function(){el.classList.remove('show');setTimeout(showToast,Math.random()*5000+4000);},3500);
+  }
+  setTimeout(showToast,3000);
+
+  // LIGHTBOX
+  window.pbOpenLb=function(src){
+    document.getElementById('pb-lb-img').src=src;
+    document.getElementById('pb-lb').classList.add('open');
+  };
+  document.getElementById('pb-lb').addEventListener('click',function(e){
+    if(e.target===this)this.classList.remove('open');
+  });
+
+  // TABS
+  window.pbTab=function(btn,panel){
+    document.querySelectorAll('.pb-tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.pb-tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById('pb-panel-'+panel).classList.add('active');
+  };
+
+  // FAQ
+  document.querySelectorAll('.pb-faq-q').forEach(function(q){
+    q.addEventListener('click',function(){
+      var item=this.parentElement;
+      item.classList.toggle('open');
+    });
+  });
+
+  // OFFER CARDS
+  window.pbOffer=function(card){
+    document.querySelectorAll('.pb-ocard').forEach(function(c){c.classList.remove('active');});
+    card.classList.add('active');
+    var vid=card.dataset.vid,price=card.dataset.price;
+    var inp=document.getElementById('pb-vid');
+    if(inp)inp.value=vid;
+    document.getElementById('pb-sticky-price').textContent=price;
+  };
+
+  // RIPPLE
+  window.pbRipple=function(btn,e){
+    var r=document.createElement('span');r.className='pb-ripple';
+    var rect=btn.getBoundingClientRect(),size=Math.max(rect.width,rect.height);
+    r.style.cssText='width:'+size+'px;height:'+size+'px;top:'+(e.clientY-rect.top-size/2)+'px;right:'+(rect.right-e.clientX-size/2)+'px';
+    btn.appendChild(r);setTimeout(function(){r.remove();},600);
+  };
+
+  // SCROLL ANIMATIONS
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:.12});
+  document.querySelectorAll('.pb-anim').forEach(function(el){obs.observe(el);});
+
+  // STICKY CTA — hide when order form is in view
+  var orderSec=document.getElementById('pb-order');
+  var stObs=new IntersectionObserver(function(entries){
+    document.getElementById('pb-sticky').style.display=entries[0].isIntersecting?'none':'';
+  },{threshold:.1});
+  if(orderSec)stObs.observe(orderSec);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Punching Bag Landing",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Punching Bag Landing" }]
+}
+{% endschema %}

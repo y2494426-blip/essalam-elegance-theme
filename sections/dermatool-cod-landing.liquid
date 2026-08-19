@@ -1,0 +1,1540 @@
+{%- liquid
+  assign product = section.settings.product
+  if product == blank
+    assign product = false
+  endif
+  if product
+    assign current_variant = product.selected_or_first_available_variant
+    assign hero_img = product.featured_image
+  endif
+-%}
+{{ 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap' | stylesheet_tag }}
+<script type="application/json" id="dt-variants-json">{{ product.variants | json }}</script>
+
+<div class="dt-page" id="dt-top">
+<style>
+/* ================================================================
+   DERMATOOL® LANDING PAGE — PREMIUM FRENCH
+   Morocco | LTR | White + Sky Blue + Dark Blue
+   ================================================================ */
+:root{
+  --dt-white:#FFFFFF;
+  --dt-sky:#E8F4FD;
+  --dt-sky-md:#C8E6F9;
+  --dt-sky-dk:#90CAF9;
+  --dt-blue:#1E88E5;
+  --dt-blue-dk:#1565C0;
+  --dt-blue-xdk:#0D47A1;
+  --dt-blue-lt:#DBEAFE;
+  --dt-text:#0F172A;
+  --dt-text-soft:#475569;
+  --dt-text-light:#94A3B8;
+  --dt-border:#E2E8F0;
+  --dt-border-blue:rgba(30,136,229,0.20);
+  --dt-shadow:0 4px 20px rgba(30,136,229,0.08);
+  --dt-shadow-md:0 8px 40px rgba(30,136,229,0.12);
+  --dt-shadow-lg:0 20px 60px rgba(30,136,229,0.15);
+  --dt-radius:20px;
+  --dt-radius-sm:12px;
+  --dt-radius-xs:8px;
+  --dt-glow:0 0 60px rgba(30,136,229,0.18);
+}
+.dt-page{
+  font-family:'Inter',sans-serif;
+  background:var(--dt-white);
+  color:var(--dt-text);
+  overflow-x:hidden;
+  line-height:1.75;
+}
+.dt-page *{box-sizing:border-box;margin:0;padding:0;}
+.dt-page img{max-width:100%;display:block;}
+.dt-wrap{max-width:1160px;margin:0 auto;padding:0 24px;}
+.dt-section{padding:100px 0;}
+.dt-section--sm{padding:64px 0;}
+.dt-section--sky{background:var(--dt-sky);}
+.dt-section--blue{background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue-dk),var(--dt-blue));}
+.dt-center{text-align:center;}
+
+/* Typography */
+.dt-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--dt-blue-dk);background:var(--dt-blue-lt);
+  border:1px solid var(--dt-border-blue);
+  padding:6px 18px;border-radius:999px;margin-bottom:16px;
+}
+.dt-h1{font-size:clamp(30px,5vw,62px);font-weight:900;line-height:1.12;letter-spacing:-1.5px;}
+.dt-h2{font-size:clamp(24px,3.5vw,42px);font-weight:800;line-height:1.2;letter-spacing:-0.8px;}
+.dt-h3{font-size:20px;font-weight:700;}
+.dt-lead{font-size:17px;color:var(--dt-text-soft);line-height:1.85;max-width:600px;}
+.dt-accent{color:var(--dt-blue-dk);}
+
+/* Animations */
+.dt-fade{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.dt-fade.dt-in{opacity:1;transform:none;}
+.dt-fade-l{opacity:0;transform:translateX(-28px);transition:opacity .7s ease,transform .7s ease;}
+.dt-fade-l.dt-in{opacity:1;transform:none;}
+.dt-fade-r{opacity:0;transform:translateX(28px);transition:opacity .7s ease,transform .7s ease;}
+.dt-fade-r.dt-in{opacity:1;transform:none;}
+.dt-scale{opacity:0;transform:scale(.94);transition:opacity .6s ease,transform .6s ease;}
+.dt-scale.dt-in{opacity:1;transform:none;}
+@keyframes dtFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+@keyframes dtPulse{0%,100%{box-shadow:0 0 0 0 rgba(30,136,229,.3);}70%{box-shadow:0 0 0 14px rgba(30,136,229,0);}}
+@keyframes dtShine{0%{background-position:-200% center;}100%{background-position:200% center;}}
+@keyframes dtOrb{0%,100%{transform:translate(0,0)scale(1);}33%{transform:translate(30px,-20px)scale(1.05);}66%{transform:translate(-20px,15px)scale(.97);}}
+@keyframes dtRipple{0%{transform:scale(0);opacity:.6;}100%{transform:scale(2.5);opacity:0;}}
+@keyframes dtSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.dt-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(255,255,255,0.90);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--dt-border);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:box-shadow .3s;
+}
+.dt-header.scrolled{box-shadow:0 4px 24px rgba(30,136,229,0.10);}
+.dt-logo{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  font-size:18px;font-weight:900;color:var(--dt-blue-xdk);letter-spacing:-0.5px;
+}
+.dt-logo-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;flex-shrink:0;
+}
+.dt-header-cta{
+  background:var(--dt-blue);color:#fff;border:none;border-radius:10px;
+  padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  transition:background .2s,transform .15s;text-decoration:none;
+}
+.dt-header-cta:hover{background:var(--dt-blue-dk);transform:translateY(-1px);}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.dt-hero{
+  padding:130px 0 90px;
+  background:linear-gradient(160deg,var(--dt-white) 0%,#EEF7FE 45%,#DCF0FB 100%);
+  position:relative;overflow:hidden;
+}
+.dt-hero-orb{
+  position:absolute;border-radius:50%;filter:blur(80px);
+  opacity:.50;pointer-events:none;animation:dtOrb 8s ease-in-out infinite;
+}
+.dt-hero-orb--1{
+  width:600px;height:600px;top:-150px;left:-200px;
+  background:radial-gradient(circle,rgba(30,136,229,.22),transparent 70%);
+}
+.dt-hero-orb--2{
+  width:400px;height:400px;bottom:-100px;right:-100px;animation-delay:3s;
+  background:radial-gradient(circle,rgba(144,202,249,.25),transparent 70%);
+}
+.dt-hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+  position:relative;z-index:1;
+}
+.dt-hero-copy{}
+.dt-hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,var(--dt-blue-lt),#E8F4FD);
+  border:1px solid var(--dt-border-blue);border-radius:999px;
+  padding:8px 20px;font-size:12px;font-weight:700;
+  color:var(--dt-blue-xdk);letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:20px;
+}
+.dt-hero-title{
+  font-size:clamp(28px,4.5vw,56px);font-weight:900;
+  line-height:1.1;letter-spacing:-1.5px;margin-bottom:20px;
+}
+.dt-hero-title mark{
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.dt-hero-sub{font-size:17px;color:var(--dt-text-soft);line-height:1.85;margin-bottom:28px;max-width:460px;}
+.dt-hero-trust{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px;}
+.dt-trust-pill{
+  display:flex;align-items:center;gap:7px;
+  background:#fff;border:1px solid var(--dt-border);border-radius:999px;
+  padding:7px 16px;font-size:13px;font-weight:600;color:var(--dt-text-soft);
+  box-shadow:var(--dt-shadow);
+}
+.dt-trust-pill span{color:var(--dt-blue);}
+.dt-hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.dt-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  border:none;border-radius:var(--dt-radius-sm);
+  font-family:'Inter',sans-serif;font-weight:700;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,background .2s;
+  text-decoration:none;
+}
+.dt-btn--primary{
+  background:var(--dt-blue);color:#fff;padding:16px 32px;font-size:16px;
+  box-shadow:0 8px 28px rgba(30,136,229,.30);
+  animation:dtPulse 2.5s ease-in-out infinite;
+}
+.dt-btn--primary:hover{background:var(--dt-blue-dk);transform:translateY(-2px);box-shadow:0 12px 36px rgba(30,136,229,.40);}
+.dt-btn--secondary{
+  background:#fff;color:var(--dt-blue-dk);padding:16px 28px;font-size:16px;
+  border:2px solid var(--dt-border-blue);
+}
+.dt-btn--secondary:hover{background:var(--dt-blue-lt);transform:translateY(-1px);}
+.dt-hero-ship{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:13.5px;font-weight:600;color:var(--dt-text-soft);}
+.dt-hero-ship span{color:var(--dt-blue);}
+
+/* Hero images */
+.dt-hero-media{position:relative;display:flex;align-items:center;justify-content:center;}
+.dt-hero-img-ring{
+  position:relative;width:100%;max-width:500px;margin:0 auto;
+}
+.dt-hero-img-bg{
+  width:100%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(30,136,229,.12),rgba(144,202,249,.08));
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.dt-hero-img-wrap{
+  position:relative;z-index:1;
+  border-radius:28px;overflow:hidden;
+  box-shadow:var(--dt-shadow-lg),var(--dt-glow);
+  animation:dtFloat 4.5s ease-in-out infinite;
+}
+.dt-hero-img-wrap img{width:100%;display:block;}
+.dt-hero-float-tag{
+  position:absolute;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+  border:1px solid var(--dt-border);border-radius:14px;
+  padding:10px 16px;font-size:12px;font-weight:700;
+  box-shadow:var(--dt-shadow);display:flex;align-items:center;gap:8px;
+  animation:dtFloat 3.5s ease-in-out infinite;white-space:nowrap;
+}
+.dt-hero-float-tag--1{top:8%;left:-18px;animation-delay:.4s;}
+.dt-hero-float-tag--2{bottom:16%;right:-18px;animation-delay:1.2s;}
+.dt-hero-float-tag--3{top:44%;right:-24px;animation-delay:.8s;}
+.dt-float-dot{width:10px;height:10px;border-radius:50%;background:var(--dt-blue);flex-shrink:0;}
+
+/* ============================================================
+   TRUST BAR
+   ============================================================ */
+.dt-trust-bar{
+  background:var(--dt-blue-xdk);padding:18px 0;overflow:hidden;
+}
+.dt-trust-bar-inner{
+  display:flex;align-items:center;justify-content:center;
+  gap:40px;flex-wrap:wrap;
+}
+.dt-trust-bar-item{
+  display:flex;align-items:center;gap:10px;
+  color:rgba(255,255,255,.90);font-size:14px;font-weight:600;
+}
+.dt-trust-bar-item .icon{font-size:20px;}
+
+/* ============================================================
+   VIDEO
+   ============================================================ */
+.dt-video-section{background:var(--dt-sky);padding:80px 0;}
+.dt-video-wrap{
+  max-width:420px;margin:40px auto 0;border-radius:var(--dt-radius);
+  overflow:hidden;box-shadow:var(--dt-shadow-lg);
+  position:relative;background:#000;
+}
+.dt-video-wrap video{width:100%;display:block;}
+.dt-video-placeholder{
+  height:500px;background:linear-gradient(135deg,#DCF0FB,#C8E6F9);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ============================================================
+   PROBLEM
+   ============================================================ */
+.dt-problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:60px;}
+.dt-problem-img{border-radius:var(--dt-radius);overflow:hidden;box-shadow:var(--dt-shadow-md);}
+.dt-problem-img img{width:100%;display:block;}
+.dt-problem-placeholder{
+  height:380px;border-radius:var(--dt-radius);
+  background:linear-gradient(135deg,#EEF7FE,#DCF0FB);
+  display:flex;align-items:center;justify-content:center;font-size:64px;
+}
+.dt-problem-list{display:flex;flex-direction:column;gap:16px;margin-top:28px;}
+.dt-problem-item{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;border-radius:var(--dt-radius-sm);border:1px solid var(--dt-border);
+  padding:16px 20px;box-shadow:var(--dt-shadow);font-size:15px;font-weight:600;
+  color:var(--dt-text-soft);
+}
+.dt-problem-icon{font-size:24px;}
+
+/* ============================================================
+   BEFORE / AFTER
+   ============================================================ */
+.dt-ba-section{background:var(--dt-sky);}
+.dt-ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:56px;}
+.dt-ba-card{border-radius:var(--dt-radius);overflow:hidden;box-shadow:var(--dt-shadow-md);}
+.dt-ba-card--before{background:linear-gradient(160deg,#FFF5F5,#FFE8E8);}
+.dt-ba-card--after{background:linear-gradient(160deg,#EEF7FE,#C8E6F9);}
+.dt-ba-header{
+  padding:22px 26px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.dt-ba-title{font-size:20px;font-weight:800;}
+.dt-ba-badge{
+  font-size:12px;font-weight:800;padding:5px 14px;border-radius:999px;
+  letter-spacing:.5px;
+}
+.dt-ba-badge--before{background:#FECACA;color:#B91C1C;}
+.dt-ba-badge--after{background:var(--dt-blue-lt);color:var(--dt-blue-dk);}
+.dt-ba-img{
+  height:280px;display:flex;align-items:center;justify-content:center;
+  font-size:64px;position:relative;overflow:hidden;
+}
+.dt-ba-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.dt-ba-list{padding:22px 26px 26px;display:flex;flex-direction:column;gap:10px;}
+.dt-ba-list li{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;}
+.dt-ba-disclaimer{
+  text-align:center;margin-top:24px;
+  font-size:12.5px;color:var(--dt-text-light);
+  background:#fff;border-radius:var(--dt-radius-sm);padding:14px;
+  border:1px solid var(--dt-border);max-width:600px;margin-left:auto;margin-right:auto;
+}
+
+/* ============================================================
+   BENEFITS
+   ============================================================ */
+.dt-benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px;}
+.dt-benefit-card{
+  background:#fff;border-radius:var(--dt-radius);
+  border:1px solid var(--dt-border);box-shadow:var(--dt-shadow);
+  padding:30px 22px;text-align:center;
+  transition:transform .3s,box-shadow .3s;
+}
+.dt-benefit-card:hover{transform:translateY(-6px);box-shadow:var(--dt-shadow-md);}
+.dt-benefit-icon{
+  width:64px;height:64px;border-radius:20px;
+  background:linear-gradient(135deg,var(--dt-blue-lt),#C8E6F9);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  margin:0 auto 18px;box-shadow:0 4px 16px rgba(30,136,229,.14);
+}
+.dt-benefit-card h3{font-size:16px;font-weight:800;margin-bottom:8px;}
+.dt-benefit-card p{font-size:13.5px;color:var(--dt-text-soft);line-height:1.75;}
+
+/* ============================================================
+   GENDER SECTION
+   ============================================================ */
+.dt-gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:56px;}
+.dt-gender-card{
+  border-radius:var(--dt-radius);overflow:hidden;
+  box-shadow:var(--dt-shadow-md);position:relative;
+}
+.dt-gender-card--f{background:linear-gradient(135deg,#EEF7FE,#C8E6F9);}
+.dt-gender-card--m{background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue-dk));}
+.dt-gender-body{padding:36px 32px;}
+.dt-gender-icon{font-size:44px;margin-bottom:14px;}
+.dt-gender-card h3{font-size:22px;font-weight:800;margin-bottom:10px;}
+.dt-gender-card--f h3{color:var(--dt-blue-xdk);}
+.dt-gender-card--m h3{color:#fff;}
+.dt-gender-card p{font-size:15px;margin-bottom:20px;line-height:1.8;}
+.dt-gender-card--f p{color:var(--dt-text-soft);}
+.dt-gender-card--m p{color:rgba(255,255,255,.75);}
+.dt-gender-list{display:flex;flex-direction:column;gap:8px;}
+.dt-gender-list li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;list-style:none;}
+.dt-gender-card--f .dt-gender-list li{color:var(--dt-text-soft);}
+.dt-gender-card--m .dt-gender-list li{color:rgba(255,255,255,.85);}
+.dt-gender-img{width:100%;height:220px;object-fit:cover;display:block;}
+
+/* ============================================================
+   PRODUCT KIT
+   ============================================================ */
+.dt-kit-section{background:var(--dt-sky);}
+.dt-kit-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px;align-items:start;}
+.dt-kit-gallery{display:flex;flex-direction:column;gap:14px;}
+.dt-kit-main-img{
+  border-radius:var(--dt-radius);overflow:hidden;box-shadow:var(--dt-shadow-md);
+  border:2px solid var(--dt-border-blue);
+}
+.dt-kit-main-img img{width:100%;display:block;}
+.dt-kit-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.dt-kit-thumb{
+  border-radius:var(--dt-radius-sm);overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:border-color .2s;box-shadow:var(--dt-shadow);
+}
+.dt-kit-thumb.active,.dt-kit-thumb:hover{border-color:var(--dt-blue);}
+.dt-kit-thumb img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.dt-kit-info{}
+.dt-kit-badge{
+  display:inline-block;background:var(--dt-blue);color:#fff;
+  border-radius:999px;padding:6px 18px;font-size:12px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;
+}
+.dt-kit-title{font-size:26px;font-weight:900;margin-bottom:8px;}
+.dt-kit-subtitle{font-size:15px;color:var(--dt-text-soft);margin-bottom:24px;}
+.dt-kit-items{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
+.dt-kit-item{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;border-radius:var(--dt-radius-sm);border:1px solid var(--dt-border);
+  padding:14px 18px;
+}
+.dt-kit-item-dot{width:40px;height:40px;border-radius:12px;background:var(--dt-blue-lt);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.dt-kit-item-name{font-size:14px;font-weight:700;}
+.dt-kit-item-vol{font-size:12px;color:var(--dt-text-light);font-weight:500;}
+.dt-kit-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:10px;}
+.dt-kit-price{font-size:40px;font-weight:900;color:var(--dt-blue-dk);letter-spacing:-1px;}
+.dt-kit-price-old{font-size:20px;color:var(--dt-text-light);text-decoration:line-through;}
+.dt-kit-save{font-size:13px;font-weight:800;background:var(--dt-blue-lt);color:var(--dt-blue-dk);padding:4px 12px;border-radius:999px;}
+.dt-kit-note{font-size:13px;color:var(--dt-text-soft);margin-bottom:24px;}
+.dt-kit-cta{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  color:#fff;border:none;border-radius:var(--dt-radius-sm);padding:18px;
+  font-size:17px;font-weight:800;font-family:'Inter',sans-serif;cursor:pointer;
+  box-shadow:0 8px 28px rgba(30,136,229,.30);
+  transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;
+}
+.dt-kit-cta:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(30,136,229,.40);}
+.dt-kit-cta-ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.2);pointer-events:none;animation:dtRipple .6s ease-out forwards;}
+.dt-kit-cta-secure{text-align:center;font-size:12px;color:var(--dt-text-light);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px;}
+
+/* ============================================================
+   HOW TO USE
+   ============================================================ */
+.dt-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px;position:relative;}
+.dt-steps::before{
+  content:'';position:absolute;top:44px;left:16.67%;right:16.67%;
+  height:2px;background:linear-gradient(90deg,transparent,var(--dt-blue-lt),transparent);
+}
+.dt-step{text-align:center;padding:0 16px;}
+.dt-step-num{
+  width:88px;height:88px;border-radius:50%;margin:0 auto 24px;
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;color:#fff;
+  position:relative;z-index:1;
+  box-shadow:0 8px 30px rgba(30,136,229,.25);
+}
+.dt-step h3{font-size:17px;font-weight:800;margin-bottom:8px;}
+.dt-step p{font-size:13.5px;color:var(--dt-text-soft);line-height:1.75;}
+
+/* ============================================================
+   COMPARISON
+   ============================================================ */
+.dt-comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:56px;max-width:700px;margin-left:auto;margin-right:auto;}
+.dt-comp-card{border-radius:var(--dt-radius);overflow:hidden;box-shadow:var(--dt-shadow-md);}
+.dt-comp-card--ours{
+  background:linear-gradient(160deg,var(--dt-blue-xdk),var(--dt-blue));
+  border:2px solid var(--dt-blue);
+}
+.dt-comp-card--other{background:#fff;border:2px solid var(--dt-border);}
+.dt-comp-header{padding:20px 24px;font-size:17px;font-weight:800;border-bottom:1px solid rgba(255,255,255,.10);}
+.dt-comp-card--ours .dt-comp-header{color:#fff;border-color:rgba(255,255,255,.15);}
+.dt-comp-card--other .dt-comp-header{color:var(--dt-text);border-color:var(--dt-border);}
+.dt-comp-list{padding:22px 24px;display:flex;flex-direction:column;gap:10px;}
+.dt-comp-list li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;list-style:none;}
+.dt-comp-card--ours .dt-comp-list li{color:rgba(255,255,255,.90);}
+.dt-comp-card--other .dt-comp-list li{color:var(--dt-text-soft);}
+
+/* ============================================================
+   SPECS
+   ============================================================ */
+.dt-specs-table{
+  max-width:720px;margin:56px auto 0;
+  border-radius:var(--dt-radius);overflow:hidden;
+  box-shadow:var(--dt-shadow-md);border:1px solid var(--dt-border);
+}
+.dt-spec-row{
+  display:grid;grid-template-columns:1fr 2fr;
+  border-bottom:1px solid var(--dt-border);
+}
+.dt-spec-row:last-child{border-bottom:none;}
+.dt-spec-key,.dt-spec-val{padding:16px 24px;font-size:14.5px;}
+.dt-spec-key{font-weight:700;background:var(--dt-sky);color:var(--dt-blue-dk);}
+.dt-spec-val{background:#fff;color:var(--dt-text);}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.dt-reviews-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:56px;}
+.dt-review-card{
+  background:#fff;border-radius:var(--dt-radius);
+  border:1px solid var(--dt-border);box-shadow:var(--dt-shadow);
+  padding:26px;transition:transform .3s;
+}
+.dt-review-card:hover{transform:translateY(-4px);}
+.dt-review-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.dt-avatar{
+  width:46px;height:46px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;font-weight:800;
+}
+.dt-reviewer strong{display:block;font-size:14.5px;font-weight:800;}
+.dt-reviewer span{font-size:12.5px;color:var(--dt-text-light);}
+.dt-stars{color:#F59E0B;font-size:14px;letter-spacing:2px;margin-bottom:8px;}
+.dt-review-text{font-size:14px;color:var(--dt-text-soft);line-height:1.8;}
+.dt-verified{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--dt-blue);margin-top:10px;}
+.dt-reviews-summary{
+  text-align:center;margin:40px auto 0;
+  background:var(--dt-blue-lt);border-radius:var(--dt-radius);
+  padding:28px;max-width:500px;box-shadow:var(--dt-shadow);
+}
+.dt-rating-big{font-size:52px;font-weight:900;color:var(--dt-blue-dk);line-height:1;}
+.dt-rating-stars{font-size:24px;color:#F59E0B;margin:8px 0;}
+.dt-rating-count{font-size:13.5px;color:var(--dt-text-soft);}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.dt-faq{max-width:800px;margin:56px auto 0;}
+.dt-faq-item{
+  background:#fff;border-radius:var(--dt-radius-sm);
+  border:1px solid var(--dt-border);margin-bottom:10px;
+  overflow:hidden;box-shadow:var(--dt-shadow);
+  transition:border-color .2s;
+}
+.dt-faq-item.dt-open{border-color:var(--dt-border-blue);}
+.dt-faq-q{
+  width:100%;text-align:left;background:none;border:none;
+  padding:20px 24px;font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--dt-text);
+}
+.dt-faq-icon{
+  width:26px;height:26px;border-radius:50%;background:var(--dt-blue-lt);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--dt-blue-dk);font-size:18px;font-weight:700;flex-shrink:0;
+  transition:transform .3s,background .2s;
+}
+.dt-faq-item.dt-open .dt-faq-icon{transform:rotate(45deg);background:var(--dt-blue);color:#fff;}
+.dt-faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease;padding:0 24px;}
+.dt-faq-item.dt-open .dt-faq-a{max-height:300px;padding-bottom:20px;}
+.dt-faq-a p{font-size:14px;color:var(--dt-text-soft);line-height:1.85;}
+
+/* ============================================================
+   ORDER / EASYSELL FORM
+   ============================================================ */
+.dt-order-section{background:var(--dt-sky);}
+.dt-order-wrap{
+  max-width:680px;margin:56px auto 0;
+  background:#fff;border:2px solid var(--dt-border-blue);
+  border-radius:var(--dt-radius);box-shadow:var(--dt-shadow-lg);
+  padding:48px;
+}
+.dt-order-header{text-align:center;margin-bottom:28px;}
+.dt-order-title{font-size:24px;font-weight:900;margin-bottom:6px;}
+.dt-order-sub{font-size:14.5px;color:var(--dt-text-soft);}
+.dt-var-sec{margin-bottom:16px;}
+.dt-var-lbl{font-size:12.5px;font-weight:700;color:var(--dt-text-soft);margin-bottom:8px;display:block;}
+.dt-var-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.dt-var-pill input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+.dt-var-pill span{
+  display:block;border:1.5px solid var(--dt-border);border-radius:10px;
+  padding:8px 18px;font-size:13.5px;font-weight:600;cursor:pointer;
+  color:var(--dt-text-soft);background:#fff;transition:all .2s;font-family:'Inter',sans-serif;
+}
+.dt-var-pill input:checked+span{border-color:var(--dt-blue);color:var(--dt-blue-dk);background:var(--dt-blue-lt);}
+.dt-qty-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.dt-qty-lbl{font-size:13px;font-weight:700;color:var(--dt-text-soft);}
+.dt-qty-box{display:flex;align-items:center;border:1.5px solid var(--dt-border);border-radius:10px;overflow:hidden;}
+.dt-qty-btn{width:40px;height:40px;background:var(--dt-sky);border:none;font-size:20px;font-weight:700;cursor:pointer;color:var(--dt-blue-dk);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;}
+.dt-qty-btn:hover{background:var(--dt-sky-md);}
+.dt-qty-inp{width:52px;height:40px;border:none;border-inline:1.5px solid var(--dt-border);text-align:center;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;background:#fff;}
+.dt-order-submit{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--dt-blue-xdk),var(--dt-blue));
+  color:#fff;border:none;border-radius:var(--dt-radius-sm);
+  padding:19px;font-size:18px;font-weight:900;font-family:'Inter',sans-serif;cursor:pointer;
+  box-shadow:0 8px 28px rgba(30,136,229,.30);
+  transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;
+}
+.dt-order-submit:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(30,136,229,.40);}
+.dt-ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.22);pointer-events:none;animation:dtRipple .6s ease-out forwards;}
+.dt-order-secure{text-align:center;font-size:12px;color:var(--dt-text-light);margin-top:12px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.dt-order-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:18px;}
+.dt-order-trust li{list-style:none;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--dt-text-soft);}
+
+/* ============================================================
+   CTA FINAL
+   ============================================================ */
+.dt-cta-final{
+  background:linear-gradient(135deg,var(--dt-blue-xdk) 0%,var(--dt-blue) 100%);
+  padding:100px 0;text-align:center;position:relative;overflow:hidden;
+}
+.dt-cta-final::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.08),transparent 60%);
+  pointer-events:none;
+}
+.dt-cta-final h2{font-size:clamp(24px,4vw,44px);font-weight:900;color:#fff;margin-bottom:14px;position:relative;}
+.dt-cta-final p{color:rgba(255,255,255,.72);font-size:17px;margin-bottom:36px;position:relative;}
+.dt-cta-final-price{
+  display:inline-flex;align-items:baseline;gap:12px;
+  margin-bottom:28px;position:relative;
+}
+.dt-cta-price-new{font-size:52px;font-weight:900;color:#fff;letter-spacing:-2px;}
+.dt-cta-price-old{font-size:22px;color:rgba(255,255,255,.45);text-decoration:line-through;}
+.dt-cta-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:#fff;color:var(--dt-blue-xdk);border:none;border-radius:var(--dt-radius-sm);
+  padding:20px 48px;font-size:18px;font-weight:900;font-family:'Inter',sans-serif;cursor:pointer;
+  box-shadow:0 10px 40px rgba(0,0,0,.20);
+  transition:transform .2s,box-shadow .2s;text-decoration:none;position:relative;
+}
+.dt-cta-btn:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.25);}
+.dt-cta-ship{color:rgba(255,255,255,.70);font-size:14px;margin-top:16px;position:relative;}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.dt-footer{
+  background:var(--dt-text);padding:44px 0;text-align:center;
+  color:rgba(255,255,255,.50);font-size:13px;
+}
+.dt-footer-logo{
+  font-size:22px;font-weight:900;color:#fff;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.dt-footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:14px;}
+.dt-footer-links a{color:rgba(255,255,255,.45);text-decoration:none;font-size:12.5px;transition:color .2s;}
+.dt-footer-links a:hover{color:rgba(255,255,255,.75);}
+
+/* ============================================================
+   STICKY CTA
+   ============================================================ */
+.dt-sticky-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:998;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(20px);
+  box-shadow:0 -8px 32px rgba(30,136,229,.12);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  transform:translateY(110%);transition:transform .35s ease;
+}
+.dt-sticky-bar.dt-show{transform:translateY(0);}
+.dt-sticky-info{display:flex;align-items:center;gap:12px;}
+.dt-sticky-thumb{width:46px;height:46px;object-fit:cover;border-radius:10px;border:1px solid var(--dt-border);flex-shrink:0;}
+.dt-sticky-name{font-size:13px;font-weight:700;}
+.dt-sticky-price{font-size:16px;font-weight:900;color:var(--dt-blue-dk);}
+.dt-sticky-btn{
+  background:var(--dt-blue);color:#fff;border:none;border-radius:10px;
+  padding:13px 22px;font-family:'Inter',sans-serif;font-weight:800;font-size:14px;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 16px rgba(30,136,229,.25);
+}
+.dt-sticky-btn:hover{background:var(--dt-blue-dk);}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.dt-lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.90);z-index:9999;
+  display:none;align-items:center;justify-content:center;padding:30px;
+}
+.dt-lightbox.dt-open{display:flex;}
+.dt-lightbox img{max-width:90vw;max-height:85vh;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,.60);}
+.dt-lightbox-close{
+  position:absolute;top:24px;right:24px;color:#fff;font-size:28px;
+  background:rgba(255,255,255,.12);border:none;cursor:pointer;
+  width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:1024px){
+  .dt-hero-grid{gap:36px;}
+  .dt-benefits-grid{grid-template-columns:repeat(2,1fr);}
+  .dt-reviews-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .dt-header{padding:12px 18px;}
+  .dt-hero{padding:100px 0 60px;}
+  .dt-hero-grid{grid-template-columns:1fr;gap:36px;}
+  .dt-hero-media{order:-1;}
+  .dt-hero-float-tag{display:none;}
+  .dt-section{padding:64px 0;}
+  .dt-section--sm{padding:44px 0;}
+  .dt-problem-grid{grid-template-columns:1fr;}
+  .dt-ba-grid{grid-template-columns:1fr;}
+  .dt-benefits-grid{grid-template-columns:1fr 1fr;}
+  .dt-gender-grid{grid-template-columns:1fr;}
+  .dt-kit-grid{grid-template-columns:1fr;}
+  .dt-steps{grid-template-columns:1fr;gap:36px;}
+  .dt-steps::before{display:none;}
+  .dt-comp-grid{grid-template-columns:1fr;}
+  .dt-order-wrap{padding:28px 20px;}
+  .dt-trust-bar-inner{gap:20px;}
+  .dt-trust-bar-item{font-size:12px;}
+}
+@media(max-width:480px){
+  .dt-h1,.dt-hero-title{font-size:27px;}
+  .dt-h2{font-size:22px;}
+  .dt-benefits-grid{grid-template-columns:1fr;}
+  .dt-hero-btns{flex-direction:column;}
+  .dt-btn--primary,.dt-btn--secondary{justify-content:center;}
+}
+@media(prefers-reduced-motion:reduce){
+  .dt-fade,.dt-fade-l,.dt-fade-r,.dt-scale{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;}
+}
+</style>
+
+<!-- ==================== HEADER ==================== -->
+<header class="dt-header" id="dt-header">
+  <a href="#dt-top" class="dt-logo">
+    <div class="dt-logo-icon">🦷</div>
+    <span>DERMATOOL®</span>
+  </a>
+  <button type="button" class="dt-header-cta" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+    Commander maintenant
+  </button>
+</header>
+
+<!-- ==================== HERO ==================== -->
+<section class="dt-hero">
+  <div class="dt-hero-orb dt-hero-orb--1"></div>
+  <div class="dt-hero-orb dt-hero-orb--2"></div>
+  <div class="dt-wrap dt-hero-grid">
+
+    <!-- Copy -->
+    <div class="dt-hero-copy dt-fade">
+      <div class="dt-hero-badge">
+        <span>✨</span> DERMATOOL® — SOIN DES ONGLES
+      </div>
+
+      <h1 class="dt-hero-title">
+        RETROUVEZ DES ONGLES<br>
+        <mark>SAINS, PROPRES &amp; SOIGNÉS</mark>
+      </h1>
+
+      <p class="dt-hero-sub">
+        Une routine simple et pratique pour prendre soin de vos ongles au quotidien — pour elle &amp; pour lui.
+      </p>
+
+      <div class="dt-hero-trust">
+        <div class="dt-trust-pill"><span>✓</span> Routine facile</div>
+        <div class="dt-trust-pill"><span>✓</span> Pour hommes &amp; femmes</div>
+        <div class="dt-trust-pill"><span>✓</span> Format pratique</div>
+      </div>
+
+      <div class="dt-hero-btns">
+        <button type="button" class="dt-btn dt-btn--primary" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+          🛒 COMMANDER MAINTENANT
+        </button>
+        <button type="button" class="dt-btn dt-btn--secondary" onclick="document.getElementById('dt-benefits').scrollIntoView({behavior:'smooth'});">
+          Voir les avantages ↓
+        </button>
+      </div>
+
+      <div class="dt-hero-ship">
+        <span>🚚</span>
+        <span>Livraison à domicile partout au Maroc</span>
+      </div>
+
+      {% if product %}
+        <div style="margin-top:20px;display:flex;align-items:baseline;gap:12px;">
+          <span style="font-size:32px;font-weight:900;color:var(--dt-blue-dk);">
+            {{ current_variant.price | money }}
+          </span>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span style="font-size:18px;color:var(--dt-text-light);text-decoration:line-through;">
+              {{ current_variant.compare_at_price | money }}
+            </span>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Image -->
+    <div class="dt-hero-media dt-fade-r">
+      <div class="dt-hero-img-ring">
+        <div class="dt-hero-img-bg"></div>
+        <div class="dt-hero-img-wrap">
+          {% if product and product.featured_image %}
+            <img src="{{ product.featured_image | image_url: width: 900 }}"
+                 loading="eager" fetchpriority="high"
+                 width="900"
+                 alt="{{ product.featured_image.alt | default: product.title }}">
+          {% else %}
+            <div style="background:linear-gradient(135deg,#EEF7FE,#C8E6F9);height:500px;display:flex;align-items:center;justify-content:center;font-size:80px;">🦷</div>
+          {% endif %}
+        </div>
+        <div class="dt-hero-float-tag dt-hero-float-tag--1">
+          <div class="dt-float-dot"></div>
+          Routine quotidienne
+        </div>
+        <div class="dt-hero-float-tag dt-hero-float-tag--2">
+          <div class="dt-float-dot"></div>
+          Kit 60 ml + 15 ml
+        </div>
+        <div class="dt-hero-float-tag dt-hero-float-tag--3">
+          <div class="dt-float-dot"></div>
+          Paiement à la livraison
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== TRUST BAR ==================== -->
+<div class="dt-trust-bar">
+  <div class="dt-trust-bar-inner">
+    <div class="dt-trust-bar-item"><span class="icon">🚚</span> Livraison partout au Maroc</div>
+    <div class="dt-trust-bar-item"><span class="icon">💵</span> Paiement à la livraison</div>
+    <div class="dt-trust-bar-item"><span class="icon">📦</span> Commande rapide</div>
+    <div class="dt-trust-bar-item"><span class="icon">🔒</span> Commande sécurisée</div>
+  </div>
+</div>
+
+<!-- ==================== VIDEO PRINCIPALE ==================== -->
+{% if section.settings.hero_video != blank %}
+<section class="dt-video-section dt-section--sm">
+  <div class="dt-wrap dt-center">
+    <span class="dt-eyebrow">Vidéo</span>
+    <h2 class="dt-h2">DÉCOUVREZ DERMATOOL® EN ACTION</h2>
+    <div class="dt-video-wrap dt-fade">
+      {{ section.settings.hero_video | video_tag: autoplay: false, loop: false, controls: true, muted: false }}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ==================== PROBLÈME ==================== -->
+<section class="dt-section">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Le problème</span>
+      <h2 class="dt-h2">VOS ONGLES NE SONT PLUS AUSSI NETS QU'AVANT ?</h2>
+    </div>
+    <div class="dt-problem-grid">
+      <div class="dt-problem-img dt-fade-l">
+        {% if product and product.images[1] %}
+          <img src="{{ product.images[1] | image_url: width: 700 }}" loading="lazy" alt="Problème ongles">
+        {% else %}
+          <div class="dt-problem-placeholder">🦷</div>
+        {% endif %}
+      </div>
+      <div class="dt-fade-r">
+        <p class="dt-lead" style="margin-bottom:28px;">
+          Les ongles peuvent changer d'apparence et devenir fragilisés au fil du temps. Une routine régulière permet d'en prendre soin au quotidien.
+        </p>
+        <div class="dt-problem-list">
+          <div class="dt-problem-item">
+            <div class="dt-problem-icon">😟</div>
+            <span>Ongles décolorés et irréguliers</span>
+          </div>
+          <div class="dt-problem-item">
+            <div class="dt-problem-icon">💔</div>
+            <span>Ongles fragilisés et abîmés</span>
+          </div>
+          <div class="dt-problem-item">
+            <div class="dt-problem-icon">🌫️</div>
+            <span>Aspect terne et peu soigné</span>
+          </div>
+          <div class="dt-problem-item">
+            <div class="dt-problem-icon">⏰</div>
+            <span>Absence de routine adaptée</span>
+          </div>
+        </div>
+        <div style="margin-top:28px;">
+          <p style="font-size:16px;font-weight:800;color:var(--dt-blue-dk);margin-bottom:10px;">La solution ?</p>
+          <p style="font-size:15px;color:var(--dt-text-soft);line-height:1.8;">
+            <strong>DERMATOOL® Fungal Nail Treatment</strong> — un soin spécialement conçu pour aider à maintenir des ongles propres, nets et visuellement plus sains.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BEFORE / AFTER ==================== -->
+<section class="dt-section dt-ba-section" id="dt-ba">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Résultats visuels</span>
+      <h2 class="dt-h2">AVANT → APRÈS</h2>
+      <p class="dt-lead" style="margin:14px auto 0;">
+        Une routine régulière pour retrouver une apparence plus propre et soignée.
+      </p>
+    </div>
+    <div class="dt-ba-grid">
+      <!-- AVANT -->
+      <div class="dt-ba-card dt-ba-card--before dt-fade-l">
+        <div class="dt-ba-header">
+          <div class="dt-ba-title">⚠️ AVANT</div>
+          <div class="dt-ba-badge dt-ba-badge--before">Sans soin</div>
+        </div>
+        <div class="dt-ba-img">
+          {% if section.settings.before_image %}
+            <img src="{{ section.settings.before_image | image_url: width: 700 }}" loading="lazy" alt="Avant DERMATOOL">
+          {% else %}
+            😟
+          {% endif %}
+        </div>
+        <ul class="dt-ba-list">
+          <li>❌ Ongles décolorés</li>
+          <li>❌ Aspect épais et irrégulier</li>
+          <li>❌ Ongles abîmés et fragiles</li>
+          <li>❌ Apparence peu soignée</li>
+        </ul>
+      </div>
+      <!-- APRÈS -->
+      <div class="dt-ba-card dt-ba-card--after dt-fade-r">
+        <div class="dt-ba-header">
+          <div class="dt-ba-title">✨ APRÈS</div>
+          <div class="dt-ba-badge dt-ba-badge--after">Avec DERMATOOL®</div>
+        </div>
+        <div class="dt-ba-img">
+          {% if section.settings.after_image %}
+            <img src="{{ section.settings.after_image | image_url: width: 700 }}" loading="lazy" alt="Après DERMATOOL">
+          {% else %}
+            😊
+          {% endif %}
+        </div>
+        <ul class="dt-ba-list">
+          <li>✅ Ongles propres et nets</li>
+          <li>✅ Aspect naturel et régulier</li>
+          <li>✅ Ongles visuellement plus sains</li>
+          <li>✅ Apparence soignée au quotidien</li>
+        </ul>
+      </div>
+    </div>
+    <div class="dt-ba-disclaimer dt-fade">
+      ℹ️ Les résultats peuvent varier selon chaque personne et la régularité d'utilisation.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== VIDEO UTILISATION ==================== -->
+{% if section.settings.usage_video != blank %}
+<section class="dt-section--sm dt-center">
+  <div class="dt-wrap">
+    <span class="dt-eyebrow">Tutoriel</span>
+    <h2 class="dt-h2">VOYEZ COMMENT UTILISER DERMATOOL®</h2>
+    <div class="dt-video-wrap dt-fade">
+      {{ section.settings.usage_video | video_tag: autoplay: false, loop: false, controls: true, muted: false }}
+    </div>
+    <div style="margin-top:32px;">
+      <button type="button" class="dt-btn dt-btn--primary" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+        🛒 JE VEUX ESSAYER DERMATOOL®
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ==================== BENEFITS ==================== -->
+<section class="dt-section" id="dt-benefits">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Avantages</span>
+      <h2 class="dt-h2">POURQUOI CHOISIR DERMATOOL® ?</h2>
+    </div>
+    <div class="dt-benefits-grid">
+      <div class="dt-benefit-card dt-fade">
+        <div class="dt-benefit-icon">💧</div>
+        <h3>PRENDRE SOIN</h3>
+        <p>Pour une routine régulière de soin des ongles, efficace et facile à intégrer dans votre quotidien.</p>
+      </div>
+      <div class="dt-benefit-card dt-fade">
+        <div class="dt-benefit-icon">✨</div>
+        <h3>NETTOYER</h3>
+        <p>Aide à maintenir une apparence propre et soignée pour des ongles visuellement plus nets.</p>
+      </div>
+      <div class="dt-benefit-card dt-fade">
+        <div class="dt-benefit-icon">⚡</div>
+        <h3>ROUTINE SIMPLE</h3>
+        <p>Une utilisation facile et rapide à intégrer dans votre routine beauté quotidienne.</p>
+      </div>
+      <div class="dt-benefit-card dt-fade">
+        <div class="dt-benefit-icon">👫</div>
+        <h3>POUR ELLE &amp; LUI</h3>
+        <p>Un soin adapté à une routine pour hommes et femmes — pratique et universel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== IMAGE GALLERY ==================== -->
+{% if product and product.images.size > 1 %}
+<section class="dt-section--sm dt-section--sky">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade" style="margin-bottom:36px;">
+      <span class="dt-eyebrow">Galerie produit</span>
+      <h2 class="dt-h2">DERMATOOL® SOUS TOUS LES ANGLES</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+      {% for image in product.images %}
+        <div class="dt-scale" style="border-radius:var(--dt-radius);overflow:hidden;box-shadow:var(--dt-shadow-md);cursor:zoom-in;transition:transform .3s,box-shadow .3s;"
+             data-dt-lightbox="{{ image | image_url: width: 1400 }}"
+             onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='var(--dt-shadow-lg)'"
+             onmouseout="this.style.transform='';this.style.boxShadow='var(--dt-shadow-md)'">
+          <img src="{{ image | image_url: width: 600 }}"
+               loading="lazy" alt="{{ image.alt | default: 'DERMATOOL® ' | append: forloop.index }}"
+               style="width:100%;aspect-ratio:1;object-fit:cover;display:block;">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Lightbox -->
+<div class="dt-lightbox" id="dt-lightbox">
+  <button type="button" class="dt-lightbox-close" id="dt-lb-close">✕</button>
+  <img src="" alt="" id="dt-lb-img">
+</div>
+
+<!-- ==================== GENDER ==================== -->
+<section class="dt-section">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade" style="margin-bottom:56px;">
+      <span class="dt-eyebrow">Pour tous</span>
+      <h2 class="dt-h2">UN SOIN PENSÉ POUR ELLE &amp; LUI</h2>
+    </div>
+    <div class="dt-gender-grid">
+      <!-- Femme -->
+      <div class="dt-gender-card dt-gender-card--f dt-fade-l">
+        {% if product and product.images[2] %}
+          <img class="dt-gender-img" src="{{ product.images[2] | image_url: width: 700 }}" loading="lazy" alt="DERMATOOL® pour femme">
+        {% endif %}
+        <div class="dt-gender-body">
+          <div class="dt-gender-icon">👩</div>
+          <h3>POUR FEMME</h3>
+          <p>Des ongles propres et soignés au quotidien, pour une apparence naturellement belle.</p>
+          <ul class="dt-gender-list">
+            <li>✓ Esthétique et soin quotidien</li>
+            <li>✓ Apparence propre et naturelle</li>
+            <li>✓ Confiance au quotidien</li>
+            <li>✓ Routine facile à adopter</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Homme -->
+      <div class="dt-gender-card dt-gender-card--m dt-fade-r">
+        {% if product and product.images[3] %}
+          <img class="dt-gender-img" src="{{ product.images[3] | image_url: width: 700 }}" loading="lazy" alt="DERMATOOL® pour homme">
+        {% endif %}
+        <div class="dt-gender-body">
+          <div class="dt-gender-icon">👨</div>
+          <h3>POUR HOMME</h3>
+          <p>Une routine simple, rapide et discrète pour des ongles toujours soignés.</p>
+          <ul class="dt-gender-list">
+            <li>✓ Simplicité et rapidité</li>
+            <li>✓ Utilisation quotidienne discrète</li>
+            <li>✓ Soin des ongles efficace</li>
+            <li>✓ Praticité au quotidien</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== KIT PRODUIT ==================== -->
+<section class="dt-section dt-kit-section" id="dt-product">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade" style="margin-bottom:56px;">
+      <span class="dt-eyebrow">Le kit</span>
+      <h2 class="dt-h2">DERMATOOL® FUNGAL NAIL TREATMENT</h2>
+      <p class="dt-lead" style="margin:14px auto 0;">Tout ce qu'il vous faut en un seul kit premium.</p>
+    </div>
+    <div class="dt-kit-grid">
+
+      <!-- Gallery -->
+      <div class="dt-kit-gallery dt-fade-l">
+        <div class="dt-kit-main-img" id="dt-kit-main">
+          {% if product and product.featured_image %}
+            <img id="dt-kit-main-img" src="{{ product.featured_image | image_url: width: 900 }}" loading="lazy" alt="{{ product.title }}">
+          {% else %}
+            <div style="height:400px;background:var(--dt-sky);display:flex;align-items:center;justify-content:center;font-size:80px;">🦷</div>
+          {% endif %}
+        </div>
+        {% if product and product.images.size > 1 %}
+          <div class="dt-kit-thumbs">
+            {% for image in product.images limit: 6 %}
+              <div class="dt-kit-thumb {% if forloop.first %}active{% endif %}"
+                   onclick="document.getElementById('dt-kit-main-img').src='{{ image | image_url: width: 900 }}';this.parentElement.querySelectorAll('.dt-kit-thumb').forEach(t=>t.classList.remove('active'));this.classList.add('active');">
+                <img src="{{ image | image_url: width: 200 }}" loading="lazy" alt="{{ image.alt | default: product.title }}">
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Info -->
+      <div class="dt-kit-info dt-fade-r">
+        <div class="dt-kit-badge">KIT DERMATOOL®</div>
+        {% if product %}
+          <h2 class="dt-kit-title">{{ product.title }}</h2>
+        {% else %}
+          <h2 class="dt-kit-title">DERMATOOL® Fungal Nail Treatment</h2>
+        {% endif %}
+        <p class="dt-kit-subtitle">Le kit complet pour prendre soin de vos ongles au quotidien.</p>
+
+        <div class="dt-kit-items">
+          <div class="dt-kit-item">
+            <div class="dt-kit-item-dot">🧴</div>
+            <div>
+              <div class="dt-kit-item-name">DERMATOOL® Fungal Nail Treatment</div>
+              <div class="dt-kit-item-vol">60 ml — Format quotidien</div>
+            </div>
+          </div>
+          <div class="dt-kit-item">
+            <div class="dt-kit-item-dot">🫙</div>
+            <div>
+              <div class="dt-kit-item-name">DERMATOOL® Fungal Nail Treatment</div>
+              <div class="dt-kit-item-vol">15 ml — Format nomade</div>
+            </div>
+          </div>
+        </div>
+
+        {% if product %}
+          <div class="dt-kit-price-row">
+            <span class="dt-kit-price">{{ current_variant.price | money }}</span>
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <span class="dt-kit-price-old">{{ current_variant.compare_at_price | money }}</span>
+              <span class="dt-kit-save">
+                -{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price }}%
+              </span>
+            {% endif %}
+          </div>
+          <p class="dt-kit-note">🚚 Livraison à domicile — 💵 Paiement à la livraison</p>
+
+          {% unless current_variant.available %}
+            <div style="background:#FEE2E2;color:#B91C1C;border-radius:10px;padding:12px 18px;font-weight:700;font-size:14px;margin-bottom:16px;">
+              ⚠️ RUPTURE DE STOCK — Revenez bientôt
+            </div>
+          {% endunless %}
+        {% endif %}
+
+        <button type="button" class="dt-kit-cta" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+          🛒 COMMANDER MON KIT
+        </button>
+        <p class="dt-kit-cta-secure">🔒 Paiement 100% sécurisé — Livraison à domicile</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW TO USE ==================== -->
+<section class="dt-section">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Utilisation</span>
+      <h2 class="dt-h2">UNE ROUTINE SIMPLE EN 3 ÉTAPES</h2>
+    </div>
+    <div class="dt-steps">
+      <div class="dt-step dt-fade">
+        <div class="dt-step-num">01</div>
+        <h3>NETTOYER</h3>
+        <p>Nettoyez et séchez correctement la zone concernée avant toute application.</p>
+      </div>
+      <div class="dt-step dt-fade">
+        <div class="dt-step-num">02</div>
+        <h3>APPLIQUER</h3>
+        <p>Utilisez DERMATOOL® conformément aux instructions du produit.</p>
+      </div>
+      <div class="dt-step dt-fade">
+        <div class="dt-step-num">03</div>
+        <h3>RÉPÉTER</h3>
+        <p>Maintenez une routine régulière pour des résultats optimaux au fil du temps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== COMPARISON ==================== -->
+<section class="dt-section--sm dt-section--sky">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade" style="margin-bottom:56px;">
+      <span class="dt-eyebrow">Comparaison</span>
+      <h2 class="dt-h2">POURQUOI DERMATOOL® EST DIFFÉRENT</h2>
+    </div>
+    <div class="dt-comp-grid">
+      <div class="dt-comp-card dt-comp-card--ours dt-fade-l">
+        <div class="dt-comp-header">✨ DERMATOOL®</div>
+        <ul class="dt-comp-list">
+          <li>✅ Format pratique 60 ml + 15 ml</li>
+          <li>✅ Routine simple au quotidien</li>
+          <li>✅ Pour hommes &amp; femmes</li>
+          <li>✅ Résultats progressifs visibles</li>
+          <li>✅ Utilisation nomade possible</li>
+          <li>✅ Livraison partout au Maroc</li>
+        </ul>
+      </div>
+      <div class="dt-comp-card dt-comp-card--other dt-fade-r">
+        <div class="dt-comp-header">❌ Solutions classiques</div>
+        <ul class="dt-comp-list">
+          <li>❌ Produits peu adaptés</li>
+          <li>❌ Routine complexe et fastidieuse</li>
+          <li>❌ Formats peu pratiques</li>
+          <li>❌ Résultats incertains</li>
+          <li>❌ Difficilement nomade</li>
+          <li>❌ Disponibilité limitée</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== AVIS CLIENTS ==================== -->
+<section class="dt-section">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Témoignages</span>
+      <h2 class="dt-h2">ILS ONT CHOISI DERMATOOL®</h2>
+      <p class="dt-lead" style="margin:12px auto 0;font-size:13px;color:var(--dt-text-light);">
+        Avis clients — les résultats peuvent varier selon les individus.
+      </p>
+    </div>
+    <div class="dt-reviews-grid">
+      {%- assign reviews = "Salma B.|Casablanca|Un produit que j'utilise maintenant chaque jour. Ma routine ongle n'a jamais été aussi simple. Je le recommande vraiment !
+Khalid M.|Rabat|Pratique et efficace. Le format 15 ml est parfait pour le voyage. Je ne pars plus sans lui.
+Fatima R.|Marrakech|J'apprécie la simplicité d'utilisation. Résultat progressif mais visible. Très satisfaite de mon achat.
+Omar T.|Fès|Livraison rapide, produit conforme à la description. Une routine facile à intégrer dans le quotidien." | split: "
+" -%}
+      {%- for rev in reviews -%}
+        {%- assign rp = rev | split: "|" -%}
+        <div class="dt-review-card dt-fade">
+          <div class="dt-review-head">
+            <div class="dt-avatar">{{ rp[0] | slice: 0 }}</div>
+            <div class="dt-reviewer">
+              <strong>{{ rp[0] }}</strong>
+              <span>{{ rp[1] }}</span>
+            </div>
+          </div>
+          <div class="dt-stars">⭐⭐⭐⭐⭐</div>
+          <p class="dt-review-text">{{ rp[2] }}</p>
+          <div class="dt-verified">✔ Achat vérifié</div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="dt-reviews-summary dt-fade">
+      <div class="dt-rating-big">4.9</div>
+      <div class="dt-rating-stars">⭐⭐⭐⭐⭐</div>
+      <div class="dt-rating-count">Basé sur les avis clients — résultats pouvant varier</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section class="dt-section dt-section--sky">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">FAQ</span>
+      <h2 class="dt-h2">QUESTIONS FRÉQUENTES SUR DERMATOOL®</h2>
+    </div>
+    <div class="dt-faq">
+      {%- assign faqs = "Comment utiliser DERMATOOL® ?|Nettoyez et séchez la zone concernée, puis appliquez DERMATOOL® conformément aux instructions figurant sur le packaging du produit. Répétez la routine régulièrement pour de meilleurs résultats visuels.
+À quelle fréquence dois-je utiliser le produit ?|Pour une routine efficace, nous vous recommandons d'utiliser DERMATOOL® régulièrement, selon les indications mentionnées sur le produit. La régularité est la clé de résultats visibles.
+Le kit est-il adapté aux hommes ?|Oui, absolument. DERMATOOL® Fungal Nail Treatment est adapté aussi bien aux hommes qu'aux femmes. C'est un soin universel pour prendre soin des ongles au quotidien.
+Le kit est-il adapté aux femmes ?|Oui, le kit DERMATOOL® est conçu pour tous. Il s'intègre parfaitement dans une routine beauté féminine quotidienne.
+Combien de temps faut-il utiliser DERMATOOL® ?|Nous recommandons une utilisation régulière et continue. Les résultats peuvent varier selon chaque personne et dépendent de la régularité d'utilisation. Consultez les instructions du produit.
+Comment recevoir ma commande au Maroc ?|Après validation de votre commande, nous vous contacterons pour confirmer la livraison. La livraison est assurée partout au Maroc avec paiement à la réception.
+Quels sont les ingrédients du produit ?|Pour la liste complète et exacte des ingrédients, veuillez consulter le packaging officiel de DERMATOOL®. Nous ne communiquons que des informations officiellement confirmées.
+Puis-je utiliser le produit sur les mains et les pieds ?|Pour toute information précise sur les zones d'application, veuillez consulter les instructions officielles figurant sur le produit DERMATOOL®." | split: "
+" -%}
+      {%- for faq in faqs -%}
+        {%- assign fp = faq | split: "|" -%}
+        <div class="dt-faq-item dt-fade">
+          <button type="button" class="dt-faq-q" data-dt-faq>
+            <span>{{ fp[0] }}</span>
+            <span class="dt-faq-icon">+</span>
+          </button>
+          <div class="dt-faq-a"><p>{{ fp[1] }}</p></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EASYSELL COD FORM ==================== -->
+<section class="dt-section dt-order-section" id="dt-order-section">
+  <div class="dt-wrap">
+    <div class="dt-center dt-fade">
+      <span class="dt-eyebrow">Commande</span>
+      <h2 class="dt-h2">COMMANDER MAINTENANT — PAIEMENT À LA LIVRAISON</h2>
+    </div>
+
+    {% if product %}
+      <div class="dt-order-wrap dt-fade">
+        <div class="dt-order-header">
+          <h3 class="dt-order-title">🛒 Confirmer ma commande</h3>
+          <p class="dt-order-sub">Remplissez le formulaire — notre équipe vous contactera pour confirmer l'envoi</p>
+          <div style="margin-top:14px;font-size:22px;font-weight:900;color:var(--dt-blue-dk);">
+            {{ current_variant.price | money }}
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <span style="font-size:16px;color:var(--dt-text-light);text-decoration:line-through;margin-right:8px;">{{ current_variant.compare_at_price | money }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        {%- form 'product', product, id: 'dt-product-form', novalidate: true -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" id="dt-variant-id">
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="dt-var-sec">
+                <span class="dt-var-lbl">{{ option.name }}</span>
+                <div class="dt-var-pills">
+                  {%- for value in option.values -%}
+                    <label class="dt-var-pill">
+                      <input type="radio" name="{{ option.name }}" value="{{ value | escape }}"
+                        {% if option.selected_value == value %}checked{% endif %}>
+                      <span>{{ value }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <div class="dt-qty-row">
+            <span class="dt-qty-lbl">Quantité :</span>
+            <div class="dt-qty-box">
+              <button type="button" class="dt-qty-btn" onclick="var q=document.getElementById('dt-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+              <input type="number" id="dt-qty" name="quantity" value="1" min="1" class="dt-qty-inp" readonly>
+              <button type="button" class="dt-qty-btn" onclick="var q=document.getElementById('dt-qty');q.value=+q.value+1;">+</button>
+            </div>
+          </div>
+
+          {% content_for 'blocks' %}
+
+          {% if current_variant.available %}
+            <button type="submit" name="add" class="dt-order-submit" id="dt-submit">
+              ✅ CONFIRMER MA COMMANDE
+            </button>
+          {% else %}
+            <button type="button" disabled class="dt-order-submit" style="opacity:.5;cursor:not-allowed;">
+              RUPTURE DE STOCK
+            </button>
+          {% endif %}
+        {%- endform -%}
+
+        <p class="dt-order-secure">🔒 Commande 100% sécurisée — Aucune carte bancaire requise</p>
+        <ul class="dt-order-trust">
+          <li>✅ Paiement à la livraison</li>
+          <li>🚚 Livraison partout au Maroc</li>
+          <li>📦 Expédition rapide</li>
+          <li>↩️ Retour facile</li>
+        </ul>
+      </div>
+    {% else %}
+      <div class="dt-order-wrap dt-fade" style="text-align:center;">
+        <p style="color:var(--dt-text-soft);font-size:16px;">
+          ⚙️ <strong>Veuillez sélectionner un produit</strong> dans le Shopify Theme Editor pour activer le formulaire de commande.
+        </p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- ==================== CTA FINAL ==================== -->
+<section class="dt-cta-final">
+  <div class="dt-wrap">
+    <h2 class="dt-h2">PRENEZ SOIN DE VOS ONGLES AVEC DERMATOOL®</h2>
+    <p>Commencez votre routine dès aujourd'hui — livraison partout au Maroc.</p>
+
+    {% if product %}
+      <div class="dt-cta-final-price">
+        <span class="dt-cta-price-new">{{ current_variant.price | money }}</span>
+        {% if current_variant.compare_at_price > current_variant.price %}
+          <span class="dt-cta-price-old">{{ current_variant.compare_at_price | money }}</span>
+        {% endif %}
+      </div><br>
+    {% endif %}
+
+    <button type="button" class="dt-cta-btn" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+      🛒 COMMANDER DERMATOOL®
+    </button>
+    <p class="dt-cta-ship">🚚 Livraison à domicile partout au Maroc</p>
+
+    {% if product and product.featured_image %}
+      <div style="margin-top:40px;">
+        <img src="{{ product.featured_image | image_url: width: 300 }}" loading="lazy"
+             alt="{{ product.title }}"
+             style="width:160px;margin:0 auto;opacity:.85;filter:drop-shadow(0 20px 40px rgba(0,0,0,.25));">
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="dt-footer">
+  <div class="dt-wrap">
+    <div class="dt-footer-logo">
+      <div class="dt-logo-icon" style="width:32px;height:32px;font-size:16px;">🦷</div>
+      <span>DERMATOOL®</span>
+    </div>
+    <p style="margin-bottom:6px;">© {{ 'now' | date: '%Y' }} DERMATOOL® — Tous droits réservés</p>
+    <div class="dt-footer-links">
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Conditions générales</a>
+      <a href="#">Politique de retour</a>
+      <a href="#">Livraison</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== STICKY CTA ==================== -->
+<div class="dt-sticky-bar" id="dt-sticky-bar">
+  <div class="dt-sticky-info">
+    {% if product and product.featured_image %}
+      <img class="dt-sticky-thumb" src="{{ product.featured_image | image_url: width: 100 }}" alt="{{ product.title }}" loading="lazy">
+    {% endif %}
+    <div>
+      <div class="dt-sticky-name">{{ product.title | default: 'DERMATOOL® Kit' }}</div>
+      <div class="dt-sticky-price">{% if product %}{{ current_variant.price | money }}{% else %}—{% endif %} DH</div>
+    </div>
+  </div>
+  <button type="button" class="dt-sticky-btn" onclick="document.getElementById('dt-order-section').scrollIntoView({behavior:'smooth'});">
+    🛒 COMMANDER
+  </button>
+</div>
+
+</div><!-- end .dt-page -->
+
+<script>
+(function(){
+  var doc = document;
+
+  /* Header scroll */
+  var header = doc.getElementById('dt-header');
+  window.addEventListener('scroll', function(){
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  }, {passive:true});
+
+  /* Scroll fade */
+  var fadeEls = doc.querySelectorAll('.dt-fade, .dt-fade-l, .dt-fade-r, .dt-scale');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('dt-in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.10});
+    fadeEls.forEach(function(el){ io.observe(el); });
+  } else {
+    fadeEls.forEach(function(el){ el.classList.add('dt-in'); });
+  }
+
+  /* Sticky bar */
+  var stickyBar = doc.getElementById('dt-sticky-bar');
+  var orderSec = doc.getElementById('dt-order-section');
+  if(stickyBar && orderSec){
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        stickyBar.classList.toggle('dt-show', !e.isIntersecting);
+      });
+    }, {threshold:.05});
+    sio.observe(orderSec);
+  }
+
+  /* FAQ accordion */
+  doc.querySelectorAll('[data-dt-faq]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.dt-faq-item');
+      var wasOpen = item.classList.contains('dt-open');
+      doc.querySelectorAll('.dt-faq-item.dt-open').forEach(function(el){ el.classList.remove('dt-open'); });
+      if(!wasOpen) item.classList.add('dt-open');
+    });
+  });
+
+  /* Lightbox */
+  var lb = doc.getElementById('dt-lightbox');
+  var lbImg = doc.getElementById('dt-lb-img');
+  var lbClose = doc.getElementById('dt-lb-close');
+  doc.querySelectorAll('[data-dt-lightbox]').forEach(function(el){
+    el.addEventListener('click', function(){
+      if(!lb) return;
+      lbImg.src = el.dataset.dtLightbox;
+      lb.classList.add('dt-open');
+      doc.body.style.overflow = 'hidden';
+    });
+  });
+  if(lbClose) lbClose.addEventListener('click', function(){ lb.classList.remove('dt-open'); doc.body.style.overflow = ''; });
+  if(lb) lb.addEventListener('click', function(e){ if(e.target===lb){ lb.classList.remove('dt-open'); doc.body.style.overflow = ''; } });
+
+  /* Submit ripple */
+  doc.querySelectorAll('.dt-order-submit, .dt-kit-cta').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var rect = btn.getBoundingClientRect();
+      var r = doc.createElement('span');
+      r.className = 'dt-ripple';
+      var sz = Math.max(btn.offsetWidth, btn.offsetHeight);
+      r.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+(e.clientY-rect.top-sz/2)+'px;left:'+(e.clientX-rect.left-sz/2)+'px;';
+      btn.appendChild(r);
+      setTimeout(function(){ r.remove(); }, 700);
+    });
+  });
+
+  /* Variant sync */
+  var variantsEl = doc.getElementById('dt-variants-json');
+  if(variantsEl && variantsEl.textContent.trim() !== 'null'){
+    try{
+      var variantData = JSON.parse(variantsEl.textContent);
+      var form = doc.getElementById('dt-product-form');
+      if(form && variantData){
+        form.querySelectorAll('.dt-var-pill input').forEach(function(r){
+          r.addEventListener('change', function(){
+            var opts = {};
+            form.querySelectorAll('.dt-var-pill input:checked').forEach(function(c){
+              opts[c.name] = c.value;
+            });
+            var match = variantData.find(function(v){
+              return Object.keys(opts).every(function(k,i){ return v['option'+(i+1)] === opts[k]; });
+            });
+            if(match){
+              var vidEl = doc.getElementById('dt-variant-id');
+              if(vidEl) vidEl.value = match.id;
+            }
+          });
+        });
+      }
+    } catch(e){}
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "DERMATOOL Landing Page",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Produit par défaut"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Vidéo principale (après le Hero)"
+    },
+    {
+      "type": "video",
+      "id": "usage_video",
+      "label": "Vidéo utilisation (après Before/After)"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Image AVANT (Before/After)"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "Image APRÈS (Before/After)"
+    }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "DERMATOOL Landing Page" }]
+}
+{% endschema %}

@@ -1,0 +1,647 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+:root{--bcp-blue:#1565C0;--bcp-blue-mid:#1976D2;--bcp-blue-light:#42A5F5;--bcp-blue-pale:#BBDEFB;--bcp-blue-bg:#E3F2FD;--bcp-white:#fff;--bcp-dark:#0D1B2A;--bcp-silver:#CFD8DC;--bcp-gold:#FFD700;--bcp-red:#E53935;--bcp-shadow:0 8px 32px rgba(21,101,192,.15);--bcp-shadow-lg:0 20px 60px rgba(21,101,192,.25);--bcp-r:20px;--bcp-r-sm:12px}
+.bcp-page *{box-sizing:border-box;margin:0;padding:0}
+.bcp-page{font-family:'Tajawal',sans-serif;direction:rtl;background:#F0F7FF;color:var(--bcp-dark);overflow-x:hidden}
+/* Progress */
+.bcp-progress{position:fixed;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,var(--bcp-blue-light),var(--bcp-blue));transform-origin:right;z-index:9999;transform:scaleX(0);transition:transform .1s}
+/* Toast */
+.bcp-toast{position:fixed;bottom:90px;right:16px;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 30px rgba(0,0,0,.15);display:flex;align-items:center;gap:10px;z-index:9000;transform:translateX(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:280px;border-right:4px solid var(--bcp-blue)}
+.bcp-toast.show{transform:translateX(0)}
+.bcp-toast__text{font-size:13px;line-height:1.5;color:#333}
+.bcp-toast__text strong{color:var(--bcp-blue);display:block}
+/* Viewers */
+.bcp-viewers{position:fixed;bottom:160px;right:16px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:30px;padding:8px 14px;box-shadow:var(--bcp-shadow);display:flex;align-items:center;gap:6px;z-index:8999;font-size:13px;color:var(--bcp-dark);animation:bcp-fadein .5s 2s both}
+.bcp-viewers__dot{width:8px;height:8px;background:#4CAF50;border-radius:50%;animation:bcp-pulse 2s infinite}
+/* Lightbox */
+.bcp-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.bcp-lightbox.open{opacity:1;pointer-events:all}
+.bcp-lightbox img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:12px;transform:scale(.9);transition:transform .3s}
+.bcp-lightbox.open img{transform:scale(1)}
+.bcp-lightbox__close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* Animations */
+@keyframes bcp-fadein{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bcp-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-14px) rotate(1deg)}}
+@keyframes bcp-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+@keyframes bcp-shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes bcp-ripple{0%{transform:scale(0);opacity:.5}100%{transform:scale(4);opacity:0}}
+@keyframes bcp-glow{0%,100%{box-shadow:0 0 20px rgba(66,165,245,.3)}50%{box-shadow:0 0 40px rgba(66,165,245,.6)}}
+@keyframes bcp-particle{0%{transform:translateY(100vh);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) translateX(20px);opacity:0}}
+.bcp-anim{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.bcp-anim.visible{opacity:1;transform:translateY(0)}
+.bcp-d1{transition-delay:.1s}.bcp-d2{transition-delay:.2s}.bcp-d3{transition-delay:.3s}.bcp-d4{transition-delay:.4s}
+/* HERO */
+.bcp-hero{background:linear-gradient(135deg,#0D1B4B 0%,#1565C0 50%,#0288D1 100%);min-height:90vh;position:relative;overflow:hidden;display:flex;align-items:center}
+.bcp-hero__circles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.bcp-hero__c{position:absolute;border-radius:50%;background:rgba(255,255,255,.05)}
+.bcp-hero__c1{width:400px;height:400px;top:-100px;left:-100px}
+.bcp-hero__c2{width:300px;height:300px;bottom:-80px;right:-80px;background:rgba(66,165,245,.1)}
+.bcp-hero__c3{width:200px;height:200px;top:30%;right:10%;background:rgba(255,255,255,.03)}
+.bcp-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.bcp-particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,.4);border-radius:50%;animation:bcp-particle linear infinite}
+.bcp-hero__inner{position:relative;z-index:1;padding:60px 20px 40px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+@media(min-width:768px){.bcp-hero__inner{grid-template-columns:1fr 1fr;padding:80px 40px}}
+.bcp-hero__content{text-align:center}
+@media(min-width:768px){.bcp-hero__content{text-align:right}}
+.bcp-hero__badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:6px 16px;color:#E3F2FD;font-size:13px;margin-bottom:20px;animation:bcp-fadein .6s .2s both}
+.bcp-hero__bdot{width:6px;height:6px;background:#4FC3F7;border-radius:50%;animation:bcp-pulse 2s infinite}
+.bcp-hero__title{font-size:clamp(28px,7vw,52px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:16px;animation:bcp-fadein .6s .3s both}
+.bcp-hero__title span{background:linear-gradient(90deg,#90CAF9,#E3F2FD,#42A5F5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bcp-hero__sub{font-size:clamp(15px,3.5vw,20px);color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:30px;animation:bcp-fadein .6s .4s both}
+.bcp-hero__cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#FFD700,#FF8F00);color:#0D1B2A;font-size:18px;font-weight:800;padding:16px 36px;border-radius:50px;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;animation:bcp-fadein .6s .5s both,bcp-glow 3s 1s infinite;position:relative;overflow:hidden;transition:transform .2s}
+.bcp-hero__cta:hover{transform:translateY(-2px) scale(1.03)}
+.bcp-ripple-dot{position:absolute;background:rgba(255,255,255,.35);border-radius:50%;width:20px;height:20px;pointer-events:none;animation:bcp-ripple .6s linear;transform:translate(-50%,-50%)}
+.bcp-hero__img-wrap{display:flex;justify-content:center;align-items:center;animation:bcp-fadein .8s .3s both}
+.bcp-hero__img{width:100%;max-width:420px;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:bcp-float 6s ease-in-out infinite;cursor:zoom-in}
+/* TRUST BAR */
+.bcp-trust{background:#fff;border-bottom:1px solid #E3F2FD}
+.bcp-trust__inner{max-width:1200px;margin:0 auto;padding:18px 20px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 20px}
+.bcp-trust__item{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--bcp-blue);white-space:nowrap}
+/* SECTIONS */
+.bcp-section{padding:60px 20px}
+.bcp-section--white{background:#fff}
+.bcp-section--light{background:linear-gradient(135deg,#F8FBFF,#E8F4FD)}
+.bcp-section--blue{background:linear-gradient(135deg,#1565C0,#0288D1)}
+.bcp-container{max-width:1100px;margin:0 auto}
+.bcp-label{display:inline-block;background:var(--bcp-blue-bg);color:var(--bcp-blue);font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase}
+.bcp-label--white{background:rgba(255,255,255,.2);color:#fff}
+.bcp-h2{font-size:clamp(22px,5vw,36px);font-weight:800;color:var(--bcp-dark);line-height:1.3;margin-bottom:14px}
+.bcp-h2--white{color:#fff}
+.bcp-p{font-size:16px;color:#546E7A;line-height:1.8;max-width:700px}
+.bcp-p--white{color:rgba(255,255,255,.85)}
+.bcp-header{text-align:center;margin-bottom:46px}
+/* GRID 2 cols */
+.bcp-grid2{display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+@media(min-width:768px){.bcp-grid2{grid-template-columns:1fr 1fr}}
+/* IMG CARD */
+.bcp-imgcard{border-radius:var(--bcp-r);overflow:hidden;box-shadow:var(--bcp-shadow-lg);cursor:zoom-in;position:relative;transition:transform .3s}
+.bcp-imgcard:hover{transform:scale(1.02)}
+.bcp-imgcard img{width:100%;height:auto;display:block}
+.bcp-imgcard__hint{position:absolute;bottom:10px;left:10px;background:rgba(255,255,255,.9);border-radius:8px;padding:3px 10px;font-size:11px;color:var(--bcp-blue);font-weight:600}
+/* PROBLEM CARDS */
+.bcp-prob-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:600px){.bcp-prob-grid{grid-template-columns:repeat(4,1fr)}}
+.bcp-prob-card{background:#fff;border-radius:var(--bcp-r);padding:24px 14px;text-align:center;box-shadow:0 4px 20px rgba(21,101,192,.08);border:1px solid var(--bcp-blue-bg);transition:transform .3s,box-shadow .3s}
+.bcp-prob-card:hover{transform:translateY(-4px);box-shadow:var(--bcp-shadow)}
+.bcp-prob-card__icon{font-size:34px;margin-bottom:10px;display:block}
+.bcp-prob-card__title{font-size:15px;font-weight:700;color:var(--bcp-dark);margin-bottom:6px}
+.bcp-prob-card__text{font-size:13px;color:#78909C;line-height:1.6}
+/* BENEFITS LIST */
+.bcp-blist{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bcp-blist li{display:flex;align-items:flex-start;gap:12px}
+.bcp-blist__icon{width:40px;height:40px;min-width:40px;background:var(--bcp-blue-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.bcp-blist__h{font-size:15px;font-weight:700;color:var(--bcp-dark);margin-bottom:4px}
+.bcp-blist__p{font-size:13px;color:#607D8B;line-height:1.6}
+/* INGREDIENTS */
+.bcp-ing-list{display:flex;flex-direction:column;gap:12px}
+.bcp-ing-card{background:linear-gradient(135deg,#F0F7FF,#fff);border:1px solid var(--bcp-blue-pale);border-radius:var(--bcp-r-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:all .3s;cursor:default}
+.bcp-ing-card:hover{background:var(--bcp-blue-bg);transform:translateX(-4px)}
+.bcp-ing-card__icon{font-size:26px;min-width:36px;text-align:center}
+.bcp-ing-card__name{font-size:14px;font-weight:700;color:var(--bcp-blue);margin-bottom:2px}
+.bcp-ing-card__desc{font-size:12px;color:#607D8B;line-height:1.5}
+/* HOW TO USE */
+.bcp-steps{display:flex;flex-direction:column;gap:18px}
+.bcp-step{display:flex;align-items:flex-start;gap:14px}
+.bcp-step__num{min-width:40px;height:40px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#fff}
+.bcp-step__h{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px}
+.bcp-step__p{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6}
+/* COUNTDOWN */
+.bcp-cd{background:linear-gradient(135deg,#B71C1C,#E53935);padding:40px 20px;text-align:center}
+.bcp-cd__lbl{color:rgba(255,255,255,.85);font-size:14px;margin-bottom:8px}
+.bcp-cd__title{color:#fff;font-size:clamp(18px,4vw,24px);font-weight:800;margin-bottom:24px}
+.bcp-cd__timer{display:flex;justify-content:center;align-items:center;gap:14px}
+.bcp-cd__unit{text-align:center}
+.bcp-cd__num{background:rgba(255,255,255,.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:12px;width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#fff}
+.bcp-cd__sep{font-size:26px;font-weight:900;color:#fff;margin-bottom:18px}
+.bcp-cd__ulbl{font-size:12px;color:rgba(255,255,255,.7);margin-top:5px}
+/* OFFERS */
+.bcp-offers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:768px){.bcp-offers-grid{grid-template-columns:repeat(4,1fr)}}
+.bcp-ocard{background:#fff;border:2px solid #E3F2FD;border-radius:var(--bcp-r);padding:18px 12px;text-align:center;cursor:pointer;position:relative;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.bcp-ocard:hover{transform:translateY(-4px);box-shadow:var(--bcp-shadow)}
+.bcp-ocard.active{border-color:var(--bcp-blue);background:linear-gradient(135deg,#E3F2FD,#BBDEFB);box-shadow:0 0 0 4px rgba(21,101,192,.15),var(--bcp-shadow);transform:translateY(-6px) scale(1.02)}
+.bcp-ocard__badge{position:absolute;top:-12px;right:50%;transform:translateX(50%);background:linear-gradient(135deg,#FF5722,#E53935);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap;animation:bcp-glow 2s infinite}
+.bcp-ocard__badge--gold{background:linear-gradient(135deg,#FFD700,#FF8F00);color:#0D1B2A}
+.bcp-ocard__img{width:100%;height:130px;object-fit:contain;margin-bottom:10px;border-radius:10px}
+.bcp-ocard__title{font-size:14px;font-weight:700;color:var(--bcp-dark);margin-bottom:8px}
+.bcp-ocard__price{font-size:22px;font-weight:900;color:var(--bcp-blue);margin-bottom:4px}
+.bcp-ocard__save{font-size:12px;color:var(--bcp-red);font-weight:600;min-height:16px}
+.bcp-ocard__check{width:24px;height:24px;border-radius:50%;border:2px solid #CFD8DC;margin:10px auto 0;display:flex;align-items:center;justify-content:center;transition:all .3s;font-size:13px;font-weight:700;color:transparent}
+.bcp-ocard.active .bcp-ocard__check{background:var(--bcp-blue);border-color:var(--bcp-blue);color:#fff}
+/* ORDER */
+.bcp-order{background:linear-gradient(135deg,#0D1B4B,#1565C0);padding:60px 20px}
+.bcp-order__box{background:#fff;border-radius:24px;padding:30px 22px;max-width:600px;margin:0 auto;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.bcp-order__title{text-align:center;font-size:20px;font-weight:800;color:var(--bcp-dark);margin-bottom:4px}
+.bcp-order__sub{text-align:center;font-size:13px;color:#90A4AE;margin-bottom:20px}
+.bcp-order__sel{background:var(--bcp-blue-bg);border-radius:12px;padding:12px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bcp-order__sel-lbl{font-size:13px;color:var(--bcp-blue);font-weight:600}
+.bcp-order__sel-price{font-size:20px;font-weight:900;color:var(--bcp-blue)}
+.bcp-order__form input,.bcp-order__form select,.bcp-order__form textarea{width:100%;padding:13px 15px;border:1.5px solid #E0E0E0;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:15px;margin-bottom:10px;transition:border-color .2s,box-shadow .2s;outline:none;direction:rtl}
+.bcp-order__form input:focus,.bcp-order__form select:focus{border-color:var(--bcp-blue);box-shadow:0 0 0 3px rgba(21,101,192,.1)}
+.bcp-order__form button[type="submit"],.bcp-order__form button[name="add"]{width:100%;padding:17px;background:linear-gradient(135deg,#1565C0,#0288D1);color:#fff;font-family:'Tajawal',sans-serif;font-size:18px;font-weight:800;border:none;border-radius:14px;cursor:pointer;margin-top:6px;transition:transform .2s,box-shadow .2s}
+.bcp-order__form button[type="submit"]:hover,.bcp-order__form button[name="add"]:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(21,101,192,.4)}
+.bcp-order__gtees{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:18px}
+.bcp-order__gtee{display:flex;align-items:center;gap:5px;font-size:12px;color:#90A4AE}
+/* REVIEWS */
+.bcp-rating-box{display:flex;align-items:center;gap:20px;background:var(--bcp-blue-bg);border-radius:var(--bcp-r);padding:22px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.bcp-rating-big__num{font-size:54px;font-weight:900;color:var(--bcp-blue);line-height:1}
+.bcp-rating-big__stars{color:var(--bcp-gold);font-size:20px}
+.bcp-rating-big__count{font-size:12px;color:#90A4AE;margin-top:3px}
+.bcp-rbars{flex:1;min-width:180px;display:flex;flex-direction:column;gap:6px}
+.bcp-rbar{display:flex;align-items:center;gap:8px}
+.bcp-rbar__lbl{font-size:12px;color:#607D8B;min-width:16px;text-align:center}
+.bcp-rbar__track{flex:1;height:8px;background:#E3F2FD;border-radius:4px;overflow:hidden}
+.bcp-rbar__fill{height:100%;background:linear-gradient(90deg,var(--bcp-blue-light),var(--bcp-blue));border-radius:4px}
+.bcp-reviews-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:600px){.bcp-reviews-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.bcp-reviews-grid{grid-template-columns:repeat(3,1fr)}}
+.bcp-rev-card{background:linear-gradient(135deg,#F8FBFF,#fff);border:1px solid #E3F2FD;border-radius:var(--bcp-r);padding:20px;transition:transform .3s,box-shadow .3s}
+.bcp-rev-card:hover{transform:translateY(-3px);box-shadow:var(--bcp-shadow)}
+.bcp-rev-card__hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bcp-rev-card__av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
+.bcp-rev-card__name{font-size:14px;font-weight:700;color:var(--bcp-dark)}
+.bcp-rev-card__city{font-size:12px;color:#90A4AE}
+.bcp-rev-card__stars{color:var(--bcp-gold);font-size:14px;margin-bottom:8px}
+.bcp-rev-card__txt{font-size:13px;color:#546E7A;line-height:1.7}
+.bcp-rev-card__verified{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#4CAF50;font-weight:600;margin-top:8px}
+/* FAQ */
+.bcp-faq__list{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.bcp-faq-item{background:#fff;border-radius:var(--bcp-r-sm);border:1px solid #E3F2FD;overflow:hidden}
+.bcp-faq-item__btn{width:100%;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;background:none;border:none;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;color:var(--bcp-dark);cursor:pointer;text-align:right;gap:10px}
+.bcp-faq-item__icon{width:28px;height:28px;min-width:28px;background:var(--bcp-blue-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--bcp-blue);font-size:18px;transition:transform .3s,background .3s}
+.bcp-faq-item.open .bcp-faq-item__icon{transform:rotate(45deg);background:var(--bcp-blue);color:#fff}
+.bcp-faq-item__body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.bcp-faq-item.open .bcp-faq-item__body{max-height:300px}
+.bcp-faq-item__inner{padding:0 18px 16px;font-size:14px;color:#607D8B;line-height:1.8}
+/* STICKY */
+.bcp-sticky{position:fixed;bottom:0;right:0;left:0;background:#fff;border-top:1px solid #E3F2FD;padding:12px 18px;z-index:8000;box-shadow:0 -8px 30px rgba(21,101,192,.1);display:none;align-items:center;gap:12px}
+@media(max-width:767px){.bcp-sticky{display:flex}}
+.bcp-sticky__price-lbl{font-size:11px;color:#90A4AE}
+.bcp-sticky__price-val{font-size:20px;font-weight:900;color:var(--bcp-blue)}
+.bcp-sticky__btn{flex:1;background:linear-gradient(135deg,#1565C0,#0288D1);color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:800;padding:14px;border-radius:14px;border:none;cursor:pointer;transition:transform .2s}
+.bcp-sticky__btn:active{transform:scale(.98)}
+</style>
+
+<!-- PROGRESS BAR -->
+<div class="bcp-progress" id="bcp-progress"></div>
+<!-- TOAST -->
+<div class="bcp-toast" id="bcp-toast">
+  <span style="font-size:26px">🛒</span>
+  <div class="bcp-toast__text"><strong id="bcp-toast-name">سارة من الرياض</strong>اشترت بلو كوبر بيبتايد ✨</div>
+</div>
+<!-- VIEWERS -->
+<div class="bcp-viewers"><div class="bcp-viewers__dot"></div><span id="bcp-viewers">18</span> شخصاً يتصفحون هذا المنتج الآن</div>
+<!-- LIGHTBOX -->
+<div class="bcp-lightbox" id="bcp-lb" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="bcp-lightbox__close" onclick="document.getElementById('bcp-lb').classList.remove('open')">✕</button>
+  <img id="bcp-lb-img" src="" alt="">
+</div>
+
+<div class="bcp-page" dir="rtl">
+
+<!-- HERO -->
+<section class="bcp-hero">
+  <div class="bcp-hero__circles"><div class="bcp-hero__c bcp-hero__c1"></div><div class="bcp-hero__c bcp-hero__c2"></div><div class="bcp-hero__c bcp-hero__c3"></div></div>
+  <div class="bcp-particles" id="bcp-particles"></div>
+  <div class="bcp-hero__inner">
+    <div class="bcp-hero__content">
+      <div class="bcp-hero__badge"><div class="bcp-hero__bdot"></div>🌟 الأكثر مبيعاً في المملكة</div>
+      <h1 class="bcp-hero__title">استعيدي <span>شباب بشرتك</span> بثقة</h1>
+      <p class="bcp-hero__sub">بلو كوبر بيبتايد — سيروم متطور يساعد على شد البشرة، تقليل التجاعيد، وإعادة إشراقتها الطبيعية من أول أسبوع.</p>
+      <button class="bcp-hero__cta" onclick="bcpScroll()">🛒 اطلبي الآن — الدفع عند الاستلام</button>
+    </div>
+    <div class="bcp-hero__img-wrap">
+      {%- if product.media[0] -%}
+        <img class="bcp-hero__img" src="{{ product.media[0] | image_url: width: 800 }}" alt="{{ product.title }}" loading="eager" width="800" onclick="bcpLB('{{ product.media[0] | image_url: width: 1400 }}')">
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="bcp-trust">
+  <div class="bcp-trust__inner">
+    <div class="bcp-trust__item">🚚 شحن مجاني</div>
+    <div class="bcp-trust__item">💵 الدفع عند الاستلام</div>
+    <div class="bcp-trust__item">🔒 طلب آمن 100%</div>
+    <div class="bcp-trust__item">⭐ آلاف العميلات الراضيات</div>
+    <div class="bcp-trust__item">↩️ استرجاع 7 أيام</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="bcp-section bcp-section--light">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">هل تعانين من هذا؟</span>
+      <h2 class="bcp-h2">أبرز مشاكل البشرة التي تُزعجك</h2>
+      <p class="bcp-p" style="margin:0 auto">بشرتك تستحق الأفضل — لا تتركي هذه المشاكل تؤثر على ثقتك بنفسك</p>
+    </div>
+    <div class="bcp-prob-grid">
+      {%- assign prob_titles = 'التجاعيد المبكرة,الخطوط الدقيقة,فقدان المرونة,بهتان البشرة' | split: ',' -%}
+      {%- assign prob_icons  = '😟,🔍,💧,🌫️' | split: ',' -%}
+      {%- assign prob_descs  = 'تجاعيد واضحة تجعل البشرة تبدو أكبر سناً من عمرها الحقيقي,خطوط رفيعة حول العينين والفم تُفقد البشرة نعومتها,فقدان التوتر الطبيعي مما يجعل البشرة تبدو مترهلة,بشرة باهتة خالية من الحيوية والنضارة الطبيعية' | split: ',' -%}
+      {%- for t in prob_titles -%}
+        <div class="bcp-prob-card bcp-anim bcp-d{{ forloop.index }}">
+          <span class="bcp-prob-card__icon">{{ prob_icons[forloop.index0] }}</span>
+          <div class="bcp-prob-card__title">{{ t }}</div>
+          <div class="bcp-prob-card__text">{{ prob_descs[forloop.index0] }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="bcp-section bcp-section--white">
+  <div class="bcp-container">
+    <div class="bcp-grid2">
+      <div class="bcp-anim">
+        {%- if product.media[1] -%}
+          <div class="bcp-imgcard" onclick="bcpLB('{{ product.media[1] | image_url: width: 1200 }}')">
+            <img src="{{ product.media[1] | image_url: width: 700 }}" alt="فوائد السيروم" loading="lazy" width="700">
+            <span class="bcp-imgcard__hint">🔍 اضغطي للتكبير</span>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="bcp-anim bcp-d2">
+        <span class="bcp-label">الفوائد</span>
+        <h2 class="bcp-h2">فوائد مذهلة لبشرتك</h2>
+        <ul class="bcp-blist">
+          <li><div class="bcp-blist__icon">🧬</div><div><div class="bcp-blist__h">يساعد على شد البشرة وإعادة الحيوية</div><div class="bcp-blist__p">تركيبة البيبتايد النحاسي قد تساهم في تعزيز إنتاج الكولاجين لبشرة أكثر شباباً وإشراقة.</div></div></li>
+          <li><div class="bcp-blist__icon">💆‍♀️</div><div><div class="bcp-blist__h">يعزز المرونة وقد يقلل التجاعيد</div><div class="bcp-blist__p">يساعد على تحسين مرونة البشرة وظهور الخطوط الدقيقة بشكل ملحوظ مع الاستخدام المنتظم.</div></div></li>
+          <li><div class="bcp-blist__icon">💧</div><div><div class="bcp-blist__h">ترطيب عميق وتغذية مستمرة</div><div class="bcp-blist__p">يمد البشرة بالرطوبة والعناصر الغذائية الأساسية لتبقى ناعمة ومشرقة طوال اليوم.</div></div></li>
+          <li><div class="bcp-blist__icon">✨</div><div><div class="bcp-blist__h">إشراقة طبيعية من أول أسبوع</div><div class="bcp-blist__p">يوحد لون البشرة ويمنح إشراقة طبيعية ملحوظة خلال أيام من الاستخدام المنتظم.</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="bcp-section bcp-section--light">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">النتائج</span>
+      <h2 class="bcp-h2">نتائج واضحة من أول استخدام</h2>
+      <p class="bcp-p" style="margin:0 auto">آلاف العميلات يشاركن تحولهن الحقيقي مع بلو كوبر بيبتايد</p>
+    </div>
+    {%- if product.media[2] -%}
+      <div class="bcp-imgcard bcp-anim" style="max-width:700px;margin:0 auto" onclick="bcpLB('{{ product.media[2] | image_url: width: 1200 }}')">
+        <img src="{{ product.media[2] | image_url: width: 900 }}" alt="قبل وبعد" loading="lazy" width="900">
+        <span class="bcp-imgcard__hint">🔍 اضغطي للتكبير</span>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="bcp-section bcp-section--white">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">المكونات</span>
+      <h2 class="bcp-h2">مكونات فعّالة وآمنة</h2>
+    </div>
+    <div class="bcp-grid2">
+      <div class="bcp-anim">
+        <div class="bcp-ing-list">
+          {%- assign ing_names  = 'بيبتايد النحاس (كوينبيتايد-1),جلسيرين,أكوا (ماء),تريثانولامين,كاريومير' | split: ',' -%}
+          {%- assign ing_icons  = '🔵,🫙,💧,⚗️,🧪' | split: ',' -%}
+          {%- assign ing_descs  = 'المكون النشط الرئيسي — قد يساعد على تعزيز الكولاجين وشد البشرة وتجديد خلاياها,مرطب طبيعي يساعد البشرة على الاحتفاظ بالرطوبة طوال اليوم,قاعدة السيروم المنقاة التي تضمن امتصاصاً سريعاً وفعّالاً,يوازن درجة الحموضة ويضمن ملاءمة الفورمولا لجميع أنواع البشرة,بوليمر متطور يمنح البشرة ملمساً ناعماً وقواماً خفيفاً' | split: ',' -%}
+          {%- for n in ing_names -%}
+            <div class="bcp-ing-card bcp-anim bcp-d{{ forloop.index }}">
+              <div class="bcp-ing-card__icon">{{ ing_icons[forloop.index0] }}</div>
+              <div><div class="bcp-ing-card__name">{{ n }}</div><div class="bcp-ing-card__desc">{{ ing_descs[forloop.index0] }}</div></div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="bcp-anim bcp-d2">
+        {%- if product.media[3] -%}
+          <div class="bcp-imgcard" onclick="bcpLB('{{ product.media[3] | image_url: width: 1200 }}')">
+            <img src="{{ product.media[3] | image_url: width: 700 }}" alt="مكونات السيروم" loading="lazy" width="700">
+            <span class="bcp-imgcard__hint">🔍 للتكبير</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIFESTYLE -->
+<section class="bcp-section bcp-section--light">
+  <div class="bcp-container">
+    <div class="bcp-grid2">
+      <div class="bcp-anim">
+        {%- if product.media[4] -%}
+          <div class="bcp-imgcard" onclick="bcpLB('{{ product.media[4] | image_url: width: 1200 }}')">
+            <img src="{{ product.media[4] | image_url: width: 700 }}" alt="نتائج السيروم" loading="lazy" width="700">
+            <span class="bcp-imgcard__hint">🔍 للتكبير</span>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="bcp-anim bcp-d2">
+        <span class="bcp-label">لبشرة أكثر ثقة</span>
+        <h2 class="bcp-h2">لبشرة أكثر شباباً وثقة كل يوم</h2>
+        <ul class="bcp-blist">
+          <li><div class="bcp-blist__icon">✅</div><div><div class="bcp-blist__h">يحسن ملمس البشرة الخشنة والمتعبة</div><div class="bcp-blist__p">يساعد على استعادة ملاسة البشرة وتجديد مظهرها بعد التعرض للشمس والبيئة.</div></div></li>
+          <li><div class="bcp-blist__icon">✅</div><div><div class="bcp-blist__h">يجعل البشرة أكثر نعومة وتماسكاً</div><div class="bcp-blist__p">بشرة ممتلئة وناعمة تبدو وكأنها قد كُسيت بطبقة من الحرير.</div></div></li>
+          <li><div class="bcp-blist__icon">✅</div><div><div class="bcp-blist__h">يمنح إشراقة طبيعية ونضارة تدوم</div><div class="bcp-blist__p">إشراقة من الداخل تظهر على بشرتك طوال اليوم بدون مجهود.</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="bcp-section bcp-section--blue">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label bcp-label--white">طريقة الاستخدام</span>
+      <h2 class="bcp-h2 bcp-h2--white">خطوات بسيطة لنتائج مذهلة</h2>
+    </div>
+    <div class="bcp-grid2">
+      <div class="bcp-anim">
+        {%- if product.media[5] -%}
+          <div class="bcp-imgcard">
+            <img src="{{ product.media[5] | image_url: width: 700 }}" alt="طريقة الاستخدام" loading="lazy" width="700">
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="bcp-anim bcp-d2">
+        <div class="bcp-steps">
+          {%- assign step_hs   = 'نظّفي بشرتك,ضعي السيروم,انتظري الامتصاص,ضعي المرطب,كرري مرتين يومياً' | split: ',' -%}
+          {%- assign step_ps   = 'نظفي وجهك بمنظف لطيف ليكون جاهزاً لامتصاص السيروم بشكل مثالي,ضعي 3-4 قطرات ودلّكي بلطف بحركات دائرية صاعدة,اتركي السيروم دقيقتين حتى يُمتص بالكامل في طبقات البشرة,بعد الامتصاص ضعي مرطبك المعتاد لإغلاق الفوائد,للحصول على أفضل النتائج استخدميه صباحاً ومساءً بانتظام' | split: ',' -%}
+          {%- for h in step_hs -%}
+            <div class="bcp-step bcp-anim bcp-d{{ forloop.index }}">
+              <div class="bcp-step__num">{{ forloop.index }}</div>
+              <div><div class="bcp-step__h">{{ h }}</div><div class="bcp-step__p">{{ step_ps[forloop.index0] }}</div></div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="bcp-cd">
+  <div class="bcp-cd__lbl">⏰ العرض ينتهي خلال</div>
+  <div class="bcp-cd__title">لا تفوّتي هذا العرض الخاص — الكميات محدودة!</div>
+  <div class="bcp-cd__timer">
+    <div class="bcp-cd__unit"><div class="bcp-cd__num" id="bcp-cdh">05</div><div class="bcp-cd__ulbl">ساعات</div></div>
+    <div class="bcp-cd__sep">:</div>
+    <div class="bcp-cd__unit"><div class="bcp-cd__num" id="bcp-cdm">47</div><div class="bcp-cd__ulbl">دقائق</div></div>
+    <div class="bcp-cd__sep">:</div>
+    <div class="bcp-cd__unit"><div class="bcp-cd__num" id="bcp-cds">33</div><div class="bcp-cd__ulbl">ثواني</div></div>
+  </div>
+</section>
+
+<!-- OFFERS -->
+<section class="bcp-section bcp-section--white" id="bcp-offers">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">اختاري عرضك</span>
+      <h2 class="bcp-h2">كلما اشتريتِ أكثر — وفّرتِ أكثر</h2>
+    </div>
+    <div class="bcp-offers-grid">
+      {%- assign o_imgs   = '5,6,7,8' | split: ',' -%}
+      {%- assign o_badges = ',🔥 الأكثر مبيعاً,,⭐ أفضل قيمة' | split: ',' -%}
+      {%- assign o_saves  = ',وفري 41 ريال,وفري 111 ريال,وفري 230 ريال' | split: ',' -%}
+      {%- assign o_badge_gold = ',,,true' | split: ',' -%}
+      {%- for variant in product.variants -%}
+        {%- assign mi = o_imgs[forloop.index0] | times: 1 -%}
+        <div class="bcp-ocard{% if forloop.first %} active{% endif %}"
+             data-vid="{{ variant.id }}"
+             data-price="{{ variant.price | money_without_trailing_zeros }}"
+             data-title="{{ variant.title }}"
+             onclick="bcpOffer(this)">
+          {%- if o_badges[forloop.index0] != blank -%}
+            <div class="bcp-ocard__badge{% if o_badge_gold[forloop.index0] == 'true' %} bcp-ocard__badge--gold{% endif %}">{{ o_badges[forloop.index0] }}</div>
+          {%- endif -%}
+          {%- if product.media[mi] -%}
+            <img class="bcp-ocard__img" src="{{ product.media[mi] | image_url: width: 400 }}" alt="{{ variant.title }}" loading="lazy" width="400">
+          {%- endif -%}
+          <div class="bcp-ocard__title">{{ variant.title }}</div>
+          <div class="bcp-ocard__price">{{ variant.price | money_without_trailing_zeros }}</div>
+          <div class="bcp-ocard__save">{{ o_saves[forloop.index0] }}</div>
+          <div class="bcp-ocard__check">✓</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section class="bcp-order" id="bcp-order">
+  <div class="bcp-container">
+    <div class="bcp-order__box bcp-anim">
+      <h3 class="bcp-order__title">🛒 أكملي طلبك الآن</h3>
+      <p class="bcp-order__sub">الدفع عند الاستلام — لا دفع مسبق</p>
+      <div class="bcp-order__sel">
+        <span class="bcp-order__sel-lbl">العرض المختار: <strong id="bcp-sel-title">{{ product.variants[0].title }}</strong></span>
+        <span class="bcp-order__sel-price" id="bcp-sel-price">{{ product.variants[0].price | money_without_trailing_zeros }}</span>
+      </div>
+      <div class="bcp-order__form">
+        {%- form 'product', product, id: 'bcp-form', novalidate: true -%}
+          <input type="hidden" name="id" id="bcp-vid" value="{{ product.variants[0].id }}">
+          {% content_for 'blocks' %}
+        {%- endform -%}
+      </div>
+      <div class="bcp-order__gtees">
+        <div class="bcp-order__gtee">🔒 بيانات آمنة</div>
+        <div class="bcp-order__gtee">🚚 شحن مجاني</div>
+        <div class="bcp-order__gtee">↩️ استرجاع 7 أيام</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="bcp-section bcp-section--white">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">آراء العميلات</span>
+      <h2 class="bcp-h2">ماذا تقول عميلاتنا؟</h2>
+    </div>
+    <div class="bcp-rating-box bcp-anim">
+      <div class="bcp-rating-big">
+        <div class="bcp-rating-big__num">4.9</div>
+        <div class="bcp-rating-big__stars">★★★★★</div>
+        <div class="bcp-rating-big__count">+2,400 تقييم</div>
+      </div>
+      <div class="bcp-rbars">
+        {%- assign bar_vs = '92,6,1,1,0' | split: ',' -%}
+        {%- for v in bar_vs -%}
+          <div class="bcp-rbar">
+            <span class="bcp-rbar__lbl">{{ 5 | minus: forloop.index0 }}★</span>
+            <div class="bcp-rbar__track"><div class="bcp-rbar__fill" style="width:{{ v }}%"></div></div>
+            <span style="font-size:12px;color:#90A4AE;min-width:28px">{{ v }}%</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="bcp-reviews-grid">
+      {%- assign r_names  = 'نورة الشمري,سارة القحطاني,ريم العتيبي,هنوف الدوسري,لجين الزهراني,منيرة المطيري,أمل الحربي,غدير السهلي,وفاء الرشيدي,بسمة العنزي' | split: ',' -%}
+      {%- assign r_cities = 'الرياض,جدة,الدمام,مكة المكرمة,المدينة المنورة,الرياض,جدة,الطائف,الدمام,الرياض' | split: ',' -%}
+      {%- assign r_inits  = 'ن,س,ر,ه,ل,م,أ,غ,و,ب' | split: ',' -%}
+      {%- assign r_clrs   = '#1565C0,#0288D1,#1976D2,#1565C0,#0288D1,#1976D2,#1565C0,#0288D1,#1976D2,#1565C0' | split: ',' -%}
+      {%- assign r_texts  = 'سيروم رائع جداً! لاحظت فرقاً واضحاً في بشرتي خلال أسبوع. التجاعيد تقلصت وبشرتي أكثر إشراقة.,منتج ممتاز جربت كثيراً من السيرومات لكن هذا الأفضل. بشرتي أكثر نعومة وتماسكاً من أول استخدام.,كنت متشككة في البداية لكن النتائج تكلمت عن نفسها. بشرتي أكثر شباباً ونضارة. أنصح به بشدة!,توصيل سريع والمنتج أصلي 100%. لاحظت تحسناً ملحوظاً في مرونة بشرتي وتقلص التجاعيد.,ممتاز جداً! ملمس خفيف على البشرة ويمتص بسرعة. بشرتي الآن ناعمة كالحرير.,قرار الشراء كان الأفضل. بشرتي تحسنت بشكل لافت في أسبوعين. سأواصل الاستخدام.,منتج راقي جداً بثمن مناسب. رائحته خفيفة ومريحة والملمس خفيف. أعدت الطلب مرتين.,جربته بعد نصيحة صديقتي وما ندمت. الفرق في بشرتي واضح وكبير خلال أسبوعين فقط.,التوصيل سريع والمنتج رائع. بشرتي أصبحت أكثر توهجاً وشباباً. سأواصل الاستخدام بالتأكيد.,أفضل سيروم استخدمته حتى الآن. يمتص بسرعة ولا يترك أثراً دهنياً. بشرتي تغيرت للأفضل.' | split: ',' -%}
+      {%- for name in r_names -%}
+        <div class="bcp-rev-card bcp-anim bcp-d{{ forloop.index | modulo: 3 | plus: 1 }}">
+          <div class="bcp-rev-card__hd">
+            <div class="bcp-rev-card__av" style="background:linear-gradient(135deg,{{ r_clrs[forloop.index0] }},#42A5F5)">{{ r_inits[forloop.index0] }}</div>
+            <div><div class="bcp-rev-card__name">{{ name }}</div><div class="bcp-rev-card__city">📍 {{ r_cities[forloop.index0] }}</div></div>
+          </div>
+          <div class="bcp-rev-card__stars">★★★★★</div>
+          <div class="bcp-rev-card__txt">{{ r_texts[forloop.index0] }}</div>
+          <div class="bcp-rev-card__verified">✅ عملية شراء موثقة</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="bcp-section bcp-section--light">
+  <div class="bcp-container">
+    <div class="bcp-header bcp-anim">
+      <span class="bcp-label">الأسئلة الشائعة</span>
+      <h2 class="bcp-h2">هل لديكِ أسئلة؟</h2>
+    </div>
+    <div class="bcp-faq__list">
+      {%- assign fqs = 'هل السيروم مناسب لجميع أنواع البشرة؟,متى سألاحظ النتائج؟,هل يمكن استخدامه مع منتجات عناية أخرى؟,هل المنتج أصلي ومعتمد؟,ما هي طريقة الدفع المتاحة؟,هل التوصيل يصل لجميع مناطق المملكة؟,ما هي سياسة الاسترجاع؟,هل يصلح للاستخدام النهاري؟' | split: ',' -%}
+      {%- assign fas = 'نعم، السيروم مناسب لجميع أنواع البشرة بما فيها الحساسة. التركيبة خفيفة وغير مثيرة للحساسية.,تبدأ ملاحظة الفرق في الإشراقة والترطيب من أول أسبوع وتظهر النتائج الكاملة خلال 3-4 أسابيع من الاستخدام المنتظم.,نعم يمكن استخدامه مع منتجات العناية الأخرى. يُنصح بوضعه بعد التنظيف وقبل المرطب لامتصاص أفضل.,نعم منتجاتنا أصلية 100% ومستوردة من المصدر. نضمن جودة كل قطعة تصلك.,التوصيل بالدفع عند الاستلام (Cash on Delivery) فقط — تدفعين للمندوب عند استلام طلبك.,نعم نوصل لجميع مدن ومناطق المملكة العربية السعودية خلال 2-4 أيام عمل.,نقدم ضمان استرجاع كامل خلال 7 أيام من الاستلام للمنتج غير المستخدم وبحالته الأصلية.,نعم التركيبة خفيفة ومناسبة للاستخدام صباحاً ومساءً. يُنصح باستخدام واقٍ للشمس معه في الصباح.' | split: ',' -%}
+      {%- for q in fqs -%}
+        <div class="bcp-faq-item bcp-anim">
+          <button class="bcp-faq-item__btn" onclick="bcpFaq(this)">
+            <span>{{ q }}</span>
+            <span class="bcp-faq-item__icon">+</span>
+          </button>
+          <div class="bcp-faq-item__body"><div class="bcp-faq-item__inner">{{ fas[forloop.index0] }}</div></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="background:linear-gradient(135deg,#1565C0,#0288D1);padding:60px 20px;text-align:center">
+  <h2 style="color:#fff;font-size:clamp(22px,5vw,36px);font-weight:900;margin-bottom:12px" class="bcp-anim">استعيدي شباب بشرتك اليوم</h2>
+  <p style="color:rgba(255,255,255,.85);font-size:16px;margin-bottom:28px" class="bcp-anim bcp-d1">آلاف العميلات السعوديات يثقن بنا — انضمي إليهن الآن</p>
+  <button class="bcp-hero__cta bcp-anim bcp-d2" onclick="bcpScroll()">🛒 اطلبي الآن — الدفع عند الاستلام</button>
+</section>
+
+</div><!-- /bcp-page -->
+
+<!-- STICKY -->
+<div class="bcp-sticky" id="bcp-sticky">
+  <div><div class="bcp-sticky__price-lbl">السعر</div><div class="bcp-sticky__price-val" id="bcp-sticky-p">{{ product.variants[0].price | money_without_trailing_zeros }}</div></div>
+  <button class="bcp-sticky__btn" onclick="bcpScroll()">🛒 اطلبي الآن</button>
+</div>
+
+<script>
+(function(){
+  // Progress bar
+  var pb = document.getElementById('bcp-progress');
+  window.addEventListener('scroll',function(){
+    var max = document.body.scrollHeight - window.innerHeight;
+    if(pb && max > 0) pb.style.transform = 'scaleX('+(window.scrollY/max)+')';
+  },{passive:true});
+
+  // Scroll animations
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.bcp-anim').forEach(function(el){obs.observe(el);});
+
+  // Particles
+  var pc = document.getElementById('bcp-particles');
+  if(pc){for(var i=0;i<18;i++){var p=document.createElement('div');p.className='bcp-particle';p.style.cssText='right:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+Math.random()*10+'s;width:'+(2+Math.random()*4)+'px;height:'+(2+Math.random()*4)+'px;opacity:'+(0.2+Math.random()*0.4);pc.appendChild(p);}}
+
+  // Toast
+  var toasts = ['سارة من الرياض','نورة من جدة','ريم من الدمام','هنوف من مكة','لجين من المدينة','منيرة من الطائف'];
+  var tEl = document.getElementById('bcp-toast');
+  var tNm = document.getElementById('bcp-toast-name');
+  var ti = 0;
+  function showToast(){
+    if(!tEl) return;
+    tNm.textContent = toasts[ti % toasts.length]; ti++;
+    tEl.classList.add('show');
+    setTimeout(function(){tEl.classList.remove('show');},3500);
+    setTimeout(showToast, 8000+Math.random()*6000);
+  }
+  setTimeout(showToast, 3000);
+
+  // Viewers
+  var vEl = document.getElementById('bcp-viewers');
+  if(vEl){setInterval(function(){var c=parseInt(vEl.textContent);vEl.textContent=Math.max(12,Math.min(28,c+(Math.random()>.5?1:-1)));},4000);}
+
+  // Countdown
+  var end = Date.now()+(5*3600+47*60+33)*1000;
+  function cd(){
+    var d=Math.max(0,end-Date.now());
+    var h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);
+    var hEl=document.getElementById('bcp-cdh'),mEl=document.getElementById('bcp-cdm'),sEl=document.getElementById('bcp-cds');
+    if(hEl)hEl.textContent=String(h).padStart(2,'0');
+    if(mEl)mEl.textContent=String(m).padStart(2,'0');
+    if(sEl)sEl.textContent=String(s).padStart(2,'0');
+  }
+  setInterval(cd,1000); cd();
+
+  // Sticky hide when in form
+  var sticky=document.getElementById('bcp-sticky'),ord=document.getElementById('bcp-order');
+  if(sticky&&ord){window.addEventListener('scroll',function(){var r=ord.getBoundingClientRect();sticky.style.display=r.top>window.innerHeight?'flex':'none';},{passive:true});}
+
+  // Ripple
+  document.querySelectorAll('.bcp-hero__cta,.bcp-sticky__btn').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      var r=document.createElement('span');r.className='bcp-ripple-dot';
+      var rect=btn.getBoundingClientRect();
+      r.style.left=(e.clientX-rect.left)+'px';r.style.top=(e.clientY-rect.top)+'px';
+      btn.appendChild(r);setTimeout(function(){r.remove();},700);
+    });
+  });
+})();
+
+function bcpOffer(card){
+  document.querySelectorAll('.bcp-ocard').forEach(function(c){c.classList.remove('active');});
+  card.classList.add('active');
+  var vid=card.dataset.vid, price=card.dataset.price, title=card.dataset.title;
+  var inp=document.getElementById('bcp-vid');
+  if(inp) inp.value=vid;
+  var st=document.getElementById('bcp-sel-title'),sp=document.getElementById('bcp-sel-price'),sk=document.getElementById('bcp-sticky-p');
+  if(st) st.textContent=title;
+  if(sp) sp.textContent=price;
+  if(sk) sk.textContent=price;
+}
+
+function bcpScroll(){
+  var el=document.getElementById('bcp-order');
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function bcpFaq(btn){
+  var item=btn.closest('.bcp-faq-item');
+  var open=item.classList.contains('open');
+  document.querySelectorAll('.bcp-faq-item.open').forEach(function(i){i.classList.remove('open');});
+  if(!open) item.classList.add('open');
+}
+
+function bcpLB(src){
+  var lb=document.getElementById('bcp-lb'),img=document.getElementById('bcp-lb-img');
+  if(lb&&img){img.src=src;lb.classList.add('open');}
+}
+</script>
+
+{% schema %}
+{
+  "name": "Blue Copper Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Blue Copper Landing" }]
+}
+{% endschema %}

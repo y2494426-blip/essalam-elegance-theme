@@ -1,0 +1,49 @@
+{% if section.settings.show_announcement %}
+<div class="announcement-bar" role="region" aria-label="Annonce">
+  <div class="announcement-bar__content page-width">
+    {%- if section.settings.announcement_text != blank -%}
+      <p class="announcement-bar__message h5">
+        {%- if section.settings.announcement_link != blank -%}
+          <a href="{{ section.settings.announcement_link }}" class="announcement-bar__link link link--text">{{ section.settings.announcement_text | escape }}</a>
+        {%- else -%}
+          {{ section.settings.announcement_text | escape }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Barre d'annonce",
+  "class": "announcement-bar-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "default": true,
+      "label": "Afficher la barre"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "default": "🚚 Livraison rapide partout au Maroc — Paiement à la livraison (COD) disponible",
+      "label": "Texte de l'annonce"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Lien de l'annonce"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barre d'annonce"
+    }
+  ]
+}
+{% endschema %}

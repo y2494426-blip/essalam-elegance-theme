@@ -1,0 +1,1369 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{{ 'https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap' | stylesheet_tag }}
+<script type="application/json" id="ft-variants-json">{{ product.variants | json }}</script>
+
+<div class="ft-page" dir="rtl" lang="ar">
+<style>
+/* ============================================================
+   FOUNTAIN LANDING — LUXURY COD PAGE
+   Saudi Arabia | Arabic RTL | Shopify OS 2.0
+   ============================================================ */
+:root{
+  --ft-bg:#FAF8F5;
+  --ft-primary:#111111;
+  --ft-accent:#C9A86A;
+  --ft-accent-lt:#E2C98A;
+  --ft-accent-dk:#9A7A3C;
+  --ft-secondary:#7D7D7D;
+  --ft-white:#FFFFFF;
+  --ft-card:#FFFFFF;
+  --ft-border:rgba(201,168,106,0.16);
+  --ft-line:rgba(17,17,17,0.08);
+  --ft-radius:24px;
+  --ft-radius-sm:16px;
+  --ft-shadow:0 4px 24px rgba(17,17,17,0.06);
+  --ft-shadow-lg:0 16px 56px rgba(17,17,17,0.10);
+  --ft-shadow-xl:0 32px 80px rgba(17,17,17,0.14);
+  --ft-glow:0 0 60px rgba(201,168,106,0.20);
+}
+.ft-page{
+  font-family:'Cairo',sans-serif;
+  background:var(--ft-bg);
+  color:var(--ft-primary);
+  overflow-x:hidden;
+  line-height:1.8;
+}
+.ft-page *{box-sizing:border-box;margin:0;padding:0;}
+.ft-page img{max-width:100%;display:block;}
+.ft-wrap{max-width:1160px;margin:0 auto;padding:0 24px;}
+.ft-section{padding:100px 0;}
+.ft-section--tight{padding:64px 0;}
+.ft-section--dark{background:#111111;}
+.ft-section--cream{background:linear-gradient(160deg,#FDF9F0,#FAF4E4);}
+.ft-center{text-align:center;}
+
+/* ---- Typography ---- */
+.ft-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--ft-accent-dk);background:rgba(201,168,106,0.10);
+  border:1px solid rgba(201,168,106,0.28);
+  padding:6px 20px;border-radius:999px;margin-bottom:18px;
+}
+.ft-h1{font-size:clamp(34px,5.5vw,68px);font-weight:900;line-height:1.15;letter-spacing:-1px;}
+.ft-h2{font-size:clamp(24px,3.8vw,44px);font-weight:800;line-height:1.25;letter-spacing:-.5px;}
+.ft-h3{font-size:19px;font-weight:800;}
+.ft-lead{font-size:17px;color:var(--ft-secondary);line-height:1.9;max-width:580px;}
+.ft-accent-text{color:var(--ft-accent-dk);}
+
+/* ---- Animations ---- */
+.ft-fade{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s ease;}
+.ft-fade.ft-in{opacity:1;transform:none;}
+.ft-fade-l{opacity:0;transform:translateX(32px);transition:opacity .75s ease,transform .75s ease;}
+.ft-fade-l.ft-in{opacity:1;transform:none;}
+.ft-fade-r{opacity:0;transform:translateX(-32px);transition:opacity .75s ease,transform .75s ease;}
+.ft-fade-r.ft-in{opacity:1;transform:none;}
+.ft-scale{opacity:0;transform:scale(.92);transition:opacity .65s ease,transform .65s ease;}
+.ft-scale.ft-in{opacity:1;transform:none;}
+@keyframes ftFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes ftFloatSlow{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-18px) rotate(2deg);}}
+@keyframes ftPulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+@keyframes ftWater{0%{transform:translateY(0) scaleX(1);}50%{transform:translateY(4px) scaleX(1.04);}100%{transform:translateY(0) scaleX(1);}}
+@keyframes ftRipple{0%{transform:scale(0);opacity:.6;}100%{transform:scale(2.4);opacity:0;}}
+@keyframes ftShimmer{0%{background-position:-200% center;}100%{background-position:200% center;}}
+@keyframes ftGlow{0%,100%{box-shadow:0 0 20px rgba(201,168,106,0.15);}50%{box-shadow:0 0 50px rgba(201,168,106,0.35);}}
+
+/* ============================================================
+   STICKY HEADER
+   ============================================================ */
+.ft-header{
+  position:fixed;top:0;inset-inline:0;z-index:1000;
+  background:rgba(250,248,245,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--ft-line);
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .3s ease,box-shadow .3s ease;
+}
+.ft-header.scrolled{
+  background:rgba(250,248,245,0.96);
+  box-shadow:0 4px 20px rgba(17,17,17,0.07);
+}
+.ft-logo{
+  font-size:20px;font-weight:800;letter-spacing:-0.5px;color:var(--ft-primary);
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+}
+.ft-logo-dot{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--ft-accent-dk),var(--ft-accent));
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.ft-nav-cta{
+  background:var(--ft-primary);color:var(--ft-white);
+  border:none;border-radius:12px;padding:10px 22px;
+  font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .2s,transform .15s;
+  text-decoration:none;display:inline-block;
+}
+.ft-nav-cta:hover{background:#333;transform:translateY(-1px);}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.ft-hero{
+  padding:140px 0 80px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#FEFCF8 0%,#FAF5EB 45%,#F5EDDB 100%);
+}
+.ft-hero-orb{
+  position:absolute;pointer-events:none;border-radius:50%;
+  filter:blur(60px);opacity:.55;
+}
+.ft-hero-orb--1{
+  width:500px;height:500px;top:-100px;left:-150px;
+  background:radial-gradient(circle,rgba(201,168,106,0.30),transparent 70%);
+}
+.ft-hero-orb--2{
+  width:350px;height:350px;bottom:-80px;right:-80px;
+  background:radial-gradient(circle,rgba(201,168,106,0.20),transparent 70%);
+}
+.ft-hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;
+  position:relative;z-index:1;
+}
+.ft-hero-media{position:relative;}
+.ft-hero-img-outer{
+  position:relative;border-radius:32px;overflow:hidden;
+  box-shadow:var(--ft-shadow-xl),var(--ft-glow);
+}
+.ft-hero-img-outer img{width:100%;height:auto;display:block;}
+.ft-hero-water{
+  position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:linear-gradient(transparent,rgba(201,168,106,0.10));
+  animation:ftWater 3s ease-in-out infinite;
+}
+.ft-float-tag{
+  position:absolute;
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(16px);
+  border:1px solid var(--ft-border);border-radius:14px;
+  padding:10px 16px;font-size:12px;font-weight:700;
+  box-shadow:var(--ft-shadow);
+  display:flex;align-items:center;gap:8px;
+  animation:ftFloat 3.5s ease-in-out infinite;
+}
+.ft-float-tag--1{top:6%;left:-20px;animation-delay:.4s;}
+.ft-float-tag--2{bottom:12%;right:-20px;animation-delay:1.3s;}
+.ft-float-tag--3{top:48%;left:-24px;animation-delay:.9s;}
+
+.ft-hero-copy{padding-top:16px;}
+.ft-hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.ft-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;
+  background:rgba(255,255,255,0.90);backdrop-filter:blur(10px);
+  border:1px solid var(--ft-border);border-radius:999px;padding:6px 14px;
+  box-shadow:0 2px 8px rgba(17,17,17,0.05);
+}
+.ft-badge--accent{background:var(--ft-accent);color:#fff;border-color:var(--ft-accent);}
+
+.ft-hero-sub{font-size:17px;color:var(--ft-secondary);margin:18px 0 26px;line-height:1.85;max-width:480px;}
+.ft-price-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
+.ft-price-current{font-size:44px;font-weight:900;letter-spacing:-1.5px;}
+.ft-price-old{font-size:20px;color:var(--ft-secondary);text-decoration:line-through;}
+.ft-price-save{
+  font-size:13px;font-weight:800;background:var(--ft-accent);
+  color:#fff;padding:5px 14px;border-radius:999px;
+}
+.ft-price-note{font-size:13px;color:var(--ft-secondary);margin-bottom:28px;}
+
+/* Hero form */
+.ft-hero-form{
+  background:rgba(255,255,255,0.85);backdrop-filter:blur(24px);
+  border:1px solid var(--ft-border);border-radius:var(--ft-radius);
+  padding:28px 26px;
+  box-shadow:var(--ft-shadow-lg);
+  margin-top:8px;
+}
+.ft-form-title{font-size:16px;font-weight:800;text-align:center;margin-bottom:5px;}
+.ft-form-sub{font-size:12px;color:var(--ft-secondary);text-align:center;margin-bottom:22px;}
+
+/* Variant pills */
+.ft-var-sec{margin-bottom:16px;}
+.ft-var-lbl{font-size:12.5px;font-weight:700;color:var(--ft-secondary);margin-bottom:8px;display:block;}
+.ft-var-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.ft-var-pill input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+.ft-var-pill span{
+  display:block;border:1.5px solid #ddd;border-radius:10px;
+  padding:7px 17px;font-size:13px;font-weight:600;cursor:pointer;
+  color:#555;background:#fafafa;transition:all .2s;font-family:'Cairo',sans-serif;
+}
+.ft-var-pill input:checked+span{border-color:var(--ft-accent);color:var(--ft-accent-dk);background:#FFF9EE;}
+
+/* Qty */
+.ft-qty-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.ft-qty-lbl{font-size:12.5px;font-weight:700;color:var(--ft-secondary);}
+.ft-qty-box{display:flex;align-items:center;border:1.5px solid #e0dbd2;border-radius:10px;overflow:hidden;}
+.ft-qty-btn{width:40px;height:40px;background:#f8f5f0;border:none;font-size:22px;font-weight:700;cursor:pointer;color:var(--ft-primary);font-family:'Cairo',sans-serif;display:flex;align-items:center;justify-content:center;}
+.ft-qty-btn:hover{background:#f0ebe2;}
+.ft-qty-inp{width:48px;height:40px;border:none;border-right:1.5px solid #e0dbd2;border-left:1.5px solid #e0dbd2;text-align:center;font-size:16px;font-weight:700;font-family:'Cairo',sans-serif;background:#fff;}
+
+/* Submit button */
+.ft-submit{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--ft-primary);color:#fff;border:none;
+  border-radius:var(--ft-radius-sm);padding:18px 24px;
+  font-family:'Cairo',sans-serif;font-size:17px;font-weight:900;cursor:pointer;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 28px rgba(17,17,17,0.25);
+  transition:background .2s,transform .15s,box-shadow .2s;
+}
+.ft-submit:hover{background:#222;transform:translateY(-2px);box-shadow:0 12px 36px rgba(17,17,17,0.30);}
+.ft-submit:active{transform:translateY(0);}
+.ft-submit-ripple{
+  position:absolute;border-radius:50%;background:rgba(255,255,255,0.22);
+  pointer-events:none;animation:ftRipple .6s ease-out forwards;
+}
+.ft-secure{text-align:center;font-size:11.5px;color:var(--ft-secondary);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px;}
+
+/* ============================================================
+   SOCIAL PROOF COUNTER
+   ============================================================ */
+.ft-proof{
+  background:var(--ft-primary);padding:48px 0;
+}
+.ft-proof-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  divide-x:1px solid rgba(255,255,255,0.10);
+}
+.ft-proof-item{
+  text-align:center;padding:20px;
+  border-right:1px solid rgba(255,255,255,0.10);
+}
+.ft-proof-item:last-child{border-right:none;}
+.ft-proof-num{
+  font-size:40px;font-weight:900;color:var(--ft-accent-lt);
+  line-height:1;display:block;margin-bottom:6px;
+  background:linear-gradient(135deg,var(--ft-accent-lt),var(--ft-accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ft-proof-lbl{font-size:13.5px;color:rgba(255,255,255,0.65);}
+
+/* ============================================================
+   BENEFITS
+   ============================================================ */
+.ft-benefits-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px;
+}
+.ft-benefit-card{
+  background:var(--ft-card);border-radius:var(--ft-radius);
+  padding:34px 26px;border:1px solid var(--ft-border);
+  box-shadow:var(--ft-shadow);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.ft-benefit-card:hover{transform:translateY(-7px);box-shadow:var(--ft-shadow-lg);}
+.ft-benefit-icon{
+  width:58px;height:58px;border-radius:18px;
+  background:linear-gradient(135deg,#FFF8E6,#FDECC8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin-bottom:18px;
+  box-shadow:0 4px 16px rgba(201,168,106,0.18);
+}
+.ft-benefit-card h3{font-size:17px;font-weight:800;margin-bottom:8px;}
+.ft-benefit-card p{font-size:14px;color:var(--ft-secondary);line-height:1.8;}
+
+/* ============================================================
+   LIFESTYLE
+   ============================================================ */
+.ft-lifestyle-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px;
+}
+.ft-lifestyle-card{
+  border-radius:var(--ft-radius);overflow:hidden;
+  position:relative;cursor:pointer;
+  box-shadow:var(--ft-shadow);
+  transition:transform .35s ease,box-shadow .35s ease;
+}
+.ft-lifestyle-card:hover{transform:scale(1.03);box-shadow:var(--ft-shadow-xl);}
+.ft-lifestyle-card:first-child{grid-row:span 2;}
+.ft-lifestyle-img{
+  width:100%;height:220px;object-fit:cover;display:block;
+  transition:transform .5s ease;
+}
+.ft-lifestyle-card:first-child .ft-lifestyle-img{height:100%;min-height:460px;}
+.ft-lifestyle-card:hover .ft-lifestyle-img{transform:scale(1.06);}
+.ft-lifestyle-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(17,17,17,0.65) 0%,transparent 55%);
+  display:flex;align-items:flex-end;padding:22px;
+}
+.ft-lifestyle-label{
+  color:#fff;font-size:16px;font-weight:800;
+  text-shadow:0 2px 8px rgba(0,0,0,0.40);
+}
+
+/* ============================================================
+   BEFORE / AFTER
+   ============================================================ */
+.ft-ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:56px;}
+.ft-ba-col{border-radius:var(--ft-radius);overflow:hidden;box-shadow:var(--ft-shadow-lg);}
+.ft-ba-col--before{background:linear-gradient(160deg,#F0EDE8,#E8E3DC);}
+.ft-ba-col--after{background:linear-gradient(160deg,#FDF9F0,#FAF3DC);}
+.ft-ba-header{padding:22px 24px;display:flex;align-items:center;gap:10px;}
+.ft-ba-header h4{font-size:15px;font-weight:800;}
+.ft-ba-tag{
+  font-size:12px;font-weight:800;padding:4px 12px;border-radius:999px;
+}
+.ft-ba-tag--before{background:#EBDDD5;color:#6B4A38;}
+.ft-ba-tag--after{background:var(--ft-accent);color:#fff;}
+.ft-ba-list{padding:0 24px 28px;list-style:none;display:flex;flex-direction:column;gap:12px;}
+.ft-ba-list li{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;}
+
+/* ============================================================
+   WHY CHOOSE US
+   ============================================================ */
+.ft-why-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:56px;}
+.ft-why-card{
+  background:var(--ft-card);border-radius:var(--ft-radius-sm);
+  padding:26px 16px;text-align:center;
+  border:1px solid var(--ft-border);box-shadow:var(--ft-shadow);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.ft-why-card:hover{transform:translateY(-5px);box-shadow:var(--ft-shadow-lg);}
+.ft-why-icon{font-size:30px;margin-bottom:12px;}
+.ft-why-card h4{font-size:13.5px;font-weight:800;margin-bottom:4px;}
+.ft-why-card p{font-size:12px;color:var(--ft-secondary);}
+
+/* ============================================================
+   PRODUCT FEATURES
+   ============================================================ */
+.ft-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px;}
+.ft-feature-card{
+  background:var(--ft-card);border-radius:var(--ft-radius);
+  padding:28px 22px;border:1px solid var(--ft-border);
+  box-shadow:var(--ft-shadow);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.ft-feature-card:hover{transform:translateY(-5px);box-shadow:var(--ft-shadow-lg);}
+.ft-feature-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,#FFF8E6,#FDECC8);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  margin-bottom:14px;
+}
+.ft-feature-card h4{font-size:14.5px;font-weight:800;margin-bottom:6px;}
+.ft-feature-card p{font-size:13px;color:var(--ft-secondary);line-height:1.75;}
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+.ft-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px;}
+.ft-gallery-item{
+  border-radius:var(--ft-radius-sm);overflow:hidden;
+  cursor:zoom-in;box-shadow:var(--ft-shadow);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.ft-gallery-item:hover{transform:scale(1.04);box-shadow:var(--ft-shadow-lg);}
+.ft-gallery-item img{width:100%;height:210px;object-fit:cover;transition:transform .5s ease;}
+.ft-gallery-item:hover img{transform:scale(1.08);}
+/* Lightbox */
+.ft-lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;
+  display:none;align-items:center;justify-content:center;padding:30px;
+}
+.ft-lightbox.ft-open{display:flex;}
+.ft-lightbox img{max-width:90vw;max-height:85vh;border-radius:16px;box-shadow:0 40px 100px rgba(0,0,0,0.60);}
+.ft-lightbox-close{
+  position:absolute;top:24px;left:24px;color:#fff;
+  font-size:34px;background:none;border:none;cursor:pointer;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;
+}
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+.ft-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;position:relative;}
+.ft-steps::before{
+  content:'';position:absolute;top:48px;right:16.67%;left:16.67%;
+  height:2px;background:linear-gradient(90deg,transparent,var(--ft-accent),transparent);
+}
+.ft-step{text-align:center;padding:0 20px;position:relative;}
+.ft-step-circle{
+  width:96px;height:96px;border-radius:50%;margin:0 auto 24px;
+  background:linear-gradient(135deg,var(--ft-primary),#333);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;position:relative;z-index:1;
+  box-shadow:0 8px 30px rgba(17,17,17,0.20),var(--ft-glow);
+  animation:ftGlow 3s ease-in-out infinite;
+}
+.ft-step-circle:nth-child(1){animation-delay:.3s;}
+.ft-step h3{font-size:18px;font-weight:800;margin-bottom:10px;}
+.ft-step p{font-size:14px;color:var(--ft-secondary);line-height:1.85;}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.ft-reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;}
+.ft-review-card{
+  background:var(--ft-card);border-radius:var(--ft-radius);
+  padding:26px;border:1px solid var(--ft-border);
+  box-shadow:var(--ft-shadow);
+  transition:transform .3s ease;
+}
+.ft-review-card:hover{transform:translateY(-5px);}
+.ft-review-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.ft-reviewer-avatar{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--ft-accent-dk),var(--ft-accent));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;font-weight:800;
+}
+.ft-reviewer-info strong{display:block;font-size:14px;font-weight:800;}
+.ft-reviewer-info span{font-size:12px;color:var(--ft-secondary);}
+.ft-stars{color:var(--ft-accent);letter-spacing:2px;font-size:13px;margin-bottom:8px;}
+.ft-review-text{font-size:13.5px;line-height:1.85;color:#3A3630;}
+.ft-verified{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--ft-accent-dk);font-weight:700;margin-top:10px;}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.ft-faq{max-width:820px;margin:56px auto 0;}
+.ft-faq-item{
+  background:var(--ft-card);border-radius:var(--ft-radius-sm);
+  border:1px solid var(--ft-border);box-shadow:var(--ft-shadow);
+  margin-bottom:10px;overflow:hidden;
+}
+.ft-faq-q{
+  width:100%;text-align:right;background:none;border:none;
+  padding:20px 24px;font-family:'Cairo',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--ft-primary);
+}
+.ft-faq-icon{color:var(--ft-accent-dk);font-size:22px;transition:transform .3s ease;flex-shrink:0;}
+.ft-faq-item.ft-open .ft-faq-icon{transform:rotate(45deg);}
+.ft-faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease;padding:0 24px;}
+.ft-faq-item.ft-open .ft-faq-a{max-height:260px;padding-bottom:20px;}
+.ft-faq-a p{font-size:14px;color:var(--ft-secondary);line-height:1.85;}
+
+/* ============================================================
+   OFFER SECTION
+   ============================================================ */
+.ft-offer{
+  background:linear-gradient(135deg,#111111 0%,#1C1A14 50%,#111111 100%);
+  border-radius:var(--ft-radius);padding:60px 44px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.ft-offer::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,106,0.18),transparent 65%);
+  pointer-events:none;
+}
+.ft-offer h2{font-size:clamp(24px,4vw,40px);color:#fff;margin-bottom:12px;position:relative;z-index:1;}
+.ft-offer p{color:rgba(255,255,255,0.65);margin-bottom:36px;position:relative;z-index:1;}
+.ft-offer-prices{
+  display:inline-flex;align-items:baseline;gap:16px;
+  margin-bottom:30px;position:relative;z-index:1;
+}
+.ft-offer-price-new{font-size:56px;font-weight:900;color:var(--ft-accent-lt);letter-spacing:-2px;}
+.ft-offer-price-old{font-size:24px;color:rgba(255,255,255,0.40);text-decoration:line-through;}
+.ft-offer-badge{
+  background:var(--ft-accent);color:#fff;font-size:14px;font-weight:800;
+  padding:6px 18px;border-radius:999px;margin-bottom:28px;
+  display:inline-block;position:relative;z-index:1;
+}
+.ft-offer-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,var(--ft-accent-dk),var(--ft-accent-lt));
+  color:#fff;border:none;border-radius:var(--ft-radius-sm);
+  padding:20px 52px;font-size:18px;font-weight:900;
+  font-family:'Cairo',sans-serif;cursor:pointer;
+  box-shadow:0 10px 40px rgba(201,168,106,0.40);
+  transition:transform .25s ease,box-shadow .25s ease;
+  position:relative;z-index:1;text-decoration:none;
+}
+.ft-offer-cta:hover{transform:translateY(-3px);box-shadow:0 16px 52px rgba(201,168,106,0.50);}
+
+/* ============================================================
+   MAIN COD FORM SECTION
+   ============================================================ */
+.ft-form-section{background:linear-gradient(160deg,#FDF9F0,#FAF3E0);}
+.ft-form-wrap{
+  max-width:680px;margin:56px auto 0;
+  background:var(--ft-white);border:1px solid var(--ft-border);
+  border-radius:var(--ft-radius);box-shadow:var(--ft-shadow-xl);
+  padding:48px;
+}
+.ft-form-wrap .ft-form-title{font-size:22px;margin-bottom:8px;}
+.ft-form-wrap .ft-form-sub{font-size:14.5px;margin-bottom:28px;}
+.ft-trust-row-sm{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:22px;}
+.ft-trust-row-sm li{list-style:none;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ft-secondary);}
+
+/* ============================================================
+   TRUST SECTION
+   ============================================================ */
+.ft-trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px;}
+.ft-trust-card{
+  background:var(--ft-card);border-radius:var(--ft-radius-sm);
+  padding:26px 18px;text-align:center;border:1px solid var(--ft-border);
+  box-shadow:var(--ft-shadow);
+}
+.ft-trust-icon{font-size:32px;margin-bottom:10px;}
+.ft-trust-card h4{font-size:14px;font-weight:800;margin-bottom:4px;}
+.ft-trust-card p{font-size:12.5px;color:var(--ft-secondary);}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.ft-footer{
+  background:var(--ft-primary);padding:44px 0;
+  text-align:center;color:rgba(255,255,255,0.50);font-size:13px;
+}
+.ft-footer-logo{
+  font-size:22px;font-weight:800;color:#fff;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+
+/* ============================================================
+   STICKY MOBILE CTA
+   ============================================================ */
+.ft-sticky-bar{
+  position:fixed;bottom:0;inset-inline:0;z-index:998;
+  background:rgba(250,248,245,0.96);backdrop-filter:blur(20px);
+  box-shadow:0 -8px 32px rgba(17,17,17,0.10);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  transform:translateY(120%);transition:transform .35s ease;
+}
+.ft-sticky-bar.ft-show{transform:translateY(0);}
+.ft-sticky-info{display:flex;align-items:center;gap:12px;min-width:0;}
+.ft-sticky-thumb{width:46px;height:46px;object-fit:cover;border-radius:12px;border:1px solid var(--ft-border);flex-shrink:0;}
+.ft-sticky-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.ft-sticky-price{font-size:15px;font-weight:900;color:var(--ft-accent-dk);}
+.ft-sticky-btn{
+  background:var(--ft-primary);color:#fff;border:none;border-radius:12px;
+  padding:13px 22px;font-family:'Cairo',sans-serif;font-weight:800;font-size:14px;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 16px rgba(17,17,17,0.20);
+}
+.ft-sticky-btn:hover{background:#333;}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:1024px){
+  .ft-benefits-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-lifestyle-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-lifestyle-card:first-child{grid-row:auto;}
+  .ft-lifestyle-card:first-child .ft-lifestyle-img{min-height:220px;}
+  .ft-why-grid{grid-template-columns:repeat(3,1fr);}
+  .ft-features-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-gallery{grid-template-columns:repeat(3,1fr);}
+  .ft-reviews-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-trust-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:768px){
+  .ft-header{padding:14px 18px;}
+  .ft-hero{padding:110px 0 60px;}
+  .ft-hero-grid{grid-template-columns:1fr;gap:36px;}
+  .ft-hero-media{order:-1;}
+  .ft-float-tag--1,.ft-float-tag--2,.ft-float-tag--3{display:none;}
+  .ft-section{padding:64px 0;}
+  .ft-proof-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-benefits-grid{grid-template-columns:1fr;}
+  .ft-lifestyle-grid{grid-template-columns:1fr;}
+  .ft-ba-grid{grid-template-columns:1fr;}
+  .ft-why-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-features-grid{grid-template-columns:1fr 1fr;}
+  .ft-gallery{grid-template-columns:repeat(2,1fr);}
+  .ft-steps{grid-template-columns:1fr;}
+  .ft-steps::before{display:none;}
+  .ft-reviews-grid{grid-template-columns:1fr;}
+  .ft-trust-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-form-wrap{padding:28px 20px;}
+  .ft-offer{padding:36px 22px;}
+}
+@media(max-width:480px){
+  .ft-h1{font-size:30px;}
+  .ft-h2{font-size:22px;}
+  .ft-why-grid{grid-template-columns:repeat(2,1fr);}
+  .ft-features-grid{grid-template-columns:1fr;}
+  .ft-gallery{grid-template-columns:repeat(2,1fr);}
+  .ft-hero-form{padding:20px 16px;}
+  .ft-proof-grid{grid-template-columns:repeat(2,1fr);}
+  body{padding-bottom:80px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .ft-fade,.ft-fade-l,.ft-fade-r,.ft-scale{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;}
+}
+</style>
+
+<!-- ==================== STICKY HEADER ==================== -->
+<header class="ft-header" id="ftHeader">
+  <a href="#ft-top" class="ft-logo">
+    <div class="ft-logo-dot">💧</div>
+    <span>{{ shop.name | default: 'نافورة' }}</span>
+  </a>
+  <button type="button" class="ft-nav-cta" onclick="document.getElementById('ft-order-form').scrollIntoView({behavior:'smooth'});">
+    اطلب الآن
+  </button>
+</header>
+
+<!-- ==================== HERO ==================== -->
+<section class="ft-hero" id="ft-top">
+  <div class="ft-hero-orb ft-hero-orb--1"></div>
+  <div class="ft-hero-orb ft-hero-orb--2"></div>
+  <div class="ft-wrap ft-hero-grid">
+
+    <!-- Image -->
+    <div class="ft-hero-media ft-fade-r">
+      <div class="ft-hero-img-outer">
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 1000 }}"
+               loading="eager" fetchpriority="high"
+               width="1000" height="1000"
+               alt="{{ product.featured_image.alt | default: product.title }}">
+        {% else %}
+          <div style="background:linear-gradient(135deg,#F5EDD8,#E8DFC8);height:560px;display:flex;align-items:center;justify-content:center;font-size:80px;">💧</div>
+        {% endif %}
+        <div class="ft-hero-water"></div>
+      </div>
+      <div class="ft-float-tag ft-float-tag--1">💧 صوت المياه المريح</div>
+      <div class="ft-float-tag ft-float-tag--2">✨ إضاءة LED دافئة</div>
+      <div class="ft-float-tag ft-float-tag--3">🪨 أحجار طبيعية</div>
+    </div>
+
+    <!-- Copy + Form -->
+    <div class="ft-hero-copy ft-fade">
+      <span class="ft-eyebrow">نافورة مكتبية فاخرة</span>
+
+      <h1 class="ft-h1">
+        هدوء الطبيعة<br>
+        <span class="ft-accent-text">في غرفتك</span>
+      </h1>
+
+      <p class="ft-hero-sub">
+        نافورة شلالات طاولية مع أحجار طبيعية وإضاءة LED دافئة — تحوّل أي مكان إلى واحة من الاسترخاء والأناقة.
+      </p>
+
+      <div class="ft-price-row">
+        <span class="ft-price-current">{% if product.price %}{{ product.price | money }}{% else %}249 ر.س{% endif %}</span>
+        <span class="ft-price-old">{% if product.compare_at_price > product.price %}{{ product.compare_at_price | money }}{% else %}399 ر.س{% endif %}</span>
+        <span class="ft-price-save">وفّر 38%</span>
+      </div>
+      <p class="ft-price-note">السعر شامل الشحن المجاني لجميع مدن المملكة</p>
+
+      <div class="ft-hero-badges">
+        <div class="ft-badge ft-badge--accent">💵 الدفع عند الاستلام</div>
+        <div class="ft-badge">🚚 شحن مجاني</div>
+        <div class="ft-badge">⭐ 4.9/5 — +3200 تقييم</div>
+        <div class="ft-badge">🇸🇦 توصيل للمملكة</div>
+      </div>
+
+      <!-- EasySell COD Form -->
+      <div class="ft-hero-form" id="ft-order-form">
+        <p class="ft-form-title">🛒 اطلب الآن — الدفع عند الاستلام</p>
+        <p class="ft-form-sub">أدخل طلبك وسيتصل بك فريقنا لتأكيد الشحن</p>
+
+        {%- form 'product', product, id: 'ft-product-form', novalidate: true -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}" id="ft-variant-id">
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="ft-var-sec">
+                <span class="ft-var-lbl">{{ option.name }}</span>
+                <div class="ft-var-pills">
+                  {%- for value in option.values -%}
+                    <label class="ft-var-pill">
+                      <input type="radio" name="{{ option.name }}" value="{{ value | escape }}"
+                        {% if option.selected_value == value %}checked{% endif %}>
+                      <span>{{ value }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <div class="ft-qty-row">
+            <span class="ft-qty-lbl">الكمية:</span>
+            <div class="ft-qty-box">
+              <button type="button" class="ft-qty-btn" onclick="var q=document.getElementById('ft-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+              <input type="number" id="ft-qty" name="quantity" value="1" min="1" class="ft-qty-inp" readonly>
+              <button type="button" class="ft-qty-btn" onclick="var q=document.getElementById('ft-qty');q.value=+q.value+1;">+</button>
+            </div>
+          </div>
+
+          {% content_for 'blocks' %}
+
+          <button type="submit" name="add" class="ft-submit" id="ft-submit">
+            🛒 اطلب الآن — الدفع عند الاستلام
+          </button>
+        {%- endform -%}
+
+        <p class="ft-secure">🔒 طلبك آمن 100% — لا حاجة لبطاقة بنكية</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== SOCIAL PROOF ==================== -->
+<div class="ft-proof">
+  <div class="ft-wrap">
+    <div class="ft-proof-grid">
+      <div class="ft-proof-item ft-fade">
+        <span class="ft-proof-num" data-count="10000">0</span>
+        <div class="ft-proof-lbl">عميل سعيد</div>
+      </div>
+      <div class="ft-proof-item ft-fade">
+        <span class="ft-proof-num" data-count="8500">0</span>
+        <div class="ft-proof-lbl">طلب تم توصيله</div>
+      </div>
+      <div class="ft-proof-item ft-fade">
+        <span class="ft-proof-num" data-count="98">0</span>
+        <div class="ft-proof-lbl">% رضا العملاء</div>
+      </div>
+      <div class="ft-proof-item ft-fade">
+        <span class="ft-proof-num" data-count="4">0</span>
+        <div class="ft-proof-lbl">⭐ تقييم / 5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BENEFITS ==================== -->
+<section class="ft-section">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">لماذا هي مختلفة</span>
+      <h2 class="ft-h2">٦ فوائد تجعل حياتك أجمل</h2>
+      <p class="ft-lead" style="margin:14px auto 0;">أكثر من مجرد ديكور — تجربة حسية كاملة في منزلك أو مكتبك.</p>
+    </div>
+    <div class="ft-benefits-grid">
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">🧘</div>
+        <h3>أجواء استرخاء حقيقية</h3>
+        <p>صوت المياه المتدفقة يهدئ الأعصاب ويقلل التوتر اليومي بشكل فعّال ومثبت علمياً.</p>
+      </div>
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">🏡</div>
+        <h3>ديكور أنيق وفاخر</h3>
+        <p>تصميم عصري راقٍ يرفع من مستوى أي غرفة ويترك انطباعاً لا يُنسى لدى الزوار.</p>
+      </div>
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">🔇</div>
+        <h3>تدفق مياه هادئ</h3>
+        <p>مضخة صامتة بالكامل — تشعر بالماء دون أي ضجيج مزعج، مثالي للنوم والعمل.</p>
+      </div>
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">💡</div>
+        <h3>إضاءة LED دافئة</h3>
+        <p>أضواء ذهبية دافئة تخلق جواً من الرومانسية والسكينة في ليالي المنزل.</p>
+      </div>
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">⚡</div>
+        <h3>سهلة الاستخدام</h3>
+        <p>ابدئي باستخدامها خلال دقائق — أملئيها بالماء وشغّلي الكهرباء فقط.</p>
+      </div>
+      <div class="ft-benefit-card ft-fade">
+        <div class="ft-benefit-icon">🎁</div>
+        <h3>هدية لا تُنسى</h3>
+        <p>هدية مثالية للأعراس، الأعياد، المكاتب، أو لكل من يستحق لحظات الاسترخاء.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== LIFESTYLE ==================== -->
+<section class="ft-section ft-section--cream">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">في كل مكان</span>
+      <h2 class="ft-h2">تتألق في كل زاوية</h2>
+      <p class="ft-lead" style="margin:14px auto 0;">من غرفة النوم إلى المكتب — تتحول مع مكانها لتمنحه روحاً مختلفة.</p>
+    </div>
+    <div class="ft-lifestyle-grid">
+      {%- assign lifestyle_rooms = "غرفة المعيشة|🏡|الأجواء الفاخرة,غرفة النوم|🌙|السكينة والهدوء,المكتب|💼|التركيز والإنتاجية,ركن الصلاة|🕌|الخشوع والروحانية,طاولة القهوة|☕|لحظات الاسترخاء" | split: "," -%}
+      {%- for room in lifestyle_rooms -%}
+        {%- assign rp = room | split: "|" -%}
+        <div class="ft-lifestyle-card ft-scale">
+          {% if product.images[forloop.index0] %}
+            <img class="ft-lifestyle-img" src="{{ product.images[forloop.index0] | image_url: width: 700 }}" loading="lazy" alt="{{ rp[0] }}">
+          {% else %}
+            <div class="ft-lifestyle-img" style="background:linear-gradient(135deg,#F0E8D0,#E0D4B0);display:flex;align-items:center;justify-content:center;font-size:60px;">{{ rp[1] }}</div>
+          {% endif %}
+          <div class="ft-lifestyle-overlay">
+            <div class="ft-lifestyle-label">{{ rp[0] }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BEFORE / AFTER ==================== -->
+<section class="ft-section">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">التحوّل الحقيقي</span>
+      <h2 class="ft-h2">قبل وبعد — الفرق واضح</h2>
+    </div>
+    <div class="ft-ba-grid">
+      <div class="ft-ba-col ft-ba-col--before ft-fade-r">
+        <div class="ft-ba-header">
+          <h4>قبل</h4>
+          <span class="ft-ba-tag ft-ba-tag--before">❌ بدون النافورة</span>
+        </div>
+        <ul class="ft-ba-list">
+          <li>😰 <span>توتر وضغط يومي</span></li>
+          <li>😤 <span>فوضى وضجيج مستمر</span></li>
+          <li>🏚️ <span>ديكور فارغ وممل</span></li>
+          <li>😴 <span>صعوبة في الاسترخاء</span></li>
+          <li>💭 <span>غرفة تفتقر للروح</span></li>
+        </ul>
+      </div>
+      <div class="ft-ba-col ft-ba-col--after ft-fade-l">
+        <div class="ft-ba-header">
+          <h4>بعد</h4>
+          <span class="ft-ba-tag ft-ba-tag--after">✅ مع النافورة</span>
+        </div>
+        <ul class="ft-ba-list">
+          <li>🧘 <span>استرخاء فوري وهدوء</span></li>
+          <li>💎 <span>جو فاخر وراقٍ</span></li>
+          <li>🌿 <span>ديكور طبيعي أنيق</span></li>
+          <li>😌 <span>نوم أعمق وتركيز أفضل</span></li>
+          <li>✨ <span>مكان تُحبين العودة إليه</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY CHOOSE US ==================== -->
+<section class="ft-section ft-section--cream">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">ثقة كاملة</span>
+      <h2 class="ft-h2">لماذا نحن الخيار الأول؟</h2>
+    </div>
+    <div class="ft-why-grid">
+      <div class="ft-why-card ft-fade">
+        <div class="ft-why-icon">🥇</div>
+        <h4>جودة مميزة</h4>
+        <p>مواد عالية الجودة مختبرة للمتانة</p>
+      </div>
+      <div class="ft-why-card ft-fade">
+        <div class="ft-why-icon">🚀</div>
+        <h4>شحن سريع</h4>
+        <p>توصيل خلال 2-5 أيام لكل المملكة</p>
+      </div>
+      <div class="ft-why-card ft-fade">
+        <div class="ft-why-icon">💵</div>
+        <h4>دفع عند الاستلام</h4>
+        <p>ادفع فقط حين تمسك المنتج بيدك</p>
+      </div>
+      <div class="ft-why-card ft-fade">
+        <div class="ft-why-icon">📦</div>
+        <h4>تغليف آمن</h4>
+        <p>تغليف فاخر يصل سليماً بدون أضرار</p>
+      </div>
+      <div class="ft-why-card ft-fade">
+        <div class="ft-why-icon">💬</div>
+        <h4>دعم سعودي</h4>
+        <p>فريق خدمة عملاء محلي متاح دائماً</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRODUCT FEATURES ==================== -->
+<section class="ft-section ft-section--dark">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow" style="background:rgba(201,168,106,0.15);border-color:rgba(201,168,106,0.35);color:var(--ft-accent-lt);">المواصفات</span>
+      <h2 class="ft-h2" style="color:#fff;">مصممة بعناية فائقة</h2>
+      <p class="ft-lead" style="margin:14px auto 0;color:rgba(255,255,255,0.55);">كل تفصيل فيها مدروس ليمنحك أفضل تجربة.</p>
+    </div>
+    <div class="ft-features-grid">
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">🔇</div>
+        <h4 style="color:#fff;">مضخة صامتة</h4>
+        <p style="color:rgba(255,255,255,0.55);">تشغيل هادئ بالكامل — لا ضجيج ولا اهتزاز مزعج حتى أثناء النوم.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">💡</div>
+        <h4 style="color:#fff;">إضاءة LED دافئة</h4>
+        <p style="color:rgba(255,255,255,0.55);">أضواء LED مدمجة تخلق توهجاً ذهبياً دافئاً يزيد الجمال ويهدئ النفس.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">🪨</div>
+        <h4 style="color:#fff;">أحجار طبيعية</h4>
+        <p style="color:rgba(255,255,255,0.55);">أحجار نهرية طبيعية مختارة بعناية تضيف لمسة أصيلة من الطبيعة.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">🛡️</div>
+        <h4 style="color:#fff;">مواد متينة</h4>
+        <p style="color:rgba(255,255,255,0.55);">مصنوعة من راتنج عالي الجودة مقاوم للخدش والكسر للاستخدام الطويل.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">🔧</div>
+        <h4 style="color:#fff;">تركيب سهل</h4>
+        <p style="color:rgba(255,255,255,0.55);">لا تحتاجين أي أدوات — اتبعي الخطوات البسيطة وابدئي خلال دقائق.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">⚡</div>
+        <h4 style="color:#fff;">توفير الطاقة</h4>
+        <p style="color:rgba(255,255,255,0.55);">استهلاك منخفض للكهرباء يتيح تشغيلها يومياً دون التأثير على الفاتورة.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">📏</div>
+        <h4 style="color:#fff;">حجم مثالي للمكتب</h4>
+        <p style="color:rgba(255,255,255,0.55);">أبعاد مدروسة تناسب الطاولة، المكتب، خزانة التلفاز، وأي سطح.</p>
+      </div>
+      <div class="ft-feature-card ft-fade" style="background:rgba(255,255,255,0.05);border-color:rgba(201,168,106,0.20);">
+        <div class="ft-feature-icon">🌊</div>
+        <h4 style="color:#fff;">شلال ثلاثي الطبقات</h4>
+        <p style="color:rgba(255,255,255,0.55);">تصميم شلال متدرج ثلاثي يضاعف من جمال المشهد البصري وصوت الماء.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GALLERY ==================== -->
+<section class="ft-section">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">معرض الصور</span>
+      <h2 class="ft-h2">شاهدها من كل زاوية</h2>
+    </div>
+    <div class="ft-gallery">
+      {% for image in product.images limit: 8 %}
+        <div class="ft-gallery-item ft-scale" data-ft-lightbox="{{ image | image_url: width: 1400 }}">
+          <img src="{{ image | image_url: width: 500 }}" loading="lazy" alt="{{ image.alt | default: product.title }} — صورة {{ forloop.index }}">
+        </div>
+      {% else %}
+        {% for i in (1..8) %}
+          <div class="ft-gallery-item ft-scale" style="background:linear-gradient(135deg,#F5EDD8,#E8DFC8);height:210px;display:flex;align-items:center;justify-content:center;font-size:40px;">💧</div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="ft-lightbox" id="ftLightbox">
+  <button type="button" class="ft-lightbox-close" id="ftLightboxClose">✕</button>
+  <img src="" alt="" id="ftLightboxImg">
+</div>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="ft-section ft-section--cream">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">البداية السهلة</span>
+      <h2 class="ft-h2">٣ خطوات فقط وابدئي الاسترخاء</h2>
+    </div>
+    <div class="ft-steps">
+      <div class="ft-step ft-fade">
+        <div class="ft-step-circle">💧</div>
+        <h3>امليها بالماء</h3>
+        <p>أضيفي الماء حتى مستوى محدد — لا تحتاجين أي مواد خاصة، ماء الصنبور يكفي.</p>
+      </div>
+      <div class="ft-step ft-fade">
+        <div class="ft-step-circle">🔌</div>
+        <h3>وصّلي الكهرباء</h3>
+        <p>قم بتوصيل الكابل بالمقبس. الجهاز يعمل على جهد 5 فولت آمن تماماً للمنزل.</p>
+      </div>
+      <div class="ft-step ft-fade">
+        <div class="ft-step-circle">😌</div>
+        <h3>استمتعي بالهدوء</h3>
+        <p>استرخي وأغمضي عينيك — اتركي صوت الشلال يأخذك لمكان آخر من السكينة التامة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== REVIEWS ==================== -->
+<section class="ft-section">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">آراء العملاء</span>
+      <h2 class="ft-h2">ماذا يقول عملاؤنا؟</h2>
+      <p class="ft-lead" style="margin:14px auto 0;">آراء حقيقية من أشخاص حقيقيين في جميع أنحاء المملكة.</p>
+    </div>
+    <div class="ft-reviews-grid">
+      {%- assign revs = "خالد الغامدي|الرياض|أب|رائعة جداً! وضعتها في مكتبي وكل من يدخل يسأل عنها. صوت الماء يساعدني على التركيز في العمل بشكل كبير جداً. تستحق كل ريال.
+سارة القحطاني|جدة|ربة منزل|اشتريتها هدية لأمي وما كنت أتوقع أن تعجبها بهذا الشكل! الآن تضعها في غرفة الجلوس وتقول أن صوت المياه يريح أعصابها كل يوم.
+محمد العمري|الدمام|موظف|التغليف فاخر جداً والمنتج وصل سليماً. المضخة صامتة بالكامل حتى في غرفة النوم لا تسمعها. الإضاءة الذهبية تعطي جواً رائعاً في الليل.
+نورة الشمري|مكة المكرمة|طالبة|وضعتها على مكتب الدراسة — صوت الماء يساعدني على التركيز وعدم التشتت. أحسن شيء اشتريته لغرفتي بصراحة!
+عبدالله الدوسري|المدينة|رجل أعمال|اشتريت ٣ منها — واحدة لمكتبي وواحدة للبيت وواحدة هدية. الجميع أعجبه التصميم. التوصيل كان سريع ومحترم.
+ريم العتيبي|أبها|معلمة|كنت أعاني من التوتر بعد يوم الدوام الطويل. من بدأت أضع النافورة في غرفتي أصبح الجو مختلف تماماً. تساعد على الاسترخاء والنوم الهادئ.
+فهد الزهراني|الطائف|طبيب|جربت نافورات أخرى قبلها بس هذه الأفضل. الأحجار الطبيعية تضيف شيئاً مختلفاً. المضخة لم تصدر أي صوت بعد شهرين من الاستخدام اليومي.
+لمى الحربي|الخبر|مصممة|من الناحية الجمالية هي قطعة فن حقيقية! تتناسق مع أي ديكور سواء كان عصرياً أو كلاسيكياً. أجمل ما وضعته في منزلي.
+سلطان المالكي|القصيم|معلم|وصل الطلب في اليوم الثاني فقط! والمنتج تجاوز توقعاتي. سعره مناسب جداً مقارنة بجودته. أوصي به لأي شخص يريد لمسة ديكور مميزة.
+هند الجهني|ينبع|ممرضة|بعد يوم عمل مرهق في المستشفى، أجلس قرب النافورة وأشعر أن التوتر يذوب. الصوت المائي يشبه صوت النهر الطبيعي. استثمار يستحق.
+عمر السبيعي|حائل|مهندس|أخذتها لمكتب الشركة وكل الموظفين يمدحونها. حتى المدير سألني من أين اشتريتها! التغليف احترافي جداً وصورة المنتج مطابقة للواقع.
+دانة العنزي|نجران|محاسبة|اشتريت نسختين — الثانية هدية لصديقتي. كلانا راضيتان جداً. الإضاءة الدافئة مع صوت الماء يخلقان جواً رومانسياً جميلاً في الليل." | split: "
+" -%}
+      {%- for rev in revs -%}
+        {%- assign rp = rev | split: "|" -%}
+        <div class="ft-review-card ft-fade">
+          <div class="ft-review-head">
+            <div class="ft-reviewer-avatar">{{ rp[0] | slice: 0 }}</div>
+            <div class="ft-reviewer-info">
+              <strong>{{ rp[0] }}</strong>
+              <span>{{ rp[1] }} — {{ rp[2] }}</span>
+            </div>
+          </div>
+          <div class="ft-stars">⭐⭐⭐⭐⭐</div>
+          <p class="ft-review-text">{{ rp[3] }}</p>
+          <div class="ft-verified">✔ عملية شراء موثقة</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section class="ft-section ft-section--cream">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">الأسئلة الشائعة</span>
+      <h2 class="ft-h2">كل ما تريد معرفته</h2>
+    </div>
+    <div class="ft-faq">
+      {%- assign faqs = "هل المضخة صامتة تماماً؟|نعم، المضخة مصممة لتعمل بصمت كامل. الشيء الوحيد الذي ستسمعينه هو صوت المياه المتدفقة الطبيعي الجميل — وهو بالضبط ما يمنحك الاسترخاء.
+هل يمكن تركها تعمل طوال الليل؟|نعم بالكامل. الجهاز يعمل بجهد 5 فولت آمن للغاية، واستهلاكه من الكهرباء منخفض جداً. كثير من عملاؤنا يتركونها تعمل أثناء النوم.
+كم مرة أحتاج لتغيير الماء؟|يُنصح بتغيير الماء مرة واحدة أسبوعياً للحفاظ على نظافتها وبريقها. يمكن إضافة قطرة من زيت الميلالوكا لتعطير الهواء.
+هل تصلح للاستخدام الخارجي؟|هي مصممة أساساً للاستخدام الداخلي في المنازل والمكاتب. لا يُنصح بتعريضها لأشعة الشمس المباشرة أو الرطوبة الشديدة.
+كم تستغرق من الوقت للتجميع؟|التجميع سهل ولا يحتاج أكثر من 5 إلى 10 دقائق باتباع التعليمات المرفقة. لا تحتاجين أدوات.
+ما نوع الكابل المستخدم؟|تأتي مع محوّل كهربائي مناسب لمقابس المملكة العربية السعودية (220 فولت). فقط وصّليها وشغّليها.
+هل يمكنني التحكم في سرعة المياه؟|نعم، بعض الموديلات مزودة بمنظم سرعة للتحكم في تدفق الماء. راجعي المواصفات المرفقة مع المنتج.
+هل الدفع عند الاستلام متاح في جميع مدن السعودية؟|نعم، الدفع عند الاستلام متاح لجميع مدن ومحافظات المملكة العربية السعودية بدون استثناء.
+ما مدة التوصيل؟|مدة التوصيل تتراوح بين 2 إلى 5 أيام عمل حسب موقعك الجغرافي. ستتلقين رسالة تتبع الطلب فور الشحن.
+هل يمكنني إرجاع المنتج إذا لم يعجبني؟|بالطبع. نوفر سياسة إرجاع مريحة خلال المدة المحددة للمنتجات السليمة غير المستخدمة. تواصلي مع فريق الدعم لترتيب الإرجاع." | split: "
+" -%}
+      {%- for faq in faqs -%}
+        {%- assign fp = faq | split: "|" -%}
+        <div class="ft-faq-item ft-fade">
+          <button type="button" class="ft-faq-q" data-ft-faq>
+            <span>{{ fp[0] }}</span>
+            <span class="ft-faq-icon">＋</span>
+          </button>
+          <div class="ft-faq-a"><p>{{ fp[1] }}</p></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== OFFER ==================== -->
+<section class="ft-section--tight">
+  <div class="ft-wrap">
+    <div class="ft-offer ft-fade">
+      <h2 class="ft-h2">عرض اليوم الحصري 🔥</h2>
+      <p>خصم خاص لفترة محدودة — اطلبي الآن قبل انتهاء الكمية</p>
+      <div class="ft-offer-prices">
+        <span class="ft-offer-price-new">249 <small style="font-size:22px;font-weight:500;">ر.س</small></span>
+        <span class="ft-offer-price-old">399 ر.س</span>
+      </div><br>
+      <span class="ft-offer-badge">✂️ وفّر 150 ر.س — خصم 38%</span>
+      <div style="margin-top:28px;">
+        <button type="button" class="ft-offer-cta" onclick="document.getElementById('ft-order-form').scrollIntoView({behavior:'smooth'});">
+          🛒 اطلبي الآن قبل انتهاء العرض
+        </button>
+      </div>
+      <!-- Countdown -->
+      <div style="display:flex;justify-content:center;gap:14px;margin-top:36px;">
+        <div class="dc-count-box" style="background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,106,0.25);border-radius:12px;padding:14px 20px;min-width:72px;text-align:center;">
+          <span style="font-size:28px;font-weight:900;color:var(--ft-accent-lt);display:block;" id="ftH">03</span>
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);">ساعة</div>
+        </div>
+        <div class="dc-count-box" style="background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,106,0.25);border-radius:12px;padding:14px 20px;min-width:72px;text-align:center;">
+          <span style="font-size:28px;font-weight:900;color:var(--ft-accent-lt);display:block;" id="ftM">59</span>
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);">دقيقة</div>
+        </div>
+        <div class="dc-count-box" style="background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,106,0.25);border-radius:12px;padding:14px 20px;min-width:72px;text-align:center;">
+          <span style="font-size:28px;font-weight:900;color:var(--ft-accent-lt);display:block;" id="ftS">59</span>
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);">ثانية</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MAIN COD FORM ==================== -->
+<section class="ft-section ft-form-section" id="ft-main-form">
+  <div class="ft-wrap">
+    <div class="ft-center ft-fade">
+      <span class="ft-eyebrow">اطلب الآن</span>
+      <h2 class="ft-h2">الدفع عند الاستلام — مريح وآمن</h2>
+    </div>
+    <div class="ft-form-wrap ft-fade">
+      <p class="ft-form-title ft-center">🛒 أكمل طلبك الآن</p>
+      <p class="ft-form-sub ft-center">أدخل بياناتك وسيتصل بك فريقنا خلال ساعات لتأكيد الشحن</p>
+
+      {%- form 'product', product, id: 'ft-main-product-form', novalidate: true -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" id="ft-main-variant-id">
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="ft-var-sec">
+              <span class="ft-var-lbl">{{ option.name }}</span>
+              <div class="ft-var-pills">
+                {%- for value in option.values -%}
+                  <label class="ft-var-pill">
+                    <input type="radio" name="{{ option.name }}" value="{{ value | escape }}"
+                      {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="ft-qty-row">
+          <span class="ft-qty-lbl">الكمية:</span>
+          <div class="ft-qty-box">
+            <button type="button" class="ft-qty-btn" onclick="var q=document.getElementById('ft-main-qty');if(q.value>1)q.value=+q.value-1;">−</button>
+            <input type="number" id="ft-main-qty" name="quantity" value="1" min="1" class="ft-qty-inp" readonly>
+            <button type="button" class="ft-qty-btn" onclick="var q=document.getElementById('ft-main-qty');q.value=+q.value+1;">+</button>
+          </div>
+        </div>
+
+        {% content_for 'blocks' %}
+
+        <button type="submit" name="add" class="ft-submit">
+          🛒 اطلب الآن والدفع عند الاستلام
+        </button>
+      {%- endform -%}
+
+      <p class="ft-secure" style="margin-top:14px;">🔒 طلبك آمن 100% — لا بطاقة بنكية مطلوبة</p>
+      <ul class="ft-trust-row-sm">
+        <li>✅ الدفع عند الاستلام</li>
+        <li>🚚 شحن مجاني</li>
+        <li>🛡️ ضمان الجودة</li>
+        <li>↩️ استرجاع سهل</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TRUST ==================== -->
+<section class="ft-section--tight">
+  <div class="ft-wrap">
+    <div class="ft-trust-grid">
+      <div class="ft-trust-card ft-fade">
+        <div class="ft-trust-icon">🚚</div>
+        <h4>شحن مجاني</h4>
+        <p>مجاني لجميع مناطق المملكة بدون استثناء</p>
+      </div>
+      <div class="ft-trust-card ft-fade">
+        <div class="ft-trust-icon">💵</div>
+        <h4>الدفع عند الاستلام</h4>
+        <p>ادفع نقداً عند استلامك للمنتج مباشرة</p>
+      </div>
+      <div class="ft-trust-card ft-fade">
+        <div class="ft-trust-icon">🛡️</div>
+        <h4>ضمان الجودة</h4>
+        <p>منتجات عالية الجودة مع دعم ما بعد البيع</p>
+      </div>
+      <div class="ft-trust-card ft-fade">
+        <div class="ft-trust-icon">⚡</div>
+        <h4>توصيل سريع</h4>
+        <p>بين 2 إلى 5 أيام عمل لباب منزلك</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="ft-footer">
+  <div class="ft-wrap">
+    <div class="ft-footer-logo">
+      <div class="ft-logo-dot" style="width:32px;height:32px;border-radius:10px;">💧</div>
+      <span>{{ shop.name | default: 'نافورة فاخرة' }}</span>
+    </div>
+    <p style="margin-bottom:8px;">© {{ 'now' | date: '%Y' }} {{ shop.name }} — جميع الحقوق محفوظة</p>
+    <p>صنعنا بعناية لتمنحك لحظات الهدوء التي تستحقها</p>
+  </div>
+</footer>
+
+<!-- ==================== STICKY BAR ==================== -->
+<div class="ft-sticky-bar" id="ftStickyBar">
+  <div class="ft-sticky-info">
+    {% if product.featured_image %}
+      <img class="ft-sticky-thumb" src="{{ product.featured_image | image_url: width: 100 }}" alt="{{ product.title }}" loading="lazy">
+    {% endif %}
+    <div>
+      <div class="ft-sticky-title">{{ product.title | default: 'نافورة مكتبية فاخرة' }}</div>
+      <div class="ft-sticky-price">{% if product.price %}{{ product.price | money }}{% else %}249 ر.س{% endif %}</div>
+    </div>
+  </div>
+  <button type="button" class="ft-sticky-btn" onclick="document.getElementById('ft-order-form').scrollIntoView({behavior:'smooth'});">
+    اطلب الآن 🛒
+  </button>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var doc = document;
+
+  /* ---- Header scroll effect ---- */
+  var header = doc.getElementById('ftHeader');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 60){ header.classList.add('scrolled'); }
+    else { header.classList.remove('scrolled'); }
+  }, { passive:true });
+
+  /* ---- Fade on scroll ---- */
+  var fadeEls = doc.querySelectorAll('.ft-fade, .ft-fade-l, .ft-fade-r, .ft-scale');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('ft-in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.10 });
+  fadeEls.forEach(function(el){ io.observe(el); });
+
+  /* ---- Animated counters ---- */
+  function animateCounter(el, target, suffix){
+    var start = 0;
+    var dur = 1800;
+    var step = target / (dur / 16);
+    var timer = setInterval(function(){
+      start = Math.min(start + step, target);
+      el.textContent = Math.floor(start).toLocaleString('ar-SA') + (suffix || '');
+      if(start >= target) clearInterval(timer);
+    }, 16);
+  }
+  var counterEls = doc.querySelectorAll('[data-count]');
+  var counterIo = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var el = e.target;
+        var target = parseInt(el.dataset.count);
+        var suffix = el.dataset.suffix || '';
+        animateCounter(el, target, suffix);
+        counterIo.unobserve(el);
+      }
+    });
+  }, { threshold:.5 });
+  counterEls.forEach(function(el){ counterIo.observe(el); });
+
+  /* ---- Sticky bar ---- */
+  var stickyBar = doc.getElementById('ftStickyBar');
+  var heroForm = doc.getElementById('ft-order-form');
+  if(stickyBar && heroForm){
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ stickyBar.classList.remove('ft-show'); }
+        else{ stickyBar.classList.add('ft-show'); }
+      });
+    }, { threshold:.15 });
+    sio.observe(heroForm);
+  }
+
+  /* ---- FAQ ---- */
+  doc.querySelectorAll('[data-ft-faq]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.ft-faq-item');
+      var wasOpen = item.classList.contains('ft-open');
+      doc.querySelectorAll('.ft-faq-item.ft-open').forEach(function(el){ el.classList.remove('ft-open'); });
+      if(!wasOpen) item.classList.add('ft-open');
+    });
+  });
+
+  /* ---- Gallery lightbox ---- */
+  var lb = doc.getElementById('ftLightbox');
+  var lbImg = doc.getElementById('ftLightboxImg');
+  var lbClose = doc.getElementById('ftLightboxClose');
+  doc.querySelectorAll('[data-ft-lightbox]').forEach(function(item){
+    item.addEventListener('click', function(){
+      var src = item.dataset.ftLightbox;
+      if(!lb || !src) return;
+      lbImg.src = src;
+      lb.classList.add('ft-open');
+      doc.body.style.overflow = 'hidden';
+    });
+  });
+  if(lbClose){ lbClose.addEventListener('click', function(){ lb.classList.remove('ft-open'); doc.body.style.overflow = ''; }); }
+  if(lb){ lb.addEventListener('click', function(e){ if(e.target === lb){ lb.classList.remove('ft-open'); doc.body.style.overflow = ''; } }); }
+
+  /* ---- Button ripple effect ---- */
+  doc.querySelectorAll('.ft-submit').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      var rect = btn.getBoundingClientRect();
+      var ripple = doc.createElement('span');
+      ripple.className = 'ft-submit-ripple';
+      var size = Math.max(btn.offsetWidth, btn.offsetHeight);
+      ripple.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+(e.clientY-rect.top-size/2)+'px;left:'+(e.clientX-rect.left-size/2)+'px;';
+      btn.appendChild(ripple);
+      setTimeout(function(){ ripple.remove(); }, 700);
+    });
+  });
+
+  /* ---- Countdown ---- */
+  function startCountdown(hEl, mEl, sEl, total){
+    var end = Date.now() + total * 1000;
+    function tick(){
+      var rem = Math.max(0, Math.floor((end - Date.now()) / 1000));
+      var h = Math.floor(rem/3600);
+      var m = Math.floor((rem%3600)/60);
+      var s = rem%60;
+      var pad = function(n){ return n<10?'0'+n:''+n; };
+      if(hEl) hEl.textContent = pad(h);
+      if(mEl) mEl.textContent = pad(m);
+      if(sEl) sEl.textContent = pad(s);
+      if(rem>0) setTimeout(tick, 1000);
+    }
+    tick();
+  }
+  startCountdown(
+    doc.getElementById('ftH'),
+    doc.getElementById('ftM'),
+    doc.getElementById('ftS'),
+    3*3600 + 59*60 + 59
+  );
+
+  /* ---- Variant sync ---- */
+  var variantsEl = doc.getElementById('ft-variants-json');
+  if(variantsEl){
+    var variantData = JSON.parse(variantsEl.textContent);
+    function syncVariants(formId, varInputId){
+      var form = doc.getElementById(formId);
+      if(!form) return;
+      form.querySelectorAll('.ft-var-pill input').forEach(function(r){
+        r.addEventListener('change', function(){
+          var opts = {};
+          form.querySelectorAll('.ft-var-pill input:checked').forEach(function(c){
+            opts[c.name] = c.value;
+          });
+          var match = variantData.find(function(v){
+            return Object.keys(opts).every(function(k,i){ return v['option'+(i+1)] === opts[k]; });
+          });
+          if(match){ var el = doc.getElementById(varInputId); if(el) el.value = match.id; }
+        });
+      });
+    }
+    syncVariants('ft-product-form','ft-variant-id');
+    syncVariants('ft-main-product-form','ft-main-variant-id');
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fountain Landing Page",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Fountain Landing Page" }]
+}
+{% endschema %}

@@ -1,0 +1,766 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign img1 = product.media[0]
+  assign img2 = product.media[1]
+  assign img3 = product.media[2]
+  assign img4 = product.media[3]
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0E0E11;
+  --bg2:#16161A;
+  --bg3:#1E1E24;
+  --gold:#C9A96E;
+  --gold-lt:#E8C98A;
+  --gold-dk:#9A7A45;
+  --white:#FFFFFF;
+  --gray:#A0A0AB;
+  --gray-dk:#606068;
+  --line:rgba(201,169,110,0.15);
+  --green:#4CAF50;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+.nl-body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Tajawal',sans-serif;
+  direction:rtl;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+.nl-wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+/* topbar */
+.nl-topbar{
+  background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-dk));
+  color:#000;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  padding:9px 12px;
+}
+
+/* nav */
+.nl-nav{
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:1px solid var(--line);
+  background:var(--bg);
+}
+.nl-brand{font-size:26px;font-weight:900;letter-spacing:1px;color:var(--white);}
+.nl-brand span{color:var(--gold);}
+
+/* hero */
+.nl-hero{
+  position:relative;
+  padding:50px 0 20px;
+  overflow:hidden;
+}
+.nl-hero-glow{
+  position:absolute;
+  top:-100px;left:-100px;
+  width:500px;height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.nl-hero-glow2{
+  position:absolute;
+  bottom:-80px;right:-80px;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,0.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.nl-hero-inner{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:50px;
+  align-items:center;
+}
+.nl-badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.nl-badge-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;
+  padding:5px 13px;border-radius:20px;
+  background:rgba(201,169,110,0.1);
+  border:1px solid rgba(201,169,110,0.35);
+  color:var(--gold-lt);
+}
+.nl-hero h1{
+  font-size:46px;line-height:1.2;
+  color:var(--white);
+  margin-bottom:14px;
+}
+.nl-hero h1 span{color:var(--gold);}
+.nl-hero p.nl-lead{
+  font-size:16px;color:var(--gray);
+  max-width:460px;margin-bottom:24px;
+}
+.nl-price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.nl-price-now{font-size:44px;font-weight:900;color:var(--white);}
+.nl-price-old{font-size:20px;color:var(--gray-dk);text-decoration:line-through;}
+.nl-price-save{
+  font-size:13px;background:var(--gold);
+  color:#000;font-weight:800;
+  padding:4px 12px;border-radius:20px;
+}
+.nl-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  color:#000;font-size:16px;font-weight:900;
+  padding:16px 34px;border-radius:10px;
+  text-decoration:none;
+  box-shadow:0 10px 30px rgba(201,169,110,0.3);
+  transition:transform .25s,box-shadow .25s;
+}
+.nl-cta:hover{transform:translateY(-2px);box-shadow:0 15px 35px rgba(201,169,110,0.4);}
+.nl-hero-note{margin-top:12px;font-size:13px;color:var(--gray-dk);}
+.nl-media-wrap{position:relative;}
+.nl-media-wrap img{
+  border-radius:20px;
+  border:1px solid var(--line);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.nl-media-badge{
+  position:absolute;top:16px;right:16px;
+  background:rgba(0,0,0,0.7);
+  border:1px solid var(--gold);
+  color:var(--gold-lt);
+  font-size:12px;font-weight:800;
+  padding:6px 14px;border-radius:20px;
+  backdrop-filter:blur(8px);
+}
+
+/* strip */
+.nl-strip{
+  background:var(--bg2);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:12px 0;
+  overflow:hidden;white-space:nowrap;
+  margin:30px 0;
+}
+.nl-strip-track{
+  display:inline-block;
+  animation:nl-scroll 22s linear infinite;
+  font-size:13.5px;color:var(--gray);
+}
+.nl-strip-track span{margin:0 22px;color:var(--gold-lt);font-weight:700;}
+@keyframes nl-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* features */
+.nl-section{padding:60px 0;}
+.nl-sec-head{text-align:center;max-width:600px;margin:0 auto 40px;}
+.nl-kicker{
+  display:inline-block;font-size:12px;letter-spacing:2px;
+  font-weight:700;color:var(--gold);
+  margin-bottom:10px;
+}
+.nl-sec-head h2{font-size:34px;color:var(--white);}
+.nl-sec-head h2 span{color:var(--gold);}
+
+.nl-features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.nl-feat{
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px 22px;
+  text-align:center;
+  transition:border-color .2s,transform .2s;
+}
+.nl-feat:hover{border-color:var(--gold);transform:translateY(-4px);}
+.nl-feat-icon{font-size:32px;margin-bottom:14px;}
+.nl-feat h3{font-size:17px;color:var(--white);margin-bottom:8px;}
+.nl-feat p{font-size:13px;color:var(--gray);}
+
+/* split */
+.nl-split{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+.nl-split.rev .nl-split-img{order:2;}
+.nl-split-img img{border-radius:18px;border:1px solid var(--line);}
+.nl-split h2{font-size:30px;color:var(--white);margin-bottom:14px;}
+.nl-split h2 span{color:var(--gold);}
+.nl-split p{font-size:15px;color:var(--gray);margin-bottom:14px;}
+.nl-list{list-style:none;}
+.nl-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:14.5px;color:var(--gray);margin-bottom:10px;
+}
+.nl-list li::before{content:"◆";color:var(--gold);font-size:10px;margin-top:5px;}
+
+/* gallery thumbnails */
+.nl-gallery{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;}
+.nl-thumb{
+  width:72px;height:72px;
+  border-radius:10px;
+  border:2px solid var(--line);
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color .2s;
+}
+.nl-thumb:hover,.nl-thumb.active{border-color:var(--gold);}
+.nl-thumb img{width:100%;height:100%;object-fit:cover;}
+
+/* specs */
+.nl-specs{width:100%;border-collapse:collapse;border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.nl-specs tr:nth-child(even) td{background:var(--bg3);}
+.nl-specs tr:nth-child(odd) td{background:var(--bg2);}
+.nl-specs td{padding:14px 18px;font-size:14px;border-bottom:1px solid var(--line);}
+.nl-specs td:first-child{font-weight:800;color:var(--gray);width:38%;}
+.nl-specs td:last-child{color:var(--white);font-weight:600;}
+
+/* trust badges */
+.nl-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.nl-trust-item{
+  text-align:center;background:var(--bg2);
+  border:1px solid var(--line);border-radius:14px;
+  padding:22px 12px;
+}
+.nl-trust-ic{font-size:26px;margin-bottom:10px;}
+.nl-trust-item span{font-size:12.5px;color:var(--gray);display:block;}
+
+/* reviews */
+.nl-reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.nl-review{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:16px;padding:22px 20px;
+}
+.nl-stars{color:var(--gold);font-size:15px;margin-bottom:8px;}
+.nl-review p{font-size:13.5px;color:var(--gray);margin-bottom:12px;}
+.nl-review-author{font-size:13px;font-weight:800;color:var(--white);}
+.nl-review-city{font-size:12px;color:var(--gray-dk);}
+
+/* order form */
+.nl-order{
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:50px;
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:46px;
+}
+.nl-order-info h2{font-size:30px;color:var(--white);margin:12px 0 14px;}
+.nl-order-info p{color:var(--gray);font-size:15px;margin-bottom:20px;}
+.nl-order-price-box{
+  background:rgba(201,169,110,0.07);
+  border:1px solid rgba(201,169,110,0.3);
+  border-radius:14px;padding:18px 20px;
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:20px;
+}
+.nl-order-amount{font-size:38px;font-weight:900;color:var(--gold-lt);}
+.nl-order-label{font-size:13px;color:var(--gray);}
+.nl-perks{list-style:none;}
+.nl-perks li{
+  display:flex;gap:10px;align-items:center;
+  font-size:14px;color:var(--gray);margin-bottom:10px;
+}
+.nl-perks li::before{content:"✓";color:var(--gold-lt);font-weight:700;}
+
+.nl-form-box{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:30px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.nl-form-box h3{font-size:18px;color:var(--white);}
+.nl-submit{
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  color:#000;font-weight:900;font-size:16px;
+  border:none;padding:16px;
+  border-radius:10px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  width:100%;font-family:'Tajawal',sans-serif;
+}
+.nl-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,169,110,0.35);}
+.nl-form-note{font-size:11.5px;color:var(--gray-dk);text-align:center;}
+
+/* variant options */
+.nl-variant-group{display:flex;flex-direction:column;gap:8px;}
+.nl-variant-group label.nl-opt-label{font-size:13px;color:var(--gray);}
+.nl-variant-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.nl-opt-btn{
+  padding:8px 16px;border-radius:8px;
+  border:1px solid var(--line);
+  background:var(--bg2);color:var(--white);
+  font-family:'Tajawal',sans-serif;
+  font-size:14px;cursor:pointer;
+  transition:all .2s;
+}
+.nl-opt-btn.selected,.nl-opt-btn:hover{
+  border-color:var(--gold);
+  color:var(--gold-lt);
+  background:rgba(201,169,110,0.08);
+}
+
+/* toast */
+.nl-toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:#fff;border-radius:14px;
+  padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+  max-width:290px;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .4s,transform .4s;
+  pointer-events:none;
+}
+.nl-toast.show{opacity:1;transform:translateY(0);}
+.nl-toast-icon{font-size:22px;flex-shrink:0;}
+.nl-toast-text{font-size:12px;color:#333;line-height:1.4;}
+.nl-toast-name{font-weight:800;color:#111;display:block;}
+
+/* footer */
+.nl-footer{
+  text-align:center;padding:32px 0 42px;
+  color:var(--gray-dk);font-size:13px;
+  border-top:1px solid var(--line);
+}
+.nl-footer .nl-brand{font-size:20px;margin-bottom:8px;}
+
+/* sticky cta */
+.nl-sticky{
+  position:fixed;bottom:0;left:0;right:0;z-index:9998;
+  background:rgba(14,14,17,0.95);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;
+}
+.nl-sticky-price{font-size:22px;font-weight:900;color:var(--gold-lt);}
+.nl-sticky-cta{
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold));
+  color:#000;font-weight:900;font-size:15px;
+  border:none;padding:13px 28px;
+  border-radius:10px;cursor:pointer;
+  font-family:'Tajawal',sans-serif;
+  white-space:nowrap;
+}
+
+@media(max-width:860px){
+  .nl-hero-inner{grid-template-columns:1fr;text-align:center;}
+  .nl-hero p.nl-lead{margin-inline:auto;}
+  .nl-price-row{justify-content:center;}
+  .nl-badge-row{justify-content:center;}
+  .nl-media-wrap{order:-1;}
+  .nl-hero h1{font-size:34px;}
+  .nl-features{grid-template-columns:1fr 1fr;}
+  .nl-split,.nl-split.rev .nl-split-img{grid-template-columns:1fr;order:0;}
+  .nl-split{grid-template-columns:1fr;}
+  .nl-trust{grid-template-columns:repeat(2,1fr);}
+  .nl-reviews{grid-template-columns:1fr;}
+  .nl-order{grid-template-columns:1fr;padding:28px;}
+  .nl-sticky{display:none;}
+}
+</style>
+
+<div class="nl-body">
+
+<div class="nl-topbar">✨ شحن لاسلكي فني — توصيل مجاني لجميع مدن المملكة &nbsp;|&nbsp; 💵 الدفع عند الاستلام</div>
+
+<header class="nl-nav">
+  <div class="nl-brand">nova<span>cart</span></div>
+</header>
+
+<!-- HERO -->
+<div class="nl-hero">
+  <div class="nl-hero-glow"></div>
+  <div class="nl-hero-glow2"></div>
+  <div class="nl-wrap nl-hero-inner">
+    <div>
+      <div class="nl-badge-row">
+        <span class="nl-badge-pill">📶 شحن لاسلكي</span>
+        <span class="nl-badge-pill">⚡ حماية من الشحن الزائد</span>
+        <span class="nl-badge-pill">🎨 لوحة رمال متحركة</span>
+      </div>
+      <h1>{{ product.title | default: 'مصباح فني' }}<br><span>لوحة فنية على مصباح</span></h1>
+      <p class="nl-lead">{{ product.description | strip_html | truncate: 180 | default: 'قاعدة شحن لاسلكية مع لوحة الرمال المتحركة — تجمع الفن والتقنية في قطعة واحدة.' }}</p>
+      <div class="nl-price-row">
+        <span class="nl-price-now" id="nl-price-now">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            {{ current_variant.price | money_without_trailing_zeros }}
+          {%- else -%}
+            {{ product.price | money_without_trailing_zeros }}
+          {%- endif -%}
+        </span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="nl-price-old">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</span>
+          <span class="nl-price-save">خصم {{ current_variant.compare_at_price | minus: current_variant.price | money_without_trailing_zeros }}</span>
+        {%- endif -%}
+      </div>
+      <a href="#nl-order" class="nl-cta">🛒 اطلبه الآن — الدفع عند الاستلام</a>
+      <p class="nl-hero-note">✔ منتج أصلي 100% &nbsp; ✔ شحن مجاني للمملكة &nbsp; ✔ ضمان الجودة</p>
+    </div>
+    <div class="nl-media-wrap">
+      {%- if img1 -%}
+        {{ img1 | image_url: width: 900 | image_tag: alt: product.title, loading: 'eager', id: 'nl-main-img' }}
+      {%- endif -%}
+      <div class="nl-media-badge">✨ إصدار محدود</div>
+      {%- if product.media.size > 1 -%}
+        <div class="nl-gallery" id="nl-gallery">
+          {%- for media in product.media limit: 4 -%}
+            <div class="nl-thumb {% if forloop.first %}active{% endif %}" data-src="{{ media | image_url: width: 900 }}" onclick="nlSetImg(this)">
+              {{ media | image_url: width: 150 | image_tag: alt: product.title, loading: 'lazy' }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<!-- STRIP -->
+<div class="nl-strip">
+  <div class="nl-strip-track">
+    <span>شحن لاسلكي سريع</span>•<span>لوحة رمال متحركة</span>•<span>حماية من الشحن الزائد</span>•<span>مضاد للانزلاق</span>•<span>تصميم فاخر</span>•<span>هدية مثالية</span>•
+    <span>شحن لاسلكي سريع</span>•<span>لوحة رمال متحركة</span>•<span>حماية من الشحن الزائد</span>•<span>مضاد للانزلاق</span>•<span>تصميم فاخر</span>•<span>هدية مثالية</span>•
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="nl-section nl-wrap">
+  <div class="nl-sec-head">
+    <span class="nl-kicker">لماذا مصباحنا الفني</span>
+    <h2>يجمع <span>الفن والتقنية</span> في قطعة واحدة</h2>
+  </div>
+  <div class="nl-features">
+    <div class="nl-feat">
+      <div class="nl-feat-icon">📶</div>
+      <h3>شحن لاسلكي مريح</h3>
+      <p>ضع هاتفك وشاهده يشحن دون أي كابلات — تقنية Qi متوافقة مع جميع الهواتف الحديثة.</p>
+    </div>
+    <div class="nl-feat">
+      <div class="nl-feat-icon">🎨</div>
+      <h3>لوحة رمال متحركة فريدة</h3>
+      <p>شكل يتغير مع كل حركة — منظر طبيعي ديناميكي يجعل كل لحظة تأملاً بصرياً مميزاً.</p>
+    </div>
+    <div class="nl-feat">
+      <div class="nl-feat-icon">⚡</div>
+      <h3>حماية كاملة وذكية</h3>
+      <p>محمي من الشحن الزائد والتسخين الزائد — شحن آمن وعملي لهاتفك في جميع الأوقات.</p>
+    </div>
+    <div class="nl-feat">
+      <div class="nl-feat-icon">🛡️</div>
+      <h3>مواد عالية الجودة</h3>
+      <p>مصنوع من مواد متينة عالية الجودة توفر استقراراً وأماناً فائقين — مضاد للانزلاق.</p>
+    </div>
+    <div class="nl-feat">
+      <div class="nl-feat-icon">💡</div>
+      <h3>إضاءة جوية مريحة</h3>
+      <p>إضاءة دافئة وناعمة تضفي على غرفتك أجواء فنية هادئة — مثالي للمكتب وغرفة النوم.</p>
+    </div>
+    <div class="nl-feat">
+      <div class="nl-feat-icon">🎁</div>
+      <h3>هدية مثالية لكل المناسبات</h3>
+      <p>تصميم فاخر يجعله هدية لا تُنسى — مثالي للأعياد، الأعراس، وتخرج المحبين.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT 1 -->
+{%- if img2 -%}
+<section class="nl-section nl-wrap">
+  <div class="nl-split">
+    <div class="nl-split-img">
+      {{ img2 | image_url: width: 700 | image_tag: alt: product.title, loading: 'lazy' }}
+    </div>
+    <div>
+      <span class="nl-kicker">لوحة الرمال المتحركة</span>
+      <h2>فن يتجدد <span>مع كل لحظة</span></h2>
+      <p>لوحة الرمال المتحركة داخل المصباح تخلق لك مشهداً طبيعياً متغيراً باستمرار — لا تملّها أبداً. كل زاوية وكل لحظة تجلب شكلاً جديداً.</p>
+      <ul class="nl-list">
+        <li>رمال طبيعية بألوان متعددة تختار منها</li>
+        <li>حركة سلسة وطبيعية عند الإمالة</li>
+        <li>تصميم محكم لا يسرب الرمال أبداً</li>
+        <li>إطار فاخر بشكل دائري أنيق</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<!-- SPLIT 2 -->
+{%- if img3 -%}
+<section class="nl-section nl-wrap">
+  <div class="nl-split rev">
+    <div class="nl-split-img">
+      {{ img3 | image_url: width: 700 | image_tag: alt: product.title, loading: 'lazy' }}
+    </div>
+    <div>
+      <span class="nl-kicker">قاعدة الشحن اللاسلكي</span>
+      <h2>ضع هاتفك <span>وتناسى الكابلات</span></h2>
+      <p>قاعدة الشحن اللاسلكي مدمجة في قاعدة المصباح — ضع هاتفك وشاهده يشحن أمام لوحة فنية رائعة. التقنية والجمال في مكان واحد.</p>
+      <ul class="nl-list">
+        <li>متوافق مع iPhone و Android الحديثة</li>
+        <li>حماية مدمجة من الشحن والتسخين الزائد</li>
+        <li>قاعدة مضادة للانزلاق تثبت هاتفك بأمان</li>
+        <li>مؤشر LED لحالة الشحن</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<!-- SPECS -->
+<section class="nl-section nl-wrap">
+  <div class="nl-sec-head">
+    <span class="nl-kicker">المواصفات التقنية</span>
+    <h2>تفاصيل <span>المنتج</span></h2>
+  </div>
+  <table class="nl-specs">
+    <tr><td>نوع المنتج</td><td>مصباح فني مع قاعدة شحن لاسلكية</td></tr>
+    <tr><td>تقنية الشحن</td><td>Qi لاسلكي — متوافق مع iPhone و Android</td></tr>
+    <tr><td>لوحة الرمال</td><td>رمال طبيعية متحركة بألوان متعددة</td></tr>
+    <tr><td>الحماية</td><td>✅ من الشحن الزائد والتسخين الزائد</td></tr>
+    <tr><td>مضاد للانزلاق</td><td>✅ قاعدة مطاطية مثبتة</td></tr>
+    <tr><td>المادة</td><td>بلاستيك متين + زجاج + رمال طبيعية</td></tr>
+    <tr><td>الإضاءة</td><td>LED دافئة</td></tr>
+    <tr><td>الطاقة</td><td>USB-C / Micro-USB</td></tr>
+    {%- for variant in product.variants -%}
+      {%- unless variant.title == 'Default Title' -%}
+        <tr><td>الألوان المتاحة</td><td>{{ product.options_with_values | map: 'values' | join: ' / ' }}</td></tr>
+        {%- break -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    <tr><td>السعر</td><td style="color:var(--gold-lt);font-weight:900;" id="nl-spec-price">{{ product.price | money_without_trailing_zeros }}</td></tr>
+    <tr><td>الشحن</td><td>✅ مجاني لجميع مناطق المملكة</td></tr>
+    <tr><td>الضمان</td><td>ضمان الجودة + إرجاع خلال ٧ أيام</td></tr>
+  </table>
+</section>
+
+<!-- REVIEWS -->
+<section class="nl-section nl-wrap">
+  <div class="nl-sec-head">
+    <span class="nl-kicker">آراء العملاء</span>
+    <h2>ماذا قالوا <span>عن المصباح</span></h2>
+  </div>
+  <div class="nl-reviews">
+    <div class="nl-review">
+      <div class="nl-stars">★★★★★</div>
+      <p>"أجمل هدية اشتريتها لحياتي! المصباح روعة والشحن اللاسلكي مريح جداً. الرمال تمشي بشكل رائع ومريح للعين."</p>
+      <div class="nl-review-author">ريم الحربي</div>
+      <div class="nl-review-city">الرياض، المملكة العربية السعودية</div>
+    </div>
+    <div class="nl-review">
+      <div class="nl-stars">★★★★★</div>
+      <p>"اشتريته لغرفة نومي وما ندمت! كل ليلة أشاهد الرمال وأنام بسلام 😍 والشحن ماشي ممتاز. التوصيل وصل بسرعة."</p>
+      <div class="nl-review-author">عبدالعزيز الدوسري</div>
+      <div class="nl-review-city">جدة، المملكة العربية السعودية</div>
+    </div>
+    <div class="nl-review">
+      <div class="nl-stars">★★★★★</div>
+      <p>"اشتريت واحد لنفسي وواحد هدية لأختي — كلنا انبهرنا! التصميم فاخر والجودة ممتازة. أنصح فيه بشدة."</p>
+      <div class="nl-review-author">سارة القحطاني</div>
+      <div class="nl-review-city">الدمام، المملكة العربية السعودية</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="nl-section nl-wrap">
+  <div class="nl-trust">
+    <div class="nl-trust-item"><div class="nl-trust-ic">🚚</div><span>توصيل مجاني للمملكة</span></div>
+    <div class="nl-trust-item"><div class="nl-trust-ic">💵</div><span>دفع عند الاستلام</span></div>
+    <div class="nl-trust-item"><div class="nl-trust-ic">🛡️</div><span>ضمان الجودة</span></div>
+    <div class="nl-trust-item"><div class="nl-trust-ic">↩</div><span>إرجاع خلال ٧ أيام</span></div>
+  </div>
+</section>
+
+<!-- ORDER FORM (EasySell) -->
+<section class="nl-section nl-wrap" id="nl-order">
+  <div class="nl-order">
+    <div class="nl-order-info">
+      <span class="nl-kicker">اطلبه الآن</span>
+      <h2>الدفع عند الاستلام</h2>
+      <p>اطلب الآن وسيتواصل معك فريقنا لتأكيد الطلب. توصيل لجميع مدن المملكة العربية السعودية.</p>
+      <div class="nl-order-price-box">
+        <div class="nl-order-amount" id="nl-order-price">{{ current_variant.price | money_without_trailing_zeros }}</div>
+        <div class="nl-order-label">شامل التوصيل<br>{{ product.title }}</div>
+      </div>
+      <ul class="nl-perks">
+        <li>الدفع نقداً عند الاستلام — بدون مخاطر</li>
+        <li>توصيل ٢-٤ أيام لجميع المناطق</li>
+        <li>ضمان الجودة وإمكانية الإرجاع</li>
+        <li>منتج أصلي 100%</li>
+      </ul>
+    </div>
+
+    <div class="nl-form-box">
+      <h3>🛒 اطلب الآن</h3>
+      {%- form 'product', product, id: 'nl-product-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" id="nl-variant-id">
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="nl-variant-group">
+              <label class="nl-opt-label">{{ option.name }}</label>
+              <div class="nl-variant-opts" data-option="{{ forloop.index }}">
+                {%- for value in option.values -%}
+                  <button type="button" class="nl-opt-btn {% if option.selected_value == value %}selected{% endif %}"
+                    data-opt="{{ forloop.parentloop.index }}" data-val="{{ value }}"
+                    onclick="nlSelectOpt(this)">{{ value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+        {% content_for 'blocks' %}
+        <button type="submit" name="add" class="nl-submit" id="nl-submit">
+          ✨ تأكيد الطلب — الدفع عند الاستلام
+        </button>
+        <div class="nl-form-note">بالضغط على "تأكيد الطلب" أنت توافق على شروط الدفع عند الاستلام</div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<footer class="nl-footer">
+  <div class="nl-brand">nova<span style="color:var(--gold)">cart</span></div>
+  <p>Smart Lifestyle & Home Products</p>
+  <p style="margin-top:8px;">© {{ 'now' | date: '%Y' }} Novacart — جميع الحقوق محفوظة</p>
+</footer>
+
+</div><!-- end nl-body -->
+
+<!-- STICKY FOOTER -->
+<div class="nl-sticky" id="nl-sticky" style="display:none;">
+  <div>
+    <div style="font-size:13px;color:var(--gray);">{{ product.title | truncate: 30 }}</div>
+    <div class="nl-sticky-price" id="nl-sticky-price">{{ product.price | money_without_trailing_zeros }}</div>
+  </div>
+  <button class="nl-sticky-cta" onclick="document.getElementById('nl-order').scrollIntoView({behavior:'smooth'})">
+    🛒 اطلب الآن
+  </button>
+</div>
+
+<!-- SOCIAL PROOF TOAST -->
+<div class="nl-toast" id="nl-toast">
+  <span class="nl-toast-icon">🛒</span>
+  <div class="nl-toast-text">
+    <span class="nl-toast-name" id="nl-toast-name"></span>
+    <span id="nl-toast-msg"></span>
+  </div>
+</div>
+
+<script>
+  var nlVariants = {{ product.variants | json }};
+  var nlOpts = {{ product.options | json }};
+  var nlSelected = {};
+
+  // init selected from current variant
+  {%- for i in (1..3) -%}
+    nlSelected[{{ i }}] = "{{ current_variant['option' | append: i] }}";
+  {%- endfor -%}
+
+  function nlSelectOpt(btn) {
+    var opt = parseInt(btn.getAttribute('data-opt'));
+    var val = btn.getAttribute('data-val');
+    nlSelected[opt] = val;
+
+    // update button styles
+    btn.closest('.nl-variant-opts').querySelectorAll('.nl-opt-btn').forEach(function(b){
+      b.classList.toggle('selected', b === btn);
+    });
+
+    nlMatchVariant();
+  }
+
+  function nlMatchVariant() {
+    var match = nlVariants.find(function(v) {
+      return nlOpts.every(function(_, i) {
+        return v['option' + (i+1)] === nlSelected[i+1];
+      });
+    });
+    if (!match) return;
+
+    document.getElementById('nl-variant-id').value = match.id;
+
+    var price = Math.round(match.price / 100);
+    var priceStr = price + ' ر.س';
+    var el = document.getElementById('nl-price-now');
+    if (el) el.textContent = priceStr;
+    var el2 = document.getElementById('nl-order-price');
+    if (el2) el2.textContent = priceStr;
+    var el3 = document.getElementById('nl-spec-price');
+    if (el3) el3.textContent = priceStr;
+    var el4 = document.getElementById('nl-sticky-price');
+    if (el4) el4.textContent = priceStr;
+
+    // update main image if variant has image
+    if (match.featured_image) {
+      var img = document.getElementById('nl-main-img');
+      if (img) img.src = match.featured_image.src;
+    }
+  }
+
+  // Thumbnail gallery
+  function nlSetImg(thumb) {
+    document.querySelectorAll('.nl-thumb').forEach(function(t){ t.classList.remove('active'); });
+    thumb.classList.add('active');
+    var img = document.getElementById('nl-main-img');
+    if (img) img.src = thumb.getAttribute('data-src');
+  }
+
+  // Sticky footer
+  var nlSticky = document.getElementById('nl-sticky');
+  var nlOrderSection = document.getElementById('nl-order');
+  if (nlSticky && nlOrderSection && 'IntersectionObserver' in window) {
+    var nlObs = new IntersectionObserver(function(entries) {
+      nlSticky.style.display = entries[0].isIntersecting ? 'none' : 'flex';
+    }, { threshold: 0.1 });
+    nlObs.observe(nlOrderSection);
+    nlSticky.style.display = 'flex';
+  }
+
+  // Social proof toasts
+  var nlToasts = [
+    ['ر.العتيبي', 'طلبت للتو من الرياض ✨'],
+    ['أ.الشمري', 'طلب للتو من جدة 🎨'],
+    ['ف.السهلي', 'طلبت للتو من الدمام 💫'],
+    ['خ.المطيري', 'طلب للتو من مكة المكرمة'],
+    ['س.الغامدي', 'طلبت للتو من المدينة المنورة'],
+    ['ع.الدوسري', 'طلب للتو من الطائف 🌟'],
+    ['ن.الزهراني', 'طلبت للتو من أبها ✨'],
+    ['م.القحطاني', 'طلب للتو من تبوك'],
+  ];
+  var nlToastEl = document.getElementById('nl-toast');
+  var nlToastName = document.getElementById('nl-toast-name');
+  var nlToastMsg = document.getElementById('nl-toast-msg');
+  var nlToastIdx = 0;
+
+  function nlShowToast() {
+    var entry = nlToasts[nlToastIdx % nlToasts.length];
+    nlToastIdx++;
+    if (nlToastName) nlToastName.textContent = entry[0] + ' ';
+    if (nlToastMsg) nlToastMsg.textContent = entry[1];
+    if (nlToastEl) {
+      nlToastEl.classList.add('show');
+      setTimeout(function(){ nlToastEl.classList.remove('show'); }, 3500);
+    }
+    setTimeout(nlShowToast, Math.random() * 8000 + 6000);
+  }
+  setTimeout(nlShowToast, 4000);
+</script>
+
+{% schema %}
+{
+  "name": "Novacart Lamp Landing",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" }
+  ]
+}
+{% endschema %}

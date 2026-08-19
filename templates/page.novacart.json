@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "novacart-lp": {
+      "type": "novacart-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["novacart-lp"]
+}

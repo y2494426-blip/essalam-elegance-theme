@@ -1,0 +1,1068 @@
+{% comment %} NOVACART Featured Products — Luxury Showcase — prefix: ncp- {% endcomment %}
+
+{%- assign col = collections[section.settings.collection] -%}
+{%- assign products_to_show = col.products | default: collection.products -%}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+/* ══════════════════════════════════════════════
+   NOVACART PRODUCTS — LUXURY SHOWCASE
+   Prefix: ncp-  Scope: #ncp-{{ section.id }}
+══════════════════════════════════════════════ */
+#ncp-{{ section.id }},
+#ncp-{{ section.id }} *,
+#ncp-{{ section.id }} *::before,
+#ncp-{{ section.id }} *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+}
+#ncp-{{ section.id }} {
+  --bg:      #F7F4EE;
+  --white:   #FFFFFF;
+  --black:   #0A0A0A;
+  --dark:    #1A1A1A;
+  --muted:   #7A7572;
+  --border:  rgba(0,0,0,.07);
+  --gold:    #C9A227;
+  --gold-lt: #E0C060;
+  --green:   #15803D;
+  --green-dk:#0E5F2C;
+  --red:     #C0392B;
+  --r:       18px;
+  --shadow:  0 4px 20px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.05);
+  --shadow-h:0 16px 56px rgba(0,0,0,.14), 0 4px 12px rgba(0,0,0,.08);
+  --font:    'Tajawal', sans-serif;
+  font-family: var(--font);
+  direction: rtl;
+  background: var(--bg);
+  padding: 90px 0 100px;
+}
+
+/* ── CONTAINER ── */
+.ncp-wrap {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ════════════════════════════════
+   SECTION HEADER
+════════════════════════════════ */
+.ncp-header {
+  text-align: center;
+  margin-bottom: 52px;
+}
+.ncp-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201,162,39,.09);
+  border: 1px solid rgba(201,162,39,.28);
+  padding: 7px 18px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+.ncp-header-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  color: var(--black);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.ncp-header-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 500px;
+  margin: 0 auto 0;
+  line-height: 1.7;
+}
+
+/* ════════════════════════════════
+   FILTER BAR
+════════════════════════════════ */
+.ncp-filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  padding: 6px;
+  background: rgba(255,255,255,.7);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.ncp-filter-btn {
+  font-family: var(--font);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all .22s ease;
+  white-space: nowrap;
+  position: relative;
+}
+.ncp-filter-btn.active {
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 0 4px 16px rgba(0,0,0,.22);
+}
+.ncp-filter-btn:not(.active):hover {
+  color: var(--black);
+  background: rgba(0,0,0,.05);
+}
+.ncp-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  background: rgba(0,0,0,.1);
+  color: inherit;
+  font-size: .68rem;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+.ncp-filter-btn.active .ncp-filter-count { background: rgba(255,255,255,.2); }
+
+/* ════════════════════════════════
+   PRODUCTS GRID
+════════════════════════════════ */
+.ncp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+/* ════════════════════════════════
+   PRODUCT CARD
+════════════════════════════════ */
+.ncp-card {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: visible;
+  position: relative;
+  transition: transform .35s ease, box-shadow .35s ease;
+  display: flex;
+  flex-direction: column;
+  /* scroll reveal */
+  opacity: 0;
+  transform: translateY(32px);
+}
+.ncp-card.ncp-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .55s ease, transform .55s ease, box-shadow .35s ease;
+}
+.ncp-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-h);
+  z-index: 2;
+}
+
+/* ── BADGE ROW ── */
+.ncp-badges {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+}
+.ncp-badge {
+  font-family: var(--font);
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+  line-height: 1.3;
+  letter-spacing: .2px;
+  white-space: nowrap;
+}
+.ncp-badge--sale { background: var(--red); color: #fff; }
+.ncp-badge--hot  { background: #F97316; color: #fff; }
+.ncp-badge--new  { background: var(--green); color: #fff; }
+.ncp-badge--top  { background: #7C3AED; color: #fff; }
+.ncp-badge--gift { background: var(--gold); color: #fff; }
+.ncp-badge--ship { background: var(--black); color: #fff; }
+
+/* ── IMAGE WRAP ── */
+.ncp-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r) var(--r) 0 0;
+  aspect-ratio: 4 / 5;
+  background: #F0ECE6;
+  display: block;
+  text-decoration: none;
+}
+.ncp-img-primary,
+.ncp-img-hover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .55s ease, opacity .4s ease;
+}
+.ncp-img-hover {
+  opacity: 0;
+}
+.ncp-card:hover .ncp-img-primary {
+  transform: scale(1.06);
+}
+.ncp-card:hover .ncp-img-hover {
+  opacity: 1;
+}
+.ncp-card:hover .ncp-img-primary.has-hover {
+  opacity: 0;
+}
+.ncp-img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #F0EBE1, #E4DDD0);
+  color: rgba(0,0,0,.2);
+}
+
+/* Hover overlay */
+.ncp-hover-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.32) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity .32s ease;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 18px;
+  gap: 8px;
+}
+.ncp-card:hover .ncp-hover-layer { opacity: 1; }
+.ncp-qv-btn {
+  font-family: var(--font);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--black);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+  white-space: nowrap;
+}
+.ncp-qv-btn:hover { background: #fff; transform: scale(1.04); }
+
+/* ── CARD BODY ── */
+.ncp-card-body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+.ncp-card-vendor {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.ncp-card-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  line-height: 1.35;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color .2s;
+}
+.ncp-card-title:hover { color: var(--gold); }
+
+/* Rating */
+.ncp-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.ncp-stars { color: #F59E0B; font-size: .82rem; letter-spacing: 1px; }
+.ncp-rating-val { font-size: .78rem; font-weight: 700; color: var(--dark); }
+.ncp-rating-cnt { font-size: .75rem; color: var(--muted); }
+
+/* Pricing */
+.ncp-card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.ncp-price-now {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--black);
+}
+.ncp-price-now small { font-size: .72rem; font-weight: 400; color: var(--muted); margin-right: 1px; }
+.ncp-price-old {
+  font-size: .82rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+/* Mini trust */
+.ncp-card-trust {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ncp-card-trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* CTA */
+.ncp-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: .9rem;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  border: 2px solid var(--black);
+  cursor: pointer;
+  transition: background .22s, transform .2s, box-shadow .22s;
+  margin-top: auto;
+  letter-spacing: .2px;
+  position: relative;
+  overflow: hidden;
+}
+.ncp-card-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.10) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ncp-card-cta:hover {
+  background: var(--green);
+  border-color: var(--green);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(21,128,61,.35);
+}
+
+/* ── SKELETON CARDS ── */
+.ncp-skeleton {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: none; /* shown via JS before products render */
+}
+.ncp-skeleton-img {
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(90deg, #F0ECE6 25%, #E8E2D8 50%, #F0ECE6 75%);
+  background-size: 200% 100%;
+  animation: ncp-shimmer 1.5s ease-in-out infinite;
+}
+.ncp-skeleton-body { padding: 16px 18px 20px; }
+.ncp-skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #F0ECE6 25%, #E8E2D8 50%, #F0ECE6 75%);
+  background-size: 200% 100%;
+  animation: ncp-shimmer 1.5s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+.ncp-skeleton-line:nth-child(1) { width: 40%; }
+.ncp-skeleton-line:nth-child(2) { width: 80%; }
+.ncp-skeleton-line:nth-child(3) { width: 55%; }
+.ncp-skeleton-line:nth-child(4) { width: 90%; height: 38px; border-radius: 50px; margin-top: 14px; }
+@keyframes ncp-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── NO RESULTS ── */
+.ncp-no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  display: none;
+}
+.ncp-no-results h3 { font-size: 1.2rem; color: var(--muted); font-weight: 600; }
+
+/* ── VIEW ALL ── */
+.ncp-footer {
+  text-align: center;
+  margin-top: 56px;
+}
+.ncp-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid rgba(0,0,0,.18);
+  color: var(--black);
+  background: transparent;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 16px 44px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all .25s ease;
+  letter-spacing: .3px;
+}
+.ncp-view-all:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0,0,0,.2);
+}
+.ncp-view-all .ncp-va-arrow { font-size: .85rem; transition: transform .25s; }
+.ncp-view-all:hover .ncp-va-arrow { transform: translateX(-6px); }
+
+/* ════════════════════════════════
+   QUICK VIEW MODAL
+════════════════════════════════ */
+#ncp-qv-modal-{{ section.id }} {
+  position: fixed;
+  inset: 0;
+  z-index: 9900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+#ncp-qv-modal-{{ section.id }}.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.ncp-qv-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+.ncp-qv-panel {
+  position: relative;
+  background: var(--white);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90svh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.28);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transform: scale(.96) translateY(16px);
+  transition: transform .32s cubic-bezier(.4,0,.2,1);
+  direction: rtl;
+}
+#ncp-qv-modal-{{ section.id }}.open .ncp-qv-panel {
+  transform: scale(1) translateY(0);
+}
+.ncp-qv-gallery {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F8F5EF;
+  border-radius: 24px 0 0 24px;
+}
+.ncp-qv-main-img {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #EEE8E0;
+}
+.ncp-qv-main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+.ncp-qv-main-img:hover img { transform: scale(1.04); }
+.ncp-qv-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ncp-qv-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color .2s;
+  flex-shrink: 0;
+  background: #EEE8E0;
+}
+.ncp-qv-thumb.active { border-color: var(--gold); }
+.ncp-qv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ncp-qv-info {
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ncp-qv-close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.08);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--dark);
+  transition: background .2s, transform .2s;
+}
+.ncp-qv-close:hover { background: var(--black); color: #fff; transform: rotate(90deg); }
+.ncp-qv-vendor { font-size: .72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.ncp-qv-title { font-size: 1.4rem; font-weight: 900; color: var(--black); line-height: 1.25; margin-bottom: 12px; }
+.ncp-qv-stars { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; }
+.ncp-qv-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+.ncp-qv-price-now { font-size: 1.6rem; font-weight: 900; color: var(--black); }
+.ncp-qv-price-now small { font-size: .85rem; font-weight: 400; color: var(--muted); }
+.ncp-qv-price-old { font-size: 1rem; color: var(--muted); text-decoration: line-through; }
+.ncp-qv-desc { font-size: .9rem; color: var(--muted); line-height: 1.7; margin-bottom: 22px; border-top: 1px solid var(--border); padding-top: 18px; }
+.ncp-qv-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
+.ncp-qv-features li { font-size: .88rem; color: var(--dark); display: flex; align-items: center; gap: 8px; }
+.ncp-qv-features li::before { content: '✓'; color: var(--green); font-weight: 900; font-size: .9rem; flex-shrink: 0; }
+.ncp-qv-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--black);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background .22s, transform .2s, box-shadow .22s;
+  box-shadow: 0 6px 24px rgba(0,0,0,.18);
+}
+.ncp-qv-cta:hover { background: var(--green); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(21,128,61,.35); }
+.ncp-qv-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.ncp-qv-trust span { font-size: .78rem; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 1080px) {
+  .ncp-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+@media (max-width: 760px) {
+  #ncp-{{ section.id }} { padding: 60px 0 70px; }
+  .ncp-wrap { padding: 0 16px; }
+  .ncp-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .ncp-filters { gap: 4px; padding: 4px; }
+  .ncp-filter-btn { font-size: .8rem; padding: 8px 14px; }
+  .ncp-card-body { padding: 12px 13px 15px; }
+  .ncp-card-vendor { display: none; }
+  .ncp-card-title { font-size: .88rem; }
+  .ncp-card-trust { display: none; }
+  .ncp-card-cta { font-size: .82rem; padding: 11px 14px; }
+  /* Quick View — single column on mobile */
+  .ncp-qv-panel { grid-template-columns: 1fr; max-width: 480px; }
+  .ncp-qv-gallery { border-radius: 24px 24px 0 0; position: static; }
+  .ncp-qv-info { padding: 20px 20px 24px; }
+}
+@media (max-width: 400px) {
+  .ncp-grid { gap: 10px; }
+  .ncp-price-now { font-size: .98rem; }
+}
+</style>
+
+<!-- QUICK VIEW MODAL -->
+<div id="ncp-qv-modal-{{ section.id }}" role="dialog" aria-modal="true" aria-label="Quick View">
+  <div class="ncp-qv-backdrop" onclick="ncpCloseQV('{{ section.id }}')"></div>
+  <div class="ncp-qv-panel">
+    <div class="ncp-qv-gallery">
+      <div class="ncp-qv-main-img" id="ncp-qv-main-{{ section.id }}">
+        <img src="" alt="" id="ncp-qv-mainimg-{{ section.id }}">
+      </div>
+      <div class="ncp-qv-thumbs" id="ncp-qv-thumbs-{{ section.id }}"></div>
+    </div>
+    <div class="ncp-qv-info">
+      <button class="ncp-qv-close" onclick="ncpCloseQV('{{ section.id }}')" aria-label="إغلاق">✕</button>
+      <div class="ncp-qv-vendor" id="ncp-qv-vendor-{{ section.id }}"></div>
+      <h2 class="ncp-qv-title" id="ncp-qv-title-{{ section.id }}"></h2>
+      <div class="ncp-qv-stars">
+        <span style="color:#F59E0B;font-size:.9rem">★★★★★</span>
+        <span style="font-size:.82rem;font-weight:700;color:#1A1A1A">4.9</span>
+        <span style="font-size:.78rem;color:#7A7572">(+120 تقييم)</span>
+      </div>
+      <div class="ncp-qv-pricing">
+        <span class="ncp-qv-price-now" id="ncp-qv-price-{{ section.id }}"></span>
+        <span class="ncp-qv-price-old" id="ncp-qv-old-{{ section.id }}"></span>
+      </div>
+      <p class="ncp-qv-desc" id="ncp-qv-desc-{{ section.id }}"></p>
+      <ul class="ncp-qv-features">
+        <li>جودة عالية ومواد متميزة</li>
+        <li>ضمان الرضا التام</li>
+        <li>توصيل سريع لجميع مناطق المملكة</li>
+        <li>الدفع عند الاستلام</li>
+      </ul>
+      <a href="#" class="ncp-qv-cta" id="ncp-qv-cta-{{ section.id }}">
+        🛒 اطلب الآن
+      </a>
+      <div class="ncp-qv-trust">
+        <span>🚚 شحن مجاني</span>
+        <span>💳 الدفع عند الاستلام</span>
+        <span>🔒 شراء آمن</span>
+        <span>🔄 إرجاع سهل</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SECTION ══════════════ -->
+<section id="ncp-{{ section.id }}">
+  <div class="ncp-wrap">
+
+    <!-- HEADER -->
+    <div class="ncp-header ncp-anim">
+      {%- if section.settings.badge != blank -%}
+        <div class="ncp-header-badge">{{ section.settings.badge }}</div>
+      {%- endif -%}
+      <h2 class="ncp-header-title">{{ section.settings.title | default: 'اكتشف منتجاتنا الأكثر تميزًا' }}</h2>
+      <p class="ncp-header-sub">{{ section.settings.subtitle | default: 'منتجات مختارة بعناية لتجمع بين الجودة، التصميم، والقيمة.' }}</p>
+    </div>
+
+    <!-- FILTER BAR -->
+    {%- if section.settings.show_filters -%}
+    <div class="ncp-filters ncp-anim" id="ncp-filters-{{ section.id }}">
+      <button class="ncp-filter-btn active" data-filter="all">الكل</button>
+      <button class="ncp-filter-btn" data-filter="best-seller">🔥 الأكثر مبيعاً</button>
+      <button class="ncp-filter-btn" data-filter="new">🆕 جديد</button>
+      <button class="ncp-filter-btn" data-filter="sale">💸 عروض</button>
+      <button class="ncp-filter-btn" data-filter="top-rated">⭐ الأعلى تقييماً</button>
+    </div>
+    {%- endif -%}
+
+    <!-- PRODUCTS GRID -->
+    <div class="ncp-grid" id="ncp-grid-{{ section.id }}">
+
+      {%- assign shown = 0 -%}
+      {%- assign max_count = section.settings.products_count | default: 8 -%}
+
+      {%- for product in products_to_show limit: max_count -%}
+        {%- assign shown = shown | plus: 1 -%}
+
+        {%- comment %} --- Build filter flags --- {%- endcomment -%}
+        {%- assign filters = 'all' -%}
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign filters = filters | append: ' sale' -%}
+        {%- endif -%}
+        {%- for tag in product.tags -%}
+          {%- assign tag_lower = tag | downcase | strip -%}
+          {%- if tag_lower == 'best-seller' or tag_lower == 'bestseller' -%}
+            {%- assign filters = filters | append: ' best-seller' -%}
+          {%- endif -%}
+          {%- if tag_lower == 'new' or tag_lower == 'جديد' -%}
+            {%- assign filters = filters | append: ' new' -%}
+          {%- endif -%}
+          {%- if tag_lower == 'top-rated' or tag_lower == 'featured' -%}
+            {%- assign filters = filters | append: ' top-rated' -%}
+          {%- endif -%}
+          {%- if tag_lower == 'free-shipping' or tag_lower == 'شحن مجاني' -%}
+            {%- assign filters = filters | append: ' free-ship' -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment %} --- Discount % --- {%- endcomment -%}
+        {%- assign discount_pct = 0 -%}
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+        {%- endif -%}
+
+        {%- comment %} --- Images --- {%- endcomment -%}
+        {%- assign has_hover_img = false -%}
+        {%- if product.media.size > 1 -%}
+          {%- assign has_hover_img = true -%}
+        {%- endif -%}
+
+        {%- comment %} --- QV JSON data --- {%- endcomment -%}
+        <script type="application/json" id="ncp-pd-{{ product.id }}">
+        {
+          "id":       {{ product.id }},
+          "title":    {{ product.title | json }},
+          "vendor":   {{ product.vendor | json }},
+          "url":      {{ product.url | json }},
+          "price":    {{ product.price | money_without_trailing_zeros | json }},
+          "price_old":{{ product.compare_at_price | money_without_trailing_zeros | json }},
+          "on_sale":  {{ product.compare_at_price | json }} > {{ product.price | json }},
+          "desc":     {{ product.description | strip_html | truncate: 220 | json }},
+          "images":   [
+            {%- for m in product.media limit: 5 -%}
+              {%- if m.media_type == 'image' -%}
+                {{ m | image_url: width: 900 | json }}
+                {%- unless forloop.last -%},{%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+          ]
+        }
+        </script>
+
+        <!-- CARD -->
+        <div
+          class="ncp-card"
+          data-filter="{{ filters }}"
+          data-pid="{{ product.id }}"
+          style="transition-delay: {{ forloop.index0 | modulo: 4 | times: 80 }}ms"
+        >
+          <!-- Badges -->
+          <div class="ncp-badges">
+            {%- if discount_pct > 0 -%}
+              <span class="ncp-badge ncp-badge--sale">-{{ discount_pct }}%</span>
+            {%- endif -%}
+            {%- if filters contains 'best-seller' -%}
+              <span class="ncp-badge ncp-badge--hot">🔥 الأكثر مبيعاً</span>
+            {%- elsif filters contains 'new' -%}
+              <span class="ncp-badge ncp-badge--new">🆕 جديد</span>
+            {%- elsif filters contains 'top-rated' -%}
+              <span class="ncp-badge ncp-badge--top">⭐ الأعلى تقييماً</span>
+            {%- endif -%}
+            {%- if filters contains 'free-ship' -%}
+              <span class="ncp-badge ncp-badge--ship">🚚 شحن مجاني</span>
+            {%- endif -%}
+          </div>
+
+          <!-- Image -->
+          <a href="{{ product.url }}" class="ncp-img-wrap" tabindex="-1">
+            {%- if product.featured_media -%}
+              <img
+                src="{{ product.featured_media | image_url: width: 600 }}"
+                alt="{{ product.title | escape }}"
+                class="ncp-img-primary{% if has_hover_img %} has-hover{% endif %}"
+                loading="lazy"
+                width="600"
+              >
+              {%- if has_hover_img -%}
+                <img
+                  src="{{ product.media[1] | image_url: width: 600 }}"
+                  alt="{{ product.title | escape }} — alt"
+                  class="ncp-img-hover"
+                  loading="lazy"
+                  width="600"
+                >
+              {%- endif -%}
+            {%- else -%}
+              <div class="ncp-img-placeholder">📦</div>
+            {%- endif -%}
+            <div class="ncp-hover-layer">
+              <button
+                class="ncp-qv-btn"
+                data-pid="{{ product.id }}"
+                onclick="ncpOpenQV(event, '{{ section.id }}', {{ product.id }})"
+                aria-label="عرض سريع لـ {{ product.title | escape }}"
+              >🔍 عرض سريع</button>
+            </div>
+          </a>
+
+          <!-- Body -->
+          <div class="ncp-card-body">
+            {%- if product.vendor != blank -%}
+              <div class="ncp-card-vendor">{{ product.vendor }}</div>
+            {%- endif -%}
+            <a href="{{ product.url }}" class="ncp-card-title">{{ product.title }}</a>
+            <div class="ncp-card-rating">
+              <span class="ncp-stars">★★★★★</span>
+              <span class="ncp-rating-val">4.9</span>
+              <span class="ncp-rating-cnt">({{ product.id | modulo: 80 | plus: 40 }})</span>
+            </div>
+            <div class="ncp-card-pricing">
+              <span class="ncp-price-now">{{ product.price | money_without_trailing_zeros }} <small>ريال</small></span>
+              {%- if product.compare_at_price > product.price -%}
+                <span class="ncp-price-old">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+              {%- endif -%}
+            </div>
+            <div class="ncp-card-trust">
+              <span>🚚 شحن مجاني</span>
+              <span>💳 الدفع عند الاستلام</span>
+            </div>
+            <a href="{{ product.url }}" class="ncp-card-cta">
+              🛒 اطلب الآن
+            </a>
+          </div>
+        </div>
+
+      {%- else -%}
+        <div class="ncp-no-results" style="display:block">
+          <h3>لم يتم العثور على منتجات في هذه المجموعة.</h3>
+        </div>
+      {%- endfor -%}
+
+      <div class="ncp-no-results" id="ncp-no-res-{{ section.id }}">
+        <h3>لا توجد منتجات في هذه الفئة.</h3>
+      </div>
+
+    </div><!-- /grid -->
+
+    <!-- VIEW ALL -->
+    {%- if section.settings.show_view_all and col != blank -%}
+      <div class="ncp-footer ncp-anim">
+        <a href="{{ col.url }}" class="ncp-view-all">
+          عرض جميع المنتجات
+          <span class="ncp-va-arrow">←</span>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div><!-- /wrap -->
+</section>
+
+<script>
+(function(){
+  var SID = '{{ section.id }}';
+
+  /* ── SCROLL REVEAL ── */
+  var cards = document.querySelectorAll('#ncp-' + SID + ' .ncp-card');
+  var anim  = document.querySelectorAll('#ncp-' + SID + ' .ncp-anim');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('ncp-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .08 });
+  cards.forEach(function(c){ io.observe(c); });
+  var ioH = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='none'; io.unobserve(e.target); }
+    });
+  }, { threshold: .1 });
+  anim.forEach(function(el){
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition='opacity .6s ease, transform .6s ease';
+    ioH.observe(el);
+  });
+
+  /* ── FILTERS ── */
+  var filterBtns = document.querySelectorAll('#ncp-filters-' + SID + ' .ncp-filter-btn');
+  var grid       = document.getElementById('ncp-grid-' + SID);
+  var noRes      = document.getElementById('ncp-no-res-' + SID);
+
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      this.classList.add('active');
+      var f = this.dataset.filter;
+      var allCards = grid.querySelectorAll('.ncp-card');
+      var visible = 0;
+      allCards.forEach(function(c, i){
+        var tags = c.dataset.filter || '';
+        var show = (f === 'all') || tags.split(' ').indexOf(f) > -1;
+        if(show){
+          c.style.display = '';
+          visible++;
+          /* stagger re-entrance */
+          c.classList.remove('ncp-visible');
+          var delay = (visible - 1) % 4 * 80;
+          setTimeout(function(card){ card.classList.add('ncp-visible'); }, delay + 20, c);
+        } else {
+          c.style.display = 'none';
+        }
+      });
+      noRes.style.display = (visible === 0) ? 'block' : 'none';
+    });
+  });
+
+  /* ══════════════════════════════════
+     QUICK VIEW
+  ══════════════════════════════════ */
+  window.ncpOpenQV = function(e, sid, pid){
+    e.preventDefault();
+    var modal = document.getElementById('ncp-qv-modal-' + sid);
+    if(!modal) return;
+
+    var raw = document.getElementById('ncp-pd-' + pid);
+    if(!raw) return;
+    var d;
+    try { d = JSON.parse(raw.textContent); } catch(err){ return; }
+
+    /* Populate */
+    document.getElementById('ncp-qv-vendor-' + sid).textContent  = d.vendor || '';
+    document.getElementById('ncp-qv-title-' + sid).textContent   = d.title  || '';
+    document.getElementById('ncp-qv-price-' + sid).textContent   = d.price  || '';
+    var oldEl = document.getElementById('ncp-qv-old-' + sid);
+    if(d.on_sale && d.price_old){ oldEl.textContent = d.price_old; oldEl.style.display = ''; }
+    else { oldEl.style.display = 'none'; }
+    document.getElementById('ncp-qv-desc-' + sid).textContent    = d.desc   || '';
+    document.getElementById('ncp-qv-cta-' + sid).href            = d.url    || '#';
+
+    /* Images */
+    var imgs = (d.images || []).filter(function(i){ return !!i; });
+    var mainImg = document.getElementById('ncp-qv-mainimg-' + sid);
+    mainImg.src = imgs[0] || '';
+    mainImg.alt = d.title || '';
+
+    var thumbsWrap = document.getElementById('ncp-qv-thumbs-' + sid);
+    thumbsWrap.innerHTML = '';
+    imgs.forEach(function(src, idx){
+      var t = document.createElement('div');
+      t.className = 'ncp-qv-thumb' + (idx === 0 ? ' active' : '');
+      t.innerHTML = '<img src="' + src + '" alt="' + (d.title || '') + ' ' + (idx+1) + '" loading="lazy">';
+      t.addEventListener('click', function(){
+        mainImg.src = src;
+        thumbsWrap.querySelectorAll('.ncp-qv-thumb').forEach(function(th){ th.classList.remove('active'); });
+        t.classList.add('active');
+      });
+      thumbsWrap.appendChild(t);
+    });
+
+    /* Open */
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    /* Trap focus */
+    modal.querySelector('.ncp-qv-close').focus();
+  };
+
+  window.ncpCloseQV = function(sid){
+    var modal = document.getElementById('ncp-qv-modal-' + sid);
+    if(modal){ modal.classList.remove('open'); document.body.style.overflow = ''; }
+  };
+
+  /* ESC key */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') ncpCloseQV(SID);
+  });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "NOVACART Products",
+  "tag": "section",
+  "class": "novacart-products-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "المجموعة والمنتجات"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "المجموعة"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "عدد المنتجات",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "نصوص القسم"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge صغير",
+      "default": "✨ مختاراتنا"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "العنوان",
+      "default": "اكتشف منتجاتنا الأكثر تميزًا"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "النص التوضيحي",
+      "default": "منتجات مختارة بعناية لتجمع بين الجودة، التصميم، والقيمة."
+    },
+    {
+      "type": "header",
+      "content": "الخيارات"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "إظهار الفلاتر",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "إظهار زر «عرض الكل»",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "NOVACART Products" }]
+}
+{% endschema %}

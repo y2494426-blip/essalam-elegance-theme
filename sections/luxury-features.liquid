@@ -1,0 +1,89 @@
+<div class="luxury-features section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="luxury-features__grid">
+      {%- for block in section.blocks -%}
+        <div class="luxury-features__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != blank -%}
+            <div class="luxury-features__icon">{{ block.settings.icon }}</div>
+          {%- endif -%}
+          <h3 class="luxury-features__title">{{ block.settings.title }}</h3>
+          <p class="luxury-features__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Caractéristiques luxe",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Caractéristique",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icône (emoji ou symbole)",
+          "default": "✦"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Qualité Premium"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Matières sélectionnées avec soin pour votre confort"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Caractéristiques luxe",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "✦",
+            "title": "Qualité Supérieure",
+            "text": "Tissus premium sélectionnés pour un confort absolu"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "🚚",
+            "title": "Livraison Maroc",
+            "text": "Livraison rapide 24–72h partout au Maroc"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "💳",
+            "title": "Paiement COD",
+            "text": "Payez à la réception — aucun risque pour vous"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "↩",
+            "title": "Retours Faciles",
+            "text": "7 jours pour changer d'avis"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

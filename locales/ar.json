@@ -1,0 +1,59 @@
+{
+  "general": {
+    "continue_shopping": "متابعة التسوق",
+    "close": "إغلاق",
+    "search": "بحث",
+    "loading": "جاري التحميل",
+    "breadcrumbs": {
+      "home": "الرئيسية"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "أضف إلى السلة",
+      "sold_out": "نفدت الكمية",
+      "unavailable": "غير متوفر",
+      "on_sale": "تخفيض",
+      "quantity": {
+        "label": "الكمية",
+        "decrease": "تقليل",
+        "increase": "زيادة"
+      },
+      "description": "الوصف",
+      "vendor": "الماركة",
+      "share": "مشاركة"
+    },
+    "facets": {
+      "filter_by_label": "تصفية حسب",
+      "sort_by_label": "ترتيب حسب",
+      "clear_all": "مسح الكل",
+      "filters": "الفلاتر",
+      "sort_by": {
+        "title": "ترتيب حسب:",
+        "manual": "مميز",
+        "best-selling": "الأكثر مبيعاً",
+        "price-ascending": "السعر: من الأقل",
+        "price-descending": "السعر: من الأعلى",
+        "created-descending": "الأحدث"
+      }
+    }
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلة التسوق فارغة",
+    "subtotal": "المجموع الفرعي",
+    "checkout": "إتمام الطلب",
+    "continue_shopping": "متابعة التسوق"
+  },
+  "sections": {
+    "header": {
+      "menu": "القائمة",
+      "cart": "السلة ({{ count }} منتجات)"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "انتقل للمحتوى",
+    "close": "إغلاق",
+    "open_menu": "فتح القائمة"
+  }
+}

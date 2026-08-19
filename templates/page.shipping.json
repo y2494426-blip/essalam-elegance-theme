@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "essalem-page-shipping",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

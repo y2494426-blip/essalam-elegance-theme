@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "punching-bag-lp": {
+      "type": "punching-bag-lp",
+      "blocks": {},
+      "settings": {}
+    }
+  },
+  "order": ["punching-bag-lp"]
+}

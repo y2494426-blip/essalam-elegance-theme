@@ -1,0 +1,108 @@
+{% comment %} ESSALEM ELEGANCE - Testimonials Section {% endcomment %}
+<section class="essalem-testimonials">
+  <div class="essalem-section-header">
+    {% if section.settings.eyebrow != blank %}
+      <span class="essalem-section-eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    <h2 class="essalem-section-title">{{ section.settings.title }}</h2>
+    <div class="essalem-section-divider"></div>
+  </div>
+
+  <div class="essalem-testimonials__grid">
+    {% for block in section.blocks %}
+      <div class="essalem-testimonial-card" {{ block.shopify_attributes }}>
+        <div class="essalem-testimonial__stars">
+          {% assign stars = block.settings.rating | round %}
+          {% for i in (1..stars) %}★{% endfor %}
+          {% assign empty_stars = 5 | minus: stars %}
+          {% for i in (1..empty_stars) %}☆{% endfor %}
+        </div>
+
+        <p class="essalem-testimonial__text">{{ block.settings.text }}</p>
+
+        <div class="essalem-testimonial__author">
+          <div class="essalem-testimonial__avatar">{{ block.settings.name | slice: 0 }}</div>
+          <div>
+            <span class="essalem-testimonial__name">{{ block.settings.name }}</span>
+            <span class="essalem-testimonial__location">{{ block.settings.location }}</span>
+            {% if block.settings.verified %}
+              <span class="essalem-testimonial__verified">✓ Achat vérifié</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Témoignages",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texte au-dessus",
+      "default": "Avis Clients"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Ce Que Disent Nos Clients"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Témoignage",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Note",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Témoignage",
+          "default": "Excellent produit, livraison rapide et service client au top !"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nom",
+          "default": "Client Satisfait"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Ville",
+          "default": "Casablanca, Maroc"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Achat vérifié",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Témoignages",
+      "blocks": [
+        {"type": "testimonial", "settings": {"rating": 5, "text": "J'ai commandé une montre pour mon mari, elle est magnifique ! Livraison en 2 jours à Casablanca. Je recommande vivement ESSALEM ELEGANCE !", "name": "Fatima Z.", "location": "Casablanca", "verified": true}},
+        {"type": "testimonial", "settings": {"rating": 5, "text": "Les lunettes sont superbes et la qualité est au rendez-vous. Le paiement à la livraison m'a rassurée. Très bonne expérience d'achat.", "name": "Mohamed A.", "location": "Rabat", "verified": true}},
+        {"type": "testimonial", "settings": {"rating": 5, "text": "Sac reçu en parfait état, exactement comme sur les photos. Service client très réactif sur WhatsApp. J'achèterai encore !", "name": "Khadija M.", "location": "Marrakech", "verified": true}}
+      ]
+    }
+  ]
+}
+{% endschema %}
